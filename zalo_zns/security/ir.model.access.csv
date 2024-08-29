@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_zalo_zns_template_user,zalo.zns.template.user,model_zalo_zns_template,base.group_user,1,1,1,1
+access_zalo_zns_template_key_value_user,zalo.zns.template.key.value.user,model_zalo_zns_template_key_value,base.group_user,1,1,1,1
+access_zalo_zns_send_message_wizard_user,zalo.zns.send.message.wizard.user,model_zalo_zns_send_message_wizard,base.group_user,1,1,1,1
+access_zalo_zns_send_message_key_value_user,zalo.zns.send.message.key.value.user,model_zalo_zns_send_message_key_value,base.group_user,1,1,1,1
+access_zalo_zns_config_user,zalo.zns.config.user,model_zalo_zns_config,base.group_user,1,1,1,1

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2024 Wokwy - quochuy.software@gmail.com -->
+<odoo>
+    <record id="view_zalo_zns_config_form" model="ir.ui.view">
+        <field name="name">zalo.zns.config.form</field>
+        <field name="model">zalo.zns.config</field>
+        <field name="arch" type="xml">
+            <form string="Zalo ZNS Configuration">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="api_url"/>
+                        <field name="access_token" password="True"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_zalo_zns_config" model="ir.actions.act_window">
+        <field name="name">Zalo ZNS Configuration</field>
+        <field name="res_model">zalo.zns.config</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+    </record>
+
+    <menuitem id="menu_zalo_zns_config" name="Configuration" parent="menu_zalo_zns_root" action="action_zalo_zns_config" sequence="20"/>
+</odoo>
