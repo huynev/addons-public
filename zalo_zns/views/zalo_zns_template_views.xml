@@ -6,9 +6,9 @@
         <field name="model">zalo.zns.template</field>
         <field name="arch" type="xml">
             <form string="Zalo ZNS Template">
-                <header>
-                    <button name="action_send_message" string="Send Message" type="object" class="oe_highlight"/>
-                </header>
+<!--                <header>-->
+<!--                    <button name="action_send_message" string="Send Message" type="object" class="oe_highlight"/>-->
+<!--                </header>-->
                 <sheet>
                     <group>
                         <field name="name"/>
@@ -48,7 +48,4 @@
         <field name="res_model">zalo.zns.template</field>
         <field name="view_mode">tree,form</field>
     </record>
-
-    <menuitem id="menu_zalo_zns_root" name="Zalo ZNS" sequence="10"/>
-    <menuitem id="menu_zalo_zns_template" name="Templates" parent="menu_zalo_zns_root" action="action_zalo_zns_template" sequence="10"/>
 </odoo>

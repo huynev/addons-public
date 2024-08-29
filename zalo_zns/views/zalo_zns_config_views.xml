@@ -23,6 +23,4 @@
         <field name="view_mode">form</field>
         <field name="target">inline</field>
     </record>
-
-    <menuitem id="menu_zalo_zns_config" name="Configuration" parent="menu_zalo_zns_root" action="action_zalo_zns_config" sequence="20"/>
 </odoo>

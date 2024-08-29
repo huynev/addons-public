@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2024 Wokwy - quochuy.software@gmail.com -->
+<odoo>
+    <record id="view_zalo_zns_batch_form" model="ir.ui.view">
+        <field name="name">zalo.zns.batch.form</field>
+        <field name="model">zalo.zns.batch</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_confirm" string="Confirm" type="object" invisible="state != 'draft'" class="oe_highlight"/>
+                    <button name="action_cancel" string="Cancel" type="object" invisible="state not in ('draft', 'in_progress')"/>
+                    <button name="action_draft" string="Set to Draft" type="object" invisible="state != 'cancelled'"/>
+                    <button name="action_done" string="Mark as Done" type="object" invisible="state != 'in_progress'" class="oe_highlight"/>
+                    <field name="state" widget="statusbar" options="{'clickable': '1'}"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object" name="action_view_messages" icon="fa-envelope">
+                            <field string="Messages" name="message_count" widget="statinfo"/>
+                        </button>
+                    </div>
+                    <group>
+                        <field name="name"/>
+                        <field name="template_id"/>
+                        <field name="model_id"/>
+                    </group>
+                    <notebook>
+                        <page string="Recipients" name="recipients">
+                            <field name="recipient_ids" widget="many2many" mode="tree,kanban"
+                                context="{'form_view_ref': 'zalo_zns.view_zalo_zns_message_form'}" readonly="state not in ['draft', 'in_progress']"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_zalo_zns_batch_tree" model="ir.ui.view">
+        <field name="name">zalo.zns.batch.tree</field>
+        <field name="model">zalo.zns.batch</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="template_id"/>
+                <field name="model_id"/>
+                <field name="message_count"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_zalo_zns_batch" model="ir.actions.act_window">
+        <field name="name">Zalo ZNS Batches</field>
+        <field name="res_model">zalo.zns.batch</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>
