@@ -60,7 +60,6 @@ class ZaloZnsMessage(models.Model):
                 template_data[kv.key] = value
 
             payload = {
-                'mode': 'development',
                 'phone': self.format_phone_number(message.phone),
                 'template_id': message.template_id.template_id,
                 'template_data': template_data
