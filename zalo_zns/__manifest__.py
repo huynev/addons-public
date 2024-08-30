@@ -19,4 +19,5 @@
     'installable': True,
     'application': True,
     'auto_install': False,
+    'translations': ['i18n/vi_VN.po'],
 }

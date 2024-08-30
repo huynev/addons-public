@@ -1,0 +1,251 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* zalo_zns
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-08-30 01:56+0000\n"
+"PO-Revision-Date: 2024-08-30 01:56+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: zalo_zns
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_config__api_url
+msgid "API URL"
+msgstr "URL API"
+
+#. module: zalo_zns
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_config__access_token
+msgid "Access Token"
+msgstr "Token truy cập"
+
+#. module: zalo_zns
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_batch__message_needaction
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_message__message_needaction
+msgid "Action Needed"
+msgstr "Cần thao tác"
+
+#. module: zalo_zns
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_batch__activity_ids
+msgid "Activities"
+msgstr "Hoạt động"
+
+#. module: zalo_zns
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_batch__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr "Decoration ngoại lệ hoạt động"
+
+#. module: zalo_zns
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_batch__activity_state
+msgid "Activity State"
+msgstr "Trạng thái hoạt động"
+
+#. module: zalo_zns
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_batch__activity_type_icon
+msgid "Activity Type Icon"
+msgstr "Biểu tượng loại hoạt động"
+
+#. module: zalo_zns
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_batch__message_attachment_count
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_message__message_attachment_count
+msgid "Attachment Count"
+msgstr "Số lượng tệp đính kèm"
+
+#. module: zalo_zns
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_message__batch_id
+msgid "Batch"
+msgstr "Lô"
+
+#. module: zalo_zns
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_batch__name
+msgid "Batch Name"
+msgstr "Tên lô"
+
+#. module: zalo_zns
+#: model:ir.ui.menu,name:zalo_zns.menu_zalo_zns_batch
+msgid "Batches"
+msgstr "Lô"
+
+#. module: zalo_zns
+#: model_terms:ir.ui.view,arch_db:zalo_zns.view_zalo_zns_batch_form
+msgid "Cancel"
+msgstr "Hủy"
+
+#. module: zalo_zns
+#: model:ir.model.fields.selection,name:zalo_zns.selection__zalo_zns_batch__state__cancelled
+msgid "Cancelled"
+msgstr "Đã hủy"
+
+#. module: zalo_zns
+#. odoo-python
+#: code:addons/zalo_zns/models/zalo_zns_batch.py:0
+#, python-format
+msgid "Cannot mark as done. There are unsent messages in this batch."
+msgstr "Không thể đánh dấu là hoàn thành. Có các tin nhắn chưa gửi trong lô này."
+
+#. module: zalo_zns
+#: model:ir.ui.menu,name:zalo_zns.menu_zalo_zns_config
+msgid "Configuration"
+msgstr "Cấu hình"
+
+#. module: zalo_zns
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_config__name
+msgid "Configuration Name"
+msgstr "Tên cấu hình"
+
+#. module: zalo_zns
+#: model_terms:ir.ui.view,arch_db:zalo_zns.view_zalo_zns_batch_form
+msgid "Confirm"
+msgstr "Xác nhận"
+
+#. module: zalo_zns
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_batch__create_uid
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_config__create_uid
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_message__create_uid
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_template__create_uid
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_template_key_value__create_uid
+msgid "Created by"
+msgstr "Tạo bởi"
+
+#. module: zalo_zns
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_batch__create_date
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_config__create_date
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_message__create_date
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_template__create_date
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_template_key_value__create_date
+msgid "Created on"
+msgstr "Tạo vào"
+
+#. module: zalo_zns
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_template__description
+msgid "Description"
+msgstr "Mô tả"
+
+#. module: zalo_zns
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_batch__display_name
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_config__display_name
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_message__display_name
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_template__display_name
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_template_key_value__display_name
+msgid "Display Name"
+msgstr "Tên hiển thị"
+
+#. module: zalo_zns
+#: model:ir.model.fields.selection,name:zalo_zns.selection__zalo_zns_batch__state__done
+#: model:ir.model.fields.selection,name:zalo_zns.selection__zalo_zns_message__state__done
+msgid "Done"
+msgstr "Hoàn thành"
+
+#. module: zalo_zns
+#: model:ir.model.fields.selection,name:zalo_zns.selection__zalo_zns_batch__state__draft
+#: model:ir.model.fields.selection,name:zalo_zns.selection__zalo_zns_message__state__draft
+msgid "Draft"
+msgstr "Nháp"
+
+#. module: zalo_zns
+#: model:ir.model.fields.selection,name:zalo_zns.selection__zalo_zns_message__message_type__dummy
+msgid "Dummy"
+msgstr "Giả"
+
+#. module: zalo_zns
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_message__error_message
+msgid "Error Message"
+msgstr "Thông báo lỗi"
+
+#. module: zalo_zns
+#: model:ir.model.fields.selection,name:zalo_zns.selection__zalo_zns_message__state__failed
+msgid "Failed"
+msgstr "Thất bại"
+
+#. module: zalo_zns
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_template_key_value__field_id
+msgid "Field"
+msgstr "Trường"
+
+#. module: zalo_zns
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_batch__message_follower_ids
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_message__message_follower_ids
+msgid "Followers"
+msgstr "Người theo dõi"
+
+#. module: zalo_zns
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_batch__message_partner_ids
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_message__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "Người theo dõi (Đối tác)"
+
+#. module: zalo_zns
+#: model:ir.model.fields,help:zalo_zns.field_zalo_zns_batch__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr "Biểu tượng Font awesome, ví dụ: fa-tasks"
+
+#. module: zalo_zns
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_batch__has_message
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_message__has_message
+msgid "Has Message"
+msgstr "Có tin nhắn"
+
+#. module: zalo_zns
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_batch__id
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_config__id
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_message__id
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_template__id
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_template_key_value__id
+msgid "ID"
+msgstr "ID"
+
+#. module: zalo_zns
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_batch__activity_exception_icon
+msgid "Icon"
+msgstr "Biểu tượng"
+
+#. module: zalo_zns
+#: model:ir.model.fields,help:zalo_zns.field_zalo_zns_batch__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr "Biểu tượng chỉ ra một hoạt động ngoại lệ."
+
+#. module: zalo_zns
+#: model:ir.model.fields,help:zalo_zns.field_zalo_zns_batch__message_needaction
+#: model:ir.model.fields,help:zalo_zns.field_zalo_zns_message__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "Nếu được chọn, các tin nhắn mới cần sự chú ý của bạn."
+
+#. module: zalo_zns
+#: model:ir.model.fields,help:zalo_zns.field_zalo_zns_batch__message_has_error
+#: model:ir.model.fields,help:zalo_zns.field_zalo_zns_message__message_has_error
+msgid "If checked, some messages have a delivery error."
+msgstr "Nếu được chọn, một số tin nhắn có lỗi gửi."
+
+#. module: zalo_zns
+#: model:ir.model.fields.selection,name:zalo_zns.selection__zalo_zns_batch__state__in_progress
+msgid "In Progress"
+msgstr "Đang thực hiện"
+
+#. module: zalo_zns
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_batch__message_is_follower
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_message__message_is_follower
+msgid "Is Follower"
+msgstr "Là người theo dõi"
+
+#. module: zalo_zns
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_template_key_value__key
+msgid "Key"
+msgstr "Khóa"
+
+#. module: zalo_zns
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_template__key_value_ids
+#: model_terms:ir.ui.view,arch_db:zalo_zns.view_zalo_zns_template_form
+msgid "Key-Value Pairs"
+msgstr "Cặp khóa-giá trị"
+
+#. module: zalo_zns
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_batch__write_uid
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_config__write_uid
+#: model:ir.model.fields,field_description:zalo_zns.field_zalo_zns_message__write_uid
+#: model:ir

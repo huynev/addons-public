@@ -25,9 +25,11 @@
                         <field name="model_id"/>
                     </group>
                     <notebook>
-                        <page string="Recipients" name="recipients">
-                            <field name="recipient_ids" widget="many2many" mode="tree,kanban"
-                                context="{'form_view_ref': 'zalo_zns.view_zalo_zns_message_form'}" readonly="state not in ['draft', 'in_progress']"/>
+                        <page string="Message" name="message">
+                            <field name="message_ids" widget="many2many" mode="tree,kanban"
+                                context="{'form_view_ref': 'zalo_zns.view_zalo_zns_message_form'}"
+                                readonly="1"
+                                options="{'no_create': True, 'no_create_edit': True}"/>
                         </page>
                     </notebook>
                 </sheet>

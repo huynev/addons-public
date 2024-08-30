@@ -3,6 +3,4 @@ access_zalo_zns_config,access_zalo_zns_config,model_zalo_zns_config,base.group_u
 access_zalo_zns_template,access_zalo_zns_template,model_zalo_zns_template,base.group_user,1,1,1,1
 access_zalo_zns_batch,access_zalo_zns_batch,model_zalo_zns_batch,base.group_user,1,1,1,1
 access_zalo_zns_message,access_zalo_zns_message,model_zalo_zns_message,base.group_user,1,1,1,1
-access_zalo_zns_add_recipients,access_zalo_zns_add_recipients,model_zalo_zns_add_recipients,base.group_user,1,1,1,0
 access_zalo_zns_template_key_value,access_zalo_zns_template_key_value,model_zalo_zns_template_key_value,base.group_user,1,1,1,1
-access_zalo_zns_send_message_wizard,access_zalo_zns_send_message_wizard,model_zalo_zns_send_message_wizard,base.group_user,1,1,1,0

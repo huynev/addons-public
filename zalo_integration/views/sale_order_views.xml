@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Form View -->
+        <record id="view_order_form_inherit_zalo" model="ir.ui.view">
+            <field name="name">sale.order.form.inherit.zalo</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//header" position="inside">
+                    <button name="action_send_zalo_message" string="Send Zalo Message" type="object" class="oe_highlight"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Tree View -->
+        <record id="view_order_tree_inherit_zalo" model="ir.ui.view">
+            <field name="name">sale.order.tree.inherit.zalo</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_quotation_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="decoration-bf">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Search View -->
+        <record id="view_sales_order_filter_inherit_zalo" model="ir.ui.view">
+            <field name="name">sale.order.list.select.inherit.zalo</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='my_sale_orders_filter']" position="after">
+                    <filter string="Batch Send Zalo Messages" name="batch_send_zalo"
+                            domain="[]" context="{'group_by': 'partner_id'}" />
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

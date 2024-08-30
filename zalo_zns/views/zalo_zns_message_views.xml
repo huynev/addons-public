@@ -8,8 +8,7 @@
             <tree>
                 <field name="batch_id"/>
                 <field name="name"/>
-                <field name="zalo_msg_id"/>
-                <field name="zalo_msg_str"/>
+                <field name="error_message"/>
                 <field name="phone"/>
                 <field
                     name="state"
@@ -40,7 +39,6 @@
                         <field name="name"/>
                         <field name="template_id"/>
                         <field name="zalo_msg_id"/>
-                        <field name="zalo_msg_str"/>
                         <field name="phone"/>
                         <field name="error_message" invisible="state != 'failed'"/>
                     </group>
