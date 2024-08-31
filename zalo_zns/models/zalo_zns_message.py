@@ -7,11 +7,12 @@ import re
 class ZaloZnsMessage(models.Model):
     _name = 'zalo.zns.message'
     _description = 'Zalo ZNS Message'
-    _inherit = ['mail.thread']
+    _inherit = ['mail.thread', 'mail.activity.mixin']
 
     batch_id = fields.Many2one('zalo.zns.batch', string='Batch', ondelete='set null', required=False, readonly=True)
     template_id = fields.Many2one('zalo.zns.template', string='Template', related='batch_id.template_id', readonly=True)
     name = fields.Char(string='Name')
+    model_id = fields.Many2one('ir.model', string='Model')
     record_id = fields.Integer(string='Record ID')
     zalo_user_id_zalo = fields.Char(string="User ID zalo")
     zalo_msg_id = fields.Char(string='Zalo Message ID', readonly=True)
@@ -24,7 +25,6 @@ class ZaloZnsMessage(models.Model):
         ('failed', 'Failed')
     ], string='State', default='draft', tracking=True)
     error_message = fields.Text(string='Error Message')
-    message_ids = fields.Many2many('mail.message', 'zalo_zns_message_mail_message_rel', 'zalo_message_id', 'mail_message_id', string='Messages')
     message_type = fields.Selection([('dummy', 'Dummy')], default='dummy', string='Message Type')
 
     def format_phone_number(self, phone):
@@ -52,7 +52,7 @@ class ZaloZnsMessage(models.Model):
             template_data = {}
             for kv in key_value_pairs:
                 if kv.model_id and kv.field_id:
-                    related_record = self.env[message.batch_id.model_id.model].browse(message.record_id)
+                    related_record = self.env[message.model_id.model].browse(message.record_id)
                     value = related_record[kv.field_id.name]
 
                     # Xử lý trường hợp value là một recordset
@@ -64,7 +64,7 @@ class ZaloZnsMessage(models.Model):
                         else:
                             value = str(value)
                     elif isinstance(value, (int, float)):
-                        value = str(value)
+                        value = int(value)
                     elif value is False:
                         value = ''
                 else:

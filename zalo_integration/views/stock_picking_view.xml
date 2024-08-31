@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Form View -->
+        <record id="view_stock_picking_form_inherit_zalo" model="ir.ui.view">
+            <field name="name">stock.picking.form.inherit.zalo</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//header" position="inside">
+                    <button name="action_send_zalo_message" string="Send Zalo Message" type="object" class="oe_highlight"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_batch_send_zalo_wizard_stock_picking" model="ir.actions.act_window">
+            <field name="name">Batch Send Zalo Messages</field>
+            <field name="res_model">zalo.batch.send.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="binding_model_id" ref="stock.model_stock_picking"/>
+            <field name="binding_view_types">list</field>
+        </record>
+    </data>
+</odoo>

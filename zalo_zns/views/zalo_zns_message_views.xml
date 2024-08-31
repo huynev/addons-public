@@ -6,7 +6,6 @@
         <field name="model">zalo.zns.message</field>
         <field name="arch" type="xml">
             <tree>
-                <field name="batch_id"/>
                 <field name="name"/>
                 <field name="error_message"/>
                 <field name="phone"/>
@@ -37,6 +36,7 @@
                     <group>
                         <field name="batch_id"/>
                         <field name="name"/>
+                        <field name="model_id"/>
                         <field name="template_id"/>
                         <field name="zalo_msg_id"/>
                         <field name="phone"/>

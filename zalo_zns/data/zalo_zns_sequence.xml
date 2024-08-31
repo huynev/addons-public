@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="seq_zalo_zns_batch" model="ir.sequence">
+            <field name="name">Zalo ZNS Batch Sequence</field>
+            <field name="code">zalo.zns.batch</field>
+            <field name="prefix">ZNS/%(year)s/%(month)s/%(day)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

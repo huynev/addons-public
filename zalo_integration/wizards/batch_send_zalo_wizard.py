@@ -29,32 +29,40 @@ class BatchSendZaloWizard(models.TransientModel):
         records = self.env[self.model].browse(record_ids)
 
         batch = self.env['zalo.zns.batch'].create({
-            'name': f"Batch {fields.Datetime.now()}",
             'template_id': self.template_id.id,
-            'model_id': self.env['ir.model'].search([('model', '=', self.model)], limit=1).id,
+            'origin_model': self._context.get('active_model'),
         })
 
         for record in records:
             partner = record.partner_id if hasattr(record, 'partner_id') else False
-            if not partner or not partner.phone:
-                raise UserError(_("Partner or phone number missing for record: %s") % record.display_name)
+            if partner and partner.phone:
+                phone = partner.phone
+            elif hasattr(record, 'phone_zalo'):
+                phone = record.phone_zalo
+            elif hasattr(record, 'phone'):
+                phone = record.phone
+            else:
+                phone = None
 
-            message_vals = {
-                'batch_id': batch.id,
-                'template_id': self.template_id.id,
-                'name': partner.name,
-                'phone': partner.phone,
-                'record_id': record.id,
-            }
-
-            message = self.env['zalo.zns.message'].create(message_vals)
+            if phone:
+                message_vals = {
+                    'batch_id': batch.id,
+                    'template_id': self.template_id.id,
+                    'name': record.name,
+                    'phone': phone,
+                    'record_id': record.id,
+                    'model_id': self.env['ir.model'].search([('model', '=', self.model)], limit=1).id,
+                }
+                message = self.env['zalo.zns.message'].create(message_vals)
 
         batch.action_confirm()
         return {
-            'type': 'ir.actions.act_window',
-            'name': _('Zalo ZNS Batch'),
-            'res_model': 'zalo.zns.batch',
-            'res_id': batch.id,
-            'view_mode': 'form',
-            'target': 'current',
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'message': _("Đã gửi đến hệ thống gửi tin ZNS"),
+                'type': 'success',
+                'sticky': False,
+                'next': {'type': 'ir.actions.act_window_close'},
+            }
         }

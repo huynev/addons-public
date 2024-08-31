@@ -15,6 +15,7 @@
         'views/zalo_zns_message_views.xml',
         'views/zalo_zns_menu.xml',
         'data/zalo_zns_cron.xml',
+        'data/zalo_zns_sequence.xml',
     ],
     'installable': True,
     'application': True,

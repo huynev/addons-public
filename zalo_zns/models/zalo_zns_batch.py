@@ -1,16 +1,15 @@
 # Copyright 2024 Wokwy - quochuy.software@gmail.com
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
+from datetime import date
 
 class ZaloZnsBatch(models.Model):
     _name = 'zalo.zns.batch'
     _description = 'Zalo ZNS Batch'
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
-    name = fields.Char(string='Batch Name', required=True, copy=False, readonly=True,
-                       default=lambda self: _('New'))
+    name = fields.Char(string='Batch Number', required=True, copy=False, readonly=True, default='/')
     template_id = fields.Many2one('zalo.zns.template', string='Template', required=True)
-    model_id = fields.Many2one('ir.model', string='Model')
     state = fields.Selection([
         ('draft', 'Draft'),
         ('in_progress', 'In Progress'),
@@ -20,6 +19,7 @@ class ZaloZnsBatch(models.Model):
     recipient_ids = fields.Many2many('res.partner', 'batch_id', string='Recipient')
     message_ids = fields.One2many('zalo.zns.message', 'batch_id', string='Messages')
     message_count = fields.Integer(string='Message Count', compute='_compute_message_count')
+    origin_model = fields.Char(string='Origin Model', readonly=True)
 
     @api.depends('message_ids')
     def _compute_message_count(self):
@@ -28,34 +28,21 @@ class ZaloZnsBatch(models.Model):
 
     @api.model
     def create(self, vals):
-        if vals.get('name', _('New')) == _('New'):
-            vals['name'] = self.env['ir.sequence'].next_by_code('zalo.zns.batch') or _('New')
-        batch = super(ZaloZnsBatch, self).create(vals)
-        batch._create_messages()
-        return batch
+        if vals.get('name', '/') == '/':
+            today = date.today()
+            origin_model = vals.get('origin_model') or self._name
+            vals['name'] = self._generate_unique_name(today, origin_model)
+        return super(ZaloZnsBatch, self).create(vals)
 
-    def write(self, vals):
-        result = super(ZaloZnsBatch, self).write(vals)
-        self._create_messages()
-        return result
-
-    def _create_messages(self):
-        for batch in self:
-            # Delete existing messages
-            # batch.message_ids.unlink()
-
-            # Create new messages
-            messages = []
-            for record in batch.recipient_ids:
-                if record.phone:
-                    messages.append({
-                        'batch_id': batch.id,
-                        'template_id': batch.template_id.id,
-                        'record_id': record.id,
-                        'name': record.name,
-                        'phone': record.phone,
-                    })
-            self.env['zalo.zns.message'].create(messages)
+    def _generate_unique_name(self, date, model_name):
+        sequence = self.env['ir.sequence'].with_context(ir_sequence_date=date)
+        model_short_name = model_name.split('.')[-1].upper()
+        prefix = f"ZNS/{model_short_name}/"
+        year = date.strftime('%Y')
+        month = date.strftime('%m')
+        day = date.strftime('%d')
+        suffix = sequence.next_by_code('zalo.zns.batch')[-4:]  # Lấy 4 số cuối của sequence
+        return f"{prefix}{year}/{month}/{day}/{suffix}"
 
     def action_confirm(self):
         self.write({'state': 'in_progress'})
