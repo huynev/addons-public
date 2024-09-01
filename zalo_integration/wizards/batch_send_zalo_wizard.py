@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
+import re
 
 
 class BatchSendZaloWizard(models.TransientModel):
@@ -8,7 +9,8 @@ class BatchSendZaloWizard(models.TransientModel):
     _description = 'Batch Send Zalo Messages'
 
     template_id = fields.Many2one('zalo.zns.template', string='Template', required=True)
-    model = fields.Char(string='Model', required=True)
+    model = fields.Char(string='Model', required=True, readonly=True)
+    field_id = fields.Many2one('ir.model.fields', string='Phone Field', domain="[('model_id.model', '=', model)]")
     record_ids = fields.Char(string='Record IDs', required=True)
 
     @api.model
@@ -23,7 +25,31 @@ class BatchSendZaloWizard(models.TransientModel):
             })
         return res
 
+    @api.onchange('model')
+    def _onchange_model(self):
+        self.field_id = False
+        if self.model:
+            model_id = self.env['ir.model'].search([('model', '=', self.model)], limit=1)
+            return {'domain': {'field_id': [
+                ('model_id', '=', model_id.id),
+                '|',
+                ('name', 'ilike', '%phone%'),
+                ('ttype', '=', 'phone')
+            ]}}
+        return {'domain': {'field_id': []}}
+
     def action_send_batch_messages(self):
+        def is_valid_phone_number(phone):
+            """
+            Kiểm tra xem một chuỗi có phải là số điện thoại hợp lệ hay không.
+            Số điện thoại hợp lệ:
+            - Bắt đầu bằng '+' hoặc '0'
+            - Chứa từ 9 đến 15 chữ số
+            - Có thể chứa dấu '-', '.', hoặc khoảng trắng giữa các số
+            """
+            pattern = r'^(?:\+|0)(?:\d[ -.]?){8,14}\d$'
+            return bool(re.match(pattern, phone))
+
         self.ensure_one()
         record_ids = [int(id) for id in self.record_ids.split(',')]
         records = self.env[self.model].browse(record_ids)
@@ -33,9 +59,18 @@ class BatchSendZaloWizard(models.TransientModel):
             'origin_model': self._context.get('active_model'),
         })
 
+        invalid_records = []
         for record in records:
             partner = record.partner_id if hasattr(record, 'partner_id') else False
-            if partner and partner.phone:
+
+            if self.field_id:
+                phone = record[self.field_id.name]
+                if isinstance(phone, models.BaseModel):
+                    if hasattr(phone, 'phone'):
+                        phone = phone.phone
+                    else:
+                        phone = str(phone)
+            elif partner and partner.phone:
                 phone = partner.phone
             elif hasattr(record, 'phone_zalo'):
                 phone = record.phone_zalo
@@ -44,7 +79,10 @@ class BatchSendZaloWizard(models.TransientModel):
             else:
                 phone = None
 
-            if phone:
+            if not phone or not is_valid_phone_number(phone):
+                invalid_records.append(record.display_name)
+                continue
+            elif phone:
                 message_vals = {
                     'batch_id': batch.id,
                     'template_id': self.template_id.id,
@@ -55,12 +93,15 @@ class BatchSendZaloWizard(models.TransientModel):
                 }
                 message = self.env['zalo.zns.message'].create(message_vals)
 
+        if invalid_records:
+            raise UserError(_("The following records do not have valid phone numbers: %s") % ", ".join(invalid_records))
+
         batch.action_confirm()
         return {
             'type': 'ir.actions.client',
             'tag': 'display_notification',
             'params': {
-                'message': _("Đã gửi đến hệ thống gửi tin ZNS"),
+                'message': _("Sent to the ZNS messaging system"),
                 'type': 'success',
                 'sticky': False,
                 'next': {'type': 'ir.actions.act_window_close'},

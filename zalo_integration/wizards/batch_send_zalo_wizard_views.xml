@@ -8,6 +8,7 @@
                 <form string="Batch Send Zalo Messages">
                     <group>
                         <field name="template_id"/>
+                        <field name="field_id"/>
                         <field name="model" invisible="1"/>
                         <field name="record_ids" invisible="1"/>
                     </group>

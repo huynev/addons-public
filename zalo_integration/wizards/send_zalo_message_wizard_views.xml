@@ -8,6 +8,8 @@
                 <form string="Send Zalo Message">
                     <group>
                         <field name="template_id"/>
+                        <field name="model" invisible="1"/>
+                        <field name="field_id"/>
                     </group>
                     <footer>
                         <button name="action_send_message" string="Send" type="object" class="btn-primary"/>
