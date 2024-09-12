@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- TikTok Shop Form View -->
+        <record id="view_tiktok_shop_form" model="ir.ui.view">
+            <field name="name">tiktok.shop.form</field>
+            <field name="model">tiktok.shop</field>
+            <field name="arch" type="xml">
+                <form string="TikTok Shop">
+                    <header>
+                        <button name="sync_orders" string="Sync Orders" type="object" class="oe_highlight"/>
+                        <button name="sync_inventory" string="Sync Inventory" type="object" class="oe_highlight"/>
+                        <button name="action_sync_categories" string="Sync TikTok Categories" type="object" class="oe_highlight"/>
+                        <button name="transfer_products_to_tiktok_warehouse" string="Transfer Products to TikTok Warehouse" type="object" class="oe_highlight"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="app_key"/>
+                            <field name="app_secret"/>
+                            <field name="access_token"/>
+                            <field name="shop_id"/>
+                            <field name="shop_cipher"/>
+                            <field name="tiktok_warehouse_id"/>
+                            <field name="company_warehouse_id"/>
+                            <field name="default_transfer_quantity"/>
+                            <field name="warehouse_id_in_tiktok"/>
+                            <field name="last_sync_time"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- TikTok Shop Tree View -->
+        <record id="view_tiktok_shop_tree" model="ir.ui.view">
+            <field name="name">tiktok.shop.tree</field>
+            <field name="model">tiktok.shop</field>
+            <field name="arch" type="xml">
+                <tree string="TikTok Shops">
+                    <field name="name"/>
+                    <field name="shop_id"/>
+                    <field name="last_sync_time"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- TikTok Shop Action -->
+        <record id="action_tiktok_shop" model="ir.actions.act_window">
+            <field name="name">TikTok Shop</field>
+            <field name="res_model">tiktok.shop</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- TikTok Shop Log Tree View -->
+        <record id="view_tiktok_shop_log_tree" model="ir.ui.view">
+            <field name="name">tiktok.shop.log.tree</field>
+            <field name="model">tiktok.shop.log</field>
+            <field name="arch" type="xml">
+                <tree string="TikTok Shop Logs">
+                    <field name="create_date"/>
+                    <field name="message"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- TikTok Shop Log Action -->
+        <record id="action_tiktok_shop_log" model="ir.actions.act_window">
+            <field name="name">TikTok Shop Logs</field>
+            <field name="res_model">tiktok.shop.log</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- TikTok Shop Menu -->
+        <menuitem id="menu_tiktok_shop"
+                  name="TikTok Shop"
+                  parent="sale.sale_menu_root"
+                  sequence="20"/>
+
+        <menuitem id="menu_tiktok_shop_config"
+                  name="Configuration"
+                  parent="menu_tiktok_shop"
+                  action="action_tiktok_shop"
+                  sequence="10"/>
+
+        <menuitem id="menu_tiktok_shop_log"
+                  name="Logs"
+                  parent="menu_tiktok_shop"
+                  action="action_tiktok_shop_log"
+                  sequence="20"/>
+    </data>
+</odoo>

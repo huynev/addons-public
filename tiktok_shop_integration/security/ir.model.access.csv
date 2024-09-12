@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_tiktok_shop_user,tiktok.shop.user,model_tiktok_shop,base.group_user,1,1,1,1
+access_tiktok_shop_log_user,tiktok.shop.log.user,model_tiktok_shop_log,base.group_user,1,1,1,1
+access_stock_picking_sale_user,stock.picking.sale.user,stock.model_stock_picking,sales_team.group_sale_salesman,1,0,0,0
+access_tiktok_category_user,tiktok.category.user,model_tiktok_category,base.group_user,1,1,1,1
+access_tiktok_category_mapping_wizard_user,tiktok.category.mapping.wizard.user,model_tiktok_category_mapping_wizard,base.group_user,1,1,1,1

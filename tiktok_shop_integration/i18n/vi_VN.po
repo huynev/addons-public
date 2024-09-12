@@ -1,0 +1,509 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* tiktok_shop_integration
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-09-12 07:37+0000\n"
+"PO-Revision-Date: 2024-09-12 07:37+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: tiktok_shop_integration
+#. odoo-python
+#: code:addons/tiktok_shop_integration/models/tiktok_shop.py:0
+#, python-format
+msgid "%d orders have been synchronized from TikTok."
+msgstr "%d đơn hàng đã được đồng bộ từ TikTok."
+
+#. module: tiktok_shop_integration
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_tiktok_shop_log__response
+msgid "API Response"
+msgstr "Phản hồi API"
+
+#. module: tiktok_shop_integration
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_tiktok_shop__access_token
+msgid "Access Token"
+msgstr "Token truy cập"
+
+#. module: tiktok_shop_integration
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_tiktok_shop__app_key
+msgid "App Key"
+msgstr "Khóa ứng dụng"
+
+#. module: tiktok_shop_integration
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_tiktok_shop__app_secret
+msgid "App Secret"
+msgstr "Bí mật ứng dụng"
+
+#. module: tiktok_shop_integration
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_sale_order__auto_transfer_count
+msgid "Auto Transfer Count"
+msgstr "Số lần chuyển tự động"
+
+#. module: tiktok_shop_integration
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_sale_order__auto_transfer_picking_ids
+msgid "Auto Transfer Pickings"
+msgstr "Lấy hàng chuyển tự động"
+
+#. module: tiktok_shop_integration
+#: model_terms:ir.ui.view,arch_db:tiktok_shop_integration.view_order_form_inherit_tiktok
+msgid "Auto Transfers"
+msgstr "Chuyển tự động"
+
+#. module: tiktok_shop_integration
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_product_product__can_sell_on_tiktok
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_product_template__can_sell_on_tiktok
+msgid "Can Sell on TikTok"
+msgstr "Có thể bán trên TikTok"
+
+#. module: tiktok_shop_integration
+#: model_terms:ir.ui.view,arch_db:tiktok_shop_integration.view_tiktok_category_mapping_wizard_form
+msgid "Cancel"
+msgstr "Hủy"
+
+#. module: tiktok_shop_integration
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_tiktok_category__child_ids
+#: model_terms:ir.ui.view,arch_db:tiktok_shop_integration.view_tiktok_category_form
+msgid "Child Categories"
+msgstr "Danh mục con"
+
+#. module: tiktok_shop_integration
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_tiktok_shop__company_warehouse_id
+msgid "Company Warehouse"
+msgstr "Kho công ty"
+
+#. module: tiktok_shop_integration
+#: model:ir.ui.menu,name:tiktok_shop_integration.menu_tiktok_shop_config
+msgid "Configuration"
+msgstr "Cấu hình"
+
+#. module: tiktok_shop_integration
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_tiktok_shop_log__create_date
+msgid "Created On"
+msgstr "Được tạo vào"
+
+#. module: tiktok_shop_integration
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_tiktok_category__create_uid
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_tiktok_category_mapping_wizard__create_uid
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_tiktok_shop__create_uid
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_tiktok_shop_log__create_uid
+msgid "Created by"
+msgstr "Tạo bởi"
+
+#. module: tiktok_shop_integration
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_tiktok_category__create_date
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_tiktok_category_mapping_wizard__create_date
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_tiktok_shop__create_date
+msgid "Created on"
+msgstr "Tạo vào"
+
+#. module: tiktok_shop_integration
+#: model_terms:ir.ui.view,arch_db:tiktok_shop_integration.product_template_form_view_inherit_tiktok
+msgid "Cập nhật kho TikTok"
+msgstr "Cập nhật kho TikTok"
+
+#. module: tiktok_shop_integration
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_tiktok_shop__default_transfer_quantity
+msgid "Default Transfer Quantity"
+msgstr "Số lượng chuyển mặc định"
+
+#. module: tiktok_shop_integration
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_tiktok_category__display_name
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_tiktok_category_mapping_wizard__display_name
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_tiktok_shop__display_name
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_tiktok_shop_log__display_name
+msgid "Display Name"
+msgstr "Tên hiển thị"
+
+#. module: tiktok_shop_integration
+#. odoo-python
+#: code:addons/tiktok_shop_integration/models/product.py:0
+#, python-format
+msgid "Failed to publish product to TikTok Shop: %s"
+msgstr "Không thể đăng sản phẩm lên TikTok Shop: %s"
+
+#. module: tiktok_shop_integration
+#. odoo-python
+#: code:addons/tiktok_shop_integration/models/tiktok_shop.py:0
+#, python-format
+msgid "Failed to retrieve categories from TikTok."
+msgstr "Không thể lấy danh mục từ TikTok."
+
+#. module: tiktok_shop_integration
+#. odoo-python
+#: code:addons/tiktok_shop_integration/models/tiktok_shop.py:0
+#, python-format
+msgid ""
+"Failed to sync orders from TikTok. Please check the logs for more details."
+msgstr ""
+"Không thể đồng bộ đơn hàng từ TikTok. Vui lòng kiểm tra nhật ký để biết thêm chi tiết."
+
+#. module: tiktok_shop_integration
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_tiktok_category__id
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_tiktok_category_mapping_wizard__id
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_tiktok_shop__id
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_tiktok_shop_log__id
+msgid "ID"
+msgstr "ID"
+
+#. module: tiktok_shop_integration
+#. odoo-python
+#: code:addons/tiktok_shop_integration/models/product.py:0
+#, python-format
+msgid "Image size exceeds 5MB limit. Please use a smaller image."
+msgstr "Kích thước hình ảnh vượt quá giới hạn 5MB. Vui lòng sử dụng hình ảnh nhỏ hơn."
+
+#. module: tiktok_shop_integration
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_tiktok_category__is_leaf
+msgid "Is Leaf Category"
+msgstr "Là danh mục lá"
+
+#. module: tiktok_shop_integration
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_tiktok_shop__last_sync_time
+msgid "Last Sync Time"
+msgstr "Thời gian đồng bộ cuối cùng"
+
+#. module: tiktok_shop_integration
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_tiktok_category__write_uid
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_tiktok_category_mapping_wizard__write_uid
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_tiktok_shop__write_uid
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_tiktok_shop_log__write_uid
+msgid "Last Updated by"
+msgstr "Cập nhật lần cuối bởi"
+
+#. module: tiktok_shop_integration
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_tiktok_category__write_date
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_tiktok_category_mapping_wizard__write_date
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_tiktok_shop__write_date
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_tiktok_shop_log__write_date
+msgid "Last Updated on"
+msgstr "Cập nhật lần cuối vào"
+
+#. module: tiktok_shop_integration
+#: model:ir.ui.menu,name:tiktok_shop_integration.menu_tiktok_shop_log
+msgid "Logs"
+msgstr "Nhật ký"
+
+#. module: tiktok_shop_integration
+#: model_terms:ir.ui.view,arch_db:tiktok_shop_integration.view_tiktok_category_form
+#: model_terms:ir.ui.view,arch_db:tiktok_shop_integration.view_tiktok_category_mapping_wizard_form
+msgid "Map Categories"
+msgstr "Ánh xạ danh mục"
+
+#. module: tiktok_shop_integration
+#: model:ir.actions.act_window,name:tiktok_shop_integration.action_tiktok_category_mapping_wizard
+#: model_terms:ir.ui.view,arch_db:tiktok_shop_integration.view_tiktok_category_mapping_wizard_form
+msgid "Map TikTok Category"
+msgstr "Ánh xạ danh mục TikTok"
+
+#. module: tiktok_shop_integration
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_tiktok_shop_log__message
+msgid "Message"
+msgstr "Tin nhắn"
+
+#. module: tiktok_shop_integration
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_tiktok_category__name
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_tiktok_shop__name
+msgid "Name"
+msgstr "Tên"
+
+#. module: tiktok_shop_integration
+#. odoo-python
+#: code:addons/tiktok_shop_integration/models/product.py:0
+#: code:addons/tiktok_shop_integration/models/product.py:0
+#, python-format
+msgid "No TikTok Shop configuration found."
+msgstr "Không tìm thấy cấu hình TikTok Shop."
+
+#. module: tiktok_shop_integration
+#. odoo-python
+#: code:addons/tiktok_shop_integration/models/product.py:0
+#, python-format
+msgid ""
+"No TikTok category mapping found for this product's category. Please set up "
+"the mapping first."
+msgstr ""
+"Không tìm thấy ánh xạ danh mục TikTok cho danh mục của sản phẩm này. Vui lòng thiết lập ánh xạ trước."
+
+#. module: tiktok_shop_integration
+#. odoo-python
+#: code:addons/tiktok_shop_integration/models/sale_order.py:0
+#, python-format
+msgid "No appropriate picking type found for transfer between warehouses."
+msgstr "Không tìm thấy loại lấy hàng phù hợp để chuyển giữa các kho."
+
+#. module: tiktok_shop_integration
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_tiktok_category__odoo_category_ids
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_tiktok_category_mapping_wizard__odoo_category_ids
+#: model_terms:ir.ui.view,arch_db:tiktok_shop_integration.view_tiktok_category_form
+msgid "Odoo Categories"
+msgstr "Danh mục Odoo"
+
+#. module: tiktok_shop_integration
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_tiktok_category__parent_id
+msgid "Parent Category"
+msgstr "Danh mục cha"
+
+#. module: tiktok_shop_integration
+#: model:ir.model,name:tiktok_shop_integration.model_product_template
+msgid "Product"
+msgstr "Sản phẩm"
+
+#. module: tiktok_shop_integration
+#. odoo-python
+#: code:addons/tiktok_shop_integration/models/product.py:0
+#, python-format
+msgid "Product Already Exists"
+msgstr "Sản phẩm đã tồn tại"
+
+Dưới đây là bản dịch tiếp tục cho phần còn lại:
+
+#. module: tiktok_shop_integration
+#: model:ir.model,name:tiktok_shop_integration.model_product_product
+msgid "Product Variant"
+msgstr "Biến thể sản phẩm"
+
+#. module: tiktok_shop_integration
+#. odoo-python
+#: code:addons/tiktok_shop_integration/models/product.py:0
+#, python-format
+msgid "Product successfully published to TikTok Shop"
+msgstr "Sản phẩm đã được đăng thành công lên TikTok Shop"
+
+#. module: tiktok_shop_integration
+#: model:ir.actions.server,name:tiktok_shop_integration.action_publish_to_tiktok
+msgid "Publish to TikTok"
+msgstr "Đăng lên TikTok"
+
+#. module: tiktok_shop_integration
+#: model:ir.model,name:tiktok_shop_integration.model_sale_order
+msgid "Sales Order"
+msgstr "Đơn bán hàng"
+
+#. module: tiktok_shop_integration
+#: model:ir.model,name:tiktok_shop_integration.model_sale_order_line
+msgid "Sales Order Line"
+msgstr "Dòng đơn bán hàng"
+
+#. module: tiktok_shop_integration
+#: model:ir.actions.server,name:tiktok_shop_integration.action_set_can_sell_on_tiktok
+#: model:ir.actions.server,name:tiktok_shop_integration.action_set_can_sell_on_tiktok_template
+msgid "Set Can Sell on TikTok"
+msgstr "Đặt có thể bán trên TikTok"
+
+#. module: tiktok_shop_integration
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_tiktok_shop__shop_id
+msgid "Shop ID"
+msgstr "ID cửa hàng"
+
+#. module: tiktok_shop_integration
+#. odoo-python
+#: code:addons/tiktok_shop_integration/models/tiktok_shop.py:0
+#, python-format
+msgid "Stock Update"
+msgstr "Cập nhật tồn kho"
+
+#. module: tiktok_shop_integration
+#. odoo-python
+#: code:addons/tiktok_shop_integration/models/product.py:0
+#: code:addons/tiktok_shop_integration/models/tiktok_shop.py:0
+#, python-format
+msgid "Success"
+msgstr "Thành công"
+
+#. module: tiktok_shop_integration
+#: model_terms:ir.ui.view,arch_db:tiktok_shop_integration.view_tiktok_shop_form
+msgid "Sync Inventory"
+msgstr "Đồng bộ hóa tồn kho"
+
+#. module: tiktok_shop_integration
+#: model_terms:ir.ui.view,arch_db:tiktok_shop_integration.view_tiktok_shop_form
+msgid "Sync Orders"
+msgstr "Đồng bộ hóa đơn hàng"
+
+#. module: tiktok_shop_integration
+#: model_terms:ir.ui.view,arch_db:tiktok_shop_integration.view_tiktok_shop_form
+msgid "Sync TikTok Categories"
+msgstr "Đồng bộ hóa danh mục TikTok"
+
+#. module: tiktok_shop_integration
+#. odoo-python
+#: code:addons/tiktok_shop_integration/models/product.py:0
+#, python-format
+msgid ""
+"This product already exists on TikTok Shop with ID: %s. Please update the "
+"existing product instead of creating a new one."
+msgstr ""
+"Sản phẩm này đã tồn tại trên TikTok Shop với ID: %s. Vui lòng cập nhật sản phẩm hiện có thay vì tạo mới."
+
+#. module: tiktok_shop_integration
+#. odoo-python
+#: code:addons/tiktok_shop_integration/models/product.py:0
+#, python-format
+msgid ""
+"This product is not marked as sellable on TikTok. Please enable it first."
+msgstr ""
+"Sản phẩm này không được đánh dấu là có thể bán trên TikTok. Vui lòng kích hoạt nó trước."
+
+#. module: tiktok_shop_integration
+#. odoo-python
+#: code:addons/tiktok_shop_integration/models/product.py:0
+#, python-format
+msgid "This product is not published on TikTok yet."
+msgstr "Sản phẩm này chưa được đăng trên TikTok."
+
+#. module: tiktok_shop_integration
+#: model:ir.actions.act_window,name:tiktok_shop_integration.action_tiktok_category
+#: model:ir.ui.menu,name:tiktok_shop_integration.menu_tiktok_category
+msgid "TikTok Categories"
+msgstr "Danh mục TikTok"
+
+#. module: tiktok_shop_integration
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_tiktok_category_mapping_wizard__tiktok_category_id
+msgid "TikTok Category"
+msgstr "Danh mục TikTok"
+
+#. module: tiktok_shop_integration
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_tiktok_category__tiktok_category_id
+msgid "TikTok Category ID"
+msgstr "ID danh mục TikTok"
+
+#. module: tiktok_shop_integration
+#: model:ir.model,name:tiktok_shop_integration.model_tiktok_category_mapping_wizard
+msgid "TikTok Category Mapping Wizard"
+msgstr "Trình hướng dẫn ánh xạ danh mục TikTok"
+
+#. module: tiktok_shop_integration
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_sale_order__tiktok_order_id
+msgid "TikTok Order ID"
+msgstr "ID đơn hàng TikTok"
+
+#. module: tiktok_shop_integration
+#: model:ir.model.constraint,message:tiktok_shop_integration.constraint_sale_order_tiktok_order_id_unique
+msgid "TikTok Order ID must be unique!"
+msgstr "ID đơn hàng TikTok phải là duy nhất!"
+
+#. module: tiktok_shop_integration
+#. odoo-python
+#: code:addons/tiktok_shop_integration/models/sale_order.py:0
+#, python-format
+msgid "TikTok Order ID must be unique. The ID %s is already used."
+msgstr "ID đơn hàng TikTok phải là duy nhất. ID %s đã được sử dụng."
+
+#. module: tiktok_shop_integration
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_sale_order_line__tiktok_order_line_id
+msgid "TikTok Order Line ID"
+msgstr "ID dòng đơn hàng TikTok"
+
+#. module: tiktok_shop_integration
+#. odoo-python
+#: code:addons/tiktok_shop_integration/models/tiktok_shop.py:0
+#, python-format
+msgid "TikTok Order Sync"
+msgstr "Đồng bộ hóa đơn hàng TikTok"
+
+#. module: tiktok_shop_integration
+#: model:ir.model,name:tiktok_shop_integration.model_tiktok_category
+msgid "TikTok Product Category"
+msgstr "Danh mục sản phẩm TikTok"
+
+#. module: tiktok_shop_integration
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_product_product__tiktok_product_id
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_product_template__tiktok_product_id
+msgid "TikTok Product ID"
+msgstr "ID sản phẩm TikTok"
+
+#. module: tiktok_shop_integration
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_product_product__tiktok_sku_id
+msgid "TikTok SKU ID"
+msgstr "ID SKU TikTok"
+
+#. module: tiktok_shop_integration
+#: model:ir.actions.act_window,name:tiktok_shop_integration.action_tiktok_shop
+#: model:ir.ui.menu,name:tiktok_shop_integration.menu_tiktok_shop
+#: model_terms:ir.ui.view,arch_db:tiktok_shop_integration.view_tiktok_shop_form
+msgid "TikTok Shop"
+msgstr "Cửa hàng TikTok"
+
+#. module: tiktok_shop_integration
+#: model:ir.model,name:tiktok_shop_integration.model_tiktok_shop
+msgid "TikTok Shop Integration"
+msgstr "Tích hợp cửa hàng TikTok"
+
+#. module: tiktok_shop_integration
+#: model:ir.model,name:tiktok_shop_integration.model_tiktok_shop_log
+msgid "TikTok Shop Log"
+msgstr "Nhật ký cửa hàng TikTok"
+
+#. module: tiktok_shop_integration
+#: model:ir.actions.act_window,name:tiktok_shop_integration.action_tiktok_shop_log
+#: model_terms:ir.ui.view,arch_db:tiktok_shop_integration.view_tiktok_shop_log_tree
+msgid "TikTok Shop Logs"
+msgstr "Nhật ký cửa hàng TikTok"
+
+#. module: tiktok_shop_integration
+#: model_terms:ir.ui.view,arch_db:tiktok_shop_integration.view_tiktok_shop_tree
+msgid "TikTok Shops"
+msgstr "Các cửa hàng TikTok"
+
+#. module: tiktok_shop_integration
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_sale_order__tiktok_status
+msgid "TikTok Status"
+msgstr "Trạng thái TikTok"
+
+#. module: tiktok_shop_integration
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_sale_order__tiktok_user_id
+msgid "TikTok User ID"
+msgstr "ID người dùng TikTok"
+
+#. module: tiktok_shop_integration
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_tiktok_shop__tiktok_warehouse_id
+msgid "TikTok Warehouse"
+msgstr "Kho TikTok"
+
+#. module: tiktok_shop_integration
+#. odoo-python
+#: code:addons/tiktok_shop_integration/models/tiktok_shop.py:0
+#, python-format
+msgid "TikTok categories have been synchronized."
+msgstr "Các danh mục TikTok đã được đồng bộ hóa."
+
+#. module: tiktok_shop_integration
+#: model_terms:ir.ui.view,arch_db:tiktok_shop_integration.view_tiktok_shop_form
+msgid "Transfer Products to TikTok Warehouse"
+msgstr "Chuyển sản phẩm đến kho TikTok"
+
+#. module: tiktok_shop_integration
+#. odoo-python
+#: code:addons/tiktok_shop_integration/models/tiktok_shop.py:0
+#, python-format
+msgid "Transfer to TikTok Warehouse"
+msgstr "Chuyển đến kho TikTok"
+
+#. module: tiktok_shop_integration
+#: model:ir.actions.server,name:tiktok_shop_integration.action_unset_can_sell_on_tiktok
+#: model:ir.actions.server,name:tiktok_shop_integration.action_unset_can_sell_on_tiktok_template
+msgid "Unset Can Sell on TikTok"
+msgstr "Bỏ đặt có thể bán trên TikTok"
+
+#. module: tiktok_shop_integration
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_tiktok_shop__shop_cipher
+msgid "shop_cipher"
+msgstr "Mã hóa cửa hàng"
+
+#. module: tiktok_shop_integration
+#: model:ir.model.fields,field_description:tiktok_shop_integration.field_tiktok_shop__warehouse_id_in_tiktok
+msgid "warehouse_id in tiktok"
+msgstr "ID kho trong TikTok"
+
+#. module: tiktok_shop_integration
+#: model_terms:ir.ui.view,arch_db:tiktok_shop_integration.product_template_form_view_inherit_tiktok
+msgid "Đăng lên TikTok"
+msgstr "Đăng lên TikTok"

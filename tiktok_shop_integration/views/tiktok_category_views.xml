@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_tiktok_category_tree" model="ir.ui.view">
+        <field name="name">tiktok.category.tree</field>
+        <field name="model">tiktok.category</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="tiktok_category_id"/>
+                <field name="parent_id"/>
+                <field name="name"/>
+                <field name="odoo_category_ids" widget="many2many_tags"/>
+                <field name="is_leaf"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_tiktok_category_form" model="ir.ui.view">
+        <field name="name">tiktok.category.form</field>
+        <field name="model">tiktok.category</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="%(action_tiktok_category_mapping_wizard)d" string="Map Categories" type="action" class="oe_highlight"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="tiktok_category_id"/>
+                        <field name="parent_id"/>
+                        <field name="is_leaf"/>
+                    </group>
+                    <notebook>
+                        <page string="Odoo Categories" name="odoo_categories">
+                            <field name="odoo_category_ids" widget="many2many_tags"/>
+                        </page>
+                        <page string="Child Categories" name="child_categories">
+                            <field name="child_ids"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_tiktok_category" model="ir.actions.act_window">
+        <field name="name">TikTok Categories</field>
+        <field name="res_model">tiktok.category</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_tiktok_category"
+              name="TikTok Categories"
+              action="action_tiktok_category"
+              parent="menu_tiktok_shop"
+              sequence="100"/>
+</odoo>
