@@ -105,6 +105,11 @@ class ProductTemplate(models.Model):
                 _("Failed to publish product to TikTok Shop: %s") % response.get('message', 'Unknown error'))
 
     def _prepare_tiktok_product_data(self, tiktok_shop):
+        self.ensure_one()
+
+        if not tiktok_shop.tiktok_pricelist_id:
+            raise UserError(_("Please set a TikTok pricelist in TikTok Shop configuration."))
+
         tiktok_categories = self.env['tiktok.category'].search([
             ('odoo_category_ids', 'in', self.categ_id.id)
         ])
@@ -113,15 +118,19 @@ class ProductTemplate(models.Model):
             raise UserError(
                 _("No TikTok category mapping found for this product's category. Please set up the mapping first."))
 
+        pricelist = tiktok_shop.tiktok_pricelist_id
+        price = pricelist.get_product_price(self, 1.0, False)
+
         # Chọn TikTok category đầu tiên trong danh sách (hoặc bạn có thể thêm logic để chọn category phù hợp nhất)
         tiktok_category = tiktok_categories[0]
 
         skus = []
         if self.product_variant_ids:
             for variant in self.product_variant_ids:
+                variant_price = pricelist.get_product_price(variant, 1.0, False)
                 sku = {
                     "seller_sku": variant.default_code or "",
-                    "original_price": str(int(variant.list_price)),  # TikTok uses integer prices in cents,
+                    "original_price": str(int(variant_price)),
                     "inventory": [
                         {
                             "warehouse_id": tiktok_shop.warehouse_id_in_tiktok,
@@ -130,30 +139,30 @@ class ProductTemplate(models.Model):
                     ],
                     "price":
                         {
-                            "amount": str(int(variant.list_price)),
-                            "currency": "VND",
+                            "amount": str(int(variant_price)),
+                            "currency": pricelist.currency_id.name,
                         },
                 }
                 skus.append(sku)
         else:
             skus = [{
                 "seller_sku": self.default_code or "",
-                "original_price": str(int(self.list_price)),  # TikTok uses integer prices in cents,
+                "original_price": str(int(price)),
                 "inventory": [
                     {
-                        "warehouse_id": "7311169146124879622",
+                        "warehouse_id": tiktok_shop.warehouse_id_in_tiktok,
                         "quantity": 0,
                     }
                 ],
                 "price":
                     {
-                        "amount": str(int(self.list_price)),
-                        "currency": "VND",
+                        "amount": str(int(price)),
+                         "currency": pricelist.currency_id.name,
                     },
             }]
 
         return {
-            "save_mode": "AS_DRAFT",
+            "save_mode": tiktok_shop.save_mode,
             "title": self.name,
             "description": self.description or "",
             "category_id": tiktok_category.tiktok_category_id,

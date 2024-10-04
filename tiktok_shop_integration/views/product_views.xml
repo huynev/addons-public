@@ -38,6 +38,9 @@
                     <label for="can_sell_on_tiktok"/>
                 </span>
             </xpath>
+            <xpath expr="//group[@name='group_general']" position="inside">
+                <field name="tiktok_product_id" readonly="1"/>
+            </xpath>
         </field>
     </record>
 

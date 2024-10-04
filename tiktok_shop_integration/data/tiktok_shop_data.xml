@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data noupdate="1">
-        <!-- Sample TikTok Shop Configuration -->
-        <record id="tiktok_shop_sample" model="tiktok.shop">
-            <field name="name">Sample TikTok Shop</field>
-            <field name="api_key">your_api_key_here</field>
-            <field name="api_secret">your_api_secret_here</field>
-        </record>
 
-        <!-- You can add more sample data here if needed -->
     </data>
 </odoo>

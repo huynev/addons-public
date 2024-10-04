@@ -6,6 +6,12 @@
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
+                <xpath expr="//field[@name='sale_order_template_id']" position="after">
+                    <label for="tiktok_order_id"/>
+                    <div class="o_row">
+                        <field name="tiktok_order_id"/>
+                    </div>
+                </xpath>
                 <xpath expr="//div[@name='button_box']" position="inside">
                     <button name="action_view_auto_transfers" type="object"
                             class="oe_stat_button" icon="fa-truck"

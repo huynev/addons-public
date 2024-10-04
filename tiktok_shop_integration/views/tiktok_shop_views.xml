@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <!-- TikTok Shop Form View -->
         <record id="view_tiktok_shop_form" model="ir.ui.view">
             <field name="name">tiktok.shop.form</field>
             <field name="model">tiktok.shop</field>
             <field name="arch" type="xml">
                 <form string="TikTok Shop">
                     <header>
-                        <button name="sync_orders" string="Sync Orders" type="object" class="oe_highlight"/>
+                        <button name="%(action_tiktok_sync_orders_wizard)d" string="Sync Orders" type="action" class="oe_highlight"/>
                         <button name="sync_inventory" string="Sync Inventory" type="object" class="oe_highlight"/>
                         <button name="action_sync_categories" string="Sync TikTok Categories" type="object" class="oe_highlight"/>
                         <button name="transfer_products_to_tiktok_warehouse" string="Transfer Products to TikTok Warehouse" type="object" class="oe_highlight"/>
@@ -25,6 +24,9 @@
                             <field name="company_warehouse_id"/>
                             <field name="default_transfer_quantity"/>
                             <field name="warehouse_id_in_tiktok"/>
+                            <field name="tiktok_pricelist_id"/>
+                            <field name="save_mode"/>
+                            <field name="order_status"/>
                             <field name="last_sync_time"/>
                         </group>
                     </sheet>
@@ -32,7 +34,6 @@
             </field>
         </record>
 
-        <!-- TikTok Shop Tree View -->
         <record id="view_tiktok_shop_tree" model="ir.ui.view">
             <field name="name">tiktok.shop.tree</field>
             <field name="model">tiktok.shop</field>

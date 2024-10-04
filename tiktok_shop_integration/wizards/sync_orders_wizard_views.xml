@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_tiktok_sync_orders_wizard_form" model="ir.ui.view">
+        <field name="name">tiktok.sync.orders.wizard.form</field>
+        <field name="model">tiktok.sync.orders.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Sync TikTok Orders">
+                <group>
+                    <field name="tiktok_shop_id"/>
+                    <field name="start_time"/>
+                    <field name="end_time"/>
+                    <field name="order_status"/>
+                </group>
+                <footer>
+                    <button name="action_sync_orders" string="Sync Orders" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_tiktok_sync_orders_wizard" model="ir.actions.act_window">
+        <field name="name">Sync TikTok Orders</field>
+        <field name="res_model">tiktok.sync.orders.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

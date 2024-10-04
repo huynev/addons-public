@@ -215,12 +215,12 @@ class TikTokShop(models.Model):
 
         params = {
             'page_size': 50,
+            'start_time': start_time,
+            'end_time': end_time,
         }
 
         json_data = {
-            "order_status": order_status,
-            'create_time_ge': start_time,
-            'create_time_lt': end_time,
+            "order_status": order_status
         }
         response = self._make_request(path, method='POST', params=params, json_data=json_data)
         total_orders = 0
@@ -236,23 +236,23 @@ class TikTokShop(models.Model):
                 for order in orders:
                     self._create_or_update_order(order)
 
-            # # Handle pagination if needed
-            # next_page_token = response.get('data', {}).get('next_page_token')
-            # while next_page_token:
-            #     params['page_token'] = next_page_token
-            #     response = self._make_request(path, method='POST', params=params)
-            #     if response and response.get('code') == 0:
-            #         orders = response.get('data', {}).get('orders', [])
-            #         total_orders += len(orders)
-            #         if not orders:
-            #             _logger.warning("No orders found in the paginated response")
-            #             break
-            #         for order in orders:
-            #             self._create_or_update_order(order)
-            #         next_page_token = response.get('data', {}).get('next_page_token')
-            #     else:
-            #         _logger.error(f"Error in paginated request: {response}")
-            #         break
+            # Handle pagination if needed
+            next_page_token = response.get('data', {}).get('next_page_token')
+            while next_page_token:
+                params['page_token'] = next_page_token
+                response = self._make_request(path, method='POST', params=params)
+                if response and response.get('code') == 0:
+                    orders = response.get('data', {}).get('orders', [])
+                    total_orders += len(orders)
+                    if not orders:
+                        _logger.warning("No orders found in the paginated response")
+                        break
+                    for order in orders:
+                        self._create_or_update_order(order)
+                    next_page_token = response.get('data', {}).get('next_page_token')
+                else:
+                    _logger.error(f"Error in paginated request: {response}")
+                    break
         else:
             _logger.error(f"Error in initial request: {response}")
             raise UserError(_("Failed to sync orders from TikTok. Please check the logs for more details."))
@@ -310,51 +310,17 @@ class TikTokShop(models.Model):
         }
 
     def _prepare_sale_order_line(self, item):
-        # product = self._get_product_by_sku(item['seller_sku'])
-        product = self._get_or_create_product_by_sku(item['seller_sku'], item)
+        product = self._get_product_by_sku(item['seller_sku'])
         if product:
-            values = {
+            return {
                 'product_id': product.id,
                 'product_uom_qty': 1,
                 'price_unit': float(item['sale_price']),
                 'tiktok_order_line_id': item['id'],
                 'tax_id': []
             }
-            return values
         else:
-            raise UserError(_("Failed to create or find product with SKU: %s") % item['seller_sku'])
-
-    def _get_or_create_product_by_sku(self, sku, item):
-        product = self.env['product.product'].sudo().search([('default_code', '=', sku)], limit=1)
-        if not product:
-            product_vals = self._prepare_product_vals(sku, item)
-            product = self.env['product.product'].sudo().create(product_vals)
-        else:
-            product.write({
-                'tiktok_product_id': item['product_id']
-            })
-
-        # Cập nhật TikTok Product ID nếu có
-        if 'tiktok_product_id' in item:
-            try:
-                product.product_tmpl_id.write({'tiktok_product_id': item['tiktok_product_id']})
-                _logger.info(f"Updated TikTok Product ID for SKU {sku}: {item['tiktok_product_id']}")
-            except Exception as e:
-                _logger.error(f"Failed to update TikTok Product ID for SKU {sku}: {str(e)}")
-
-        return product
-
-    def _prepare_product_vals(self, sku, item):
-        return {
-            'name': item.get('product_name', 'TikTok Product'),
-            'default_code': sku,
-            'type': 'product',
-            'sale_ok': True,
-            'purchase_ok': False,
-            'can_sell_on_tiktok': True,
-            'list_price': float(item['sale_price']),
-            'tiktok_product_id': item.get('tiktok_product_id'),
-        }
+            return None
 
     def _get_or_create_customer(self):
         Partner = self.env['res.partner']
