@@ -310,7 +310,6 @@ class TikTokShop(models.Model):
         }
 
     def _prepare_sale_order_line(self, item):
-        # product = self._get_product_by_sku(item['seller_sku'])
         product = self._get_or_create_product_by_sku(item['seller_sku'], item)
         if product:
             values = {
@@ -381,8 +380,8 @@ class TikTokShop(models.Model):
     def _map_order_status(self, status):
         status_mapping = {
             'UNPAID': 'draft',
-            'AWAITING_SHIPMENT': 'sale',
-            'AWAITING_COLLECTION': 'sale',
+            'AWAITING_SHIPMENT': 'draft',
+            'AWAITING_COLLECTION': 'draft',
             'IN_TRANSIT': 'sale',
             'DELIVERED': 'sale',
             'COMPLETED': 'sale',
