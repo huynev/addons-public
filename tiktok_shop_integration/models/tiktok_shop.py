@@ -271,26 +271,30 @@ class TikTokShop(models.Model):
         }
 
     def _create_or_update_order(self, order_data):
-        SaleOrder = self.env['sale.order']
-        existing_order = SaleOrder.search([('tiktok_order_id', '=', order_data['id'])], limit=1)
+        existing_order = self.env['sale.order'].search([('tiktok_order_id', '=', order_data['id'])], limit=1)
         order_vals = self._prepare_sale_order_vals(order_data)
         order_vals['warehouse_id'] = self.tiktok_warehouse_id.id
         if existing_order:
             try:
-                # existing_order.write(order_vals)
-                existing_order.write({'tiktok_status': order_data['status'], 'tiktok_order_id': order_data['id'], 'tiktok_user_id': order_data['user_id']})
+                existing_order.write({
+                    'tiktok_status': order_data['status'],
+                    'tiktok_order_id': order_data['id'],
+                    'tiktok_user_id': order_data['user_id'],
+                    'partner_id': self._get_or_create_customer(order_data['user_id']).id,
+                })
                 _logger.info(f"Updated order {existing_order.name} from TikTok order {order_data['id']}")
             except ValidationError as e:
-                _logger.error(f"Failed to update order {order_data['order_id']}: {str(e)}")
+                _logger.error(f"Failed to update order {order_data['id']}: {str(e)}")
         else:
             try:
-                new_order = SaleOrder.create(order_vals)
+                order_vals['partner_id'] = self._get_or_create_customer(order_data['user_id']).id
+                new_order = self.env['sale.order'].create(order_vals)
                 _logger.info(f"Created new order {new_order.name} from TikTok order {order_data['id']}")
             except ValidationError as e:
-                _logger.error(f"Failed to create order for TikTok order {order_data['order_id']}: {str(e)}")
+                _logger.error(f"Failed to create order for TikTok order {order_data['id']}: {str(e)}")
 
     def _prepare_sale_order_vals(self, order_data):
-        partner = self._get_or_create_customer()
+        partner = self._get_or_create_customer(order_data['user_id'])
         order_lines = []
         for item in order_data['line_items']:
             line = self._prepare_sale_order_line(item)
@@ -355,13 +359,15 @@ class TikTokShop(models.Model):
             'tiktok_product_id': item.get('tiktok_product_id'),
         }
 
-    def _get_or_create_customer(self):
-        Partner = self.env['res.partner']
-        partner = Partner.search([('name', '=', 'TIKTOK')], limit=1)
+    def _get_or_create_customer(self, tiktok_user_id):
+        partner = self.env['res.partner'].search([('tiktok_user_id', '=', tiktok_user_id)], limit=1)
         if partner:
             return partner
         else:
-            return Partner.create({'name': 'TIKTOK'})
+            return self.env['res.partner'].create({
+                'name': f'TikTok Customer {tiktok_user_id}',
+                'tiktok_user_id': tiktok_user_id,
+            })
 
     def _get_product_by_sku(self, seller_sku):
         product = self.env['product.product'].search([('default_code', '=', seller_sku)], limit=1)

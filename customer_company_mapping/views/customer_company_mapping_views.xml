@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_customer_company_mapping_tree" model="ir.ui.view">
+        <field name="name">customer.company.mapping.tree</field>
+        <field name="model">customer.company.mapping</field>
+        <field name="arch" type="xml">
+            <tree string="Customer Company Mapping" editable="bottom">
+                <field name="company_id"/>
+                <field name="state_id"/>
+                <field name="district_id"/>
+                <field name="ward_id"/>
+                <field name="street"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_customer_company_mapping_form" model="ir.ui.view">
+        <field name="name">customer.company.mapping.form</field>
+        <field name="model">customer.company.mapping</field>
+        <field name="arch" type="xml">
+            <form string="Customer Company Mapping">
+                <sheet>
+                    <group>
+                        <field name="company_id"/>
+                        <field name="state_id"/>
+                        <field name="district_id"/>
+                        <field name="ward_id"/>
+                        <field name="street"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_customer_company_mapping" model="ir.actions.act_window">
+        <field name="name">Customer Company Mapping</field>
+        <field name="res_model">customer.company.mapping</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_customer_company_mapping"
+              name="Customer Company Mapping"
+              action="action_customer_company_mapping"
+              parent="contacts.menu_contacts"
+              sequence="20"/>
+</odoo>
