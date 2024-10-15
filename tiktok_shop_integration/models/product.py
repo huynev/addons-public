@@ -119,7 +119,7 @@ class ProductTemplate(models.Model):
                 _("No TikTok category mapping found for this product's category. Please set up the mapping first."))
 
         pricelist = tiktok_shop.tiktok_pricelist_id
-        price = pricelist.get_product_price(self, 1.0, False)
+        price = pricelist._get_product_price(self, 1.0, False)
 
         # Chọn TikTok category đầu tiên trong danh sách (hoặc bạn có thể thêm logic để chọn category phù hợp nhất)
         tiktok_category = tiktok_categories[0]
@@ -127,7 +127,7 @@ class ProductTemplate(models.Model):
         skus = []
         if self.product_variant_ids:
             for variant in self.product_variant_ids:
-                variant_price = pricelist.get_product_price(variant, 1.0, False)
+                variant_price = pricelist._get_product_price(variant, 1.0, False)
                 sku = {
                     "seller_sku": variant.default_code or "",
                     "original_price": str(int(variant_price)),
