@@ -280,21 +280,19 @@ class TikTokShop(models.Model):
                     'tiktok_status': order_data['status'],
                     'tiktok_order_id': order_data['id'],
                     'tiktok_user_id': order_data['user_id'],
-                    'partner_id': self._get_or_create_customer(order_data['user_id']).id,
                 })
                 _logger.info(f"Updated order {existing_order.name} from TikTok order {order_data['id']}")
             except ValidationError as e:
                 _logger.error(f"Failed to update order {order_data['id']}: {str(e)}")
         else:
             try:
-                order_vals['partner_id'] = self._get_or_create_customer(order_data['user_id']).id
                 new_order = self.env['sale.order'].create(order_vals)
                 _logger.info(f"Created new order {new_order.name} from TikTok order {order_data['id']}")
             except ValidationError as e:
                 _logger.error(f"Failed to create order for TikTok order {order_data['id']}: {str(e)}")
 
     def _prepare_sale_order_vals(self, order_data):
-        partner = self._get_or_create_customer(order_data['user_id'])
+        partner = self._get_or_create_customer(order_data['user_id'], order_data.get('recipient_address', {}))
         order_lines = []
         for item in order_data['line_items']:
             line = self._prepare_sale_order_line(item)
@@ -359,15 +357,42 @@ class TikTokShop(models.Model):
             'tiktok_product_id': item.get('tiktok_product_id'),
         }
 
-    def _get_or_create_customer(self, tiktok_user_id):
+    def _get_or_create_customer(self, tiktok_user_id, address_data=None):
         partner = self.env['res.partner'].search([('tiktok_user_id', '=', tiktok_user_id)], limit=1)
+        if not address_data:
+            address_data = {}
+        ttest = address_data.get('address_detail')
+        partner_vals = {
+            'name': address_data.get('name', f'TikTok Customer {tiktok_user_id}'),
+            'tiktok_user_id': tiktok_user_id,
+            'street': ttest,
+            'street2': address_data.get('full_address', ''),
+            'city': address_data.get('city', ''),
+            'state_id': self._get_state_id(address_data.get('state', '')),
+            'zip': address_data.get('zipcode', ''),
+            'country_id': self._get_country_id(address_data.get('region_code', '')),
+            'phone': address_data.get('phone_number', ''),
+            'mobile': address_data.get('phone_number', ''),
+        }
+
         if partner:
-            return partner
+            partner.write(partner_vals)
         else:
-            return self.env['res.partner'].create({
-                'name': f'TikTok Customer {tiktok_user_id}',
-                'tiktok_user_id': tiktok_user_id,
-            })
+            partner = self.env['res.partner'].create(partner_vals)
+
+        return partner
+
+    def _get_state_id(self, state_name):
+        if not state_name:
+            return False
+        state = self.env['res.country.state'].search([('name', 'ilike', state_name)], limit=1)
+        return state.id if state else False
+
+    def _get_country_id(self, country_code):
+        if not country_code:
+            return False
+        country = self.env['res.country'].search([('code', '=', country_code.upper())], limit=1)
+        return country.id if country else False
 
     def _get_product_by_sku(self, seller_sku):
         product = self.env['product.product'].search([('default_code', '=', seller_sku)], limit=1)
