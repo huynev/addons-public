@@ -20,6 +20,9 @@ class TikTokShop(models.Model):
     app_key = fields.Char(string='App Key', required=True)
     app_secret = fields.Char(string='App Secret', required=True)
     access_token = fields.Char(string='Access Token', required=True)
+    refresh_token = fields.Char(string='Refresh Token', required=True)
+    access_token_expire_in = fields.Datetime(string='Access Token Expiry', readonly=True)
+    refresh_token_expire_in = fields.Datetime(string='Refresh Token Expiry', readonly=True)
     shop_id = fields.Char(string='Shop ID', required=True)
     shop_cipher = fields.Char(string='shop_cipher', required=True)
     tiktok_warehouse_id = fields.Many2one('stock.warehouse', string='TikTok Warehouse', required=True)
@@ -158,7 +161,64 @@ class TikTokShop(models.Model):
 
         return signature
 
+    def _refresh_access_token(self):
+        base_url = "https://auth.tiktok-shops.com"
+        path = "/api/v2/token/refresh"
+
+        params = {
+            'app_key': self.app_key,
+            'app_secret': self.app_secret,
+            'refresh_token': self.refresh_token,
+            'grant_type': 'refresh_token'
+        }
+
+        try:
+            response = requests.get(f"{base_url}{path}", params=params)
+            response.raise_for_status()
+            data = response.json()
+
+            if data.get('code') == 0:
+                self.write({
+                    'access_token': data['data']['access_token'],
+                    'refresh_token': data['data']['refresh_token'],
+                    'access_token_expire_in': fields.Datetime.now() + timedelta(seconds=data['data']['access_token_expire_in']),
+                    'refresh_token_expire_in': fields.Datetime.now() + timedelta(seconds=data['data']['refresh_token_expire_in'])
+                })
+                return True
+            else:
+                _logger.error(f"Token refresh failed: {data.get('message')}")
+                return False
+
+        except Exception as e:
+            _logger.error(f"Token refresh failed: {str(e)}")
+            return False
+
+    def action_refresh_token(self):
+        if self._refresh_access_token():
+            return {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'title': _('Success'),
+                    'message': _('Access token refreshed successfully.'),
+                    'type': 'success',
+                }
+            }
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': _('Error'),
+                'message': _('Failed to refresh access token.'),
+                'type': 'danger',
+            }
+        }
+
     def _make_request(self, path, method='GET', params=None, json_data=None):
+        if not self.access_token_expire_in or fields.Datetime.now() >= self.access_token_expire_in:
+            if not self._refresh_access_token():
+                raise UserError(_("Failed to refresh access token. Please check your credentials."))
+
         base_url = "https://open-api.tiktokglobalshop.com"
         url = f"{base_url}{path}"
 
