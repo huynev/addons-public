@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <data>
+        <!-- Display barcode in Tree View -->
+        <record id="view_picking_tree_barcode" model="ir.ui.view">
+            <field name="name">stock.picking.tree.barcode</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.vpicktree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='location_dest_id']" position="after">
+                    <field name="barcode" />
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Inherit the stock.picking form view -->
+        <record id="view_picking_form_barcode" model="ir.ui.view">
+            <field name="name">stock.picking.form.barcode</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <!-- Target the Extra page and the other_infos group -->
+                <xpath expr="//page[@name='extra']//group[@name='other_infos']/field[@name='company_id']" position="after">
+                    <group>
+                        <field name="barcode_image" widget="image" />
+                    </group>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

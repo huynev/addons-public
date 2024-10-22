@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <data noupdate="1">
+        <record id="seq_stock_picking_barcode" model="ir.sequence">
+            <field name="name">Stock Picking Barcode</field>
+            <field name="code">stock.picking.barcode</field>
+            <field name="padding">9</field>
+            <field name="prefix">SPB</field>
+        </record>
+    </data>
+</odoo>
