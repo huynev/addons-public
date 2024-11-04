@@ -23,7 +23,7 @@
                 <!-- Target the Extra page and the other_infos group -->
                 <xpath expr="//page[@name='extra']//group[@name='other_infos']/field[@name='company_id']" position="after">
                     <group>
-                        <field name="barcode_image" widget="image" />
+                        <field name="barcode_image" widget="image" invisible="not barcode_image" />
                     </group>
                 </xpath>
             </field>
