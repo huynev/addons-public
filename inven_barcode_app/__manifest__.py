@@ -11,12 +11,16 @@ This module enables the barcode scanning feature for the warehouse management sy
     'version': '1.0',
     'depends': ['stock'],
     'data': [
+        'security/ir.model.access.csv',
         'views/ir_sequence_views.xml',
         'views/stock_location_views.xml',
-        'views/stock_picking_views.xml'
+        'views/stock_picking_views.xml',
+        'views/res_config_settings_views.xml',
+        'views/report_barcodes_view.xml',
     ],
     'external_dependencies': {
-       'python': ['python-barcode'],
+        'python': ['python-barcode'],
     },
-    'installable': True
+    'installable': True,
+    'translations': ['i18n/vi_VN.po'],
 }

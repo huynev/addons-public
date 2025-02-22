@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View -->
+    <record id="view_prestashop_product_category_tree" model="ir.ui.view">
+        <field name="name">prestashop.product.category.tree</field>
+        <field name="model">prestashop.product.category</field>
+        <field name="arch" type="xml">
+            <tree string="PrestaShop Product Categories">
+                <field name="name"/>
+                <field name="shop_id"/>
+                <field name="date_add"/>
+                <field name="date_upd"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_prestashop_product_category_form" model="ir.ui.view">
+        <field name="name">prestashop.product.category.form</field>
+        <field name="model">prestashop.product.category</field>
+        <field name="arch" type="xml">
+            <form string="PrestaShop Product Category">
+                <header>
+                    <button
+                        name="export_record"
+                        string="Xuất Danh Mục"
+                        type="object"
+                        class="btn-primary"
+                        help="Xuất danh mục sang PrestaShop"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Tên Danh Mục"/>
+                        <h1>
+                            <field name="name" placeholder="Nhập tên danh mục"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="shop_id"/>
+                            <field name="odoo_id"/>
+                        </group>
+                        <group>
+                            <field name="date_add" readonly="1"/>
+                            <field name="date_upd" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_prestashop_product_category_search" model="ir.ui.view">
+        <field name="name">prestashop.product.category.search</field>
+        <field name="model">prestashop.product.category</field>
+        <field name="arch" type="xml">
+            <search string="Tìm kiếm Danh Mục PrestaShop">
+                <field name="name"/>
+                <field name="prestashop_id"/>
+                <filter name="recently_added"
+                        string="Được Thêm Gần Đây"
+                        domain="[('date_add', '>=', (context_today() - relativedelta(days=30)).strftime('%Y-%m-%d'))]"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action Window -->
+    <record id="action_prestashop_product_category" model="ir.actions.act_window">
+        <field name="name">Danh Mục PrestaShop</field>
+        <field name="res_model">prestashop.product.category</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help">Quản lý các danh mục sản phẩm được đồng bộ từ PrestaShop</field>
+    </record>
+</odoo>

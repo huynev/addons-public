@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_barcode_list">
+        <t t-set="full_width" t-value="True"/>
+        <t t-call="web.basic_layout">
+            <t t-foreach="docs" t-as="o">
+                <t t-foreach="barcodes" t-as="barcode">
+                    <div style="width: 100%">
+                        <img t-att-src="barcode['image']" style="width:300px;height:auto" />
+                        <p style="margin-top: 5px;margin-bottom: 10px;margin-left: 20px;" t-esc="barcode['name']">Barcode</p>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <record id="stock_picking_barcode_report" model="ir.actions.report">
+        <field name="name">Picking Barcodes</field>
+        <field name="model">stock.picking</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">inven_barcode_app.report_barcode_list</field>
+        <field name="report_file">inven_barcode_app.report_barcode_list</field>
+        <field name="print_report_name">Picking Barcodes</field>
+        <field name="binding_model_id" ref="model_stock_picking"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

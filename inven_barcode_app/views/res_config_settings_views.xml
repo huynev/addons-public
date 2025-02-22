@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="res_config_settings_view_form" model="ir.ui.view">
+            <field name="name">res.config.settings.view.form.inherit.stock_barcode_app</field>
+            <field name="model">res.config.settings</field>
+            <field name="priority" eval="31"/>
+            <field name="inherit_id" ref="base.res_config_settings_view_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="inside" >
+                    <app data-string="Inventory Barcode App" string="Inventory Barcode App" name="inven_barcode_app" groups="stock.group_stock_manager">
+                        <block title="Stock Confirm Image" name="stock_confirm_image">
+                            <div class="row">
+                                <group class="col">
+                                    <field name="stock_confirm_image" string="Enable Stock Confirm Image" />
+                                </group>
+                                <group class="col">
+                                    <field name="stock_confirm_image_count" string="Number of image when stock picking done" />
+                                </group>
+                            </div>
+                        </block>
+                    </app>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

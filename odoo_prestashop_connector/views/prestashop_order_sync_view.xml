@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_prestashop_order_sync_tree" model="ir.ui.view">
+        <field name="name">prestashop.order.sync.service.tree</field>
+        <field name="model">prestashop.order.sync.service</field>
+        <field name="arch" type="xml">
+            <tree string="PrestaShop Order Sync">
+                <field name="name"/>
+                <field name="shop_id"/>
+                <field name="total_orders_imported"/>
+                <field name="total_orders_exported"/>
+                <field name="last_sync_date"/>
+                <field name="sync_status"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_prestashop_order_sync_form" model="ir.ui.view">
+        <field name="name">prestashop.order.sync.service.form</field>
+        <field name="model">prestashop.order.sync.service</field>
+        <field name="arch" type="xml">
+            <form string="PrestaShop Order Sync">
+                <header>
+                    <button
+                        name="action_sync_orders"
+                        string="Đồng Bộ Ngay"
+                        type="object"
+                        class="btn-primary"
+                        invisible="sync_status == 'running'"/>
+                    <field name="sync_status"
+                           widget="statusbar"
+                           statusbar_visible="draft,running,completed"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="shop_id" required="1"/>
+                            <field name="sync_status" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="total_orders_imported"/>
+                            <field name="total_orders_exported"/>
+                            <field name="last_sync_date" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_prestashop_order_sync_search" model="ir.ui.view">
+        <field name="name">prestashop.order.sync.service.search</field>
+        <field name="model">prestashop.order.sync.service</field>
+        <field name="arch" type="xml">
+            <search string="Tìm kiếm Đồng Bộ PrestaShop">
+                <field name="name" string="Tên"/>
+                <field name="shop_id" string="Backend"/>
+                <field name="sync_status" string="Trạng Thái"/>
+
+                <filter name="filter_draft"
+                        string="Chưa Đồng Bộ"
+                        domain="[('sync_status', '=', 'draft')]"/>
+                <filter name="filter_running"
+                        string="Đang Đồng Bộ"
+                        domain="[('sync_status', '=', 'running')]"/>
+                <filter name="filter_completed"
+                        string="Hoàn Thành"
+                        domain="[('sync_status', '=', 'completed')]"/>
+
+                <group expand="0" string="Nhóm Theo">
+                    <filter name="group_by_backend"
+                            string="Backend"
+                            context="{'group_by': 'shop_id'}"/>
+                    <filter name="group_by_status"
+                            string="Trạng Thái"
+                            context="{'group_by': 'sync_status'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="action_prestashop_order_sync" model="ir.actions.act_window">
+        <field name="name">Đồng Bộ Đơn Hàng PrestaShop</field>
+        <field name="res_model">prestashop.order.sync.service</field>
+        <field name="view_mode">tree,form,search</field>
+        <field name="help">Quản lý và đồng bộ đơn hàng giữa Odoo và PrestaShop</field>
+    </record>
+</odoo>

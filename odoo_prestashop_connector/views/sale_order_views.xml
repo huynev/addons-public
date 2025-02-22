@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_prestashop_sale_order_form" model="ir.ui.view">
+        <field name="name">prestashop.sale.order.form</field>
+        <field name="model">prestashop.sale.order</field>
+        <field name="arch" type="xml">
+            <form string="PrestaShop Sale Order">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="shop_id" readonly="True"/>
+                            <field name="odoo_id" readonly="True"/>
+                            <field name="prestashop_payment"/>
+                            <field name="prestashop_payment_module"/>
+                        </group>
+                        <group>
+                            <field name="total_amount"/>
+                            <field name="total_amount_tax"/>
+                            <field name="total_shipping_tax_included"/>
+                            <field name="total_shipping_tax_excluded"/>
+                            <field name="conversion_rate"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Order Lines">
+                            <field name="prestashop_order_line_ids"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_prestashop_sale_order_tree" model="ir.ui.view">
+        <field name="name">prestashop.sale.order.tree</field>
+        <field name="model">prestashop.sale.order</field>
+        <field name="arch" type="xml">
+            <tree string="PrestaShop Sale Orders">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="date_order"/>
+                <field name="total_amount"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_sale_order_prestashop_form" model="ir.ui.view">
+        <field name="name">sale.order.prestashop.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <button class="oe_stat_button" type="object"
+                        name="action_view_prestashop_bindings"
+                        icon="fa-shopping-cart"
+                        invisible="not prestashop_bind_ids">
+                    <field string="PrestaShop" name="prestashop_bind_count" widget="statinfo"/>
+                </button>
+            </div>
+            <notebook position="inside">
+                <page string="PrestaShop Info"
+                      invisible="not prestashop_bind_ids">
+                    <group>
+                        <field name="prestashop_bind_ids"/>
+                    </group>
+                </page>
+            </notebook>
+        </field>
+    </record>
+</odoo>

@@ -1,5 +1,5 @@
 from odoo import http
-from odoo.http import request
+from odoo.http import request, Response, content_disposition
 import barcode
 from barcode.writer import ImageWriter
 import io
@@ -7,6 +7,7 @@ import base64
 from odoo.exceptions import ValidationError
 from . import base_controller
 import logging
+from odoo.addons.inven_barcode_app.utils import barcode_util
 
 _logger = logging.getLogger(__name__)
 
@@ -14,7 +15,7 @@ _logger = logging.getLogger(__name__)
 class StockPickingController(base_controller.BaseAPIController):
 
     @http.route('/api/stock-picking', type='json', auth='user', methods=['POST'], csrf=False)
-    def get_stock_picking(self, picking_type=None, page=1, page_size=50):
+    def get_stock_picking(self, picking_type=None, page=1, page_size=50, exclude_ids=[]):
         # Ensure page and page_size are integers
         try:
             page = int(page)
@@ -27,7 +28,7 @@ class StockPickingController(base_controller.BaseAPIController):
 
         # Search for stock.picking records based on the type
         active_company_id = context.get('company_id') or context['allowed_company_ids'][0]
-        domain = [('company_id', '=', active_company_id)]
+        domain = [('company_id', '=', active_company_id), ('id', 'not in', exclude_ids)]
         if picking_type:
             domain.append(('picking_type_id.code', '=', picking_type))
 
@@ -369,6 +370,15 @@ class StockPickingController(base_controller.BaseAPIController):
                 'location_id': stock_picking.location_id.id,  # Source location
                 'location_dest_id': stock_picking.location_dest_id.id,  # Destination location
             })
+            
+            request.env['stock.move.line'].create(
+                {
+                    'move_id': move.id,
+                    'quantity': product_data.get('product_uom_qty', 0),
+                    'product_uom_id': product_data.get('product_uom'),  
+                    'product_id': product_data.get('product_id'),  
+                }
+            )
 
             # Return success response
             return {
@@ -390,6 +400,7 @@ class StockPickingController(base_controller.BaseAPIController):
 
         except Exception as e:
             return {'success': False, 'error': str(e), }
+        
 
     @http.route('/api/stock-picking/store', type='json', auth='user', methods=['POST'])
     def save_stock_picking(self, picking_data):
@@ -463,27 +474,250 @@ class StockPickingController(base_controller.BaseAPIController):
         if not picking.exists():
             return {'success': False, 'error': 'Stock picking not found'}
 
-        if picking.barcode:
-            # Use python-barcode to generate the barcode
-            code128 = barcode.get('code128', picking.barcode, writer=ImageWriter())
-            buffer = io.BytesIO()  # Create a BytesIO buffer
-
-            try:
-                code128.write(buffer)  # Write the barcode to the buffer
-                buffer.seek(0)  # Move to the beginning of the buffer
-
-                # Convert the buffer content to base64
-                barcode_image = base64.b64encode(buffer.read()).decode('utf-8')
-
-            except Exception as e:
-                barcode_image = False
-            finally:
-                buffer.close()  # Ensure the buffer is closed to free up resources
-        else:
-            barcode_image = False
-
         # Prepare the stock picking details including move lines
-        picking_details = {
+        picking_details = self._format_picking_response(picking)
+
+        return {
+            'success': True,
+            'data': picking_details
+        }
+
+    @http.route('/api/stock-picking/validate', type='json', auth='user', methods=['POST'], csrf=False)
+    def validate_stock_picking(self, picking_id):
+        """
+        Remove all move_lines in the picking, create new ones, and validate the picking.
+        :param picking_id: The ID of the stock.picking to update.
+        :param move_lines_data: List of new move_lines data to create.
+        :param create_backorder: Create backorder if move_line don't have enough quantity
+        :return: JSON response with success or error message.
+        """
+        # Tìm phiếu nhập hàng theo ID
+        picking = request.env['stock.picking'].sudo().browse(picking_id)
+
+        # Kiểm tra xem phiếu nhập hàng có tồn tại không
+        if not picking or picking.state == 'done':
+            return {'success': False, 'error': 'Stock picking not found or completed'}
+
+        try:
+            result = picking.with_context(**{
+                'from_api': True
+            }).button_validate()
+            
+            # Kiểm tra trạng thái của phiếu
+            if result != True:
+                return {
+                    'success': True,
+                    'type': result
+                }
+
+            return {
+                'success': True,
+                'type': 'done',
+                'message': 'Stock picking updated and validated successfully',
+                'picking_id': picking_id,
+                'backorders': [backorder.id for backorder in picking.backorder_ids],
+            }
+
+        except ValidationError as e:
+            return {'success': False, 'error': str(e)}
+        except Exception as e:
+            return {'success': False, 'error': f'An unexpected error occurred: {str(e)}'}
+        
+    
+    @http.route('/api/stock-picking/validate-sms', type='json', auth='user', methods=['POST'], csrf=False)
+    def validate_sms(self, **post):
+        send_sms = post.get('send_sms')
+        wiz_id = post.get('wiz_id')
+        context_data = post.get('context_data')
+        
+        if not wiz_id or not context_data:
+            return {
+                'success': False,
+                'error': 'Missing context data',
+            }
+        
+        wizard = request.env['confirm.stock.sms'].sudo().browse(wiz_id)
+        
+        if not wizard.exists():
+            return {'success': False, 'message': 'Wizard not found'}
+        
+        if context_data.get('from_api') is None:
+            ctx = dict(request.env.context, **context_data, **{'from_api': True})
+        else:
+            ctx = dict(request.env.context, **context_data)
+        
+        if send_sms:
+            result = wizard.with_context(ctx).send_sms()
+        else:
+            result = wizard.with_context(ctx).dont_send_sms()
+        
+        if result == True:
+            return {
+                'success': True,
+                'message': 'Validate stock picking success',
+                'type': 'done',
+            }
+        
+        return {
+            'success': True,
+            'error': 'Validate stock picking failed',
+            'type': result,
+        }
+        
+    @http.route('/api/stock-picking/validate-backorder', type='json', auth='user', methods=['POST'], csrf=False)
+    def validate_backorder(self, **post):
+        create_backorder = post.get('create_backorder')
+        context_data = post.get('context_data')
+        
+        if not context_data:
+            return {
+                'success': False,
+                'error': 'Missing context data',
+            }
+        
+        if context_data.get('from_api') is None:
+            ctx = dict(request.env.context, **context_data, **{'from_api': True})
+        else:
+            ctx = dict(request.env.context, **context_data)
+        
+        wizard = request.env['stock.backorder.confirmation'].create({
+            'pick_ids': [(6, 0, ctx.get('button_validate_picking_ids'))]
+        })
+        
+        if create_backorder:
+            result = wizard.with_context(ctx).process()
+        else:
+            result = wizard.with_context(ctx).process_cancel_backorder()
+        
+        if result == True:
+            return {
+                'success': True,
+                'message': 'Validate stock picking success',
+                'type': 'done',
+            }
+        
+        return {
+            'success': True,
+            'error': 'Validate stock picking failed',
+            'type': result,
+        }
+    
+    @http.route('/api/stock-picking/validate-confirm-images', type='json', auth='user', methods=['POST'], csrf=False)
+    def validate_confirm_images(self, **post):
+        picking_id = post.get('picking_id')
+        context_data = post.get('context_data')
+        image_data_list = post.get('image_data_list')
+        
+        if not context_data or not image_data_list:
+            return {
+                'success': False,
+                'error': 'Missing context data',
+            }
+        
+        if context_data.get('from_api') is None:
+            ctx = dict(request.env.context, **context_data, **{'from_api': True})
+        else:
+            ctx = dict(request.env.context, **context_data)
+        
+        picking = request.env['stock.picking'].browse(picking_id)
+        
+        if not picking or picking.state == 'done' or picking.state == 'cancel':
+            return {
+                'success': False,
+                'errror': 'Picking not found or invalid',
+            }
+        
+        picking.confirm_images.unlink()
+        
+        for image_data in image_data_list: 
+            request.env['stock.confirm.image'].create({
+                'picking_id': picking.id,
+                'image': image_data
+            })
+        
+        picking = request.env['stock.picking'].browse(picking_id)
+            
+        result  = picking.with_context(ctx).button_validate()
+        
+        if result == True:
+            return {
+                'success': True,
+                'message': 'Validate stock picking success',
+                'type': 'done',
+            }
+        
+        return {
+            'success': True,
+            'error': 'Validate stock picking failed',
+            'type': result,
+        }
+
+
+    @http.route('/api/stock-picking/confirm', type='json', auth='user', methods=['POST'], csrf=False)
+    def confirm_picking(self, id):
+        picking = request.env['stock.picking'].sudo().browse(id)
+        
+        if (picking.state != 'draft'):
+            return {
+                'success': False,
+                'error': 'Picking only confirm in draft state'
+            }
+        
+        if picking.action_confirm():
+            new_picking = request.env['stock.picking'].sudo().browse(id)
+            
+            return {
+                'success': True,
+                'data': self._format_picking_response(new_picking)
+            }
+        
+        return {
+            'success': False,
+            'error': 'Picking confirm failed'
+        }
+        
+    @http.route('/api/stock-picking/assign', type='json', auth='user', methods=['POST'], csrf=False)
+    def action_assign(self, id):
+        picking = request.env['stock.picking'].sudo().browse(id)
+        
+        picking.action_assign()
+        
+        new_picking = request.env['stock.picking'].sudo().browse(id)
+        
+        if picking.state == 'assigned': 
+            return {
+                'success': True,
+                'data': self._format_picking_response(new_picking)
+            }
+        
+        return {
+            'success': False,
+            'error': 'Assign Picking Failed',
+        }
+        
+    @http.route('/api/stock-picking/cancel', type='json', auth='user', methods=['POST'], csrf=False)
+    def action_cancel(self, id):
+        picking = request.env['stock.picking'].sudo().browse(id)
+        
+        picking.action_cancel()
+        
+        new_picking = request.env['stock.picking'].sudo().browse(id)
+        
+        if picking.state == 'cancel': 
+            return {
+                'success': True,
+                'data': self._format_picking_response(new_picking)
+            }
+        
+        return {
+            'success': False,
+            'error': 'Cancel Picking Failed',
+        }
+
+    def _format_picking_response(self, picking):
+        barcode_image = self._generate_barcode_image(picking)
+        
+        return {
             'id': picking.id,
             'name': picking.display_name,
             'partner_id': picking.partner_id.name if picking.partner_id else None,
@@ -512,11 +746,14 @@ class StockPickingController(base_controller.BaseAPIController):
                     'name': move.product_id.display_name,
                 },
                 'product_uom_qty': move.product_uom_qty,
+                'product_qty': move.product_qty,
+                'quantity': move.quantity,
                 'product_uom': {
                     'id': move.product_uom.id,
                     'name': move.product_uom.display_name,
                 },
                 'move_line_ids': [{
+                    'id': line.id,
                     'lot_id': line.lot_id.name if line.lot_id else None,
                     'quantity': line.quantity,
                     'location': {
@@ -527,78 +764,88 @@ class StockPickingController(base_controller.BaseAPIController):
                         'id': line.location_dest_id.id,
                         'name': line.location_dest_id.display_name,
                     },
+                    'package': {
+                        'id': line.package_id.id,
+                        'name': line.package_id.display_name,
+                        'type': {
+                            'id': line.package_id.package_type_id.id,
+                            'name': line.package_id.package_type_id.display_name
+                        }
+                    },
+                    'result_package': {
+                        'id': line.result_package_id.id,
+                        'name': line.result_package_id.display_name,
+                        'type': {
+                            'id': line.result_package_id.package_type_id.id,
+                            'name': line.result_package_id.package_type_id.display_name
+                        }
+                    },
+                    'package_level': {
+                        'id': line.package_level_id.id,
+                        'package': {
+                            'id': line.package_level_id.package_id.id,
+                            'name': line.package_level_id.package_id.display_name,
+                            'type': {
+                                'id': line.package_level_id.package_id.package_type_id.id,
+                                'name': line.package_level_id.package_id.package_type_id.display_name
+                            }
+                        }
+                    }
                 } for line in move.move_line_ids],
             } for move in picking.move_ids_without_package],
+            'confirm_images': [image.image for image in picking.confirm_images]
         }
+    
+    def _generate_barcode_image(self, picking):
+        if picking.barcode:
+            # Use python-barcode to generate the barcode
+            code128 = barcode.get('code128', picking.barcode, writer=ImageWriter())
+            buffer = io.BytesIO()  # Create a BytesIO buffer
 
-        return {
-            'success': True,
-            'data': picking_details
-        }
+            try:
+                code128.write(buffer)  # Write the barcode to the buffer
+                buffer.seek(0)  # Move to the beginning of the buffer
 
-    @http.route('/api/stock-picking/validate', type='json', auth='user', methods=['POST'], csrf=False)
-    def validate_stock_picking(self, picking_id, move_lines_data, create_backorder):
-        """
-        Remove all move_lines in the picking, create new ones, and validate the picking.
-        :param picking_id: The ID of the stock.picking to update.
-        :param move_lines_data: List of new move_lines data to create.
-        :param create_backorder: Create backorder if move_line don't have enough quantity
-        :return: JSON response with success or error message.
-        """
-        # Tìm phiếu nhập hàng theo ID
-        picking = request.env['stock.picking'].sudo().browse(picking_id)
+                # Convert the buffer content to base64
+                barcode_image = base64.b64encode(buffer.read()).decode('utf-8')
 
-        # Kiểm tra xem phiếu nhập hàng có tồn tại không
-        if not picking or picking.state == 'done':
-            return {'success': False, 'error': 'Stock picking not found or completed'}
+            except Exception as e:
+                barcode_image = False
+            finally:
+                buffer.close()  # Ensure the buffer is closed to free up resources
+        else:
+            barcode_image = False
+            
+        
+        return barcode_image
+    
+    @http.route('/api/stock-picking/report-barcode', type='http', auth="user", methods=['POST'], csrf=False)
+    def report_barcodes(self, **kwargs):
+        picking_id = kwargs.get('picking_id')
+        picking_id = int(picking_id)
+        
+        picking = request.env['stock.picking'].browse(picking_id)
 
-        try:
-            # Xóa tất cả các move_lines hiện có
-            picking.move_line_ids.unlink()
-
-            # Tạo mới các move_lines dựa trên dữ liệu từ body request
-            new_move_lines = []
-            move_id = 0
-            for line_data in move_lines_data:
-                new_move_lines.append({
-                    'product_id': line_data.get('product_id'),
-                    'quantity': line_data.get('quantity'),
-                    'move_id': line_data.get('move_id'),
-                    'location_id': picking.location_id.id,
-                    'location_dest_id': picking.location_dest_id.id,
-                    'product_uom_id': line_data.get('product_uom_id'),
-                    'picked': True
-                })
-                move_id = line_data.get('move_id')
-
-            # Tạo các dòng chuyển động mới cho phiếu nhập hàng
-            picking.write({
-                'move_line_ids': [(0, 0, move_line) for move_line in new_move_lines]
-            })
-
-            # Xác nhận phiếu nhập hàng
-            ctx = {
-                'button_validate_picking_ids': [picking.id],  # Đặt ID của picking hiện tại
-            }
-            if create_backorder:
-                # Xác nhận phiếu và kích hoạt tạo backorder nếu cần
-                picking.with_context(ctx).process_validate_with_backorder()
-            else:
-                picking.with_context(ctx).process_validate_without_backorder()
-
-            # Kiểm tra trạng thái của phiếu
-            if picking.state != 'done':
-                raise ValidationError(
-                    "The picking could not be validated and marked as 'done'. Check if all conditions are met.")
-
+        if not picking:
             return {
-                'success': True,
-                'message': 'Stock picking updated and validated successfully',
-                'picking_id': picking_id,
-                'backorders': [backorder.id for backorder in picking.backorder_ids],
+                'success': False,
+                'error': 'Picking not found'
             }
-
-        except ValidationError as e:
-            return {'success': False, 'error': str(e)}
-        except Exception as e:
-            return {'success': False, 'error': f'An unexpected error occurred: {str(e)}'}
+            
+        report = request.env.ref('inven_barcode_app.stock_picking_barcode_report')  # Adjust with your module and report ID
+        pdf_content, content_type = request.env['ir.actions.report'].sudo()._render_qweb_pdf(
+            report, 
+            [picking.id],
+            data = {
+                'barcodes': picking.get_all_barcodes()
+            }
+        )
+        
+        # Set headers for file download
+        headers = [
+            ('Content-Type', 'application/pdf'),
+            ('Content-Length', len(pdf_content)),
+            ('Content-Disposition', content_disposition(picking.name + 'barcodes.pdf'))
+        ]
+        
+        return Response(pdf_content, headers=headers)

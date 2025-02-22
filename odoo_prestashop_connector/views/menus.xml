@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Menu Cha PrestaShop -->
+    <menuitem id="menu_prestashop_root"
+              name="PrestaShop"
+              web_icon="odoo_prestashop_connector,static/description/icon.png"
+              sequence="50"/>
+    <!-- Nhóm Đồng Bộ -->
+    <menuitem
+        id="menu_prestashop_sync"
+        name="Đồng Bộ"
+        parent="menu_prestashop_root"
+        sequence="20"/>
+
+    <!-- Menu Đồng Bộ Đơn Hàng -->
+    <menuitem
+        id="menu_prestashop_order_sync"
+        name="Đồng Bộ Đơn Hàng"
+        parent="menu_prestashop_sync"
+        action="action_prestashop_order_sync"
+        sequence="10"/>
+
+    <!-- Nhóm Sản phẩm -->
+    <menuitem
+        id="menu_prestashop_product"
+        name="Sản phẩm"
+        parent="menu_prestashop_root"
+        sequence="30"/>
+
+    <menuitem
+        id="menu_prestashop_product_category"
+        name="Danh mục Sản Phẩm"
+        parent="menu_prestashop_product"
+        action="action_prestashop_product_category"
+        sequence="5"/>
+
+    <menuitem id="menu_prestashop_list_products"
+          name="Danh sách sản phẩm"
+          parent="menu_prestashop_product"
+          action="action_prestashop_product"
+          sequence="10"/>
+
+     <menuitem id="menu_prestashop_export_categories"
+              name="Đẩy danh mục SP từ Odoo->Prestashop"
+              parent="menu_prestashop_product"
+              action="action_prestashop_export_categories"
+              sequence="15"/>
+
+    <menuitem id="menu_prestashop_export_products"
+              name="Đẩy sản phẩm từ Odoo->Prestashop"
+              parent="menu_prestashop_product"
+              action="action_prestashop_export_products"
+              sequence="20"/>
+
+<!--    <menuitem id="menu_prestashop_import_products"-->
+<!--              name="Lấy SP từ Prestashop->Odoo"-->
+<!--              parent="menu_prestashop_product"-->
+<!--              action="action_prestashop_import_products"-->
+<!--              sequence="25"/>-->
+
+    <!-- Nhóm Sale-->
+    <menuitem
+        id="menu_prestashop_sale"
+        name="Sales"
+        parent="menu_prestashop_root"
+        sequence="30"/>
+
+    <menuitem id="menu_prestashop_list_sales"
+              name="Danh sách đơn hàng từ Prestashop"
+              parent="menu_prestashop_sale"
+              action="action_prestashop_sale_order"
+              sequence="5"/>
+
+    <menuitem id="menu_prestashop_customer"
+              name="Danh sách khách hàng từ Prestashop"
+              parent="menu_prestashop_sale"
+              action="action_prestashop_customer"
+              sequence="30"/>
+
+<!--    <menuitem id="menu_prestashop_delivery"-->
+<!--              name="Deliveries"-->
+<!--              parent="menu_prestashop_sale"-->
+<!--              action="action_prestashop_delivery"-->
+<!--              sequence="40"/>-->
+
+    <!-- Nhóm Cấu hình -->
+    <menuitem
+        id="menu_prestashop_config"
+        name="Cấu hình"
+        parent="menu_prestashop_root"
+        sequence="40"/>
+
+    <menuitem id="menu_prestashop_backend"
+              name="Backends"
+              parent="menu_prestashop_config"
+              action="action_prestashop_backend"
+              sequence="10"/>
+
+    <menuitem id="menu_prestashop_shop"
+              name="Shops"
+              parent="menu_prestashop_config"
+              action="action_prestashop_shop"
+              sequence="20"/>
+
+    <menuitem id="menu_prestashop_shop_group"
+              name="Shop Groups"
+              parent="menu_prestashop_config"
+              action="action_prestashop_shop_group"
+              sequence="30"/>
+</odoo>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_prestashop_export_products" model="ir.ui.view">
+        <field name="name">prestashop.export.products.form</field>
+        <field name="model">prestashop.export.products</field>
+        <field name="arch" type="xml">
+            <form string="Export Products to PrestaShop">
+                <group>
+                    <field name="shop_id"/>
+                    <field name="product_ids" widget="many2many_tags"/>
+                </group>
+                <footer>
+                    <button name="export_products"
+                            string="Export Products"
+                            type="object"
+                            class="btn-primary"/>
+                    <button special="cancel"
+                            string="Cancel"
+                            class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_prestashop_export_products" model="ir.actions.act_window">
+        <field name="name">Export to PrestaShop</field>
+        <field name="res_model">prestashop.export.products</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

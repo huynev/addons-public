@@ -33,36 +33,7 @@ class ProductController(http.Controller):
         }
 
         for product in products:
-            response_data['product_records'].append({
-                'id': product.id,
-                'name': product.display_name,
-                'description': product.description_sale or product.description,
-                'price': {
-                    'list_price': product.list_price,
-                    'cost_price': product.standard_price,
-                },
-                'quantity': {
-                    'available': product.qty_available,
-                    'incoming': product.incoming_qty,
-                    'outgoing': product.outgoing_qty,
-                    'forecast': product.virtual_available,
-                },
-                'uom': {
-                    'id': product.uom_id.id, # Đơn vị đo lường
-                    'name': product.uom_id.display_name,
-                },
-                'category': {   # Danh mục sản phẩm
-                    'id': product.categ_id.id,
-                    'name': product.categ_id.display_name,
-                },
-                'product_image': product.image_1920,
-                'currency': {
-                    'id': product.currency_id.id,
-                    'name': product.currency_id.name,
-                    'symbol': product.currency_id.symbol,
-                    'position': product.currency_id.position,  # Vị trí của ký hiệu tiền tệ (trước/sau giá)
-                },
-            })
+            response_data['product_records'].append(self._format_product_response(product))
 
         return {'success': True, 'data': response_data}
 
@@ -132,7 +103,35 @@ class ProductController(http.Controller):
             barcode_image = False
 
         # Chi tiết sản phẩm
-        product_details = {
+        product_details = self._format_product_response(product)
+
+        return {
+            'success': True,
+            'data': product_details
+        }
+        
+    @http.route('/api/products/search', type='json', auth='user', methods=['POST'], csrf=False)
+    def search_products(self, search):
+        domain = [
+            ('type', 'in', ['product', 'consu']), 
+            '|', '|',
+            ('name', 'ilike', search),
+            ('barcode', 'ilike', search),
+            ('default_code', 'ilike', search)
+        ]
+
+        # Fetch product.product records
+        products = request.env['product.product'].sudo().search(
+            domain,
+        )
+        
+        return {
+            'success': True,
+            'data': [self._format_product_response(product) for product in products]
+        }
+    
+    def _format_product_response(self, product):
+        return {
             'id': product.id,
             'name': product.display_name,
             'description': product.description_sale or product.description,
@@ -154,8 +153,6 @@ class ProductController(http.Controller):
                 'id': product.categ_id.id,
                 'name': product.categ_id.display_name,
             },
-            'barcode': product.barcode,
-            'barcode_image': barcode_image,
             'product_image': product.image_1920,
             'currency': {
                 'id': product.currency_id.id,
@@ -163,9 +160,4 @@ class ProductController(http.Controller):
                 'symbol': product.currency_id.symbol,
                 'position': product.currency_id.position,  # Vị trí của ký hiệu tiền tệ (trước/sau giá)
             },
-        }
-
-        return {
-            'success': True,
-            'data': product_details
         }

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_prestashop_import_products" model="ir.ui.view">
+        <field name="name">prestashop.import.products.form</field>
+        <field name="model">prestashop.import.products</field>
+        <field name="arch" type="xml">
+            <form string="Import Products from PrestaShop">
+                <group>
+                    <field name="backend_id"/>
+                    <field name="from_date"/>
+                </group>
+                <footer>
+                    <button name="import_products"
+                            string="Import Products"
+                            type="object"
+                            class="btn-primary"/>
+                    <button special="cancel"
+                            string="Cancel"
+                            class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_prestashop_import_products" model="ir.actions.act_window">
+        <field name="name">Import Products</field>
+        <field name="res_model">prestashop.import.products</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Menu item cho import sản phẩm -->
+
+</odoo>

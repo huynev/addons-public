@@ -26,6 +26,28 @@
                         <field name="barcode_image" widget="image" invisible="not barcode_image" />
                     </group>
                 </xpath>
+
+                <!-- Locate the notebook (tabs container) -->
+                <xpath expr="//notebook" position="inside">
+                    <!-- Add a new tab -->
+                    <page string="Confirm Images" invisible="not confirm_images">
+                        <field name="confirm_images" widget="kanban" readonly="1">
+                            <kanban>
+                                <templates>
+                                    <t t-name="kanban-box">
+                                        <div class="o_kanban_record" style="text-align: center; padding: 10px;">
+                                            <!-- Display the image -->
+                                            <div>
+                                                <img t-att-src="kanban_image('stock.confirm.image', 'image', record.id.raw_value)" 
+                                                    style="max-width: 150px; max-height: 150px; border: 1px solid #ddd; padding: 5px;" />
+                                            </div>
+                                        </div>
+                                    </t>
+                                </templates>
+                            </kanban>
+                        </field>
+                    </page>
+                </xpath>
             </field>
         </record>
     </data>

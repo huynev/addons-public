@@ -1,0 +1,24 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_prestashop_backend_user,prestashop.backend.user,model_prestashop_backend,base.group_user,1,0,0,0
+access_prestashop_backend_manager,prestashop.backend.manager,model_prestashop_backend,base.group_system,1,1,1,1
+access_prestashop_product_template_user,prestashop.product.template.user,model_prestashop_product_template,base.group_user,1,0,0,0
+access_prestashop_product_template_manager,prestashop.product.template.manager,model_prestashop_product_template,base.group_system,1,1,1,1
+access_prestashop_sale_order_user,prestashop.sale.order.user,model_prestashop_sale_order,base.group_user,1,0,0,0
+access_prestashop_sale_order_manager,prestashop.sale.order.manager,model_prestashop_sale_order,base.group_system,1,1,1,1
+access_prestashop_stock_picking_user,prestashop.stock.picking.user,model_prestashop_stock_picking,base.group_user,1,0,0,0
+access_prestashop_stock_picking_manager,prestashop.stock.picking.manager,model_prestashop_stock_picking,base.group_system,1,1,1,1
+access_prestashop_res_partner_user,prestashop.res.partner.user,model_prestashop_res_partner,base.group_user,1,0,0,0
+access_prestashop_res_partner_manager,prestashop.res.partner.manager,model_prestashop_res_partner,base.group_system,1,1,1,1
+access_prestashop_import_products,prestashop.import.products,model_prestashop_import_products,base.group_user,1,1,1,1
+access_prestashop_export_products,prestashop.import.products,model_prestashop_export_products,base.group_user,1,1,1,1
+access_prestashop_shop_user,prestashop.shop.user,model_prestashop_shop,base.group_user,1,1,1,1
+access_prestashop_shop_manager,prestashop.shop.manager,model_prestashop_shop,base.group_user,1,1,1,1
+access_prestashop_shop_group_user,prestashop.shop.group.user,model_prestashop_shop_group,base.group_user,1,1,1,1
+access_prestashop_shop_group_manager,prestashop.shop.group.manager,model_prestashop_shop_group,base.group_user,1,1,1,1
+access_prestashop_order_sync_user,Prestashop Order Sync User,model_prestashop_order_sync_service,base.group_user,1,1,1,0
+access_prestashop_order_sync_manager,Prestashop Order Sync Manager,model_prestashop_order_sync_service,base.group_user,1,1,1,0
+access_prestashop_sale_order_line_user,Prestashop Sale Order Line User,model_prestashop_sale_order_line,base.group_user,1,1,1,0
+access_prestashop_sale_order_line_manager,Prestashop Sale Order Line Manager,model_prestashop_sale_order_line,base.group_user,1,1,1,0
+access_prestashop_product_category_user,prestashop.product.category.user,model_prestashop_product_category,base.group_user,1,0,0,0
+access_prestashop_product_category_manager,prestashop.product.category.manager,model_prestashop_product_category,base.group_system,1,1,1,1
+access_prestashop_export_categories,prestashop.export.categories,model_prestashop_export_categories,base.group_system,1,1,1,1

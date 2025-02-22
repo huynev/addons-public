@@ -7,7 +7,6 @@ _logger = logging.getLogger(__name__)
 
 
 class BaseAPIController(http.Controller):
-
     def _get_context(self):
         """
         Retrieve and process the context from the incoming request.

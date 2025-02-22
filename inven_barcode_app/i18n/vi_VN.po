@@ -1,0 +1,160 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-11-27 11:52+0000\n"
+"PO-Revision-Date: 2024-11-27 13:50+0000\n"
+"Last-Translator: \n"
+"Language-Team: Vietnamese (Vietnam)\n"
+"Language: vi-VN\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"X-Loco-Source-Locale: vi_VN\n"
+"X-Loco-Parser: loco_parse_po\n"
+"X-Generator: Loco https://localise.biz/"
+
+#. module: inven_barcode_app
+#: model:ir.model.fields,field_description:inven_barcode_app.field_stock_picking__barcode
+#:  model_terms:ir.ui.view,arch_db:inven_barcode_app.report_barcode_list
+msgid "Barcode"
+msgstr "Mã vạch"
+
+#. module: inven_barcode_app
+#: model:ir.model.fields,field_description:inven_barcode_app.field_stock_picking__barcode_image
+msgid "Barcode Image"
+msgstr "Ảnh mã vạch"
+
+#. module: inven_barcode_app
+#: model:ir.model,name:inven_barcode_app.model_res_company
+msgid "Companies"
+msgstr "Công ty"
+
+#. module: inven_barcode_app
+#: model:ir.model,name:inven_barcode_app.model_res_config_settings
+msgid "Config Settings"
+msgstr "Cài đặt cấu hình"
+
+#. module: inven_barcode_app
+#: model:ir.model.fields,field_description:inven_barcode_app.field_stock_picking__confirm_images
+#:  model_terms:ir.ui.view,arch_db:inven_barcode_app.view_picking_form_barcode
+msgid "Confirm Images"
+msgstr "Ảnh xác nhận"
+
+#. module: inven_barcode_app
+#: model:ir.model.fields,field_description:inven_barcode_app.field_stock_confirm_image__create_uid
+msgid "Created by"
+msgstr "Được tạo bởi"
+
+#. module: inven_barcode_app
+#: model:ir.model.fields,field_description:inven_barcode_app.field_stock_confirm_image__create_date
+msgid "Created on"
+msgstr "Được tạo lúc"
+
+#. module: inven_barcode_app
+#: model:ir.model.fields,field_description:inven_barcode_app.field_stock_confirm_image__display_name
+msgid "Display Name"
+msgstr "Tên hiển thị"
+
+#. module: inven_barcode_app
+#: model_terms:ir.ui.view,arch_db:inven_barcode_app.res_config_settings_view_form
+msgid "Enable Stock Confirm Image"
+msgstr "Bật tính năng Chụp ảnh xác nhận"
+
+#. module: inven_barcode_app
+#: model:ir.model.fields,field_description:inven_barcode_app.field_stock_confirm_image__id
+msgid "ID"
+msgstr "ID"
+
+#. module: inven_barcode_app
+#: model:ir.model.fields,field_description:inven_barcode_app.field_stock_confirm_image__image
+msgid "Image"
+msgstr "Ảnh"
+
+#. module: inven_barcode_app
+#: model:ir.model,name:inven_barcode_app.model_stock_confirm_image
+msgid "Image for stock before done state"
+msgstr "Ảnh xác nhận trước khi hoàn thành phiếu kho"
+
+#. module: inven_barcode_app
+#: model_terms:ir.ui.view,arch_db:inven_barcode_app.res_config_settings_view_form
+msgid "Inventory Barcode App"
+msgstr "Ứng dụng Kho - Barcode"
+
+#. module: inven_barcode_app
+#: model:ir.model,name:inven_barcode_app.model_stock_location
+msgid "Inventory Locations"
+msgstr "Địa điểm kiểm kho"
+
+#. module: inven_barcode_app
+#: model:ir.model.fields,field_description:inven_barcode_app.field_stock_confirm_image__write_uid
+msgid "Last Updated by"
+msgstr "Cập nhật lần cuối bởi"
+
+#. module: inven_barcode_app
+#: model:ir.model.fields,field_description:inven_barcode_app.field_stock_confirm_image__write_date
+msgid "Last Updated on"
+msgstr "Cập nhật lần cuối lúc"
+
+#. module: inven_barcode_app
+#: model:ir.model.fields,field_description:inven_barcode_app.field_stock_confirm_image__name
+msgid "Name"
+msgstr "Tên"
+
+#. module: inven_barcode_app
+#: model:ir.model.fields,field_description:inven_barcode_app.field_res_config_settings__stock_confirm_image_count
+msgid "Number of image need taken when done stock picking"
+msgstr "Số lượng ảnh cần chụp khi xác nhận phiếu kho"
+
+#. module: inven_barcode_app
+#: model_terms:ir.ui.view,arch_db:inven_barcode_app.res_config_settings_view_form
+msgid "Number of image when stock picking done"
+msgstr "Số lượng ảnh cần chụp khi xác nhận phiếu kho"
+
+#. module: inven_barcode_app
+#: model:ir.actions.report,name:inven_barcode_app.stock_picking_barcode_report 
+#: model:ir.actions.report,print_report_name:inven_barcode_app.stock_picking_barcode_report
+msgid "Picking Barcodes"
+msgstr "Các mã vạch phiếu kho"
+
+#. module: inven_barcode_app
+#: model_terms:ir.ui.view,arch_db:inven_barcode_app.res_config_settings_view_form
+msgid "Stock Confirm Image"
+msgstr "Ảnh xác nhận"
+
+#. module: inven_barcode_app
+#: model:ir.model.fields,field_description:inven_barcode_app.field_res_company__stock_confirm_image
+msgid "Stock Done Image"
+msgstr "Ảnh xác nhận"
+
+#. module: inven_barcode_app
+#: model:ir.model.fields,field_description:inven_barcode_app.field_res_company__stock_confirm_image_count
+msgid "Stock Image Number"
+msgstr "Số ảnh xác nhận"
+
+#. module: inven_barcode_app
+#: model:ir.model.fields,field_description:inven_barcode_app.field_stock_confirm_image__picking_id
+msgid "Stock Picking"
+msgstr "Phiếu chuyển kho"
+
+#. module: inven_barcode_app
+#: model:ir.model.fields,field_description:inven_barcode_app.field_res_config_settings__stock_confirm_image
+msgid "Take image when done stock picking"
+msgstr "Chụp ảnh xác nhận phiếu kho"
+
+#. module: inven_barcode_app
+#. odoo-python
+#: code:addons/inven_barcode_app/models/stock_picking.py:0
+#, python-format
+msgid ""
+"There is nothing eligible to put in a pack. Either there are no quantities "
+"to put in a pack or all products are already in a pack."
+msgstr ""
+"Không có gì đủ điều kiện để đưa vào một kiện hàng. Hoặc là không có số lượng "
+"để đưa vào một kiện hàng hoặc tất cả sản phẩm đã có trong một kiện hàng."
+
+#. module: inven_barcode_app
+#: model:ir.model,name:inven_barcode_app.model_stock_picking
+msgid "Transfer"
+msgstr "Lệnh chuyển hàng"
