@@ -29,6 +29,7 @@ class PrestashopProductCategory(models.Model):
         required=True,
         ondelete='cascade'
     )
+    description = fields.Text(string='Description')
     date_add = fields.Datetime('Added on PrestaShop')
     date_upd = fields.Datetime('Updated on PrestaShop')
 

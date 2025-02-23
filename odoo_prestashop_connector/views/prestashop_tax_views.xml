@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form View -->
+    <record id="view_prestashop_tax_mapping_form" model="ir.ui.view">
+        <field name="name">prestashop.tax.mapping.form</field>
+        <field name="model">prestashop.tax.mapping</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="shop_id"/>
+                            <field name="tax_id"/>
+                        </group>
+                        <group>
+                            <field name="prestashop_tax_group_id"/>
+                            <field name="prestashop_tax_name"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View -->
+    <record id="view_prestashop_tax_mapping_tree" model="ir.ui.view">
+        <field name="name">prestashop.tax.mapping.tree</field>
+        <field name="model">prestashop.tax.mapping</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="shop_id"/>
+                <field name="tax_id"/>
+                <field name="prestashop_tax_group_id"/>
+                <field name="prestashop_tax_name"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_prestashop_tax_mapping_search" model="ir.ui.view">
+        <field name="name">prestashop.tax.mapping.search</field>
+        <field name="model">prestashop.tax.mapping</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="shop_id"/>
+                <field name="tax_id"/>
+                <field name="prestashop_tax_name"/>
+                <group expand="0" string="Group By">
+                    <filter string="Shop" name="group_by_shop" context="{'group_by': 'shop_id'}"/>
+                    <filter string="Odoo Tax" name="group_by_tax" context="{'group_by': 'tax_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_prestashop_tax_mapping" model="ir.actions.act_window">
+        <field name="name">PrestaShop Tax Mappings</field>
+        <field name="res_model">prestashop.tax.mapping</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new tax mapping
+            </p>
+            <p>
+                Map Odoo taxes with PrestaShop tax rules groups.
+            </p>
+        </field>
+    </record>
+</odoo>

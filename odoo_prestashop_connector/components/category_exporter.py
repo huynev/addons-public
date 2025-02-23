@@ -15,17 +15,73 @@ class CategoryExporter(Component):
 
     def run(self, binding):
         self.binding = binding
-        data = self._prepare_data()
-        if binding.prestashop_id:
-            self._update(data)
-        else:
-            self._create(data)
+
+        try:
+            # Kiểm tra category parent trước
+            if self.binding.parent_id:
+                # Tìm prestashop binding của parent
+                parent_binding = self.env['prestashop.product.category'].search([
+                    ('odoo_id', '=', self.binding.parent_id.id),
+                    ('shop_id', '=', self.binding.shop_id.id)
+                ], limit=1)
+
+                # Nếu parent chưa có binding, tạo binding và export
+                if not parent_binding:
+                    parent_binding = self.env['prestashop.product.category'].create({
+                        'odoo_id': self.binding.parent_id.id,
+                        'shop_id': self.binding.shop_id.id,
+                    })
+                    parent_binding.export_record()
+
+                # Nếu parent chưa có prestashop_id, export parent trước
+                elif not parent_binding.prestashop_id:
+                    parent_binding.export_record()
+
+            # Export category hiện tại
+            data = self._prepare_data()
+            if self.binding.prestashop_id:
+                self._update(data)
+            else:
+                self._create(data)
+
+            # Export tất cả category con
+            child_categories = self.env['product.category'].search([
+                ('parent_id', '=', self.binding.odoo_id.id)
+            ])
+
+            for child in child_categories:
+                # Tìm hoặc tạo binding cho child
+                child_binding = self.env['prestashop.product.category'].search([
+                    ('odoo_id', '=', child.id),
+                    ('shop_id', '=', self.binding.shop_id.id)
+                ], limit=1)
+
+                if not child_binding:
+                    child_binding = self.env['prestashop.product.category'].create({
+                        'odoo_id': child.id,
+                        'shop_id': self.binding.shop_id.id,
+                    })
+
+                # Export child category
+                child_binding.export_record()
+
+        except Exception as e:
+            _logger.error(f"Error exporting category {self.binding.name}: {str(e)}")
+            raise
 
     def _prepare_data(self):
         prestashop = ET.Element('prestashop')
         prestashop.set('xmlns:xlink', 'http://www.w3.org/1999/xlink')
-
         category = ET.SubElement(prestashop, 'category')
+
+        def create_cdata_element(parent, tag, value=''):
+            elem = ET.SubElement(parent, tag)
+            elem.text = f'<![CDATA[{value}]]>'
+            return elem
+
+        # Add ID if updating
+        if self.binding.prestashop_id:
+            create_cdata_element(category, 'id', str(self.binding.prestashop_id))
 
         # Add name with language support
         name = ET.SubElement(category, 'name')
@@ -39,23 +95,27 @@ class CategoryExporter(Component):
         lang.set('id', '1')
         lang.text = f'<![CDATA[{self._format_link_rewrite(self.binding.name)}]]>'
 
-        # Add description
+        # Add description (empty by default)
         description = ET.SubElement(category, 'description')
         lang = ET.SubElement(description, 'language')
         lang.set('id', '1')
-        lang.text = '<![CDATA[]]>'
+        lang.text = f'<![CDATA[{self.binding.description or ""}]]>'
 
         # Add active status
-        active = ET.SubElement(category, 'active')
-        active.text = '<![CDATA[1]]>'
+        create_cdata_element(category, 'active', '1')
 
         # Add parent category
-        if self.binding.parent_id and self.binding.parent_id.prestashop_bind_ids:
-            id_parent = ET.SubElement(category, 'id_parent')
-            id_parent.text = f'<![CDATA[{self.binding.parent_id.prestashop_bind_ids[0].prestashop_id}]]>'
+        if self.binding.parent_id:
+            parent_binding = self.env['prestashop.product.category'].search([
+                ('odoo_id', '=', self.binding.parent_id.id),
+                ('shop_id', '=', self.binding.shop_id.id)
+            ], limit=1)
+            if parent_binding and parent_binding.prestashop_id:
+                create_cdata_element(category, 'id_parent', str(parent_binding.prestashop_id))
+            else:
+                create_cdata_element(category, 'id_parent', '2')  # Root category in PrestaShop
         else:
-            id_parent = ET.SubElement(category, 'id_parent')
-            id_parent.text = '<![CDATA[0]]>'
+            create_cdata_element(category, 'id_parent', '2')  # Root category in PrestaShop
 
         xml_str = ET.tostring(prestashop, encoding='utf-8', xml_declaration=True)
         xml_str = xml_str.decode('utf-8').replace('&lt;![CDATA[', '<![CDATA[').replace(']]&gt;', ']]>')
@@ -72,7 +132,7 @@ class CategoryExporter(Component):
         return name
 
     def _create(self, data):
-        prestashop = self.shop_id.backend_id._get_prestashop_client()
+        prestashop = self.binding.shop_id.backend_id._get_prestashop_client()
         try:
             result = prestashop.add('categories', data)
             if isinstance(result, ET.Element):
@@ -91,9 +151,10 @@ class CategoryExporter(Component):
             raise
 
     def _update(self, data):
-        prestashop = self.shop_id.backend_id._get_prestashop_client()
+        prestashop = self.binding.shop_id.backend_id._get_prestashop_client()
         try:
-            prestashop.edit('categories', self.binding.prestashop_id, data)
+            resource = f'categories/{self.binding.prestashop_id}'
+            prestashop.edit(resource, data)
             self.binding.date_upd = fields.Datetime.now()
             _logger.info("Updated category in PrestaShop with ID: %s", self.binding.prestashop_id)
         except Exception as e:

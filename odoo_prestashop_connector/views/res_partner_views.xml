@@ -25,6 +25,7 @@
                         </group>
                         <group>
                             <field name="prestashop_default_group"/>
+                            <field name="property_product_pricelist"/>
                             <field name="date_add"/>
                             <field name="date_upd"/>
                         </group>

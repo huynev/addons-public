@@ -7,6 +7,7 @@
             <form string="Export Products to PrestaShop">
                 <group>
                     <field name="shop_id"/>
+                    <field name="category_ids" widget="many2many_tags"/>
                     <field name="product_ids" widget="many2many_tags"/>
                 </group>
                 <footer>

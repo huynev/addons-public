@@ -107,4 +107,10 @@
               parent="menu_prestashop_config"
               action="action_prestashop_shop_group"
               sequence="30"/>
+
+    <menuitem id="menu_prestashop_tax_mapping"
+              name="Tax Mappings"
+              parent="menu_prestashop_config"
+              action="action_prestashop_tax_mapping"
+              sequence="40"/>
 </odoo>

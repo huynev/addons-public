@@ -22,3 +22,5 @@ access_prestashop_sale_order_line_manager,Prestashop Sale Order Line Manager,mod
 access_prestashop_product_category_user,prestashop.product.category.user,model_prestashop_product_category,base.group_user,1,0,0,0
 access_prestashop_product_category_manager,prestashop.product.category.manager,model_prestashop_product_category,base.group_system,1,1,1,1
 access_prestashop_export_categories,prestashop.export.categories,model_prestashop_export_categories,base.group_system,1,1,1,1
+access_prestashop_tax_mapping_manager,prestashop.tax.mapping manager,model_prestashop_tax_mapping,base.group_system,1,1,1,1
+access_prestashop_tax_mapping_user,prestashop.tax.mapping user,model_prestashop_tax_mapping,base.group_system,1,1,1,1

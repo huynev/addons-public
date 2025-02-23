@@ -7,7 +7,12 @@ class PrestashopExportProducts(models.TransientModel):
     shop_id = fields.Many2one(
         'prestashop.shop',
         'PrestaShop Shop',
-        required=True
+        required=True,
+        default=lambda self: self.env['prestashop.shop'].search([], limit=1)
+    )
+    category_ids = fields.Many2many(
+        'product.category',
+        string='Product Categories'
     )
     product_ids = fields.Many2many(
         'product.template',
@@ -16,8 +21,12 @@ class PrestashopExportProducts(models.TransientModel):
 
     def export_products(self):
         self.ensure_one()
-        for product in self.product_ids:
-            # Tạo binding nếu chưa có
+        products = self.product_ids
+        if self.category_ids:
+            category_ids = self.env['product.category'].search([('id', 'child_of', self.category_ids.ids)])
+            products |= self.env['product.template'].search([('categ_id', 'in', category_ids.ids)])
+
+        for product in products:
             binding = self.env['prestashop.product.template'].search([
                 ('odoo_id', '=', product.id),
                 ('shop_id', '=', self.shop_id.id)
@@ -27,9 +36,9 @@ class PrestashopExportProducts(models.TransientModel):
                     'odoo_id': product.id,
                     'shop_id': self.shop_id.id
                 })
-            # Export sản phẩm
-            # binding.with_delay(channel='root.prestashop').export_record()
-            binding.export_record()
+            binding.with_delay(channel='root.prestashop').export_record()
+            # binding.export_record()
+
         return {
             'type': 'ir.actions.client',
             'tag': 'display_notification',

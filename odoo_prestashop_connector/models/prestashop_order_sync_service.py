@@ -170,12 +170,15 @@ class PrestashopOrderSyncService(models.Model):
             # Tìm hoặc tạo khách hàng
             partner = self._get_or_create_partner(order_info)
 
+            # Lấy pricelist từ res.partner nếu có, không thì lấy từ shop_id
+            pricelist = partner.property_product_pricelist or self.shop_id.pricelist_id
+
             # Tạo đơn hàng Odoo
             sale_order = self.env['sale.order'].create({
                 'partner_id': partner.id,
                 'origin': f"PrestaShop Order {order_info.get('reference', '')}",
                 'client_order_ref': order_info.get('reference', ''),
-                'pricelist_id': self.shop_id.pricelist_id.id,
+                'pricelist_id': pricelist.id,
             })
 
             # Tạo liên kết PrestaShop

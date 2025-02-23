@@ -118,21 +118,53 @@ class ProductExporter(Component):
         # create_cdata_element(product, 'id_manufacturer', '1')
         # create_cdata_element(product, 'id_supplier', '1')
         create_cdata_element(product, 'available_for_order', '1')
-        # Set category_default to the product's category
-        if category_bindings:
-            create_cdata_element(product, 'id_category_default', str(category_bindings.prestashop_id))
-        else:
-            create_cdata_element(product, 'id_category_default', '2')  # Default category if not found
+
+        # Get PrestaShop category from Odoo category
+        category_obj = self.env['prestashop.product.category']
+        category_bindings = category_obj.search([
+            ('odoo_id', '=', self.binding.odoo_id.categ_id.id),
+            ('shop_id', '=', self.binding.shop_id.id)
+        ], limit=1)
+
+        # Set default category
+        default_category_id = category_bindings.prestashop_id if category_bindings else self.binding.shop_id.default_category_id.id
+        create_cdata_element(product, 'id_category_default', str(default_category_id))
+
         create_cdata_element(product, 'new', '1')
-        create_cdata_element(product, 'id_default_combination', '1')
-        create_cdata_element(product, 'id_tax_rules_group', '1')
+
+        if self.binding.attribute_line_ids:
+            # Sản phẩm có biến thể
+            create_cdata_element(product, 'id_default_combination', '1')
+            create_cdata_element(product, 'product_type', 'standard')
+        else:
+            # Sản phẩm không có biến thể
+            create_cdata_element(product, 'id_default_combination', '0')
+            create_cdata_element(product, 'product_type', '')
+
+        if self.binding.taxes_id:
+            tax_mapping = self.env['prestashop.tax.mapping'].search([
+                ('shop_id', '=', self.binding.shop_id.id),
+                ('tax_id', '=', self.binding.taxes_id[0].id)  # Lấy thuế đầu tiên
+            ], limit=1)
+
+            if tax_mapping:
+                create_cdata_element(product, 'id_tax_rules_group', str(tax_mapping.prestashop_tax_group_id))
+            else:
+                _logger.warning(
+                    f"No tax mapping found for tax {self.binding.taxes_id[0].name} in shop {self.binding.shop_id.name}"
+                )
+                create_cdata_element(product, 'id_tax_rules_group', '1')  # Default tax group
+        else:
+            # Nếu không có thuế, sử dụng default tax group
+            create_cdata_element(product, 'id_tax_rules_group', '0')
+
         create_cdata_element(product, 'type', '1')
         create_cdata_element(product, 'id_shop_default', '1')
 
         # Basic fields
         reference = self.binding.main_reference or self.binding.default_code
         create_cdata_element(product, 'reference', reference or '')
-        create_cdata_element(product, 'product_type', 'standard')
+
         create_cdata_element(product, 'supplier_reference', '')
         create_cdata_element(product, 'ean13', self.binding.barcode or '')
         create_cdata_element(product, 'state', '1')

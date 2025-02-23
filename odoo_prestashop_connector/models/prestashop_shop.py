@@ -1,5 +1,7 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
+import logging
+_logger = logging.getLogger(__name__)
 
 class PrestashopShop(models.Model):
     _name = 'prestashop.shop'
@@ -12,6 +14,12 @@ class PrestashopShop(models.Model):
         'Shop Group',
         required=True,
         ondelete='cascade'
+    )
+
+    tax_mapping_ids = fields.One2many(
+        'prestashop.tax.mapping',
+        'shop_id',
+        string='Tax Mappings'
     )
 
     backend_id = fields.Many2one(
@@ -37,6 +45,11 @@ class PrestashopShop(models.Model):
         help='Bảng giá được sử dụng để xuất giá sản phẩm sang PrestaShop'
     )
 
+    _sql_constraints = [
+        ('prestashop_uniq', 'unique(backend_id, prestashop_id)',
+         'A PrestaShop shop with this ID already exists.'),
+    ]
+
     @api.onchange('pricelist_id')
     def _onchange_pricelist_id(self):
         """
@@ -59,10 +72,59 @@ class PrestashopShop(models.Model):
                     'The shop must have the same backend as its shop group.'
                 )
 
-    _sql_constraints = [
-        ('prestashop_uniq', 'unique(backend_id, prestashop_id)',
-         'A PrestaShop shop with this ID already exists.'),
-    ]
+    def action_import_tax_rules_groups(self):
+        """Import tax rules groups from PrestaShop"""
+        self.ensure_one()
+        prestashop = self.backend_id._get_prestashop_client()
+
+        try:
+            tax_groups = prestashop.get('tax_rule_groups', options={'display': 'full'})
+
+            for tax_group in tax_groups.findall('.//tax_rule_group'):
+                tax_group_id = tax_group.find('id').text
+                name = tax_group.find('name').text
+
+                # Tìm mapping tồn tại
+                mapping = self.env['prestashop.tax.mapping'].search([
+                    ('shop_id', '=', self.id),
+                    ('prestashop_tax_group_id', '=', int(tax_group_id))
+                ], limit=1)
+
+                vals = {
+                    'shop_id': self.id,
+                    'prestashop_tax_group_id': int(tax_group_id),
+                    'prestashop_tax_name': name,
+                }
+
+                if mapping:
+                    mapping.write(vals)
+                else:
+                    self.env['prestashop.tax.mapping'].create(vals)
+
+            return {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'title': 'Success',
+                    'message': 'Tax rules groups imported successfully',
+                    'type': 'success',
+                }
+            }
+
+        except Exception as e:
+            _logger.error(f"Error importing tax rules groups: {str(e)}")
+            return {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'title': 'Error',
+                    'message': str(e),
+                    'type': 'danger',
+                }
+            }
+
+
+
 
 
 class PrestashopShopGroup(models.Model):
@@ -96,4 +158,33 @@ class PrestashopShopGroup(models.Model):
     _sql_constraints = [
         ('prestashop_uniq', 'unique(backend_id, prestashop_id)',
          'A PrestaShop shop group with this ID already exists.'),
+    ]
+
+class PrestashopTaxMapping(models.Model):
+    _name = 'prestashop.tax.mapping'
+    _description = 'PrestaShop Tax Mapping'
+
+    shop_id = fields.Many2one(
+        'prestashop.shop',
+        string='PrestaShop Shop',
+        required=True
+    )
+    tax_id = fields.Many2one(
+        'account.tax',
+        string='Odoo Tax',
+        domain=[('type_tax_use', '=', 'sale')]
+    )
+    prestashop_tax_group_id = fields.Integer(
+        string='PrestaShop Tax Rules Group ID',
+        required=True
+    )
+    prestashop_tax_name = fields.Char(
+        string='PrestaShop Tax Name',
+        help='Name of tax rules group on PrestaShop'
+    )
+
+    _sql_constraints = [
+        ('unique_tax_mapping',
+         'unique(shop_id, tax_id, prestashop_tax_group_id)',
+         'A mapping for this tax and PrestaShop tax group already exists!')
     ]

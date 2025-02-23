@@ -28,6 +28,13 @@
         <field name="model">prestashop.shop</field>
         <field name="arch" type="xml">
             <form>
+                <header>
+                    <button name="action_import_tax_rules_groups"
+                            string="Import Tax Rules"
+                            type="object"
+                            class="oe_highlight"
+                            confirm="Are you sure you want to import tax rules from PrestaShop?"/>
+                </header>
                 <sheet>
                     <group>
                         <group>
@@ -37,9 +44,9 @@
                             <field name="active"/>
                         </group>
                         <group>
+                            <field name="backend_id"/>
                             <field name="shop_url"/>
                             <field name="default_category_id"/>
-                            <field name="backend_id"/>
                             <field name="pricelist_id"/>
                         </group>
                     </group>
@@ -62,7 +69,6 @@
         </field>
     </record>
 
-    <!-- Menu Items -->
     <record id="action_prestashop_shop" model="ir.actions.act_window">
         <field name="name">PrestaShop Shops</field>
         <field name="res_model">prestashop.shop</field>

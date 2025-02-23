@@ -47,7 +47,14 @@ class PrestashopResPartner(models.Model):
         required=True,
         ondelete='cascade'
     )
-    prestashop_id = fields.Integer('PrestaShop ID', readonly=True)
+    property_product_pricelist = fields.Many2one(
+        'product.pricelist',
+        string='Pricelist',
+        related='odoo_id.property_product_pricelist',
+        store=True,
+        readonly=True
+    )
+    prestashop_id = fields.Integer('PrestaShop ID')
     shop_id = fields.Many2one(
         'prestashop.shop',
         'PrestaShop Shop',

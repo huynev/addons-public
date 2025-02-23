@@ -8,7 +8,8 @@ class PrestashopExportCategories(models.TransientModel):
     shop_id = fields.Many2one(
         'prestashop.shop',
         'PrestaShop Shop',
-        required=True
+        required=True,
+        default=lambda self: self.env['prestashop.shop'].search([], limit=1)
     )
 
     category_ids = fields.Many2many(

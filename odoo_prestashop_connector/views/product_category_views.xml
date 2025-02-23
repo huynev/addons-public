@@ -6,6 +6,7 @@
         <field name="model">prestashop.product.category</field>
         <field name="arch" type="xml">
             <tree string="PrestaShop Product Categories">
+                <field name="odoo_id"/>
                 <field name="name"/>
                 <field name="shop_id"/>
                 <field name="date_add"/>
@@ -37,8 +38,10 @@
                     </div>
                     <group>
                         <group>
+                            <field name="parent_id"/>
                             <field name="shop_id"/>
                             <field name="odoo_id"/>
+                            <field name="description"/>
                         </group>
                         <group>
                             <field name="date_add" readonly="1"/>

@@ -25,6 +25,7 @@
         'security/ir.model.access.csv',
         'views/prestashop_backend_views.xml',
         'views/prestashop_shop_views.xml',
+        'views/prestashop_tax_views.xml',
         'views/product_template_views.xml',
         'views/product_category_views.xml',
         'views/res_partner_views.xml',
