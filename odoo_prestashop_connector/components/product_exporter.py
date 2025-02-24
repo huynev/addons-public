@@ -115,17 +115,9 @@ class ProductExporter(Component):
         ], limit=1)
 
         # Technical fields
-        # create_cdata_element(product, 'id_manufacturer', '1')
-        # create_cdata_element(product, 'id_supplier', '1')
+        create_cdata_element(product, 'id_manufacturer', '')
+        create_cdata_element(product, 'id_supplier', '')
         create_cdata_element(product, 'available_for_order', '1')
-
-        # Get PrestaShop category from Odoo category
-        category_obj = self.env['prestashop.product.category']
-        category_bindings = category_obj.search([
-            ('odoo_id', '=', self.binding.odoo_id.categ_id.id),
-            ('shop_id', '=', self.binding.shop_id.id)
-        ], limit=1)
-
         # Set default category
         default_category_id = category_bindings.prestashop_id if category_bindings else self.binding.shop_id.default_category_id.id
         create_cdata_element(product, 'id_category_default', str(default_category_id))
