@@ -156,14 +156,27 @@ class ProductExporter(Component):
                 create_cdata_element(product, 'id_tax_rules_group', '1')  # Default tax group
         else:
             # Nếu không có thuế, sử dụng default tax group
-            create_cdata_element(product, 'id_tax_rules_group', '0')
+            create_cdata_element(product, 'id_tax_rules_group', '')
 
         create_cdata_element(product, 'type', '1')
         create_cdata_element(product, 'id_shop_default', '1')
 
         # Basic fields
-        reference = self.binding.main_reference or self.binding.default_code
-        create_cdata_element(product, 'reference', reference or '')
+        if self.binding.default_code:
+            unique_reference = self.binding.default_code
+        else:
+            if self.binding.main_reference:
+                reference = self.binding.main_reference
+            else:
+                reference = f"PROD-{self.binding.id}"
+            # Kiểm tra và tạo reference duy nhất
+            unique_reference = self._get_unique_reference(reference)
+
+        create_cdata_element(product, 'reference', unique_reference)
+
+        # Cập nhật main_reference nếu nó được tạo tự động
+        if not self.binding.main_reference:
+            self.binding.main_reference = unique_reference
 
         create_cdata_element(product, 'supplier_reference', '')
         create_cdata_element(product, 'ean13', self.binding.barcode or '')
@@ -403,7 +416,11 @@ class ProductExporter(Component):
 
         # Required fields
         create_cdata_element(combination, 'id_product', str(self.binding.prestashop_id))
-        create_cdata_element(combination, 'reference', variant.default_code or '')
+        # Kiểm tra và tạo reference mặc định nếu không có
+        default_code = variant.default_code or f"COMBI-{variant.id}"
+        unique_reference = self._get_unique_reference(default_code, combination=True)
+        create_cdata_element(combination, 'reference', unique_reference)
+
         create_cdata_element(combination, 'ean13', variant.barcode or '')
         create_cdata_element(combination, 'mpn', variant.default_code or '')
         create_cdata_element(combination, 'supplier_reference', '')
@@ -457,6 +474,32 @@ class ProductExporter(Component):
         # Xóa dấu gạch ngang ở đầu và cuối
         name = name.strip('-')
         return name
+
+    def _get_unique_reference(self, reference, combination=False):
+        prestashop = self.binding.shop_id.backend_id._get_prestashop_client()
+        unique_reference = reference
+        counter = 0
+
+        while True:
+            try:
+                if combination:
+                    filters = {'filter[reference]': str(unique_reference)}
+                    result = prestashop.get('combinations', options=filters)
+                else:
+                    filters = {'filter[reference]': str(unique_reference)}
+                    result = prestashop.get('products', options=filters)
+
+                if result.find('.//product') is None and result.find('.//combination') is None:
+                    break
+                else:
+                    unique_reference = f"{reference}-{counter}"
+                    counter += 1
+
+            except Exception as e:
+                _logger.error(f"Error checking unique reference: {str(e)}")
+                break
+
+        return unique_reference
 
     def _create(self, data):
         """ Create product in PrestaShop """

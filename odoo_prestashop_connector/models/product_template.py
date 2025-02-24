@@ -74,12 +74,13 @@ class PrestashopProductTemplate(models.Model):
     _inherits = {'product.template': 'odoo_id'}
     _description = 'PrestaShop Product Template Binding'
 
-    main_reference = fields.Char('Main Reference', help='Reference code for product template')
+    main_reference = fields.Char('Main Reference', readonly=True, help='Reference code for product template')
 
     odoo_id = fields.Many2one(
         'product.template',
         string='Product Template',
         required=True,
+        readonly=True,
         ondelete='cascade',
         domain=[('active', 'in', [True, False])]
     )

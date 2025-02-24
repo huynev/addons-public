@@ -43,7 +43,7 @@ class PrestashopOrderSyncService(models.Model):
                 orders_xml = prestashop.search('orders', {
                     'display': 'full',
                     'sort': '[id_DESC]',
-                    'limit': 50
+                    'limit': 5
                 })
             except Exception as search_error:
                 _logger.error(f"Lỗi tìm kiếm đơn hàng: {str(search_error)}")
@@ -69,11 +69,11 @@ class PrestashopOrderSyncService(models.Model):
 
                     if not existing_order:
                         # Tạo đơn hàng mới
-                        self._create_sale_order(order_dict, backend)
+                        self._create_sale_order(order_dict)
                         sync_count += 1
                     else:
                         # Cập nhật đơn hàng đã tồn tại
-                        self._update_sale_order(existing_order, order_dict, backend)
+                        self._update_sale_order(existing_order, order_dict)
                         update_count += 1
 
                 except Exception as order_error:
@@ -97,7 +97,7 @@ class PrestashopOrderSyncService(models.Model):
             })
             return 0
 
-    def _update_sale_order(self, existing_order, order_data, backend):
+    def _update_sale_order(self, existing_order, order_data):
         """
         Cập nhật đơn hàng Odoo từ dữ liệu PrestaShop
         """
@@ -160,7 +160,7 @@ class PrestashopOrderSyncService(models.Model):
 
         return order_rows
 
-    def _create_sale_order(self, order_data, backend):
+    def _create_sale_order(self, order_data):
         """
         Tạo đơn hàng Odoo từ dữ liệu PrestaShop
         """
@@ -236,14 +236,21 @@ class PrestashopOrderSyncService(models.Model):
                     _logger.warning(f"Sản phẩm không tồn tại: {product_binding.name}")
                     continue
 
+                # Cập nhật thuế
+                tax_id = False
+                if product_binding.taxes_id:
+                    tax_id = product_binding.taxes_id[0].id
+
                 # Tạo order line
+                unit_price_tax_excl = float(row.get('unit_price_tax_excl', 0))
                 try:
                     order_line = self.env['sale.order.line'].create({
                         'order_id': sale_order.id,
                         'product_id': product.id,
                         'product_uom_qty': float(row.get('product_quantity', 1)),
-                        'price_unit': float(row.get('product_price', 0)),
+                        'price_unit': unit_price_tax_excl,
                         'name': row.get('product_name', product.name),
+                        'tax_id': [(6, 0, [tax_id])] if tax_id else [],
                     })
 
                     self.env['prestashop.sale.order.line'].create({

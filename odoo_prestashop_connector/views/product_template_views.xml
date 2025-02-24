@@ -14,16 +14,16 @@
                         <page string="General Information" name="general_information">
                             <group>
                                 <group>
-                                    <field name="shop_id"/>
+                                    <field name="shop_id" readonly="True"/>
                                     <field name="prestashop_id"/>
                                     <field name="detailed_type" readonly="True"/>
                                     <field name="default_code" readonly="True"/>
-                                    <field name="main_reference"/>
+                                    <field name="main_reference" readonly="True"/>
                                     <field name="barcode" readonly="True"/>
                                 </group>
                                 <group>
                                     <field name="price" readonly="True"/>
-                                    <field name="odoo_id"/>
+                                    <field name="odoo_id" readonly="True"/>
                                 </group>
                             </group>
                         </page>

@@ -169,14 +169,22 @@ class SaleOrderImporter(Component):
                     _logger.warning(f"Product does not exist: {product_binding.name}")
                     continue
 
+                # Cập nhật thuế
+                tax_id = False
+                if product_binding.taxes_id:
+                    tax_id = product_binding.taxes_id[0].id
+
+                # Giá chưa thuế
+                unit_price_tax_excl = float(row.get('unit_price_tax_excl', 0))
                 # Tạo order line
                 try:
                     order_line = self.env['sale.order.line'].create({
                         'order_id': sale_order.id,
                         'product_id': product.id,
                         'product_uom_qty': float(row.get('product_quantity', 1)),
-                        'price_unit': float(row.get('product_price', 0)),
+                        'price_unit': unit_price_tax_excl,
                         'name': row.get('product_name', product.name),
+                        'tax_id': [(6, 0, [tax_id])] if tax_id else [],
                     })
 
                     self.env['prestashop.sale.order.line'].create({
