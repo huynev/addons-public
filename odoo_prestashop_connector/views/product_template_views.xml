@@ -24,6 +24,7 @@
                                 <group>
                                     <field name="price" readonly="True"/>
                                     <field name="odoo_id" readonly="True"/>
+                                    <field name="tax_id"/>
                                 </group>
                             </group>
                         </page>
@@ -56,6 +57,7 @@
                 <field name="main_reference"/>
                 <field name="price"/>
                 <field name="qty_available"/>
+                <field name="tax_id" string="Tax"/>
                 <field name="note"/>
                 <field name="date_upd"/>
             </tree>

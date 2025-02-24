@@ -141,22 +141,30 @@ class ProductExporter(Component):
             create_cdata_element(product, 'id_default_combination', '0')
             create_cdata_element(product, 'product_type', '')
 
-        if self.binding.taxes_id:
-            tax_mapping = self.env['prestashop.tax.mapping'].search([
-                ('shop_id', '=', self.binding.shop_id.id),
-                ('tax_id', '=', self.binding.taxes_id[0].id)  # Lấy thuế đầu tiên
-            ], limit=1)
-
-            if tax_mapping:
-                create_cdata_element(product, 'id_tax_rules_group', str(tax_mapping.prestashop_tax_group_id))
-            else:
-                _logger.warning(
-                    f"No tax mapping found for tax {self.binding.taxes_id[0].name} in shop {self.binding.shop_id.name}"
-                )
-                create_cdata_element(product, 'id_tax_rules_group', '1')  # Default tax group
+        # Cập nhật thuế cho sản phẩm
+        if self.binding.tax_id:
+            # Nếu đã có tax_id trong binding thì sử dụng luôn
+            create_cdata_element(product, 'id_tax_rules_group', str(self.binding.tax_id.prestashop_tax_group_id))
         else:
-            # Nếu không có thuế, sử dụng default tax group
-            create_cdata_element(product, 'id_tax_rules_group', '')
+            # Nếu chưa có tax_id trong binding nhưng có thuế trong product template
+            if self.binding.taxes_id:
+                tax_mapping = self.env['prestashop.tax.mapping'].search([
+                    ('shop_id', '=', self.binding.shop_id.id),
+                    ('tax_id', '=', self.binding.taxes_id[0].id)  # Lấy thuế đầu tiên
+                ], limit=1)
+
+                if tax_mapping:
+                    # Cập nhật tax_id vào binding
+                    self.binding.tax_id = tax_mapping.id
+                    create_cdata_element(product, 'id_tax_rules_group', str(tax_mapping.prestashop_tax_group_id))
+                else:
+                    _logger.warning(
+                        f"No tax mapping found for tax {self.binding.taxes_id[0].name} in shop {self.binding.shop_id.name}"
+                    )
+                    create_cdata_element(product, 'id_tax_rules_group', '')  # Default tax group
+            else:
+                # Nếu không có thuế, sử dụng default tax group
+                create_cdata_element(product, 'id_tax_rules_group', '')
 
         create_cdata_element(product, 'type', '1')
         create_cdata_element(product, 'id_shop_default', '1')

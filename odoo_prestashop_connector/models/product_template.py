@@ -104,6 +104,12 @@ class PrestashopProductTemplate(models.Model):
         readonly=True,
         store=True
     )
+    tax_id = fields.Many2one(
+        'prestashop.tax.mapping',
+        string='PrestaShop Tax Mapping',
+        domain="[('shop_id', '=', shop_id)]",
+        help='Thuế được áp dụng cho sản phẩm trên PrestaShop'
+    )
     note = fields.Text('Notes', help='Internal notes about the product')
 
     @api.model

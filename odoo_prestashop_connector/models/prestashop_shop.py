@@ -164,6 +164,12 @@ class PrestashopTaxMapping(models.Model):
     _name = 'prestashop.tax.mapping'
     _description = 'PrestaShop Tax Mapping'
 
+    name = fields.Char(
+        string='Display Name',
+        compute='_compute_name',
+        store=True
+    )
+
     shop_id = fields.Many2one(
         'prestashop.shop',
         string='PrestaShop Shop',
@@ -188,3 +194,10 @@ class PrestashopTaxMapping(models.Model):
          'unique(shop_id, tax_id, prestashop_tax_group_id)',
          'A mapping for this tax and PrestaShop tax group already exists!')
     ]
+
+    @api.depends('tax_id', 'prestashop_tax_name', 'shop_id')
+    def _compute_name(self):
+        for record in self:
+            tax_name = record.tax_id.name if record.tax_id else ''
+            prestashop_name = record.prestashop_tax_name or ''
+            record.name = f"{tax_name} ({prestashop_name})" if tax_name and prestashop_name else tax_name or prestashop_name
