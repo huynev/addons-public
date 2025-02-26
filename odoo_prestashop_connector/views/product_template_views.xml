@@ -28,6 +28,20 @@
                                 </group>
                             </group>
                         </page>
+                        <page string="Variants" invisible="not attribute_line_ids">
+                            <field name="attribute_line_ids" readonly="1"/>
+                            <separator string="PrestaShop Variant Bindings"/>
+                            <field name="variant_bind_ids" context="{'default_prestashop_product_id': id, 'default_shop_id': shop_id}" readonly="1">
+                                <tree>
+                                    <field name="display_name"/>
+                                    <field name="reference"/>
+                                    <field name="default_code"/>
+                                    <field name="prestashop_id"/>
+                                    <field name="date_upd"/>
+                                    <field name="qty_available"/>
+                                </tree>
+                            </field>
+                        </page>
                         <page string="PrestaShop Information" name="prestashop_information">
                             <group>
                                 <group>

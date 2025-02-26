@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Partner Form View Extension -->
+    <record id="view_partner_form_magento" model="ir.ui.view">
+        <field name="name">res.partner.form.magento</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <button name="export_record" type="object" string="Export to Magento" class="oe_highlight"
+                    invisible="sync_status == 'exporting'"/>
+            </div>
+            <page name="sales_purchases" position="after">
+                <page string="Magento" groups="connector.group_connector_manager">
+                    <group>
+                        <field name="magento_bind_ids">
+                            <tree>
+                                <field name="backend_id"/>
+                                <field name="external_id"/>
+                                <field name="sync_date"/>
+                            </tree>
+                        </field>
+                    </group>
+                </page>
+            </page>
+        </field>
+    </record>
+
+    <!-- Magento Partner Views -->
+    <record id="view_magento_res_partner_form" model="ir.ui.view">
+        <field name="name">magento.res.partner.form</field>
+        <field name="model">magento.res.partner</field>
+        <field name="arch" type="xml">
+            <form string="Magento Customer">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="odoo_id" readonly="1"/>
+                            <field name="backend_id" readonly="1"/>
+                            <field name="external_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="sync_date" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_magento_res_partner_tree" model="ir.ui.view">
+        <field name="name">magento.res.partner.tree</field>
+        <field name="model">magento.res.partner</field>
+        <field name="arch" type="xml">
+            <tree string="Magento Customers">
+                <field name="name"/>
+                <field name="backend_id"/>
+                <field name="external_id"/>
+                <field name="sync_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_magento_res_partner" model="ir.actions.act_window">
+        <field name="name">Magento Customers</field>
+        <field name="res_model">magento.res.partner</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_magento_res_partner"
+              name="Customers"
+              parent="menu_magento_root"
+              action="action_magento_res_partner"
+              sequence="70"/>
+</odoo>

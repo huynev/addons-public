@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Sale Order Form View Extension -->
+    <record id="view_order_form_magento" model="ir.ui.view">
+        <field name="name">sale.order.form.magento</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <button class="oe_stat_button" name="export_to_magento" type="object"
+                        string="Export to Magento" icon="fa-shopping-cart"
+                        groups="connector.group_connector_manager"
+                        attrs="{'invisible': [('state', 'not in', ['sale', 'done'])]}"/>
+            </div>
+            <notebook position="inside">
+                <page string="Magento" groups="connector.group_connector_manager">
+                    <group>
+                        <field name="magento_bind_ids">
+                            <tree>
+                                <field name="backend_id"/>
+                                <field name="external_id"/>
+                                <field name="magento_increment_id"/>
+                                <field name="store_id"/>
+                                <field name="sync_date"/>
+                            </tree>
+                        </field>
+                    </group>
+                </page>
+            </notebook>
+        </field>
+    </record>
+
+    <!-- Magento Sale Order Views -->
+    <record id="view_magento_sale_order_form" model="ir.ui.view">
+        <field name="name">magento.sale.order.form</field>
+        <field name="model">magento.sale.order</field>
+        <field name="arch" type="xml">
+            <form string="Magento Sale Order">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="odoo_id" readonly="1"/>
+                            <field name="backend_id" readonly="1"/>
+                            <field name="external_id" readonly="1"/>
+                            <field name="magento_increment_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="store_id"/>
+                            <field name="storeview_id"/>
+                            <field name="website_id" readonly="1"/>
+                            <field name="sync_date" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Magento Order Lines">
+                            <field name="magento_order_line_ids">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="product_id"/>
+                                    <field name="product_uom_qty"/>
+                                    <field name="price_unit"/>
+                                    <field name="external_id"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_magento_sale_order_tree" model="ir.ui.view">
+        <field name="name">magento.sale.order.tree</field>
+        <field name="model">magento.sale.order</field>
+        <field name="arch" type="xml">
+            <tree string="Magento Sale Orders">
+                <field name="name"/>
+                <field name="magento_increment_id"/>
+                <field name="backend_id"/>
+                <field name="store_id"/>
+                <field name="website_id"/>
+                <field name="external_id"/>
+                <field name="sync_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_magento_sale_order" model="ir.actions.act_window">
+        <field name="name">Magento Sale Orders</field>
+        <field name="res_model">magento.sale.order</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_magento_sale_order"
+              name="Orders"
+              parent="menu_magento_root"
+              action="action_magento_sale_order"
+              sequence="60"/>
+</odoo>

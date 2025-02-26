@@ -85,6 +85,13 @@ class PrestashopProductTemplate(models.Model):
         domain=[('active', 'in', [True, False])]
     )
 
+    # Field để liên kết với các biến thể
+    variant_bind_ids = fields.One2many(
+        'prestashop.product.product',
+        'prestashop_product_id',
+        string='Variant Bindings'
+    )
+
     # PrestaShop specific fields
     prestashop_id = fields.Integer('PrestaShop ID', readonly=True)
 
@@ -158,7 +165,8 @@ class PrestashopProductTemplate(models.Model):
         if self.prestashop_id:
             with self.shop_id.backend_id.work_on(self._name) as work:
                 exporter = work.component(usage='record.exporter')
-                exporter._update_stock(self)
+                # exporter._update_stock(self)
+                exporter.run(self)
 
     @api.model
     def import_record(self, backend, prestashop_id):

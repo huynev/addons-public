@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_magento_storeview_form" model="ir.ui.view">
+        <field name="name">magento.storeview.form</field>
+        <field name="model">magento.storeview</field>
+        <field name="arch" type="xml">
+            <form string="Magento Store View">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="external_id"/>
+                            <field name="store_id"/>
+                        </group>
+                        <group>
+                            <field name="website_id" readonly="1"/>
+                            <field name="backend_id" readonly="1"/>
+                            <field name="lang_id"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_magento_storeview_tree" model="ir.ui.view">
+        <field name="name">magento.storeview.tree</field>
+        <field name="model">magento.storeview</field>
+        <field name="arch" type="xml">
+            <tree string="Magento Store Views">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="external_id"/>
+                <field name="store_id"/>
+                <field name="website_id"/>
+                <field name="lang_id"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_magento_storeview" model="ir.actions.act_window">
+        <field name="name">Magento Store Views</field>
+        <field name="res_model">magento.storeview</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_magento_storeview"
+              name="Store Views"
+              parent="menu_magento_root"
+              action="action_magento_storeview"
+              sequence="40"/>
+</odoo>

@@ -1,0 +1,21 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_magento_backend_user,magento.backend user,model_magento_backend,base.group_system,1,0,0,0
+access_magento_backend_manager,magento.backend manager,model_magento_backend,base.group_system,1,1,1,1
+access_magento_website_user,magento.website user,model_magento_website,base.group_system,1,0,0,0
+access_magento_website_manager,magento.website manager,model_magento_website,base.group_system,1,1,1,1
+access_magento_store_user,magento.store user,model_magento_store,base.group_system,1,0,0,0
+access_magento_store_manager,magento.store manager,model_magento_store,base.group_system,1,1,1,1
+access_magento_storeview_user,magento.storeview user,model_magento_storeview,base.group_system,1,0,0,0
+access_magento_storeview_manager,magento.storeview manager,model_magento_storeview,base.group_system,1,1,1,1
+access_magento_product_template_user,magento.product.template user,model_magento_product_template,base.group_system,1,0,0,0
+access_magento_product_template_manager,magento.product.template manager,model_magento_product_template,base.group_system,1,1,1,1
+access_magento_product_product_user,magento.product.product user,model_magento_product_product,base.group_system,1,0,0,0
+access_magento_product_product_manager,magento.product.product manager,model_magento_product_product,base.group_system,1,1,1,1
+access_magento_res_partner_user,magento.res.partner user,model_magento_res_partner,base.group_system,1,0,0,0
+access_magento_res_partner_manager,magento.res.partner manager,model_magento_res_partner,base.group_system,1,1,1,1
+access_magento_sale_order_user,magento.sale.order user,model_magento_sale_order,base.group_system,1,0,0,0
+access_magento_sale_order_manager,magento.sale.order manager,model_magento_sale_order,base.group_system,1,1,1,1
+access_magento_sale_order_line_user,magento.sale.order.line user,model_magento_sale_order_line,base.group_system,1,0,0,0
+access_magento_sale_order_line_manager,magento.sale.order.line manager,model_magento_sale_order_line,base.group_system,1,1,1,1
+access_magento_import_products_wizard,magento.import.products.wizard,model_magento_import_products_wizard,base.group_system,1,1,1,1
+access_magento_import_orders_wizard,magento.import.orders.wizard,model_magento_import_orders_wizard,base.group_system,1,1,1,1

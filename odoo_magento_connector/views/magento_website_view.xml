@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_magento_website_form" model="ir.ui.view">
+        <field name="name">magento.website.form</field>
+        <field name="model">magento.website</field>
+        <field name="arch" type="xml">
+            <form string="Magento Website">
+                <header>
+                    <button name="import_stores" type="object" string="Import Stores" class="oe_highlight"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="external_id"/>
+                            <field name="backend_id"/>
+                        </group>
+                        <group>
+                            <field name="warehouse_id"/>
+                            <field name="currency_id"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Stores">
+                            <field name="store_ids">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="code"/>
+                                    <field name="external_id"/>
+                                    <field name="active"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_magento_website_tree" model="ir.ui.view">
+        <field name="name">magento.website.tree</field>
+        <field name="model">magento.website</field>
+        <field name="arch" type="xml">
+            <tree string="Magento Websites">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="external_id"/>
+                <field name="backend_id"/>
+                <field name="warehouse_id"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_magento_website" model="ir.actions.act_window">
+        <field name="name">Magento Websites</field>
+        <field name="res_model">magento.website</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_magento_website"
+              name="Websites"
+              parent="menu_magento_root"
+              action="action_magento_website"
+              sequence="20"/>
+</odoo>

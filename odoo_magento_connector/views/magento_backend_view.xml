@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_magento_backend_form" model="ir.ui.view">
+        <field name="name">magento.backend.form</field>
+        <field name="model">magento.backend</field>
+        <field name="arch" type="xml">
+            <form string="Magento Backend">
+                <header>
+                    <button name="check_magento_connection" type="object" string="Check Connection" class="oe_highlight"/>
+                    <button name="import_websites" type="object" string="Import Websites" class="oe_highlight"/>
+                    <button name="import_products" type="object" string="Import Products" class="oe_highlight"/>
+                    <button name="import_orders" type="object" string="Import Orders" class="oe_highlight"/>
+                    <button name="export_stock_levels" type="object" string="Export Stock" class="oe_highlight"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="version"/>
+                            <field name="location"/>
+                            <field name="access_token" password="True"/>
+                            <field name="default_lang_id"/>
+                        </group>
+                        <group>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="active"/>
+                            <field name="admin_notification_mail"/>
+                            <field name="import_products_from_date"/>
+                            <field name="import_orders_from_date"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Websites">
+                            <field name="website_ids">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="code"/>
+                                    <field name="external_id"/>
+                                    <field name="warehouse_id"/>
+                                    <field name="currency_id"/>
+                                    <field name="active"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_magento_backend_tree" model="ir.ui.view">
+        <field name="name">magento.backend.tree</field>
+        <field name="model">magento.backend</field>
+        <field name="arch" type="xml">
+            <tree string="Magento Backends">
+                <field name="name"/>
+                <field name="version"/>
+                <field name="location"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_magento_backend" model="ir.actions.act_window">
+        <field name="name">Magento Backends</field>
+        <field name="res_model">magento.backend</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_magento_root"
+              name="Magento"
+              parent="connector.menu_connector_root"
+              sequence="10"/>
+
+    <menuitem id="menu_magento_backend"
+              name="Backends"
+              parent="menu_magento_root"
+              action="action_magento_backend"
+              sequence="10"/>
+</odoo>

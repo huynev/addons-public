@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Queue Job Channels -->
+        <record id="channel_magento" model="queue.job.channel">
+            <field name="name">Magento</field>
+            <field name="parent_id" ref="queue_job.channel_root"/>
+        </record>
+
+        <record id="channel_magento_product" model="queue.job.channel">
+            <field name="name">Magento Product</field>
+            <field name="parent_id" ref="channel_magento"/>
+        </record>
+
+        <record id="channel_magento_sale" model="queue.job.channel">
+            <field name="name">Magento Sale</field>
+            <field name="parent_id" ref="channel_magento"/>
+        </record>
+
+        <record id="channel_magento_stock" model="queue.job.channel">
+            <field name="name">Magento Stock</field>
+            <field name="parent_id" ref="channel_magento"/>
+        </record>
+
+        <record id="channel_magento_partner" model="queue.job.channel">
+            <record id="channel_magento_partner" model="queue.job.channel">
+            <field name="name">Magento Partner</field>
+            <field name="parent_id" ref="channel_magento"/>
+        </record>
+
+        <!-- Cron Jobs -->
+        <record id="ir_cron_magento_import_products" model="ir.cron">
+            <field name="name">Magento: Import Products</field>
+            <field name="model_id" ref="model_magento_backend"/>
+            <field name="state">code</field>
+            <field name="code">model._scheduler_import_products()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="active" eval="False"/>
+            <field name="doall" eval="False"/>
+        </record>
+
+        <record id="ir_cron_magento_import_orders" model="ir.cron">
+            <field name="name">Magento: Import Orders</field>
+            <field name="model_id" ref="model_magento_backend"/>
+            <field name="state">code</field>
+            <field name="code">model._scheduler_import_orders()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+            <field name="active" eval="False"/>
+            <field name="doall" eval="False"/>
+        </record>
+
+        <record id="ir_cron_magento_update_stock" model="ir.cron">
+            <field name="name">Magento: Update Stock</field>
+            <field name="model_id" ref="model_magento_backend"/>
+            <field name="state">code</field>
+            <field name="code">model._scheduler_update_stock()</field>
+            <field name="interval_number">2</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+            <field name="active" eval="False"/>
+            <field name="doall" eval="False"/>
+        </record>
+    </data>
+</odoo>

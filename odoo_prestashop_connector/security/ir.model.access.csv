@@ -24,3 +24,4 @@ access_prestashop_product_category_manager,prestashop.product.category.manager,m
 access_prestashop_export_categories,prestashop.export.categories,model_prestashop_export_categories,base.group_system,1,1,1,1
 access_prestashop_tax_mapping_manager,prestashop.tax.mapping manager,model_prestashop_tax_mapping,base.group_system,1,1,1,1
 access_prestashop_tax_mapping_user,prestashop.tax.mapping user,model_prestashop_tax_mapping,base.group_system,1,1,1,1
+access_prestashop_product_product,prestashop.product.product access,model_prestashop_product_product,base.group_user,1,1,1,1

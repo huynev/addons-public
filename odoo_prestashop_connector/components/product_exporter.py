@@ -263,7 +263,7 @@ class ProductExporter(Component):
             # Tìm value theo tên và option ID
             filters = {
                 'filter[id_attribute_group]': str(option_id),
-                'filter[name]': str(value.name)
+                'filter[name]': str(value.name)  # Sử dụng full_value_name thay vì chỉ value.name
             }
             result = prestashop.get('product_option_values', options=filters)
             existing_values = result.findall('.//product_option_value')
@@ -389,19 +389,59 @@ class ProductExporter(Component):
         try:
             # Lặp qua các biến thể của sản phẩm
             for variant in self.binding.product_variant_ids:
-                # Tạo combination mới
-                combination_data = self._prepare_combination_data(variant)
-                result = prestashop.add('combinations', combination_data)
+                # Đảm bảo variant binding tồn tại
+                variant_binding = self._ensure_variant_binding(variant)
 
-                if result is not None:
-                    _logger.info(f"Created combination for product {self.binding.prestashop_id} variant {variant.id}")
+                # Xác định reference cho biến thể
+                default_code = variant.default_code
+                if not default_code:
+                    default_code = f"COMBI-{variant.id}"
 
+                # Tạo reference duy nhất
+                unique_reference = self._get_unique_reference(default_code, combination=True)
+
+                # Cập nhật reference vào binding nếu khác
+                if variant_binding.reference != unique_reference:
+                    variant_binding.write({'reference': unique_reference})
+                    _logger.info(f"Updated variant binding reference to {unique_reference}")
+
+                # Kiểm tra nếu variant đã có prestashop_id khác 0
+                if variant_binding.prestashop_id and variant_binding.prestashop_id != 0:
+                    # Cập nhật combination đã tồn tại
+                    combination_data = self._prepare_combination_data(variant, variant_binding.prestashop_id)
+                    prestashop.edit(f'combinations/{variant_binding.prestashop_id}', combination_data)
+                    _logger.info(
+                        f"Updated existing combination {variant_binding.prestashop_id} for variant {variant.id}")
+                else:
+                    # Tạo combination mới
+                    combination_data = self._prepare_combination_data(variant)
+                    result = prestashop.add('combinations', combination_data)
+
+                    if result is not None:
+                        # Lấy thông tin từ kết quả
+                        combination_elem = result.find('.//combination')
+                        if combination_elem is not None:
+                            id_elem = combination_elem.find('id')
+                            if id_elem is not None and id_elem.text:
+                                # Lấy text từ CDATA section
+                                combination_id = id_elem.text.strip('[]!CDATA')
+
+                                # Cập nhật prestashop_id cho variant binding
+                                variant_binding.write({
+                                    'prestashop_id': int(combination_id),
+                                    'date_add': fields.Datetime.now()
+                                })
+                                _logger.info(
+                                    f"Created combination for product {self.binding.prestashop_id} variant {variant.id} with ID {combination_id}")
+
+            return True
         except Exception as e:
             _logger.error(f"Error creating combinations: {str(e)}")
             raise
 
     def _prepare_combination_data(self, variant, combination_id=None):
         """Prepare combination data for export"""
+        variant_binding = self._ensure_variant_binding(variant)
         prestashop = ET.Element('prestashop')
         prestashop.set('xmlns:xlink', 'http://www.w3.org/1999/xlink')
         combination = ET.SubElement(prestashop, 'combination')
@@ -411,15 +451,30 @@ class ProductExporter(Component):
             elem.text = f'<![CDATA[{value}]]>'
             return elem
 
+        # Xử lý prestashop_id
         if combination_id:
             create_cdata_element(combination, 'id', str(combination_id))
+            if variant_binding and (variant_binding.prestashop_id == 0 or not variant_binding.prestashop_id):
+                variant_binding.write({
+                    'prestashop_id': int(combination_id),
+                    'date_add': fields.Datetime.now()
+                })
+                _logger.info(f"Updated variant binding prestashop_id from 0 to {combination_id}")
+        elif variant_binding and variant_binding.prestashop_id and variant_binding.prestashop_id != 0:
+            create_cdata_element(combination, 'id', str(variant_binding.prestashop_id))
 
         # Required fields
         create_cdata_element(combination, 'id_product', str(self.binding.prestashop_id))
-        # Kiểm tra và tạo reference mặc định nếu không có
-        default_code = variant.default_code or f"COMBI-{variant.id}"
-        unique_reference = self._get_unique_reference(default_code, combination=True)
-        create_cdata_element(combination, 'reference', unique_reference)
+
+        # Sử dụng reference từ variant binding nếu có
+        if variant_binding and variant_binding.reference:
+            # Luôn ưu tiên sử dụng reference từ binding
+            reference = variant_binding.reference
+        else:
+            # Nếu không có reference trong binding, lấy từ variant hoặc tạo mới
+            reference = variant.default_code or f"COMBI-{variant.id}"
+
+        create_cdata_element(combination, 'reference', reference)
 
         create_cdata_element(combination, 'ean13', variant.barcode or '')
         create_cdata_element(combination, 'mpn', variant.default_code or '')
@@ -454,6 +509,39 @@ class ProductExporter(Component):
         xml_str = ET.tostring(prestashop, encoding='utf-8', xml_declaration=True)
         xml_str = xml_str.decode('utf-8').replace('&lt;![CDATA[', '<![CDATA[').replace(']]&gt;', ']]>')
         return xml_str.encode('utf-8')
+
+    def _ensure_variant_binding(self, variant):
+        """Đảm bảo tồn tại binding cho variant và trả về binding đó"""
+        # Tìm binding hiện có
+        variant_binding = self.env['prestashop.product.product'].search([
+            ('odoo_id', '=', variant.id),
+            ('shop_id', '=', self.binding.shop_id.id)
+        ], limit=1)
+
+        if not variant_binding:
+            # Tạo binding mới với prestashop_id = 0
+            try:
+                reference = variant.default_code or f"COMBI-{variant.id}"
+                variant_binding = self.env['prestashop.product.product'].create({
+                    'odoo_id': variant.id,
+                    'shop_id': self.binding.shop_id.id,
+                    'prestashop_product_id': self.binding.id,
+                    'reference': reference,
+                    'prestashop_id': 0  # Khởi tạo với prestashop_id = 0
+                })
+                _logger.info(f"Created new prestashop.product.product binding for variant {variant.id}")
+            except Exception as e:
+                _logger.error(f"Error creating variant binding: {e}")
+                # Thử tìm lại binding đã tồn tại
+                variant_binding = self.env['prestashop.product.product'].search([
+                    ('odoo_id', '=', variant.id),
+                    ('shop_id', '=', self.binding.shop_id.id)
+                ], limit=1)
+
+                if variant_binding:
+                    _logger.info(f"Found existing binding for variant {variant.id}")
+
+        return variant_binding
 
     def _format_link_rewrite(self, name):
         """Convert name to URL friendly format"""
@@ -602,104 +690,148 @@ class ProductExporter(Component):
             if binding.attribute_line_ids:
                 # Cập nhật kho cho từng biến thể
                 for variant in binding.product_variant_ids:
+                    # Đảm bảo tồn tại binding cho variant
+                    variant_binding = self._ensure_variant_binding(variant)
+
+                    # Lấy reference từ binding hoặc từ product variant
+                    reference = variant_binding.reference or variant.default_code or ''
+
                     # Tìm combination ID trên PrestaShop
-                    combination_filters = {
-                        'filter[id_product]': str(binding.prestashop_id),
-                        'filter[reference]': str(variant.default_code or '')
-                    }
+                    if variant_binding.prestashop_id and variant_binding.prestashop_id != 0:
+                        # Nếu đã có prestashop_id trong binding, sử dụng nó
+                        combination_id = variant_binding.prestashop_id
+                        _logger.info(f"Using existing combination ID {combination_id} from binding")
+                    else:
+                        # Nếu chưa có prestashop_id, tìm theo reference
+                        combination_id = None
+                        combination_filters = {
+                            'filter[id_product]': str(binding.prestashop_id),
+                            'filter[reference]': str(reference)
+                        }
+                        try:
+                            combinations = prestashop.get('combinations', options=combination_filters)
+                            combination = combinations.find('.//combination')
+                            if combination is not None:
+                                combination_id = combination.get('id')
+                                _logger.info(f"Found combination ID {combination_id} by reference {reference}")
+
+                                # Cập nhật prestashop_id cho variant binding nếu chưa có
+                                if variant_binding and not variant_binding.prestashop_id:
+                                    variant_binding.write({
+                                        'prestashop_id': int(combination_id),
+                                        'date_upd': fields.Datetime.now()
+                                    })
+                                    _logger.info(f"Updated variant binding with prestashop_id {combination_id}")
+                            else:
+                                _logger.warning(f"Could not find combination with reference {reference}")
+                                continue
+                        except Exception as e:
+                            _logger.error(f"Error finding combination by reference {reference}: {str(e)}")
+                            continue
+
+                    if not combination_id:
+                        _logger.warning(
+                            f"No combination ID for variant {variant.display_name} with reference {reference}")
+                        continue
+
+                    # Tìm stock_available cho combination
                     try:
-                        combinations = prestashop.get('combinations', options=combination_filters)
-                        combination = combinations.find('.//combination')
-                        if combination is not None:
-                            combination_id = combination.get('id')
+                        stock_filters = {
+                            'filter[id_product]': str(binding.prestashop_id),
+                            'filter[id_product_attribute]': str(combination_id)
+                        }
+                        stock_data = prestashop.get('stock_availables', options=stock_filters)
+                        stock_available = stock_data.find('.//stock_available')
 
-                            # Tìm stock_available cho combination
-                            stock_filters = {
-                                'filter[id_product]': str(binding.prestashop_id),
-                                'filter[id_product_attribute]': str(combination_id)
-                            }
-                            stock_data = prestashop.get('stock_availables', options=stock_filters)
-                            stock_available = stock_data.find('.//stock_available')
+                        if stock_available is not None:
+                            stock_id = stock_available.get('id')
 
-                            if stock_available is not None:
-                                stock_id = stock_available.get('id')
+                            # Lấy số lượng tồn kho từ variant
+                            quantity = int(variant.qty_available)
 
-                                # Tạo XML để cập nhật kho
-                                stock_xml = ET.Element('prestashop')
-                                stock_xml.set('xmlns:xlink', 'http://www.w3.org/1999/xlink')
-                                stock = ET.SubElement(stock_xml, 'stock_available')
+                            # Tạo XML để cập nhật kho
+                            stock_xml = ET.Element('prestashop')
+                            stock_xml.set('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+                            stock = ET.SubElement(stock_xml, 'stock_available')
 
-                                def create_cdata_element(parent, tag, value=''):
-                                    elem = ET.SubElement(parent, tag)
-                                    elem.text = f'<![CDATA[{value}]]>'
-                                    return elem
+                            def create_cdata_element(parent, tag, value=''):
+                                elem = ET.SubElement(parent, tag)
+                                elem.text = f'<![CDATA[{value}]]>'
+                                return elem
 
-                                # Thêm các trường bắt buộc
-                                create_cdata_element(stock, 'id', stock_id)
-                                create_cdata_element(stock, 'quantity', str(int(variant.qty_available)))
+                            # Thêm các trường bắt buộc
+                            create_cdata_element(stock, 'id', stock_id)
+                            create_cdata_element(stock, 'quantity', str(quantity))
 
-                                # Thêm các trường bổ sung
-                                ET.SubElement(stock, 'id_product').text = str(binding.prestashop_id)
-                                ET.SubElement(stock, 'id_product_attribute').text = str(combination_id)
-                                ET.SubElement(stock, 'depends_on_stock').text = '0'
-                                ET.SubElement(stock, 'out_of_stock').text = '1'
-                                ET.SubElement(stock, 'id_shop').text = '1'
+                            # Thêm các trường bổ sung
+                            ET.SubElement(stock, 'id_product').text = str(binding.prestashop_id)
+                            ET.SubElement(stock, 'id_product_attribute').text = str(combination_id)
+                            ET.SubElement(stock, 'depends_on_stock').text = '0'
+                            ET.SubElement(stock, 'out_of_stock').text = '1'
+                            ET.SubElement(stock, 'id_shop').text = '1'
 
-                                # Chuyển đổi thành string
-                                xml_str = ET.tostring(stock_xml, encoding='utf-8', xml_declaration=True)
-                                xml_str = xml_str.decode('utf-8').replace('&lt;![CDATA[', '<![CDATA[').replace(']]&gt;',
-                                                                                                               ']]>')
+                            # Chuyển đổi thành string
+                            xml_str = ET.tostring(stock_xml, encoding='utf-8', xml_declaration=True)
+                            xml_str = xml_str.decode('utf-8').replace('&lt;![CDATA[', '<![CDATA[').replace(']]&gt;',
+                                                                                                           ']]>')
 
-                                # Cập nhật số lượng tồn kho
-                                resource_path = f'stock_availables/{stock_id}'
-                                prestashop.edit(resource_path, xml_str.encode('utf-8'))
-                                _logger.info(
-                                    f"Updated stock quantity for variant {variant.default_code} to {variant.qty_available}")
-
+                            # Cập nhật số lượng tồn kho
+                            resource_path = f'stock_availables/{stock_id}'
+                            prestashop.edit(resource_path, xml_str.encode('utf-8'))
+                            _logger.info(f"Updated stock quantity for variant {reference} to {quantity}")
+                        else:
+                            _logger.warning(f"No stock_available found for combination {combination_id}")
                     except Exception as e:
-                        _logger.error(f"Error updating stock for variant {variant.default_code}: {str(e)}")
+                        _logger.error(f"Error updating stock for variant {reference}: {str(e)}")
                         continue
 
             else:
                 # Cập nhật kho cho sản phẩm không có biến thể
-                filters = {'filter[id_product]': str(binding.prestashop_id)}
-                stock_data = prestashop.get('stock_availables', options=filters)
+                try:
+                    filters = {'filter[id_product]': str(binding.prestashop_id)}
+                    stock_data = prestashop.get('stock_availables', options=filters)
 
-                stock_available = stock_data.find('.//stock_available')
-                if stock_available is not None:
-                    stock_id = stock_available.get('id')
+                    stock_available = stock_data.find('.//stock_available')
+                    if stock_available is not None:
+                        stock_id = stock_available.get('id')
 
-                    # Tạo XML cập nhật kho
-                    stock_xml = ET.Element('prestashop')
-                    stock_xml.set('xmlns:xlink', 'http://www.w3.org/1999/xlink')
-                    stock = ET.SubElement(stock_xml, 'stock_available')
+                        # Lấy số lượng tồn kho từ sản phẩm
+                        quantity = int(binding.qty_available)
 
-                    def create_cdata_element(parent, tag, value=''):
-                        elem = ET.SubElement(parent, tag)
-                        elem.text = f'<![CDATA[{value}]]>'
-                        return elem
+                        # Tạo XML cập nhật kho
+                        stock_xml = ET.Element('prestashop')
+                        stock_xml.set('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+                        stock = ET.SubElement(stock_xml, 'stock_available')
 
-                    # Thêm các trường bắt buộc
-                    create_cdata_element(stock, 'id', stock_id)
-                    create_cdata_element(stock, 'quantity', str(int(binding.qty_available)))
+                        def create_cdata_element(parent, tag, value=''):
+                            elem = ET.SubElement(parent, tag)
+                            elem.text = f'<![CDATA[{value}]]>'
+                            return elem
 
-                    # Thêm các trường bổ sung
-                    ET.SubElement(stock, 'id_product').text = str(binding.prestashop_id)
-                    ET.SubElement(stock, 'id_product_attribute').text = '0'
-                    ET.SubElement(stock, 'depends_on_stock').text = '0'
-                    ET.SubElement(stock, 'out_of_stock').text = '1'
-                    ET.SubElement(stock, 'id_shop').text = '1'
+                        # Thêm các trường bắt buộc
+                        create_cdata_element(stock, 'id', stock_id)
+                        create_cdata_element(stock, 'quantity', str(quantity))
 
-                    # Chuyển đổi thành string
-                    xml_str = ET.tostring(stock_xml, encoding='utf-8', xml_declaration=True)
-                    xml_str = xml_str.decode('utf-8').replace('&lt;![CDATA[', '<![CDATA[').replace(']]&gt;', ']]>')
+                        # Thêm các trường bổ sung
+                        ET.SubElement(stock, 'id_product').text = str(binding.prestashop_id)
+                        ET.SubElement(stock, 'id_product_attribute').text = '0'
+                        ET.SubElement(stock, 'depends_on_stock').text = '0'
+                        ET.SubElement(stock, 'out_of_stock').text = '1'
+                        ET.SubElement(stock, 'id_shop').text = '1'
 
-                    # Cập nhật số lượng tồn kho
-                    resource_path = f'stock_availables/{stock_id}'
-                    prestashop.edit(resource_path, xml_str.encode('utf-8'))
-                    _logger.info(
-                        f"Updated stock quantity for product {binding.prestashop_id} to {binding.qty_available}")
+                        # Chuyển đổi thành string
+                        xml_str = ET.tostring(stock_xml, encoding='utf-8', xml_declaration=True)
+                        xml_str = xml_str.decode('utf-8').replace('&lt;![CDATA[', '<![CDATA[').replace(']]&gt;', ']]>')
+
+                        # Cập nhật số lượng tồn kho
+                        resource_path = f'stock_availables/{stock_id}'
+                        prestashop.edit(resource_path, xml_str.encode('utf-8'))
+                        _logger.info(f"Updated stock quantity for product {binding.prestashop_id} to {quantity}")
+                    else:
+                        _logger.warning(f"No stock_available found for product {binding.prestashop_id}")
+                except Exception as e:
+                    _logger.error(f"Error updating stock for product {binding.prestashop_id}: {str(e)}")
 
         except Exception as e:
-            _logger.error(f"Error updating stock for product {binding.prestashop_id}: {str(e)}")
+            _logger.error(f"Error in _update_stock for product {binding.prestashop_id}: {str(e)}")
             raise

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_magento_store_form" model="ir.ui.view">
+        <field name="name">magento.store.form</field>
+        <field name="model">magento.store</field>
+        <field name="arch" type="xml">
+            <form string="Magento Store">
+                <header>
+                    <button name="import_storeviews" type="object" string="Import Store Views" class="oe_highlight"/>
+                    <button name="import_products" type="object" string="Import Products" class="oe_highlight"/>
+                    <button name="import_orders" type="object" string="Import Orders" class="oe_highlight"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="external_id"/>
+                            <field name="website_id"/>
+                            <field name="backend_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="pricelist_id"/>
+                            <field name="default_category_id"/>
+                            <field name="team_id"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Store Views">
+                            <field name="storeview_ids">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="code"/>
+                                    <field name="external_id"/>
+                                    <field name="lang_id"/>
+                                    <field name="active"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_magento_store_tree" model="ir.ui.view">
+        <field name="name">magento.store.tree</field>
+        <field name="model">magento.store</field>
+        <field name="arch" type="xml">
+            <tree string="Magento Stores">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="external_id"/>
+                <field name="website_id"/>
+                <field name="pricelist_id"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_magento_store" model="ir.actions.act_window">
+        <field name="name">Magento Stores</field>
+        <field name="res_model">magento.store</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_magento_store"
+              name="Stores"
+              parent="menu_magento_root"
+              action="action_magento_store"
+              sequence="30"/>
+</odoo>

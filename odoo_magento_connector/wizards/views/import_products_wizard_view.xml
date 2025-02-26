@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_magento_import_products_wizard_form" model="ir.ui.view">
+        <field name="name">magento.import.products.wizard.form</field>
+        <field name="model">magento.import.products.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Import Products from Magento">
+                <group>
+                    <field name="backend_id"/>
+                    <field name="website_id"/>
+                    <field name="store_id"/>
+                    <field name="from_date"/>
+                </group>
+                <footer>
+                    <button name="import_products" string="Import Products" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_magento_import_products" model="ir.actions.act_window">
+        <field name="name">Import Products</field>
+        <field name="res_model">magento.import.products.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_magento_import_products"
+              name="Import Products"
+              parent="menu_magento_root"
+              action="action_magento_import_products"
+              sequence="110"/>
+</odoo>
