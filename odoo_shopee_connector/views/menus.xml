@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_shopee_root"
+        name="Shopee"
+        web_icon="odoo_shopee_connector,static/description/icon.png"
+        sequence="15"/>
+
+    <menuitem id="menu_shopee_backend"
+        name="Backends"
+        parent="menu_shopee_root"
+        action="action_shopee_backend"
+        sequence="5"/>
+
+    <menuitem id="menu_shopee_import"
+        name="Import/Export"
+        parent="menu_shopee_root"
+        sequence="10"/>
+
+<!--    <menuitem id="menu_shopee_import_products"-->
+<!--        name="Import Products"-->
+<!--        parent="menu_shopee_import"-->
+<!--        action="action_shopee_import_products"-->
+<!--        sequence="10"/>-->
+
+    <menuitem id="menu_shopee_import_orders"
+        name="Import Orders"
+        parent="menu_shopee_import"
+        action="action_shopee_import_orders"
+        sequence="20"/>
+
+    <menuitem id="menu_shopee_category"
+              name="Categories"
+              parent="odoo_shopee_connector.menu_shopee_root"
+              action="action_shopee_category"
+              sequence="30"/>
+
+    <menuitem id="menu_shopee_export_products"
+        name="Export Products"
+        parent="menu_shopee_import"
+        action="action_shopee_export_products"
+        sequence="30"/>
+
+    <menuitem id="menu_shopee_product"
+        name="Products"
+        parent="menu_shopee_root"
+        action="action_shopee_product_template"
+        sequence="20"/>
+
+    <menuitem id="menu_shopee_sale_order"
+        name="Orders"
+        parent="menu_shopee_root"
+        action="action_shopee_sale_order"
+        sequence="30"/>
+
+    <menuitem id="menu_shopee_res_partner"
+        name="Customers"
+        parent="menu_shopee_root"
+        action="action_shopee_res_partner"
+        sequence="40"/>
+
+    <menuitem id="menu_shopee_job"
+                  name="Queue Jobs"
+                  parent="menu_shopee_root"
+                  action="queue_job.action_queue_job"
+                  groups="queue_job.group_queue_job_manager"
+                  sequence="90"/>
+</odoo>

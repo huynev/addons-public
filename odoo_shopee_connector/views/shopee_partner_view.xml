@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_shopee_res_partner_form" model="ir.ui.view">
+        <field name="name">shopee.res.partner.form</field>
+        <field name="model">shopee.res.partner</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="backend_id"/>
+                            <field name="external_id"/>
+                            <field name="odoo_id"/>
+                            <field name="sync_date"/>
+                        </group>
+                        <group>
+                            <field name="shopee_user_id"/>
+                            <field name="shopee_username"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_shopee_res_partner_tree" model="ir.ui.view">
+        <field name="name">shopee.res.partner.tree</field>
+        <field name="model">shopee.res.partner</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="backend_id"/>
+                <field name="shopee_user_id"/>
+                <field name="odoo_id"/>
+                <field name="shopee_username"/>
+                <field name="sync_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_shopee_res_partner" model="ir.actions.act_window">
+        <field name="name">Shopee Customers</field>
+        <field name="res_model">shopee.res.partner</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+<!--    &lt;!&ndash; Add Shopee Bindings to partner form &ndash;&gt;-->
+<!--    <record id="res_partner_view_form_inherit_shopee" model="ir.ui.view">-->
+<!--        <field name="name">res.partner.form.inherit.shopee</field>-->
+<!--        <field name="model">res.partner</field>-->
+<!--        <field name="inherit_id" ref="base.view_partner_form"/>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <xpath expr="//page[@name='sales_purchases']" position="after">-->
+<!--                <page name="shopee" string="Shopee" invisible="not shopee_bind_ids">-->
+<!--                    <field name="shopee_bind_ids" />-->
+<!--                </page>-->
+<!--            </xpath>-->
+<!--        </field>-->
+<!--    </record>-->
+</odoo>

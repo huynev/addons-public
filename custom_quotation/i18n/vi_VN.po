@@ -1,0 +1,167 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* custom_quotation
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-02-13 10:00+0000\n"
+"PO-Revision-Date: 2024-02-13 10:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: custom_quotation
+#: model:ir.model.fields,field_description:custom_quotation.field_custom_quotation__access_token
+msgid "Access Token"
+msgstr "Mã truy cập"
+
+#. module: custom_quotation
+#: model:ir.model.fields.selection,name:custom_quotation.selection__custom_quotation__state__accepted
+msgid "Accepted"
+msgstr "Đã xác nhận"
+
+#. module: custom_quotation
+#: model:ir.actions.report,name:custom_quotation.action_report_custom_quotation
+msgid "In báo giá"
+msgstr "In báo giá"
+
+#. module: custom_quotation
+#: model:ir.model.fields.selection,name:custom_quotation.selection__custom_quotation__state__cancelled
+msgid "Cancelled"
+msgstr "Đã hủy"
+
+#. module: custom_quotation
+#: model_terms:ir.ui.view,arch_db:custom_quotation.view_custom_quotation_form
+msgid "Chọn sản phẩm có trong báo giá"
+msgstr "Chọn sản phẩm có trong báo giá"
+
+#. module: custom_quotation
+#: model_terms:ir.ui.view,arch_db:custom_quotation.view_custom_quotation_form
+msgid "Chi tiết báo giá được tạo"
+msgstr "Chi tiết báo giá được tạo"
+
+#. module: custom_quotation
+#: model:ir.model.fields,field_description:custom_quotation.field_custom_quotation__partner_id
+msgid "Customer"
+msgstr "Khách hàng"
+
+#. module: custom_quotation
+#: model:ir.model.fields,field_description:custom_quotation.field_custom_quotation__date
+msgid "Quotation Date"
+msgstr "Ngày báo giá"
+
+#. module: custom_quotation
+#: model:ir.model.fields,field_description:custom_quotation.field_custom_quotation_line__name
+msgid "Description"
+msgstr "Mô tả"
+
+#. module: custom_quotation
+#: model:ir.model.fields.selection,name:custom_quotation.selection__custom_quotation__state__draft
+msgid "Draft"
+msgstr "Nháp"
+
+#. module: custom_quotation
+#: model:ir.model.fields,field_description:custom_quotation.field_custom_quotation__excel_file
+msgid "Excel File"
+msgstr "File Excel"
+
+#. module: custom_quotation
+#: model:ir.model.fields,field_description:custom_quotation.field_custom_quotation__excel_filename
+msgid "Excel Filename"
+msgstr "Tên file Excel"
+
+#. module: custom_quotation
+#: model:ir.model.fields.selection,name:custom_quotation.selection__custom_quotation__state__expired
+msgid "Expired"
+msgstr "Hết hạn"
+
+#. module: custom_quotation
+#: model:ir.model.fields,field_description:custom_quotation.field_custom_quotation__validity_date
+msgid "Expiration Date"
+msgstr "Ngày hết hạn"
+
+#. module: custom_quotation
+#: model:ir.model.fields,field_description:custom_quotation.field_custom_quotation_line__packaging_info
+msgid "Packaging Info"
+msgstr "Thông tin đóng gói"
+
+#. module: custom_quotation
+#: model:ir.model.fields,field_description:custom_quotation.field_custom_quotation_line__price_unit
+msgid "Unit Price"
+msgstr "Đơn giá"
+
+#. module: custom_quotation
+#: model:ir.model.fields,field_description:custom_quotation.field_custom_quotation_line__product_id
+msgid "Product"
+msgstr "Sản phẩm"
+
+#. module: custom_quotation
+#: model:ir.model.fields,field_description:custom_quotation.field_custom_quotation__pricelist_id
+msgid "Price List"
+msgstr "Bảng giá"
+
+#. module: custom_quotation
+#: model:ir.model.fields,field_description:custom_quotation.field_custom_quotation__name
+msgid "Reference"
+msgstr "Mã tham chiếu"
+
+#. module: custom_quotation
+#: model:ir.model.fields.selection,name:custom_quotation.selection__custom_quotation__state__sent
+msgid "Sent"
+msgstr "Đã gửi"
+
+#. module: custom_quotation
+#: model:ir.model.fields,field_description:custom_quotation.field_custom_quotation__state
+msgid "Status"
+msgstr "Trạng thái"
+
+#. module: custom_quotation
+#: model:ir.model.fields,field_description:custom_quotation.field_custom_quotation_line__tax_ids
+msgid "Taxes"
+msgstr "Thuế"
+
+#. module: custom_quotation
+#: model_terms:ir.ui.view,arch_db:custom_quotation.view_custom_quotation_form
+msgid "Thêm một dòng"
+msgstr "Thêm một dòng"
+
+#. module: custom_quotation
+#: model:ir.model.fields,field_description:custom_quotation.field_custom_quotation_line__product_uom_id
+msgid "Unit of Measure"
+msgstr "Đơn vị tính"
+
+#. module: custom_quotation
+#: model_terms:ir.ui.view,arch_db:custom_quotation.view_custom_quotation_form
+msgid "Xác nhận"
+msgstr "Xác nhận"
+
+#. module: custom_quotation
+#: model_terms:ir.ui.view,arch_db:custom_quotation.view_custom_quotation_form
+msgid "Xuất Excel"
+msgstr "Xuất Excel"
+
+#. module: custom_quotation
+#: model_terms:ir.ui.view,arch_db:custom_quotation.portal_my_quotation
+msgid "My Quotation"
+msgstr "Báo giá của tôi"
+
+#. module: custom_quotation
+#: model_terms:ir.ui.view,arch_db:custom_quotation.view_custom_quotation_form
+msgid "Xem trước báo giá"
+msgstr "Xem trước báo giá"
+
+#. module: custom_quotation
+#: model_terms:ir.ui.view,arch_db:custom_quotation.view_custom_quotation_form
+msgid "Tạo hoặc cập nhật báo giá"
+msgstr "Tạo hoặc cập nhật báo giá"
+
+#. module: custom_quotation
+#: code:addons/custom_quotation/models/custom_quotation.py:0
+#, python-format
+msgid "Vui lòng chọn ít nhất một sản phẩm để tạo báo giá"
+msgstr "Vui lòng chọn ít nhất một sản phẩm để tạo báo giá"

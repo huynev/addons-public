@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Custom Quotation Tree View -->
+    <record id="view_custom_quotation_tree" model="ir.ui.view">
+        <field name="name">custom.quotation.tree</field>
+        <field name="model">custom.quotation</field>
+        <field name="arch" type="xml">
+            <tree string="Báo giá">
+                <field name="name"/>
+                <field name="description"/>
+                <field name="partner_id"/>
+                <field name="date"/>
+                <field name="excel_file" filename="excel_filename" widget="binary" readonly="1" string="Download Excel"/>
+                <field name="pdf_file" filename="pdf_filename" widget="binary" readonly="1" string="Download PDF"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Custom Quotation Form View -->
+    <record id="view_custom_quotation_form" model="ir.ui.view">
+        <field name="name">custom.quotation.form</field>
+        <field name="model">custom.quotation</field>
+        <field name="arch" type="xml">
+            <form string="Báo giá">
+                <header>
+                    <button name="action_open_product_list"
+                        string="Chọn sản phẩm đưa vào báo giá"
+                        type="object"
+                        class="btn-secondary"/>
+                    <button name="action_generate_files"
+                        string="Tạo file báo giá"
+                        type="object"
+                        class="btn-primary"
+                        invisible="not quotation_line_ids"/>
+                    <button name="action_preview_quotation"
+                            string="Link báo giá gửi khách"
+                            type="object"
+                            class="btn-secondary"
+                            invisible="not quotation_line_ids"/>
+                    <button name="%(custom_quotation.action_report_custom_quotation)d"
+                        string="In báo giá"
+                        type="action"
+                        class="oe_highlight"
+                        invisible="not quotation_line_ids"/>
+                    <button class="oe_highlight"
+                                    name="action_export_excel"
+                                    type="object"
+                                    string="Xuất Excel"
+                                    invisible="not quotation_line_ids"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="description"/>
+                            <field name="partner_id" domain="[('customer_rank', '>', 0)]"/>
+                            <field name="pricelist_id"/>
+                        </group>
+                        <group>
+                            <field name="validity_date"/>
+                            <field name="date"/>
+                            <field name="excel_file" filename="excel_filename"/>
+                            <field name="excel_filename" invisible="1"/>
+                            <field name="pdf_file" filename="pdf_filename"/>
+                            <field name="pdf_filename" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Chi tiết báo giá được tạo" name="quotation_lines">
+                            <field name="quotation_line_ids">
+                                <tree
+                                    string="Quotation Lines"
+                                    editable="bottom"
+                                    limit="20"
+                                >
+                                    <control>
+                                        <create name="add_quotation_control" string="Thêm một dòng"/>
+                                    </control>
+                                    <field name="product_id"/>
+                                    <field name="name"/>
+                                    <field name="product_uom_id"/>
+                                    <field name="price_unit"/>
+                                    <field name="packaging_info"/>
+                                    <field name="tax_ids" widget="many2many_tags"/>
+                                    <field name="price_with_tax"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Custom Quotation Line Tree View -->
+    <record id="view_quotation_line_tree" model="ir.ui.view">
+        <field name="name">custom.quotation.line.tree</field>
+        <field name="model">custom.quotation.line</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="product_id"
+                       domain="[('sale_ok', '=', True)]"
+                       options="{'no_create': True}"
+                       required="1"/>
+                <field name="name"/>
+                <field name="product_uom_id" groups="uom.group_uom"/>
+                <field name="packaging_info"/>
+                <field name="price_unit"/>
+                <field name="tax_ids"
+                       widget="many2many_tags"
+                       domain="[('type_tax_use', '=', 'sale')]"
+                       options="{'no_create': True}"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_quotation_product_tree" model="ir.ui.view">
+        <field name="name">product.tree</field>
+        <field name="model">product.product</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="default_code"/>
+                <field name="name"/>
+                <field name="lst_price"/>
+                <field name="qty_available"/>
+                <field name="uom_id" groups="uom.group_uom"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Custom Quotation Action -->
+    <record id="action_custom_quotation" model="ir.actions.act_window">
+        <field name="name">Báo giá cho khách</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">custom.quotation</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Sequence -->
+    <record id="seq_custom_quotation" model="ir.sequence">
+        <field name="name">Custom Quotation Sequence</field>
+        <field name="code">custom.quotation</field>
+        <field name="prefix">BG/%(year)s/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <record id="view_product_selection_tree" model="ir.ui.view">
+        <field name="name">product.selection.tree</field>
+        <field name="model">product.product</field>
+        <field name="arch" type="xml">
+            <tree string="Chọn sản phẩm" multi_edit="1" create="0" delete="0">
+                <header>
+                    <button name="action_add_to_quotation"
+                        type="object"
+                        string="Áp dụng"
+                        class="btn-primary"/>
+                </header>
+                <field name="default_code"/>
+                <field name="name"/>
+                <field name="lst_price"/>
+                <field name="qty_available"/>
+                <field name="uom_id" groups="uom.group_uom"/>
+            </tree>
+        </field>
+    </record>
+    <!-- Product Selection Action -->
+    <record id="action_product_selection" model="ir.actions.act_window">
+        <field name="name">Chọn sản phẩm</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">product.product</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_product_selection_tree"/>
+        <field name="target">new</field>
+        <field name="domain">[('id', 'in', context.get('default_product_ids', []))]</field>
+        <field name="context">{'search_default_selected_products': 1}</field>
+    </record>
+    <!-- Menu Items -->
+    <menuitem id="menu_custom_price_list"
+        name="Báo giá cho khách"
+        parent="sale.sale_menu_root"
+        sequence="20"/>
+
+    <menuitem id="menu_quotation_list"
+        name="Danh sách báo giá đã tạo"
+        parent="menu_custom_price_list"
+        action="action_custom_quotation"
+        sequence="1"/>
+</odoo>

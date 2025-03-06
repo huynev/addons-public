@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View -->
+    <record id="view_shopee_category_tree" model="ir.ui.view">
+        <field name="name">shopee.category.tree</field>
+        <field name="model">shopee.category</field>
+        <field name="arch" type="xml">
+            <tree string="Shopee Categories"
+                  decoration-bf="is_leaf == True"
+                  decoration-muted="active == False">
+                <field name="name"/>
+                <field name="shopee_category_id"/>
+                <field name="parent_id"/>
+                <field name="is_leaf"/>
+                <field name="product_count"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_shopee_category_form" model="ir.ui.view">
+        <field name="name">shopee.category.form</field>
+        <field name="model">shopee.category</field>
+        <field name="arch" type="xml">
+            <form string="Shopee Category">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Category Name"/>
+                        <h1>
+                            <field name="name" placeholder="Category Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="shopee_category_id" readonly="True"/>
+                            <field name="parent_id" domain="[('id', '!=', id)]" readonly="True"/>
+                            <field name="is_leaf" readonly="True"/>
+                        </group>
+                        <group>
+                            <field name="product_count"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Child Categories">
+                            <field name="child_ids" readonly="True"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_shopee_category_search" model="ir.ui.view">
+        <field name="name">shopee.category.search</field>
+        <field name="model">shopee.category</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="shopee_category_id"/>
+                <field name="product_category_id"/>
+                <separator/>
+                <filter string="Leaf Categories" name="leaf_categories" domain="[('is_leaf', '=', True)]"/>
+                <filter string="Parent Categories" name="parent_categories" domain="[('is_leaf', '=', False)]"/>
+                <filter string="Mapped Categories" name="mapped_categories" domain="[('product_category_id', '!=', False)]"/>
+                <filter string="Unmapped Categories" name="unmapped_categories" domain="[('product_category_id', '=', False)]"/>
+                <separator/>
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Parent Category" name="group_by_parent" domain="[]" context="{'group_by': 'parent_id'}"/>
+                    <filter string="Odoo Category" name="group_by_odoo_category" domain="[]" context="{'group_by': 'product_category_id'}"/>
+                    <filter string="Backend" name="group_by_backend" domain="[]" context="{'group_by': 'backend_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action Window -->
+    <record id="action_shopee_category" model="ir.actions.act_window">
+        <field name="name">Shopee Categories</field>
+        <field name="res_model">shopee.category</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_shopee_category_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Import Shopee categories to map them with Odoo product categories
+            </p>
+            <p>
+                Categories will be imported from Shopee and can be mapped to Odoo product categories.
+                This allows for better organization and synchronization of products between systems.
+            </p>
+        </field>
+    </record>
+</odoo>

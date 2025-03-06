@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_shopee_backend_form" model="ir.ui.view">
+        <field name="name">shopee.backend.form</field>
+        <field name="model">shopee.backend</field>
+        <field name="arch" type="xml">
+            <form string="Shopee Backend">
+                <header>
+                    <button name="check_connection" type="object" string="Check Connection" class="oe_highlight"/>
+                    <button name="%(action_shopee_export_products_wizard)d" type="action" string="Export Products"/>
+                    <button name="%(action_shopee_import_orders_wizard)d" type="action" string="Import Orders"/>
+                    <button name="import_categories" type="object" class="oe_highlight"
+                        string="Import Categories"/>
+                    <button name="fetch_location_id" type="object" string="Lấy Location ID từ Shopee" class="btn-primary"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="shop_id"/>
+                        <field name="partner_id"/>
+                        <field name="partner_key" password="True"/>
+                        <field name="access_token"/>
+                        <field name="code"/>
+                        <field name="api_url"/>
+                        <field name="warehouse_id"/>
+                        <field name="location_id"/>
+                        <field name="pricelist_id"/>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                        <field name="import_orders_from_date"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_shopee_backend_tree" model="ir.ui.view">
+        <field name="name">shopee.backend.tree</field>
+        <field name="model">shopee.backend</field>
+        <field name="arch" type="xml">
+            <tree string="Shopee Backends">
+                <field name="name"/>
+                <field name="shop_id"/>
+                <field name="warehouse_id"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_shopee_backend" model="ir.actions.act_window">
+        <field name="name">Shopee Backends</field>
+        <field name="res_model">shopee.backend</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

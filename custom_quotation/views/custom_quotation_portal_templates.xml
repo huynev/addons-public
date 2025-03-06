@@ -1,0 +1,442 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="custom_frontend_layout">
+        <t t-call="web.layout">
+            <t t-set="head">
+                <meta charset="utf-8"/>
+                <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+                <link rel="preload" href="/web/static/src/libs/fontawesome/fonts/fontawesome-webfont.woff2?v=4.7.0" as="font" crossorigin=""/>
+                <t t-call-assets="web.assets_frontend" t-js="false"/>
+                <script type="text/javascript">
+                    document.addEventListener('DOMContentLoaded', function() {
+                        document.title = 'QuangHuyGroup';
+                    });
+                </script>
+                <style>
+                    header {
+                        display: flex;
+                        align-items: flex-start;
+                        padding: 20px;
+                        margin: 0 auto;
+                        padding: 0 15px;
+                        width: 90%;
+                        border-bottom: 2px solid #f87100;
+                        padding-bottom: 20px;
+                    }
+
+                    .product-details {
+                        display:none;
+                    }
+
+                    header img {
+                        width: 150px;
+                        margin-right: 10px;
+                        align-self: flex-start;
+                    }
+
+                    .company_address {
+                        display: flex;
+                        justify-content: space-between;
+                        width: 100%;
+                    }
+
+                    .company_address .col1,
+                    .company_address .col2 {
+                        flex: 1;
+                        padding: 0 15px;
+                    }
+
+                    /* Điều chỉnh tỷ lệ cột */
+                    .company_address .col1 {
+                        flex: 3; /* Cột 1 chiếm 3 phần */
+                    }
+
+                    .company_address .col2 {
+                        flex: 2; /* Cột 2 chiếm 2 phần */
+                    }
+
+                    .quote-header {
+                        text-align: center;
+                        margin-bottom: 10px;
+                    }
+
+                    .quote-header h1 {
+                        margin-bottom: 5px;
+                        font-weight: bold;
+                    }
+
+                    .quote-date {
+                        font-size: 0.9em;
+                        color: #666;
+                        text-align: center;
+                        margin-bottom: 20px;
+                    }
+
+                   /* CSS cho modal */
+                    .image-modal {
+                        display: none;  /* Chỉ giữ một thuộc tính display */
+                        position: fixed;
+                        z-index: 1000;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background-color: rgba(0,0,0,0.9);
+                    }
+
+                    .image-modal.show {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+
+                    .modal-content {
+                        display: block;
+                        max-width: 90%;
+                        max-height: 90vh;
+                        object-fit: contain;
+                        margin: auto;
+                    }
+
+                    .close-modal {
+                        position: absolute;
+                        right: 15px;
+                        top: 15px;
+                        color: #fff;
+                        font-size: 30px;
+                        font-weight: bold;
+                        cursor: pointer;
+                        z-index: 1001;
+                    }
+
+                    /* CSS responsive cho modal */
+                    @media screen and (max-width: 768px) {
+                        .modal-content {
+                            max-width: 95%;
+                            max-height: 80vh;
+                            width: auto;
+                            height: auto;
+                        }
+
+                        #modalImage {
+                            width: 100%;
+                            height: 100%;
+                            object-fit: contain;
+                        }
+
+                        .image-modal {
+                            padding: 20px;
+                        }
+                    }
+
+                    /* CSS responsive */
+                    @media screen and (max-width: 768px) {
+                        .company_address {
+                            display: none;
+                        }
+
+                        header {
+                            flex-direction: column;
+                            width: 100%;
+                            padding: 10px;
+                        }
+
+                        header img {
+                            width: 100px;
+                            margin: 0 auto 10px;
+                        }
+
+                        .company_address {
+                            flex-direction: column;
+                        }
+
+                        .company_address .col1,
+                        .company_address .col2 {
+                            flex: 1;
+                            padding: 5px;
+                            width: 100%;
+                        }
+
+                        .table {
+                            display: block;
+                            overflow-x: auto;
+                            white-space: nowrap;
+                        }
+
+                        .table th,
+                        .table td {
+                            min-width: 100px;
+                        }
+
+                        .table th:first-child,
+                        .table td:first-child {
+                            min-width: 50px;
+                        }
+
+                        .table th:nth-child(2),
+                        .table td:nth-child(2) {
+                            min-width: 120px;
+                        }
+
+                        .container {
+                            padding: 0 10px;
+                            width: 100%;
+                        }
+
+                        .quote-header h1 {
+                            font-size: 1.5em;
+                        }
+
+                        .quote-date {
+                            font-size: 0.8em;
+                        }
+
+                        /* Điều chỉnh modal cho mobile */
+                        .modal-content {
+                            max-width: 95%;
+                        }
+
+                        .close-modal {
+                            right: 15px;
+                            top: 10px;
+                            font-size: 30px;
+                        }
+                    }
+
+                    /* CSS để table có thể scroll ngang trên mobile */
+                    .table-responsive-wrapper {
+                        overflow-x: auto;
+                        -webkit-overflow-scrolling: touch;
+                        margin-bottom: 1rem;
+                    }
+
+                    /* CSS để giữ kích thước ảnh phù hợp */
+                    .product-image-thumb {
+                        object-fit: contain;
+                    }
+
+                     @media screen and (max-width: 768px) {
+        table.table td {
+        white-space: normal;  /* Cho phép text xuống hàng */
+        word-wrap: break-word;  /* Tự động ngắt từ khi quá dài */
+        word-break: break-word;  /* Cho phép ngắt từ ở bất kỳ đâu nếu cần */
+        padding: 5px;
+        text-align: left !important;
+        border: none;
+    }
+
+    /* Giới hạn chiều rộng tối đa cho tên sản phẩm */
+    table.table td span[t-field="line.product_id"] {
+        display: block;
+        width: 100%;
+        line-height: 1.4;  /* Tăng khoảng cách giữa các dòng */
+    }
+
+        /* CSS cho card view */
+        table.table {
+            display: block;
+            width: 100%;
+        }
+
+        table.table thead {
+            display: none;  /* Ẩn header trên mobile */
+        }
+
+        table.table tbody {
+            display: block;
+            width: 100%;
+        }
+
+        table.table tr {
+            display: block;
+            width: 100%;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        table.table td {
+            display: block;
+            width: 100%;
+            padding: 5px;
+            text-align: left !important;
+            border: none;
+        }
+
+        /* Ẩn cột STT trên mobile */
+        table.table td:first-child {
+            display: none;
+        }
+
+        /* CSS cho hình ảnh */
+        table.table td:nth-child(2) {
+            text-align: center !important;
+            margin-bottom: 10px;
+        }
+
+        /* CSS cho thông tin sản phẩm */
+        .product-details {
+            margin-top: 10px;
+            display:block;
+        }
+
+        .product-details div {
+            margin: 5px 0;
+        }
+
+        .product-details div::before {
+            content: attr(data-label);
+            font-weight: bold;
+            width: 80px;
+            display: inline-block;
+        }
+    }
+                </style>
+            </t>
+            <body>
+                <div id="wrapwrap">
+                    <header t-if="not no_header" id="top" data-anchor="true">
+                        <img t-attf-src="/web/binary/company_logo" alt="Logo"/>
+                        <div class="company_address">
+                            <div class="col1">
+                                <strong>CÔNG TY TNHH TM – DV – CNTT QUANG HUY</strong><br/>
+                                20/9 Cách Mạng Tháng Tám, Phường 5, Quận Tân Bình, Tp. HCM<br/>
+                                Điện thoại : 0937.921.008 - 0918.121.321<br/>
+                                E-mail : info@quanghuycorp.com<br/>
+                                Website: http://www.quanghuycorp.com<br/>
+                            </div>
+                            <div class="col2"><br/>
+                                Tên tài khoản : Nguyễn Đình Quang Huy<br/>
+                                - 0071002625801 - Vietcombank CN Kỳ Đồng<br/>
+                                - 060157246138 - Sacombank CN Điên Biên Phủ<br/>
+                                - 24455259 - ACB CN Thị Nghè
+                            </div>
+                        </div>
+                    </header>
+                    <main>
+                        <t t-out="0"/>
+                    </main>
+                    <footer t-if="not no_footer" id="bottom" data-anchor="true" t-attf-class="bg-light o_footer">
+                        <div class="container text-center py-3">
+                            <p>Bản quyền © CÔNG TY TNHH TM – DV – CNTT QUANG HUY</p>
+                        </div>
+                    </footer>
+                </div>
+            </body>
+        </t>
+    </template>
+    <template id="portal_my_quotation" name="My Quotation">
+        <t t-call="custom_quotation.custom_frontend_layout">
+            <div class="container" style="margin-top:20px">
+                <div class="quote-header">
+                    <h1>Báo Giá </h1>
+                    <div class="quote-date">
+                        <t t-if="quotation.description">
+                            <span t-field="quotation.description"/><br/>
+                        </t>
+                        (Mã: <span t-field="quotation.name"/> <t t-set="current_date" t-value="datetime.datetime.now().strftime('%d/%m/%Y')"/>
+                        - Ngày: <span t-esc="current_date"/>)
+                    </div>
+                    <div class="mt-3 mb-3 text-center" t-if="quotation.pdf_file">
+                        <a t-att-href="'/my/quotation/download/%s?access_token=%s' % (quotation.id, quotation.access_token)"
+                           class="btn btn-primary">
+                            <i class="fa fa-download"/> Tải báo giá (PDF)
+                        </a>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <t t-if="quotation.partner_id">
+                        <strong>Khách hàng:</strong>
+                        <span t-field="quotation.partner_id"/>
+                    </t>
+                </div>
+                <table class="table table-sm mt-4">
+                    <thead>
+                        <tr>
+                            <th class="text-center" style="width: 5%">STT</th>
+                            <th class="text-center" style="width: 15%">Hình ảnh</th>
+                            <th>Sản phẩm</th>
+                            <th class="text-right">ĐVT</th>
+                            <th class="text-right">Giá</th>
+                            <th class="text-right">Thuế</th>
+                            <th class="text-right">Giá bao gồm thuế</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="quotation.quotation_line_ids" t-as="line">
+                            <tr>
+                                <td class="text-center">
+                                    <span t-esc="line_index + 1"/>
+                                </td>
+                                <td class="text-center">
+                                    <img t-if="line.product_id.image_256"
+                                         t-att-src="image_data_uri(line.product_id.image_1920)"
+                                         t-att-data-image="image_data_uri(line.product_id.image_1920)"
+                                         class="product-image-thumb"
+                                         style="max-height: 90px; max-width: 90px; cursor: pointer;"
+                                         alt="Product Image"
+                                         onclick="showModal(this)"/>
+                                </td>
+                                <td>
+                                    <span t-field="line.product_id"/>
+                                    <div class="product-details">
+                                        Giá:
+                                            <span t-field="line.price_unit" t-options='{"widget": "monetary", "display_currency": env.company.currency_id}' /> (<span t-field="line.product_id.uom_id.name"/>)
+                                            <t t-foreach="line.tax_ids" t-as="tax">
+                                                - thuế:<span t-field="tax.amount" t-options='{"widget": "float", "precision": 0}'/>%
+                                            </t><br/>
+                                            Giá bao gồm thuế: <span t-field="line.price_with_tax" t-options='{"widget": "monetary", "display_currency": env.company.currency_id}' /> (<span t-field="line.product_id.uom_id.name"/>)
+                                    </div>
+                                </td>
+                                <td class="text-right d-none d-md-table-cell">
+                                    <span t-field="line.product_id.uom_id.name"/>
+                                </td>
+                                <td class="text-right d-none d-md-table-cell">
+                                    <span t-field="line.price_unit" t-options='{"widget": "monetary", "display_currency": env.company.currency_id}'/>
+                                </td>
+                                <td class="text-right d-none d-md-table-cell">
+                                    <t t-foreach="line.tax_ids" t-as="tax">
+                                        <span t-field="tax.amount" t-options='{"widget": "float", "precision": 0}'/>%
+                                    </t>
+                                </td>
+                                <td class="text-right d-none d-md-table-cell">
+                                    <span t-field="line.price_with_tax" t-options='{"widget": "monetary", "display_currency": env.company.currency_id}'/>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </div>
+            <!-- Thêm modal -->
+            <div id="imageModal" class="image-modal">
+                <span class="close-modal" onclick="closeModal()">x</span>
+                <img class="modal-content" id="modalImage"/>
+            </div>
+
+            <!-- Thêm JavaScript -->
+            <script type="text/javascript">
+                function showModal(img) {
+                    var modal = document.getElementById("imageModal");
+                    var modalImg = document.getElementById("modalImage");
+                    modal.classList.add('show')
+                    modalImg.src = img.getAttribute('data-image');
+                }
+
+                function closeModal() {
+                    var modal = document.getElementById("imageModal");
+                    modal.classList.remove('show');
+                }
+
+                // Đóng modal khi click bên ngoài ảnh
+                window.onclick = function(event) {
+                    var modal = document.getElementById("imageModal");
+                    if (event.target == modal) {
+                        modal.classList.remove('show');
+                    }
+                }
+            </script>
+        </t>
+    </template>
+</odoo>

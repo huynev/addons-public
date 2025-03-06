@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_shopee_product_template_form" model="ir.ui.view">
+        <field name="name">shopee.product.template.form</field>
+        <field name="model">shopee.product.template</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="export_product" type="object" string="Export to Shopee" class="oe_highlight"/>
+                    <button name="export_inventory" type="object" string="Export Inventory"/>
+                    <button name="get_and_apply_category_recommendation" type="object"
+                            string="Auto-Select Category" class="btn-secondary"
+                            help="Tự động chọn danh mục phù hợp nhất cho sản phẩm dựa trên gợi ý từ Shopee"/>
+                    <button name="create_variant_bindings" type="object" string="Create Variant Bindings"
+                            invisible="not has_variants"
+                            class="btn-secondary"/>
+                    <field name="shopee_sync_status" widget="statusbar" statusbar_visible="not_synced,syncing,synced,failed"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="shopee_name" placeholder="Product Name on Shopee"/>
+                        </h1>
+                    </div>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_odoo_product" type="object" class="oe_stat_button" icon="fa-cubes">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Odoo Product</span>
+                            </div>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="backend_id"/>
+                            <field name="external_id" readonly="1"/>
+                            <field name="odoo_id"/>
+                            <field name="shopee_category"/>
+                            <field name="shopee_category_id"/>
+                            <field name="has_variants" invisible="1"/>
+                            <field name="variant_count" invisible="not has_variants"/>
+                        </group>
+                        <group>
+                            <field name="shopee_price"/>
+                            <field name="shopee_stock"/>
+                            <field name="shopee_item_status"/>
+                            <field name="shopee_condition"/>
+                            <field name="sync_date" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Shipping Information">
+                        <group>
+                            <field name="shopee_weight"/>
+                            <field name="shopee_package_length"/>
+                        </group>
+                        <group>
+                            <field name="shopee_package_width"/>
+                            <field name="shopee_package_height"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="description" string="Description">
+                            <field name="shopee_description" placeholder="Product description for Shopee..."/>
+                        </page>
+                        <page name="variants" string="Variants" invisible="not has_variants">
+                            <field name="variant_ids">
+                                <tree editable="bottom">
+                                    <field name="odoo_id"/>
+                                    <field name="shopee_name"/>
+                                    <field name="shopee_price"/>
+                                    <field name="shopee_stock"/>
+                                    <field name="model_id"/>
+                                    <field name="model_sku"/>
+                                    <field name="tier_index"/>
+                                    <field name="external_id" invisible="1"/>
+                                    <field name="sync_date"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page name="sync_info" string="Synchronization">
+                            <group>
+                                <field name="shopee_sync_message"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_shopee_product_template_tree" model="ir.ui.view">
+        <field name="name">shopee.product.template.tree</field>
+        <field name="model">shopee.product.template</field>
+        <field name="arch" type="xml">
+            <tree decoration-success="shopee_sync_status == 'synced'" decoration-danger="shopee_sync_status == 'failed'" decoration-info="shopee_sync_status == 'syncing'">
+                <field name="shopee_name"/>
+                <field name="backend_id"/>
+                <field name="external_id"/>
+                <field name="odoo_id"/>
+                <field name="shopee_price"/>
+                <field name="shopee_stock"/>
+                <field name="has_variants"/>
+                <field name="variant_count" sum="Total Variants"/>
+                <field name="shopee_sync_status"/>
+                <field name="sync_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_shopee_product_search" model="ir.ui.view">
+        <field name="name">shopee.product.template.search</field>
+        <field name="model">shopee.product.template</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="shopee_name"/>
+                <field name="external_id"/>
+                <field name="odoo_id"/>
+                <field name="shopee_category"/>
+                <field name="shopee_category_id"/>
+                <separator/>
+                <filter string="Has Variants" name="has_variants" domain="[('has_variants', '=', True)]"/>
+                <filter string="Synced" name="synced" domain="[('shopee_sync_status', '=', 'synced')]"/>
+                <filter string="Failed" name="failed" domain="[('shopee_sync_status', '=', 'failed')]"/>
+                <filter string="Not Synced" name="not_synced" domain="[('shopee_sync_status', '=', 'not_synced')]"/>
+                <filter string="Syncing" name="syncing" domain="[('shopee_sync_status', '=', 'syncing')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Shopee Backend" name="group_by_backend" context="{'group_by': 'backend_id'}"/>
+                    <filter string="Category" name="group_by_category" context="{'group_by': 'shopee_category'}"/>
+                    <filter string="Sync Status" name="group_by_sync_status" context="{'group_by': 'shopee_sync_status'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- View for Shopee Product Variant -->
+    <record id="view_shopee_product_variant_form" model="ir.ui.view">
+        <field name="name">shopee.product.product.form</field>
+        <field name="model">shopee.product.product</field>
+        <field name="arch" type="xml">
+            <form>
+<!--                <header>-->
+<!--                    <button name="export_inventory" type="object" string="Update Stock" class="oe_highlight"-->
+<!--                            invisible="not model_id"/>-->
+<!--                </header>-->
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="shopee_name" placeholder="Variant Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="shopee_template_id"/>
+                            <field name="odoo_id"/>
+                            <field name="model_id"/>
+                            <field name="model_sku"/>
+                            <field name="tier_index"/>
+                        </group>
+                        <group>
+                            <field name="backend_id"/>
+                            <field name="external_id"/>
+                            <field name="shopee_price"/>
+                            <field name="shopee_stock"/>
+                            <field name="sync_date"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_shopee_product_variant_tree" model="ir.ui.view">
+        <field name="name">shopee.product.product.tree</field>
+        <field name="model">shopee.product.product</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="shopee_name"/>
+                <field name="odoo_id"/>
+                <field name="shopee_template_id"/>
+                <field name="model_id"/>
+                <field name="model_sku"/>
+                <field name="shopee_price"/>
+                <field name="shopee_stock"/>
+                <field name="sync_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_shopee_product_template" model="ir.actions.act_window">
+        <field name="name">Shopee Products</field>
+        <field name="res_model">shopee.product.template</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_shopee_product_variant" model="ir.actions.act_window">
+        <field name="name">Shopee Variants</field>
+        <field name="res_model">shopee.product.product</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

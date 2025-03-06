@@ -1,0 +1,18 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_shopee_backend_admin,shopee.backend admin,model_shopee_backend,base.group_system,1,1,1,1
+access_shopee_backend_user,shopee.backend user,model_shopee_backend,base.group_user,1,0,0,0
+access_shopee_product_product_manager,shopee.product.product manager,model_shopee_product_product,base.group_system,1,1,1,1
+access_shopee_product_product_user,shopee.product.product user,model_shopee_product_product,base.group_user,1,0,0,0
+access_shopee_product_template_manager,shopee.product.template manager,model_shopee_product_template,base.group_system,1,1,1,1
+access_shopee_product_template_user,shopee.product.template user,model_shopee_product_template,base.group_user,1,0,0,0
+access_shopee_sale_order_manager,shopee.sale.order manager,model_shopee_sale_order,base.group_system,1,1,1,1
+access_shopee_sale_order_user,shopee.sale.order user,model_shopee_sale_order,base.group_user,1,0,0,0
+access_shopee_sale_order_line_manager,shopee.sale.order.line manager,model_shopee_sale_order_line,base.group_system,1,1,1,1
+access_shopee_sale_order_line_user,shopee.sale.order.line user,model_shopee_sale_order_line,base.group_user,1,0,0,0
+access_shopee_res_partner_manager,shopee.res.partner manager,model_shopee_res_partner,base.group_system,1,1,1,1
+access_shopee_res_partner_user,shopee.res.partner user,model_shopee_res_partner,base.group_user,1,0,0,0
+access_shopee_import_products_wizard,shopee.import.products.wizard,model_shopee_import_products_wizard,base.group_system,1,1,1,1
+access_shopee_import_orders_wizard,shopee.import.orders.wizard,model_shopee_import_orders_wizard,base.group_system,1,1,1,1
+access_shopee_export_products,shopee.export.products,model_shopee_export_products,base.group_system,1,1,1,1
+access_shopee_category_user,shopee.category.user,model_shopee_category,base.group_user,1,0,0,0
+access_shopee_category_manager,shopee.category.manager,model_shopee_category,base.group_system,1,1,1,1

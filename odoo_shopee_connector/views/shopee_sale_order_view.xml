@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_shopee_sale_order_form" model="ir.ui.view">
+        <field name="name">shopee.sale.order.form</field>
+        <field name="model">shopee.sale.order</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="backend_id"/>
+                            <field name="external_id"/>
+                            <field name="odoo_id"/>
+                            <field name="sync_date"/>
+                        </group>
+                        <group>
+                            <field name="shopee_order_sn"/>
+                            <field name="shopee_order_status"/>
+                            <field name="shopee_order_date"/>
+                            <field name="shopee_payment_method"/>
+                            <field name="shopee_shipping_carrier"/>
+                            <field name="shopee_tracking_number"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_shopee_sale_order_tree" model="ir.ui.view">
+        <field name="name">shopee.sale.order.tree</field>
+        <field name="model">shopee.sale.order</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="backend_id"/>
+                <field name="shopee_order_sn"/>
+                <field name="odoo_id"/>
+                <field name="shopee_order_status"/>
+                <field name="shopee_order_date"/>
+                <field name="sync_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_shopee_sale_order" model="ir.actions.act_window">
+        <field name="name">Shopee Sale Orders</field>
+        <field name="res_model">shopee.sale.order</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+<!--    &lt;!&ndash; Add Shopee Bindings to order form &ndash;&gt;-->
+<!--    <record id="sale_order_view_form_inherit_shopee" model="ir.ui.view">-->
+<!--        <field name="name">sale.order.form.inherit.shopee</field>-->
+<!--        <field name="model">sale.order</field>-->
+<!--        <field name="inherit_id" ref="sale.view_order_form"/>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <xpath expr="//page[@name='other_information']" position="after">-->
+<!--                <page name="shopee" string="Shopee" invisible="not shopee_bind_ids">-->
+<!--                    <field name="shopee_bind_ids" />-->
+<!--                </page>-->
+<!--            </xpath>-->
+<!--        </field>-->
+<!--    </record>-->
+</odoo>
