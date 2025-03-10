@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- WooCommerce Product Template Form View -->
+        <record id="view_woo_product_template_form" model="ir.ui.view">
+            <field name="name">woo.product.template.form</field>
+            <field name="model">woo.product.template</field>
+            <field name="arch" type="xml">
+                <form string="WooCommerce Product">
+                    <header>
+                        <button name="export_stock" type="object" string="Export Stock"
+                            class="oe_highlight"/>
+                        <field name="woo_status" widget="statusbar" options="{'visible_items': ['draft', 'publish']}"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1><field name="name" placeholder="Product Name"/></h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="backend_id"/>
+                                <field name="woo_id"/>
+                                <field name="odoo_id"/>
+                                <field name="woo_updated_at"/>
+                            </group>
+                            <group>
+                                <field name="default_code"/>
+                                <field name="list_price"/>
+                                <field name="type"/>
+                                <field name="categ_id"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Description">
+                                <field name="description" placeholder="Description"/>
+                            </page>
+                            <page string="Inventory">
+                                <group>
+                                    <field name="qty_available"/>
+                                    <field name="virtual_available"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- WooCommerce Product Template Tree View -->
+        <record id="view_woo_product_template_tree" model="ir.ui.view">
+            <field name="name">woo.product.template.tree</field>
+            <field name="model">woo.product.template</field>
+            <field name="arch" type="xml">
+                <tree string="WooCommerce Products">
+                    <field name="backend_id"/>
+                    <field name="woo_id"/>
+                    <field name="name"/>
+                    <field name="default_code"/>
+                    <field name="list_price"/>
+                    <field name="qty_available"/>
+                    <field name="woo_status"/>
+                    <field name="woo_updated_at"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- WooCommerce Product Template Search View -->
+        <record id="view_woo_product_template_search" model="ir.ui.view">
+            <field name="name">woo.product.template.search</field>
+            <field name="model">woo.product.template</field>
+            <field name="arch" type="xml">
+                <search string="Search WooCommerce Products">
+                    <field name="name"/>
+                    <field name="woo_id"/>
+                    <field name="default_code"/>
+                    <filter string="Published" name="published" domain="[('woo_status', '=', 'publish')]"/>
+                    <filter string="Draft" name="draft" domain="[('woo_status', '=', 'draft')]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Backend" name="groupby_backend" context="{'group_by': 'backend_id'}"/>
+                        <filter string="Status" name="groupby_status" context="{'group_by': 'woo_status'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- WooCommerce Product Template Action -->
+        <record id="action_woo_product_template" model="ir.actions.act_window">
+            <field name="name">WooCommerce Products</field>
+            <field name="res_model">woo.product.template</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_woo_product_template_search"/>
+            <field name="context">{'search_default_published': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No WooCommerce Products yet
+                </p>
+                <p>
+                    Products will appear here after synchronization with your WooCommerce store.
+                </p>
+            </field>
+        </record>
+
+        <!-- Add WooCommerce related fields to the product form view -->
+        <record id="product_template_form_view_woo" model="ir.ui.view">
+            <field name="name">product.template.form.woo</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook" position="inside">
+                    <page string="WooCommerce" invisible="not woo_bind_ids">
+                        <field name="woo_bind_ids">
+                            <tree>
+                                <field name="backend_id"/>
+                                <field name="woo_id"/>
+                                <field name="woo_status"/>
+                                <field name="woo_updated_at"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- WooCommerce Product Category Form View -->
+        <record id="view_woo_product_category_form" model="ir.ui.view">
+            <field name="name">woo.product.category.form</field>
+            <field name="model">woo.product.category</field>
+            <field name="arch" type="xml">
+                <form string="WooCommerce Product Category">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1><field name="name" placeholder="Category Name"/></h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="backend_id"/>
+                                <field name="woo_id"/>
+                                <field name="odoo_id"/>
+                            </group>
+                            <group>
+                                <field name="woo_parent_id"/>
+                                <field name="parent_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- WooCommerce Product Category Tree View -->
+        <record id="view_woo_product_category_tree" model="ir.ui.view">
+            <field name="name">woo.product.category.tree</field>
+            <field name="model">woo.product.category</field>
+            <field name="arch" type="xml">
+                <tree string="WooCommerce Product Categories">
+                    <field name="backend_id"/>
+                    <field name="woo_id"/>
+                    <field name="name"/>
+                    <field name="woo_parent_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- WooCommerce Product Category Action -->
+        <record id="action_woo_product_category" model="ir.actions.act_window">
+            <field name="name">WooCommerce Categories</field>
+            <field name="res_model">woo.product.category</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No WooCommerce Categories yet
+                </p>
+                <p>
+                    Categories will appear here after synchronization with your WooCommerce store.
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

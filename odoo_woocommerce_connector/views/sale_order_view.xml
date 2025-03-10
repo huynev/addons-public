@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- WooCommerce Sale Order Form View -->
+        <record id="view_woo_sale_order_form" model="ir.ui.view">
+            <field name="name">woo.sale.order.form</field>
+            <field name="model">woo.sale.order</field>
+            <field name="arch" type="xml">
+                <form string="WooCommerce Sale Order">
+                    <header>
+                        <field name="woo_status" widget="statusbar" options="{'visible_items': ['pending', 'processing', 'completed', 'cancelled']}"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1" class="oe_inline"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="backend_id"/>
+                                <field name="woo_id"/>
+                                <field name="odoo_id"/>
+                                <field name="woo_order_key"/>
+                                <field name="company_id" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="date_order"/>
+                                <field name="partner_id"/>
+                                <field name="woo_customer_id"/>
+                                <field name="amount_total"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Order Lines">
+                                <field name="order_line" mode="tree">
+                                    <tree string="Order Lines" editable="bottom">
+                                        <field name="product_id"/>
+                                        <field name="name"/>
+                                        <field name="product_uom_qty"/>
+                                        <field name="price_unit"/>
+                                        <field name="tax_id" widget="many2many_tags"/>
+                                        <field name="price_subtotal"/>
+                                        <field name="company_id" invisible="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- WooCommerce Sale Order Tree View -->
+        <record id="view_woo_sale_order_tree" model="ir.ui.view">
+            <field name="name">woo.sale.order.tree</field>
+            <field name="model">woo.sale.order</field>
+            <field name="arch" type="xml">
+                <tree string="WooCommerce Sale Orders" decoration-info="woo_status == 'pending'" decoration-success="woo_status == 'completed'" decoration-warning="woo_status == 'processing'" decoration-danger="woo_status == 'cancelled'">
+                    <field name="backend_id"/>
+                    <field name="woo_id"/>
+                    <field name="name"/>
+                    <field name="date_order"/>
+                    <field name="partner_id"/>
+                    <field name="amount_total"/>
+                    <field name="woo_status"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- WooCommerce Sale Order Search View -->
+        <record id="view_woo_sale_order_search" model="ir.ui.view">
+            <field name="name">woo.sale.order.search</field>
+            <field name="model">woo.sale.order</field>
+            <field name="arch" type="xml">
+                <search string="Search WooCommerce Sale Orders">
+                    <field name="name"/>
+                    <field name="woo_id"/>
+                    <field name="partner_id"/>
+                    <filter string="Pending" name="pending" domain="[('woo_status', '=', 'pending')]"/>
+                    <filter string="Processing" name="processing" domain="[('woo_status', '=', 'processing')]"/>
+                    <filter string="Completed" name="completed" domain="[('woo_status', '=', 'completed')]"/>
+                    <filter string="Cancelled" name="cancelled" domain="[('woo_status', '=', 'cancelled')]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Backend" name="groupby_backend" context="{'group_by': 'backend_id'}"/>
+                        <filter string="Status" name="groupby_status" context="{'group_by': 'woo_status'}"/>
+                        <filter string="Customer" name="groupby_partner" context="{'group_by': 'partner_id'}"/>
+                        <filter string="Order Date" name="groupby_date" context="{'group_by': 'date_order:month'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- WooCommerce Sale Order Action -->
+        <record id="action_woo_sale_order" model="ir.actions.act_window">
+            <field name="name">WooCommerce Orders</field>
+            <field name="res_model">woo.sale.order</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_woo_sale_order_search"/>
+            <field name="context">{'search_default_processing': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No WooCommerce Orders yet
+                </p>
+                <p>
+                    Orders will appear here after synchronization with your WooCommerce store.
+                </p>
+            </field>
+        </record>
+
+        <!-- Add WooCommerce related fields to the sale order form view -->
+        <record id="view_order_form_woo" model="ir.ui.view">
+            <field name="name">sale.order.form.woo</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook" position="inside">
+                    <page string="WooCommerce" invisible="not woo_bind_ids">
+                        <group>
+                            <field name="woo_bind_ids">
+                                <tree>
+                                    <field name="backend_id"/>
+                                    <field name="woo_id"/>
+                                    <field name="woo_status"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

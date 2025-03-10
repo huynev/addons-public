@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- WooCommerce Main Menu -->
+        <menuitem id="menu_woo_root"
+                  name="WooCommerce"
+                  web_icon="odoo_woocommerce_connector,static/description/icon.png"
+                  sequence="10"/>
+
+        <!-- Backend Configuration Sub-menu -->
+        <menuitem id="menu_woo_backend"
+                  name="Backends"
+                  parent="menu_woo_root"
+                  action="action_woo_backend"
+                  sequence="10"/>
+
+        <!-- Catalog Sub-menu -->
+        <menuitem id="menu_woo_catalog"
+                  name="Catalog"
+                  parent="menu_woo_root"
+                  sequence="20"/>
+
+        <menuitem id="menu_woo_product"
+                  name="Products"
+                  parent="menu_woo_catalog"
+                  action="action_woo_product_template"
+                  sequence="10"/>
+
+        <menuitem id="menu_woo_category"
+                  name="Categories"
+                  parent="menu_woo_catalog"
+                  action="action_woo_product_category"
+                  sequence="20"/>
+
+        <!-- Sales Sub-menu -->
+        <menuitem id="menu_woo_sales"
+                  name="Sales"
+                  parent="menu_woo_root"
+                  sequence="30"/>
+
+        <menuitem id="menu_woo_sale_order"
+                  name="Orders"
+                  parent="menu_woo_sales"
+                  action="action_woo_sale_order"
+                  sequence="10"/>
+
+        <menuitem id="menu_woo_customer"
+                  name="Customers"
+                  parent="menu_woo_sales"
+                  action="action_woo_res_partner"
+                  sequence="20"/>
+
+        <!-- Queue Jobs Sub-menu -->
+        <menuitem id="menu_queue_job"
+                  name="Queue Jobs"
+                  parent="menu_woo_root"
+                  action="queue_job.action_queue_job"
+                  groups="queue_job.group_queue_job_manager"
+                  sequence="90"/>
+
+    </data>
+</odoo>

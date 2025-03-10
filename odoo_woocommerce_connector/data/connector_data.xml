@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="connector_woo_record" model="connector.backend">
+            <field name="name">WooCommerce Connector</field>
+            <field name="version">wp-api-v2</field>
+        </record>
+    </data>
+</odoo>

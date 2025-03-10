@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_woo_backend_manager,woo.backend.manager,model_woo_backend,base.group_user,1,0,0,0
+access_woo_backend_user,woo.backend.user,model_woo_backend,base.group_user,1,1,1,1
+access_woo_product_template_manager,woo.product.template.manager,model_woo_product_template,base.group_user,1,0,0,0
+access_woo_product_template_user,woo.product.template.user,model_woo_product_template,base.group_user,1,0,0,0
+access_woo_product_category_manager,woo.product.category.manager,model_woo_product_category,base.group_user,1,0,0,0
+access_woo_product_category_user,woo.product.category.user,model_woo_product_category,base.group_user,1,0,0,0
+access_woo_sale_order_manager,woo.sale.order.manager,model_woo_sale_order,base.group_user,1,0,0,0
+access_woo_sale_order_user,woo.sale.order.user,model_woo_sale_order,base.group_user,1,0,0,0
+access_woo_sale_order_line_manager,woo.sale.order.line.manager,model_woo_sale_order_line,base.group_user,1,0,0,0
+access_woo_sale_order_line_user,woo.sale.order.line.user,model_woo_sale_order_line,base.group_user,1,0,0,0
+access_woo_res_partner_manager,woo.res.partner.manager,model_woo_res_partner,base.group_user,1,0,0,0
+access_woo_res_partner_user,woo.res.partner.user,model_woo_res_partner,base.group_user,1,0,0,0

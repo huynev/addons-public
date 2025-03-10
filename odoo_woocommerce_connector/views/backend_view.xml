@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- WooCommerce Backend Form View -->
+        <record id="view_woo_backend_form" model="ir.ui.view">
+            <field name="name">woo.backend.form</field>
+            <field name="model">woo.backend</field>
+            <field name="arch" type="xml">
+                <form string="WooCommerce Backend">
+                    <header>
+                        <button name="test_connection" type="object" string="Test Connection"
+                            class="oe_highlight"/>
+                        <button name="import_products" type="object" string="Import Products"
+                            invisible="state != 'active'"/>
+                        <button name="import_orders" type="object" string="Import Orders"
+                            invisible="state != 'active'"/>
+                        <button name="export_stock" type="object" string="Export Stock"
+                            invisible="state != 'active'"/>
+                        <field name="state" widget="statusbar" options="{'visible_items': ['draft', 'active', 'inactive']}"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only"/>
+                            <h1><field name="name" placeholder="e.g. My WooCommerce Store"/></h1>
+                        </div>
+                        <group>
+                            <group string="API Connection">
+                                <field name="woo_url" placeholder="https://example.com"/>
+                                <field name="woo_consumer_key"/>
+                                <field name="woo_consumer_secret"/>
+                                <field name="woo_version"/>
+                                <field name="is_ssl_verify"/>
+                            </group>
+                            <group string="Synchronization">
+                                <field name="product_import_batch_size"/>
+                                <field name="order_import_batch_size"/>
+                                <field name="product_import_rule"/>
+                                <field name="order_import_rule"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Date Filters">
+                                <group>
+                                    <group string="Import From">
+                                        <field name="import_products_from_date"/>
+                                        <field name="import_orders_from_date"/>
+                                    </group>
+                                    <group string="Last Synchronization">
+                                        <field name="last_product_import_date" readonly="1"/>
+                                        <field name="last_order_import_date" readonly="1"/>
+                                        <field name="last_stock_export_date" readonly="1"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Default Settings">
+                                <group>
+                                    <field name="default_category_id"/>
+                                    <field name="default_customer_user_id"/>
+                                    <field name="default_payment_term_id"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- WooCommerce Backend Tree View -->
+        <record id="view_woo_backend_tree" model="ir.ui.view">
+            <field name="name">woo.backend.tree</field>
+            <field name="model">woo.backend</field>
+            <field name="arch" type="xml">
+                <tree string="WooCommerce Backends">
+                    <field name="name"/>
+                    <field name="woo_url"/>
+                    <field name="state"/>
+                    <field name="last_product_import_date"/>
+                    <field name="last_order_import_date"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- WooCommerce Backend Search View -->
+        <record id="view_woo_backend_search" model="ir.ui.view">
+            <field name="name">woo.backend.search</field>
+            <field name="model">woo.backend</field>
+            <field name="arch" type="xml">
+                <search string="Search WooCommerce Backends">
+                    <field name="name"/>
+                    <field name="woo_url"/>
+                    <filter string="Active" name="active" domain="[('state', '=', 'active')]"/>
+                    <filter string="Inactive" name="inactive" domain="[('state', '=', 'inactive')]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Status" name="groupby_state" context="{'group_by': 'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- WooCommerce Backend Action -->
+        <record id="action_woo_backend" model="ir.actions.act_window">
+            <field name="name">WooCommerce Backends</field>
+            <field name="res_model">woo.backend</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_woo_backend_search"/>
+            <field name="context">{'search_default_active': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new WooCommerce Backend
+                </p>
+                <p>
+                    Define at least one WooCommerce Backend to synchronize with your WooCommerce store.
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>
