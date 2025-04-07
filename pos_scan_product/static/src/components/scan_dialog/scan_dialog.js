@@ -1,9 +1,10 @@
 /** @odoo-module **/
 
 import { AbstractAwaitablePopup } from "@point_of_sale/app/popup/abstract_awaitable_popup";
-import { useState } from "@odoo/owl";
+import { useState, onWillStart, onWillUnmount } from "@odoo/owl";
 import { useService } from "@web/core/utils/hooks";
 import { usePos } from "@point_of_sale/app/store/pos_hook";
+import { loadJS } from "@web/core/assets";
 
 export class PosScanPopup extends AbstractAwaitablePopup {
     static template = "pos_scan_product.PosScanPopup";
@@ -19,6 +20,10 @@ export class PosScanPopup extends AbstractAwaitablePopup {
         this.posModel = usePos();
         this.notification = useService("notification");
 
+        // Phát hiện iOS
+        this.isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        this.isPWA = window.matchMedia('(display-mode: standalone)').matches;
+
         this.state = useState({
             showCamera: false,
             showFileUpload: false,
@@ -27,22 +32,43 @@ export class PosScanPopup extends AbstractAwaitablePopup {
             filePreview: null,
             scanning: false,
             lastScannedBarcode: null,
-            lastScannedTime: 0
+            lastScannedTime: 0,
+            showIOSWarning: this.isIOS && !this.isPWA,
+            availableCameras: [], // Danh sách camera sẵn có
+            selectedCameraId: null
         });
 
-        this.cameraStream = null;
-        this.barcodeDetector = null;
-
+        this.html5QrcodeScanner = null;
         this.beepSound = new Audio("/pos_scan_product/static/src/sounds/beep.mp3");
 
-        // Khởi tạo BarcodeDetector nếu trình duyệt hỗ trợ
-        if ('BarcodeDetector' in window) {
-            this.barcodeDetector = new BarcodeDetector({
-                formats: ['qr_code', 'code_39', 'code_128', 'ean_13', 'ean_8', 'upc_a', 'upc_e']
-            });
-        }
+        // Khởi tạo thư viện khi setup
+        onWillStart(async () => {
+            try {
+                // Tải thư viện html5-qrcode
+                await loadJS("/pos_scan_product/static/lib/html5-qrcode.min.js");
+
+                // Khởi tạo danh sách camera
+                await this._initializeCameras();
+            } catch (error) {
+                console.error('Lỗi khi khởi tạo thư viện quét mã:', error);
+                this.notification.add('Không thể tải thư viện quét mã', {
+                    type: 'warning'
+                });
+            }
+        });
+
+        // Đảm bảo dừng quét khi component bị hủy
+        onWillUnmount(() => {
+            this._stopCamera();
+        });
     }
 
+    // Xử lý cảnh báo iOS
+    dismissIOSWarning() {
+        this.state.showIOSWarning = false;
+    }
+
+    // Mở camera để quét
     openCamera() {
         this.state.showCamera = true;
         this.state.showFileUpload = false;
@@ -50,9 +76,11 @@ export class PosScanPopup extends AbstractAwaitablePopup {
         this.state.lastScannedBarcode = null;
         this.state.lastScannedTime = 0;
 
-        this._startCamera();
+        // Bắt đầu quét
+        this._startCameraScanning();
     }
 
+    // Mở chế độ tải file
     openFileUpload() {
         this.state.showCamera = false;
         this.state.showFileUpload = true;
@@ -62,6 +90,7 @@ export class PosScanPopup extends AbstractAwaitablePopup {
         this._stopCamera();
     }
 
+    // Xử lý khi chọn file
     handleFileInput(event) {
         const file = event.target.files[0];
         if (!file) return;
@@ -73,55 +102,224 @@ export class PosScanPopup extends AbstractAwaitablePopup {
         fileReader.onload = (e) => {
             this.state.filePreview = e.target.result;
 
-            // Xử lý quét mã vạch từ ảnh
-            this._scanFromImage(e.target.result);
+            // Quét mã vạch từ ảnh
+            this._scanFromImage(file);
         };
         fileReader.readAsDataURL(file);
     }
 
-    async _startCamera() {
+    // Khởi tạo danh sách camera
+    async _initializeCameras() {
         try {
-            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-                this.state.cameraMessage = 'Trình duyệt của bạn không hỗ trợ truy cập camera';
-                return;
+            // Kiểm tra xem thư viện đã được tải
+            if (typeof Html5QrcodeScanner === 'undefined') {
+                throw new Error('Thư viện Html5QrcodeScanner chưa được tải');
             }
 
-            // Yêu cầu quyền truy cập camera
-            this.cameraStream = await navigator.mediaDevices.getUserMedia({
-                video: { facingMode: 'environment' }
-            });
+            // Lấy danh sách camera
+            const devices = await Html5QrcodeScanner.getCameras();
+            this.state.availableCameras = devices;
 
-            // Kết nối luồng video với thẻ video
-            const videoElement = document.getElementById('preview');
-            if (videoElement) {
-                videoElement.srcObject = this.cameraStream;
-                videoElement.play();
-                this.state.cameraMessage = 'Đưa mã vạch/QR vào vùng quét';
+            // Chọn camera mặc định
+            if (devices.length > 0) {
+                // Ưu tiên camera sau
+                const environmentCamera = devices.find(device =>
+                    device.label.toLowerCase().includes('back') ||
+                    device.label.toLowerCase().includes('rear')
+                ) || devices[0];
 
-                // Bắt đầu quét liên tục
-                this._startScanningLoop(videoElement);
+                this.state.selectedCameraId = environmentCamera.id;
             }
         } catch (error) {
-            console.error('Error accessing camera:', error);
-            this.state.cameraMessage = 'Không thể truy cập camera: ' + (error.message || 'Lỗi không xác định');
+            console.error('Lỗi khi lấy danh sách camera:', error);
+            this.notification.add('Không thể lấy danh sách camera', {
+                type: 'warning'
+            });
         }
     }
 
-    _stopCamera() {
-        if (this.cameraStream) {
-            this.cameraStream.getTracks().forEach(track => track.stop());
-            this.cameraStream = null;
+    // Bắt đầu quét camera
+    _startCameraScanning() {
+        try {
+            // Kiểm tra xem thư viện đã được tải
+            if (typeof Html5QrcodeScanner === 'undefined') {
+                throw new Error('Thư viện Html5QrcodeScanner chưa được tải');
+            }
+
+            // Dừng bất kỳ quét nào đang diễn ra
+            this._stopCamera();
+
+            // Tạo container cho scanner
+            const containerId = 'reader';
+            let container = document.getElementById(containerId);
+            if (!container) {
+                const cameraContainer = document.querySelector('.camera-container');
+                if (!cameraContainer) {
+                    throw new Error('Không tìm thấy container để chèn scanner');
+                }
+                container = document.createElement('div');
+                container.id = containerId;
+                container.style.width = '100%';
+                container.style.height = '300px';
+                cameraContainer.appendChild(container);
+            }
+
+            // Cấu hình scanner
+            const config = {
+                fps: 10,
+                qrbox: 250
+            };
+
+            // Khởi tạo scanner
+            this.html5QrcodeScanner = new Html5QrcodeScanner(
+                containerId,
+                config,
+                /* verbose= */ false
+            );
+
+            // Render scanner với các callback
+            this.html5QrcodeScanner.render(
+                this._onScanSuccess.bind(this),
+                this._onScanError.bind(this)
+            );
+
+            this.state.scanning = true;
+            this.state.cameraMessage = 'Đưa mã vạch/QR vào vùng quét';
+        } catch (error) {
+            console.error('Lỗi khi khởi động camera:', error);
+            this.state.cameraMessage = 'Không thể khởi động camera: ' + (error.message || 'Lỗi không xác định');
+            this.notification.add(this.state.cameraMessage, {
+                type: 'warning'
+            });
+        }
+    }
+
+    // Xử lý khi quét thành công
+    _onScanSuccess(decodedText, decodedResult) {
+        const currentTime = Date.now();
+        if (currentTime - this.state.lastScannedTime < 3000) return;
+
+        if (this.scanCount >= 5) {
+        this.html5QrcodeScanner.clear();
+            return;
         }
 
-        const videoElement = document.getElementById('preview');
-        if (videoElement) {
-            videoElement.srcObject = null;
+        this.scanCount = (this.scanCount || 0) + 1;
+
+        this.state.lastScannedTime = currentTime;
+        this.state.cameraMessage = `Đã quét được mã: ${decodedText}`;
+
+        const product = this.posModel.db.get_product_by_barcode(decodedText);
+        if (product) {
+            const success = this._addOrUpdateProduct(product);
+            if (!success) {
+                this.notification.add(`Không thể thêm sản phẩm vào đơn hàng`, {
+                    type: "warning",
+                });
+            }
+        } else {
+            this.notification.add(`Không tìm thấy sản phẩm với mã vạch: ${decodedText}`, {
+                type: "warning",
+            });
+        }
+    }
+
+    // Xử lý lỗi khi quét
+    _onScanError(errorMessage) {
+        console.log('Scan error:', errorMessage);
+        this.state.cameraMessage = 'Lỗi quét: ' + errorMessage;
+    }
+
+    // Dừng camera
+    _stopCamera() {
+        if (this.html5QrcodeScanner) {
+            try {
+                this.html5QrcodeScanner.clear();
+                this.html5QrcodeScanner = null;
+            } catch (error) {
+                console.error('Lỗi khi dừng camera:', error);
+            }
         }
 
         this.state.scanning = false;
+        this.state.cameraMessage = '';
     }
 
-    // Tìm orderline có chứa sản phẩm, nếu không có trả về null
+    // Quét từ ảnh tải lên
+    async _scanFromImage(imageFile) {
+        try {
+            // Kiểm tra thư viện
+            if (typeof Html5Qrcode === 'undefined') {
+                throw new Error('Thư viện Html5Qrcode chưa được tải');
+            }
+
+            const html5QrCode = new Html5Qrcode('');
+            const result = await html5QrCode.scanFile(imageFile);
+
+            if (result) {
+                this.state.fileMessage = 'Đã quét được mã: ' + result.decodedText;
+
+                // Xử lý mã vạch
+                const product = this.posModel.db.get_product_by_barcode(result.decodedText);
+
+                if (product) {
+                    // Thêm hoặc cập nhật sản phẩm trong đơn hàng
+                    const success = this._addOrUpdateProduct(product);
+
+                    if (!success) {
+                        this.notification.add(`Không thể thêm sản phẩm vào đơn hàng`, {
+                            type: "warning",
+                        });
+                    }
+                } else {
+                    this.notification.add(`Không tìm thấy sản phẩm với mã vạch: ${result.decodedText}`, {
+                        type: "warning",
+                    });
+                }
+            } else {
+                this.state.fileMessage = 'Không tìm thấy mã vạch hoặc QR code trong ảnh';
+            }
+        } catch (error) {
+            console.error('Lỗi khi quét ảnh:', error);
+            this.state.fileMessage = 'Lỗi khi quét ảnh: ' + (error.message || 'Lỗi không xác định');
+        }
+    }
+
+    // Phát âm thanh beep
+    _playBeepSound() {
+        try {
+            // Thử nhiều phương pháp phát âm thanh
+            if (this.beepSound) {
+                // Đặt âm lượng và thời gian
+                this.beepSound.volume = 1.0;
+                this.beepSound.currentTime = 0;
+
+                // Thử các phương thức phát
+                const playPromise = this.beepSound.play();
+
+                // Xử lý promise để bắt lỗi
+                if (playPromise !== undefined) {
+                    playPromise
+                        .then(() => {
+                            // Phát thành công
+                            console.log('Phát âm thanh thành công');
+                        })
+                        .catch((error) => {
+                            // Thử phát với interact
+                            console.warn('Không thể phát âm thanh tự động:', error);
+                            // Hiển thị thông báo yêu cầu người dùng tương tác
+                            this.notification.add('Vui lòng bấm để phát âm thanh', {
+                                type: 'warning'
+                            });
+                        });
+                }
+            }
+        } catch (error) {
+            console.warn('Lỗi khi phát âm thanh:', error);
+        }
+    }
+
+    // Tìm orderline có chứa sản phẩm
     _findOrderline(order, product) {
         let orderlines = order.get_orderlines();
         for (let i = 0; i < orderlines.length; i++) {
@@ -132,20 +330,7 @@ export class PosScanPopup extends AbstractAwaitablePopup {
         return null;
     }
 
-    // Phát âm thanh beep
-    _playBeepSound() {
-        try {
-            // Đặt lại thời gian để đảm bảo âm thanh phát từ đầu
-            this.beepSound.currentTime = 0;
-            this.beepSound.play().catch(error => {
-                console.warn('Không thể phát âm thanh:', error);
-            });
-        } catch (error) {
-            console.warn('Lỗi khi phát âm thanh:', error);
-        }
-    }
-
-    // Thêm sản phẩm vào đơn hàng hoặc tăng số lượng nếu đã tồn tại
+    // Thêm hoặc cập nhật sản phẩm trong đơn hàng
     _addOrUpdateProduct(product) {
         const order = this.posModel.get_order();
         if (!order) return false;
@@ -165,139 +350,26 @@ export class PosScanPopup extends AbstractAwaitablePopup {
                 type: "success",
             });
         }
+
+        // Phát âm thanh
         this._playBeepSound();
 
         return true;
     }
 
-    async _startScanningLoop(videoElement) {
-        if (!this.barcodeDetector) {
-            this.state.cameraMessage = 'Trình duyệt của bạn không hỗ trợ BarcodeDetector';
-            return;
-        }
-
-        this.state.scanning = true;
-
-        const scanFrame = async () => {
-            if (!this.state.scanning || !this.state.showCamera) return;
-
-            try {
-                const currentTime = Date.now();
-                // Kiểm tra xem đã đủ 2 giây kể từ lần quét cuối chưa
-                const shouldScan = currentTime - this.state.lastScannedTime >= 2000;
-
-                if (shouldScan) {
-                    const barcodes = await this.barcodeDetector.detect(videoElement);
-
-                    if (barcodes.length > 0) {
-                        // Lấy mã đầu tiên tìm thấy
-                        const barcode = barcodes[0].rawValue;
-
-                        // Xử lý mã vạch
-                        const product = this.posModel.db.get_product_by_barcode(barcode);
-
-                        if (product) {
-                            // Cập nhật thời gian quét cuối
-                            this.state.lastScannedTime = currentTime;
-                            this.state.lastScannedBarcode = barcode;
-                            this.state.cameraMessage = `Đã quét được mã: ${barcode}`;
-
-                            // Thêm hoặc cập nhật sản phẩm trong đơn hàng
-                            const success = this._addOrUpdateProduct(product);
-
-                            if (!success) {
-                                this.notification.add(`Không thể thêm sản phẩm vào đơn hàng`, {
-                                    type: "warning",
-                                });
-                            }
-                        } else {
-                            this.notification.add(`Không tìm thấy sản phẩm với mã vạch: ${barcode}`, {
-                                type: "warning",
-                            });
-                            this.state.lastScannedTime = currentTime; // Cập nhật thời gian để tránh quét liên tục
-                        }
-                    }
-                }
-
-                // Tiếp tục quét
-                requestAnimationFrame(scanFrame);
-            } catch (error) {
-                console.error('Error scanning barcode:', error);
-                this.state.cameraMessage = 'Lỗi khi quét: ' + (error.message || 'Lỗi không xác định');
-
-                // Thử lại sau 1 giây
-                setTimeout(() => {
-                    if (this.state.scanning) {
-                        requestAnimationFrame(scanFrame);
-                    }
-                }, 1000);
-            }
-        };
-
-        // Bắt đầu vòng lặp quét
-        requestAnimationFrame(scanFrame);
-    }
-
-    async _scanFromImage(imageDataUrl) {
-        if (!this.barcodeDetector) {
-            this.state.fileMessage = 'Trình duyệt của bạn không hỗ trợ BarcodeDetector';
-            return;
-        }
-
-        try {
-            // Tạo đối tượng Image để có thể phân tích
-            const img = new Image();
-            img.src = imageDataUrl;
-
-            // Đợi ảnh tải xong
-            await new Promise(resolve => {
-                img.onload = resolve;
-            });
-
-            // Phát hiện mã vạch trong ảnh
-            const barcodes = await this.barcodeDetector.detect(img);
-
-            if (barcodes.length > 0) {
-                // Lấy mã đầu tiên tìm thấy
-                const barcode = barcodes[0].rawValue;
-                this.state.fileMessage = 'Đã quét được mã: ' + barcode;
-
-                // Xử lý mã vạch
-                const product = this.posModel.db.get_product_by_barcode(barcode);
-
-                if (product) {
-                    // Thêm hoặc cập nhật sản phẩm trong đơn hàng
-                    const success = this._addOrUpdateProduct(product);
-
-                    if (!success) {
-                        this.notification.add(`Không thể thêm sản phẩm vào đơn hàng`, {
-                            type: "warning",
-                        });
-                    }
-                } else {
-                    this.notification.add(`Không tìm thấy sản phẩm với mã vạch: ${barcode}`, {
-                        type: "warning",
-                    });
-                }
-            } else {
-                this.state.fileMessage = 'Không tìm thấy mã vạch hoặc QR code trong ảnh';
-            }
-        } catch (error) {
-            console.error('Error scanning image:', error);
-            this.state.fileMessage = 'Lỗi khi quét ảnh: ' + (error.message || 'Lỗi không xác định');
-        }
-    }
-
+    // Trả về payload (nếu cần)
     getPayload() {
         return {};
     }
 
+    // Xử lý khi hủy popup
     cancel() {
         // Đảm bảo đóng camera khi đóng popup
         this._stopCamera();
         super.cancel();
     }
 
+    // Xử lý khi xác nhận popup
     confirm() {
         // Đảm bảo đóng camera khi đóng popup
         this._stopCamera();

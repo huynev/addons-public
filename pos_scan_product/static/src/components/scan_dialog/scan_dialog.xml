@@ -7,6 +7,7 @@
                 <h4 class="modal-title">Quét mã vạch/QR sản phẩm</h4>
             </div>
             <div class="modal-body">
+                <!-- Cảnh báo cho iOS -->
                 <div class="scan-options">
                     <div class="scan-option" t-on-click="openCamera">
                         <i class="fa fa-camera fa-3x"></i>
@@ -18,23 +19,47 @@
                     </div>
                 </div>
 
-                <div t-if="state.showCamera" class="camera-container">
-                    <video id="preview" width="100%"></video>
-                    <div class="camera-message" t-if="state.cameraMessage">
+                <!-- Camera Scanning Section -->
+                <div class="camera-container">
+                    <!-- Nút chuyển đổi camera nếu có nhiều hơn 1 camera -->
+                    <div t-if="state.availableCameras.length > 1"
+                         class="camera-switch-btn btn btn-sm btn-secondary mb-2"
+                         t-on-click="toggleCameraMode">
+                        <i class="fa fa-refresh"></i> Đổi camera
+                    </div>
+
+                    <!-- Video preview -->
+                    <div id="reader" width="100%" class="mb-2">></div>
+
+                    <!-- Camera message -->
+                    <div class="camera-message text-center" t-if="state.cameraMessage">
                         <t t-esc="state.cameraMessage"/>
                     </div>
                 </div>
 
+                <!-- File Upload Section -->
                 <div t-if="state.showFileUpload" class="file-upload-container">
-                    <input type="file" id="barcode-file-input" accept="image/*" t-on-change="handleFileInput"/>
-                    <div class="file-preview" t-if="state.filePreview">
-                        <img t-att-src="state.filePreview" width="200"/>
+                    <input type="file"
+                           id="barcode-file-input"
+                           accept="image/*"
+                           t-on-change="handleFileInput"
+                           class="form-control mb-2"/>
+
+                    <!-- File preview -->
+                    <div class="file-preview text-center" t-if="state.filePreview">
+                        <img t-att-src="state.filePreview"
+                             width="200"
+                             class="img-fluid rounded"/>
                     </div>
-                    <div class="file-message" t-if="state.fileMessage">
+
+                    <!-- File message -->
+                    <div class="file-message text-center mt-2" t-if="state.fileMessage">
                         <t t-esc="state.fileMessage"/>
                     </div>
                 </div>
             </div>
+
+            <!-- Footer buttons -->
             <div class="footer footer-flex modal-footer">
                 <div class="button confirm highlight btn btn-lg btn-primary" t-on-click="confirm">
                     <t t-esc="props.confirmText" />

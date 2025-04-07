@@ -16,6 +16,7 @@
     'data': [],
     'assets': {
         'point_of_sale._assets_pos': [
+            'pos_scan_product/static/lib/html5-qrcode.min.js',
             'pos_scan_product/static/src/components/scan_dialog/scan_dialog.js',
             'pos_scan_product/static/src/components/scan_dialog/scan_dialog.xml',
             'pos_scan_product/static/src/components/scan_button/scan_button.js',

@@ -63,4 +63,30 @@
         display: block;
         margin: 0 auto;
     }
+
+    /* Style cho cảnh báo iOS */
+    .ios-pwa-warning {
+        margin-bottom: 15px;
+        padding: 10px;
+
+        ol {
+            margin-left: 20px;
+            margin-bottom: 10px;
+        }
+
+        .btn {
+            margin-top: 5px;
+        }
+    }
+}
+
+/* Style đặc biệt cho PWA mode */
+@media (display-mode: standalone) {
+    .pos .control-button.scan-button {
+        background-color: #28a745;
+
+        &:hover {
+            background-color: #218838;
+        }
+    }
 }
