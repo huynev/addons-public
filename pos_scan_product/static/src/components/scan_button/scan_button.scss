@@ -1,0 +1,66 @@
+.scan-button {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    background-color: #6c757d;
+    color: white !important;
+    cursor: pointer;
+    margin: 5px;
+
+    &:hover {
+        background-color: #5a6268;
+    }
+
+    i {
+        font-size: 1.2em;
+    }
+}
+
+.popup-scan {
+    .scan-options {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 20px;
+    }
+
+    .scan-option {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        cursor: pointer;
+        padding: 15px;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+
+        &:hover {
+            background-color: #f0f0f0;
+        }
+
+        i {
+            margin-bottom: 10px;
+        }
+    }
+
+    .camera-container,
+    .file-upload-container {
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    .camera-message,
+    .file-message {
+        margin-top: 10px;
+        padding: 10px;
+        background-color: #f8f9fa;
+        border-radius: 4px;
+    }
+
+    .file-preview {
+        margin-top: 15px;
+    }
+
+    #barcode-file-input {
+        display: block;
+        margin: 0 auto;
+    }
+}

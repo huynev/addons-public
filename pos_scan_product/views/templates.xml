@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- File này trống vì tất cả asset JS và XML được định nghĩa trong __manifest__.py -->
+</odoo>

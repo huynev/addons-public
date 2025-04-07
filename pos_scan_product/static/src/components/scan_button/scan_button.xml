@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="pos_scan_product.PosScanButton" owl="1">
+        <div class="control-button scan-button"
+             t-on-click="onClick">
+            <i class="fa fa-barcode me-2"/>
+            <span>Quét mã</span>
+        </div>
+    </t>
+</templates>

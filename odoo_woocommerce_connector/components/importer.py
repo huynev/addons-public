@@ -24,7 +24,11 @@ class WooImporter(Component):
 
     def _get_woo_data(self):
         """Return the WooCommerce data for processing"""
-        return self.backend_adapter.read(self.woo_id)
+        try:
+            return self.backend_adapter.read(self.woo_id)
+        except Exception as e:
+            _logger.error("Error in _get_woo_data: %s", str(e))
+            raise
 
     def _before_import(self):
         """Hook called before the import"""
