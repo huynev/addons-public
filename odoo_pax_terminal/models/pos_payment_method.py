@@ -4,9 +4,9 @@ from odoo.exceptions import ValidationError
 import logging
 import socket
 import json
-import base64
 import time
 import random
+import xml.etree.ElementTree as ET
 
 _logger = logging.getLogger(__name__)
 
@@ -45,7 +45,8 @@ class PosPaymentMethod(models.Model):
     @api.model
     def _load_pos_data_fields(self, config_id):
         params = super()._load_pos_data_fields(config_id)
-        params += ['pax_terminal_ip', 'pax_terminal_id']
+        params += ['pax_terminal_ip', 'pax_terminal_id', 'pax_transaction_type',
+                   'pax_capture_signature', 'pax_clerk_id']
         return params
 
     @api.constrains('use_payment_terminal', 'pax_terminal_id')
@@ -59,7 +60,7 @@ class PosPaymentMethod(models.Model):
 
     @api.model
     def pax_send_payment(self, data):
-        """Method called by the JavaScript to process payment
+        """Method called by JavaScript to process payment with real PAX protocol
 
         Args:
             data (dict): Payment data from JavaScript
@@ -67,7 +68,7 @@ class PosPaymentMethod(models.Model):
         Returns:
             dict: Payment result
         """
-        _logger.debug("pax_send_payment called with data: %s", data)
+        _logger.info("PAX payment request received: %s", data)
 
         # Get payment method ID from data
         payment_method_id = data.get('payment_method_id')
@@ -102,34 +103,33 @@ class PosPaymentMethod(models.Model):
                     'error_message': _('Invalid payment amount')
                 }
 
-            # Prepare PAX command
-            amount_cents = int(amount * 100)  # Convert to cents
+            # Convert amount to cents (PAX expects amount in cents)
+            amount_cents = int(amount * 100)
 
-            # Create PAX command structure
+            # Prepare command data
             command_data = {
                 'command': 'T00',  # DoCredit command
-                'version': '1.28',
-                'transactionType': data.get('transaction_type', '01'),
-                'amount': str(amount_cents),
-                'reference': data.get('reference', '1'),
-                'clerk_id': data.get('clerk_id') or payment_method.pax_clerk_id or terminal.default_clerk_id or '',
-                'timeout': data.get('timeout', terminal.timeout * 1000),
-                'capture_signature': data.get('capture_signature', payment_method.pax_capture_signature),
+                'amount': str(amount_cents).zfill(8),  # Amount in cents, zero-padded
+                'transaction_type': data.get('transaction_type', payment_method.pax_transaction_type or '01'),
+                'reference': data.get('reference', self._generate_reference()),
+                'clerk_id': (data.get('clerk_id') or
+                             payment_method.pax_clerk_id or
+                             terminal.default_clerk_id or 'CASHIER01'),
+                'timeout': data.get('timeout', terminal.timeout * 1000),  # Convert to milliseconds
             }
 
             # Process payment
             if terminal.demo_mode:
+                _logger.info("Processing PAX payment in DEMO mode")
                 result = self._simulate_pax_payment(terminal, amount, command_data)
             else:
-                # Real PAX terminal processing
-                encoded_command = self._encode_pax_command(command_data)
-                response = self._send_to_pax_terminal(terminal, encoded_command, data.get('timeout', 120))
-                result = self._parse_pax_response(response)
+                _logger.info("Processing PAX payment with REAL terminal")
+                result = self._process_real_pax_payment(terminal, command_data)
 
             # Create transaction log
             log_vals = {
                 'terminal_id': terminal.id,
-                'transaction_type': command_data['transactionType'],
+                'transaction_type': command_data['transaction_type'],
                 'amount': amount,
                 'raw_request': json.dumps(command_data, indent=2),
                 'raw_response': json.dumps(result, indent=2),
@@ -139,13 +139,12 @@ class PosPaymentMethod(models.Model):
 
             if result.get('success'):
                 log_vals.update({
-                    'response_code': result.get('response_code', ''),
-                    'response_message': result.get('response_message', ''),
+                    'response_code': result.get('result_code', ''),
+                    'response_message': result.get('result_txt', ''),
                     'reference_number': result.get('reference_number', ''),
                     'auth_code': result.get('auth_code', ''),
                     'card_type': result.get('card_type', ''),
-                    'card_number': result.get('masked_card_number', ''),
-                    'cardholder_name': result.get('cardholder_name', ''),
+                    'card_number': result.get('card_number', ''),
                     'state': 'approved'
                 })
 
@@ -156,32 +155,33 @@ class PosPaymentMethod(models.Model):
                     'payment_status': 'success',
                     'transaction_id': result.get('reference_number') or result.get('transaction_id', ''),
                     'card_type': result.get('card_type', ''),
+                    'auth_code': result.get('auth_code', ''),
                     'pax_transaction_log_id': transaction_log.id,
                     'demo_mode': terminal.demo_mode,
                 }
 
                 # Add receipt data if available
-                if result.get('receipt_merchant') or result.get('receipt_customer'):
-                    response_data['ticket'] = result.get('receipt_customer', '')
-                    response_data['receipt_data'] = {
-                        'merchant_receipt': result.get('receipt_merchant', ''),
-                        'customer_receipt': result.get('receipt_customer', ''),
-                    }
+                if result.get('receipt'):
+                    response_data['ticket'] = result.get('receipt', '')
 
+                _logger.info("PAX payment successful: %s", response_data)
                 return response_data
             else:
                 log_vals.update({
-                    'response_message': result.get('error_message', 'Unknown error'),
-                    'response_code': result.get('response_code', 'ERROR'),
+                    'response_message': result.get('result_txt', 'Unknown error'),
+                    'response_code': result.get('result_code', 'ERROR'),
                     'state': 'declined'
                 })
 
                 # Create transaction log
                 self.env['pax.transaction.log'].create(log_vals)
 
+                error_message = result.get('result_txt') or result.get('message', 'Transaction declined')
+                _logger.warning("PAX payment failed: %s", error_message)
+
                 return {
                     'payment_status': 'failure',
-                    'error_message': result.get('error_message', 'Transaction declined'),
+                    'error_message': error_message,
                     'demo_mode': terminal.demo_mode,
                 }
 
@@ -190,6 +190,40 @@ class PosPaymentMethod(models.Model):
             return {
                 'payment_status': 'error',
                 'error_message': f'Payment processing error: {str(e)}'
+            }
+
+    def _process_real_pax_payment(self, terminal, command_data):
+        """Process payment with real PAX terminal using XML protocol"""
+        try:
+            # Create XML command using terminal's method
+            xml_command = terminal.create_xml_command(
+                command_type=command_data['command'],
+                amount=command_data['amount'],
+                transaction_type=command_data['transaction_type'],
+                reference=command_data['reference'],
+                clerk_id=command_data['clerk_id'],
+                timeout=command_data['timeout']
+            )
+
+            _logger.info("Sending XML command to PAX terminal: %s", xml_command)
+
+            # Send command to terminal
+            xml_response = terminal._send_tcp_command(xml_command, timeout=command_data['timeout'] / 1000)
+
+            _logger.info("Received XML response from PAX terminal: %s", xml_response)
+
+            # Parse response
+            result = terminal.parse_xml_response(xml_response)
+
+            return result
+
+        except Exception as e:
+            _logger.error("Error in real PAX payment processing: %s", str(e))
+            return {
+                'success': False,
+                'result_code': 'COMM_ERROR',
+                'result_txt': f'Communication error: {str(e)}',
+                'message': 'Failed to communicate with terminal'
             }
 
     def _simulate_pax_payment(self, terminal, amount, command_data):
@@ -211,114 +245,131 @@ class PosPaymentMethod(models.Model):
             # Generate fake transaction data
             transaction_id = f"DEMO{random.randint(100000, 999999)}"
             auth_code = f"{random.randint(100000, 999999)}"
-            reference_number = f"REF{random.randint(1000, 9999)}"
+            reference_number = command_data['reference']
             masked_card = f"****-****-****-{random.randint(1000, 9999)}"
 
             # Generate fake receipt
             receipt_lines = [
-                f"DEMO TRANSACTION - {card_type}",
+                f"*** DEMO TRANSACTION ***",
+                f"Card Type: {card_type}",
                 f"Amount: ${amount:.2f}",
                 f"Card: {masked_card}",
                 f"Auth: {auth_code}",
                 f"Ref: {reference_number}",
                 f"Date: {fields.Datetime.now().strftime('%m/%d/%Y %H:%M')}",
                 "",
-                "*** DEMO MODE ***",
+                "DEMO MODE - NOT A REAL TRANSACTION",
                 "Thank you!"
             ]
 
             return {
                 'success': True,
-                'response_code': '000000',
-                'response_message': 'APPROVED - DEMO MODE',
+                'result_code': '000000',
+                'result_txt': 'APPROVED - DEMO MODE',
                 'transaction_id': transaction_id,
                 'auth_code': auth_code,
                 'reference_number': reference_number,
                 'card_type': card_type,
-                'masked_card_number': masked_card,
-                'receipt_customer': '\n'.join(receipt_lines),
-                'receipt_merchant': '\n'.join(receipt_lines + ["MERCHANT COPY"]),
+                'card_number': masked_card,
+                'receipt': '\n'.join(receipt_lines),
+                'message': 'APPROVED - DEMO MODE',
             }
         else:
             # Simulate different types of failures
             failure_reasons = [
-                ('001', 'DECLINED - INSUFFICIENT FUNDS'),
-                ('002', 'DECLINED - CARD EXPIRED'),
-                ('003', 'DECLINED - INVALID CARD'),
-                ('004', 'DECLINED - CARD BLOCKED'),
-                ('005', 'ERROR - COMMUNICATION TIMEOUT'),
-                ('006', 'DECLINED - PIN REQUIRED'),
-                ('007', 'DECLINED - CALL BANK'),
+                ('100001', 'DECLINED - INSUFFICIENT FUNDS'),
+                ('100002', 'DECLINED - CARD EXPIRED'),
+                ('100003', 'DECLINED - INVALID CARD'),
+                ('100004', 'DECLINED - CARD BLOCKED'),
+                ('100005', 'ERROR - COMMUNICATION TIMEOUT'),
+                ('100006', 'DECLINED - PIN REQUIRED'),
+                ('100007', 'DECLINED - CALL BANK'),
             ]
 
             error_code, error_message = random.choice(failure_reasons)
 
             return {
                 'success': False,
-                'response_code': error_code,
-                'error_message': error_message + ' - DEMO MODE'
+                'result_code': error_code,
+                'result_txt': error_message + ' - DEMO MODE',
+                'message': error_message + ' - DEMO MODE'
             }
 
-    def _encode_pax_command(self, command_data):
-        """Encode PAX command for transmission"""
-        # In real implementation, this would format according to PAX protocol
-        # For now, we'll use JSON encoding
-        command_str = json.dumps(command_data)
-        return base64.b64encode(command_str.encode('utf-8')).decode('utf-8')
+    def _generate_reference(self):
+        """Generate unique reference number"""
+        timestamp = int(time.time())
+        random_num = random.randint(100, 999)
+        return f"REF{timestamp}{random_num}"[-12:]  # Keep last 12 chars
 
-    def _send_to_pax_terminal(self, terminal, encoded_command, timeout):
-        """Send command to PAX terminal via HTTP/TCP"""
+    @api.model
+    def pax_void_payment(self, data):
+        """Void a PAX payment transaction"""
         try:
-            # Example HTTP implementation
-            # In real implementation, you'd use PAX-specific protocol
-            url = f"http://{terminal.ip_address}:{terminal.port}/process"
-            headers = {'Content-Type': 'application/json'}
-            data = {'command': encoded_command}
-
-            import requests
-            response = requests.post(url, json=data, headers=headers, timeout=timeout)
-
-            if response.status_code == 200:
-                return response.text
-            else:
-                raise Exception(f"HTTP {response.status_code}: {response.text}")
-
-        except Exception as e:
-            _logger.error("Error communicating with PAX terminal: %s", str(e))
-            raise Exception(f"Terminal communication failed: {str(e)}")
-
-    def _parse_pax_response(self, response_text):
-        """Parse response from PAX terminal"""
-        try:
-            # In real implementation, this would parse PAX protocol response
-            # For now, we'll assume JSON response
-            response_data = json.loads(response_text)
-
-            # Map PAX response to our format
-            if response_data.get('status') == 'approved':
+            transaction_log_id = data.get('transaction_log_id')
+            if not transaction_log_id:
                 return {
+                    'payment_status': 'error',
+                    'error_message': _('Transaction log ID not provided')
+                }
+
+            transaction_log = self.env['pax.transaction.log'].browse(transaction_log_id)
+            if not transaction_log.exists():
+                return {
+                    'payment_status': 'error',
+                    'error_message': _('Transaction log not found')
+                }
+
+            terminal = transaction_log.terminal_id
+
+            # Prepare void command
+            command_data = {
+                'command': 'T04',  # DoVoid command
+                'transaction_type': '16',  # Void transaction type
+                'reference': transaction_log.reference_number,
+                'auth_code': transaction_log.auth_code,
+                'timeout': terminal.timeout * 1000,
+            }
+
+            if terminal.demo_mode:
+                # Demo void always succeeds
+                result = {
                     'success': True,
-                    'response_code': response_data.get('response_code', '000000'),
-                    'response_message': response_data.get('message', 'Approved'),
-                    'transaction_id': response_data.get('transaction_id', ''),
-                    'auth_code': response_data.get('auth_code', ''),
-                    'reference_number': response_data.get('reference', ''),
-                    'card_type': response_data.get('card_type', ''),
-                    'masked_card_number': response_data.get('masked_pan', ''),
-                    'receipt_customer': response_data.get('customer_receipt', ''),
-                    'receipt_merchant': response_data.get('merchant_receipt', ''),
+                    'result_code': '000000',
+                    'result_txt': 'VOIDED - DEMO MODE',
+                    'message': 'VOIDED - DEMO MODE'
+                }
+            else:
+                # Real terminal void
+                xml_command = terminal.create_xml_command(
+                    command_type=command_data['command'],
+                    transaction_type=command_data['transaction_type'],
+                    reference=command_data['reference'],
+                    timeout=command_data['timeout']
+                )
+
+                xml_response = terminal._send_tcp_command(xml_command)
+                result = terminal.parse_xml_response(xml_response)
+
+            if result.get('success'):
+                # Update transaction log status
+                transaction_log.write({
+                    'state': 'voided',
+                    'response_message': result.get('result_txt', 'Voided'),
+                })
+
+                return {
+                    'payment_status': 'success',
+                    'message': 'Transaction voided successfully'
                 }
             else:
                 return {
-                    'success': False,
-                    'response_code': response_data.get('response_code', 'ERROR'),
-                    'error_message': response_data.get('message', 'Transaction failed')
+                    'payment_status': 'failure',
+                    'error_message': result.get('result_txt', 'Void failed')
                 }
 
         except Exception as e:
-            _logger.error("Error parsing PAX response: %s", str(e))
+            _logger.error("Error voiding PAX payment: %s", str(e))
             return {
-                'success': False,
-                'response_code': 'PARSE_ERROR',
-                'error_message': f'Failed to parse terminal response: {str(e)}'
+                'payment_status': 'error',
+                'error_message': f'Void processing error: {str(e)}'
             }

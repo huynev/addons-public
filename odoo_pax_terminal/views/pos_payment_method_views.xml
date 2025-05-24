@@ -16,6 +16,9 @@
                        invisible="use_payment_terminal != 'pax'"/>
                 <field name="pax_clerk_id"
                        invisible="use_payment_terminal != 'pax'"/>
+                <field name="pax_terminal_ip"
+                       invisible="use_payment_terminal != 'pax'"
+                       string="Terminal IP"/>
             </field>
         </field>
     </record>
