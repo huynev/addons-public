@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- PAX Terminal Form View với Demo Mode -->
+    <!-- PAX Terminal Form View with Demo Mode -->
     <record id="view_pax_terminal_form" model="ir.ui.view">
         <field name="name">pax.terminal.form</field>
         <field name="model">pax.terminal</field>
@@ -25,6 +25,7 @@
                             <field name="demo_mode"/>
                             <field name="demo_success_rate" invisible="not demo_mode"
                                    help="Percentage of demo transactions that will succeed (0-100%)"/>
+                            <field name="protocol_type" invisible="demo_mode"/>
                         </group>
                         <group>
                             <field name="active"/>
@@ -49,8 +50,16 @@
                     </group>
 
                     <group string="Default Settings">
-                        <field name="default_clerk_id"/>
-                        <field name="default_reference_prefix"/>
+                        <group>
+                            <field name="default_clerk_id"/>
+                            <field name="default_reference_prefix"/>
+                        </group>
+                    </group>
+
+                    <!-- POS Configuration Assignment -->
+                    <group string="POS Configuration Assignment">
+                        <field name="pos_config_ids" widget="many2many_tags"
+                               help="Leave empty to make this terminal available to all POS configurations"/>
                     </group>
 
                     <notebook>
@@ -87,7 +96,7 @@
         </field>
     </record>
 
-    <!-- PAX Terminal List View (Changed from Tree to List) -->
+    <!-- PAX Terminal List View -->
     <record id="view_pax_terminal_list" model="ir.ui.view">
         <field name="name">pax.terminal.list</field>
         <field name="model">pax.terminal</field>
@@ -95,10 +104,13 @@
             <list string="PAX Terminals">
                 <field name="name"/>
                 <field name="demo_mode" widget="boolean"/>
+                <field name="protocol_type"/>
                 <field name="ip_address"/>
                 <field name="port"/>
-                <field name="active"/>
+                <field name="active" widget="boolean"/>
                 <field name="company_id" groups="base.group_multi_company"/>
+                <button name="test_connection" type="object" string="Test"
+                        class="btn-secondary" title="Test Connection"/>
             </list>
         </field>
     </record>
@@ -120,20 +132,30 @@
         </field>
     </record>
 
-    <!-- PAX Transaction List View (Changed from Tree to List) -->
+    <!-- PAX Transaction List View -->
     <record id="view_pax_transaction_log_list" model="ir.ui.view">
         <field name="name">pax.transaction.log.list</field>
         <field name="model">pax.transaction.log</field>
         <field name="arch" type="xml">
-            <list string="PAX Transactions">
+            <list string="PAX Transactions" default_order="transaction_date desc">
                 <field name="name"/>
                 <field name="transaction_date"/>
                 <field name="terminal_id"/>
                 <field name="transaction_type"/>
-                <field name="amount"/>
+                <field name="amount" sum="Total Amount"/>
                 <field name="card_type"/>
-                <field name="state"/>
+                <field name="state" decoration-success="state == 'approved'"
+                       decoration-danger="state in ['declined', 'error']"
+                       decoration-warning="state == 'pending'"
+                       decoration-muted="state == 'voided'"/>
                 <field name="response_message"/>
+                <field name="is_successful" invisible="1"/>
+                <button name="action_void_transaction" type="object" string="Void"
+                        class="btn-secondary" title="Void Transaction"
+                        invisible="state != 'approved'"/>
+                <button name="action_get_signature" type="object" string="Get Signature"
+                        class="btn-secondary" title="Capture Signature"
+                        invisible="state != 'approved' or has_signature"/>
             </list>
         </field>
     </record>
@@ -145,7 +167,14 @@
         <field name="arch" type="xml">
             <form string="PAX Transaction">
                 <header>
-                    <field name="state" widget="statusbar" statusbar_visible="draft,pending,approved,declined"/>
+                    <button name="action_void_transaction" type="object" string="Void Transaction"
+                            class="oe_highlight" invisible="state != 'approved'"/>
+                    <button name="action_get_signature" type="object" string="Get Signature"
+                            invisible="state != 'approved' or has_signature"/>
+                    <button name="action_print_receipt" type="object" string="Print Receipt"
+                            invisible="not receipt_customer and not receipt_merchant"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,pending,approved,declined"/>
                 </header>
                 <sheet>
                     <div class="oe_title">
@@ -159,43 +188,80 @@
                         <strong>Demo Transaction:</strong> This transaction was processed in demo mode.
                     </div>
 
+                    <!-- Success/Failure Alert -->
+                    <div class="alert alert-success" role="alert" invisible="not is_successful">
+                        <strong>Transaction Approved:</strong> This transaction was processed successfully.
+                    </div>
+                    <div class="alert alert-danger" role="alert"
+                         invisible="is_successful or state not in ['declined', 'error']">
+                        <strong>Transaction Failed:</strong> <field name="error_message" readonly="1" nolabel="1"/>
+                    </div>
+
                     <group>
                         <group>
                             <field name="terminal_id"/>
                             <field name="transaction_type"/>
                             <field name="transaction_date"/>
+                            <field name="processed_date"/>
                             <field name="has_signature" invisible="1"/>
+                            <field name="is_successful" invisible="1"/>
                         </group>
                         <group>
                             <field name="amount"/>
                             <field name="tip_amount"/>
                             <field name="total_amount"/>
+                            <field name="clerk_id"/>
                         </group>
                     </group>
 
                     <group string="Card Information">
-                        <field name="card_type"/>
-                        <field name="card_number"/>
-                        <field name="cardholder_name"/>
+                        <group>
+                            <field name="card_type"/>
+                            <field name="card_number"/>
+                            <field name="cardholder_name"/>
+                            <field name="entry_method"/>
+                        </group>
                     </group>
 
                     <group string="Transaction Details">
-                        <field name="response_code"/>
-                        <field name="response_message"/>
-                        <field name="auth_code"/>
-                        <field name="reference_number"/>
-                        <field name="pos_order_id"/>
-                        <field name="pos_payment_id"/>
+                        <group>
+                            <field name="response_code"/>
+                            <field name="response_message"/>
+                            <field name="auth_code"/>
+                            <field name="reference_number"/>
+                            <field name="host_reference"/>
+                        </group>
+                        <group>
+                            <field name="pos_order_id"/>
+                            <field name="pos_payment_id"/>
+                            <field name="batch_number"/>
+                            <field name="station_id"/>
+                        </group>
                     </group>
 
                     <notebook>
                         <page string="Signature" name="signature" invisible="not has_signature">
-                            <field name="signature_data" widget="image"/>
+                            <group>
+                                <field name="signature_data" widget="image" class="oe_avatar"/>
+                            </group>
+                        </page>
+                        <page string="Receipt Data" name="receipt"
+                              invisible="not receipt_customer and not receipt_merchant">
+                            <group>
+                                <group string="Customer Receipt">
+                                    <field name="receipt_customer" nolabel="1" readonly="1"/>
+                                </group>
+                                <group string="Merchant Receipt">
+                                    <field name="receipt_merchant" nolabel="1" readonly="1"/>
+                                </group>
+                            </group>
                         </page>
                         <page string="Technical Data" name="technical" groups="base.group_erp_manager">
                             <group>
-                                <field name="raw_request"/>
-                                <field name="raw_response"/>
+                                <field name="raw_request" readonly="1"/>
+                                <field name="raw_response" readonly="1"/>
+                                <field name="error_code"/>
+                                <field name="error_message"/>
                             </group>
                         </page>
                     </notebook>
@@ -204,11 +270,53 @@
         </field>
     </record>
 
+    <!-- PAX Transaction Search View -->
+    <record id="view_pax_transaction_log_search" model="ir.ui.view">
+        <field name="name">pax.transaction.log.search</field>
+        <field name="model">pax.transaction.log</field>
+        <field name="arch" type="xml">
+            <search string="PAX Transactions">
+                <field name="name"/>
+                <field name="terminal_id"/>
+                <field name="reference_number"/>
+                <field name="card_type"/>
+                <field name="clerk_id"/>
+                <field name="pos_order_id"/>
+
+                <filter string="Approved" name="approved" domain="[('state', '=', 'approved')]"/>
+                <filter string="Declined" name="declined" domain="[('state', '=', 'declined')]"/>
+                <filter string="Pending" name="pending" domain="[('state', '=', 'pending')]"/>
+                <filter string="Voided" name="voided" domain="[('state', '=', 'voided')]"/>
+
+                <separator/>
+                <filter string="Today" name="today"
+                        domain="[('transaction_date', '&gt;=', datetime.datetime.combine(context_today(), datetime.time(0,0,0)))]"/>
+                <filter string="This Week" name="this_week"
+                        domain="[('transaction_date', '&gt;=', (context_today() - datetime.timedelta(weeks=1)).strftime('%Y-%m-%d'))]"/>
+                <filter string="This Month" name="this_month"
+                        domain="[('transaction_date', '&gt;=', (context_today().replace(day=1)).strftime('%Y-%m-%d'))]"/>
+
+                <separator/>
+                <filter string="With Signature" name="with_signature" domain="[('has_signature', '=', True)]"/>
+                <filter string="Demo Transactions" name="demo" domain="[('response_message', 'ilike', 'DEMO MODE')]"/>
+
+                <group expand="0" string="Group By">
+                    <filter string="Terminal" name="group_terminal" context="{'group_by': 'terminal_id'}"/>
+                    <filter string="State" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Card Type" name="group_card_type" context="{'group_by': 'card_type'}"/>
+                    <filter string="Transaction Type" name="group_transaction_type" context="{'group_by': 'transaction_type'}"/>
+                    <filter string="Date" name="group_date" context="{'group_by': 'transaction_date:day'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
     <!-- PAX Transaction Action -->
     <record id="action_pax_transaction_log" model="ir.actions.act_window">
         <field name="name">PAX Transactions</field>
         <field name="res_model">pax.transaction.log</field>
         <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_this_month': 1}</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 No PAX transactions found
@@ -216,6 +324,8 @@
             <p>
                 Here you can see all PAX terminal transactions.
                 Demo transactions will be marked accordingly.
+                <br/>
+                Use filters to find specific transactions or group them by different criteria.
             </p>
         </field>
     </record>
@@ -237,4 +347,11 @@
               parent="menu_pax_terminal_root"
               action="action_pax_transaction_log"
               sequence="20"/>
+
+    <!-- Dashboard/Reports submenu -->
+    <menuitem id="menu_pax_reports"
+              name="Reports"
+              parent="menu_pax_terminal_root"
+              sequence="30"/>
+
 </odoo>
