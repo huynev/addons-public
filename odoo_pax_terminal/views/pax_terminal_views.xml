@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- PAX Terminal Form View với Demo Mode -->
+    <record id="view_pax_terminal_form" model="ir.ui.view">
+        <field name="name">pax.terminal.form</field>
+        <field name="model">pax.terminal</field>
+        <field name="arch" type="xml">
+            <form string="PAX Terminal">
+                <header>
+                    <button name="test_connection" type="object" string="Test Connection" class="oe_highlight"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1><field name="name" placeholder="e.g. Main Register Terminal"/></h1>
+                    </div>
+
+                    <!-- Demo Mode Alert -->
+                    <div class="alert alert-info" role="alert" invisible="not demo_mode">
+                        <strong>Demo Mode Enabled:</strong> This terminal will simulate payments without connecting to a real device.
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="demo_mode"/>
+                            <field name="demo_success_rate" invisible="not demo_mode"
+                                   help="Percentage of demo transactions that will succeed (0-100%)"/>
+                        </group>
+                        <group>
+                            <field name="active"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+
+                    <group string="Connection Settings" invisible="demo_mode">
+                        <group>
+                            <field name="ip_address"/>
+                            <field name="port"/>
+                            <field name="timeout"/>
+                        </group>
+                    </group>
+
+                    <group string="Demo Connection Settings" invisible="not demo_mode">
+                        <group>
+                            <field name="ip_address" readonly="1" help="Not used in demo mode"/>
+                            <field name="port" readonly="1" help="Not used in demo mode"/>
+                            <field name="timeout" help="Simulated processing time will be 1-3 seconds"/>
+                        </group>
+                    </group>
+
+                    <group string="Default Settings">
+                        <field name="default_clerk_id"/>
+                        <field name="default_reference_prefix"/>
+                    </group>
+
+                    <notebook>
+                        <page string="Payment Methods" name="payment_methods">
+                            <field name="payment_method_ids" readonly="1"/>
+                        </page>
+                        <page string="Transaction Logs" name="transaction_logs">
+                            <field name="transaction_log_ids" readonly="1"/>
+                        </page>
+                        <page string="Demo Mode Info" name="demo_info" invisible="not demo_mode">
+                            <div class="o_form_sheet">
+                                <h3>Demo Mode Information</h3>
+                                <p>When Demo Mode is enabled:</p>
+                                <ul>
+                                    <li>No real PAX terminal device is required</li>
+                                    <li>Payments are simulated with random card types (VISA, MASTERCARD, AMEX, DISCOVER)</li>
+                                    <li>Success rate can be configured (default: 90%)</li>
+                                    <li>Processing time is simulated (1-3 seconds)</li>
+                                    <li>Transaction logs are still created for testing purposes</li>
+                                    <li>All transactions are marked as "DEMO MODE" in the logs</li>
+                                </ul>
+                                <p><strong>Note:</strong> Demo mode is perfect for:</p>
+                                <ul>
+                                    <li>Testing the POS integration</li>
+                                    <li>Training staff</li>
+                                    <li>Demonstrating functionality to customers</li>
+                                    <li>Development and UAT environments</li>
+                                </ul>
+                            </div>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- PAX Terminal List View (Changed from Tree to List) -->
+    <record id="view_pax_terminal_list" model="ir.ui.view">
+        <field name="name">pax.terminal.list</field>
+        <field name="model">pax.terminal</field>
+        <field name="arch" type="xml">
+            <list string="PAX Terminals">
+                <field name="name"/>
+                <field name="demo_mode" widget="boolean"/>
+                <field name="ip_address"/>
+                <field name="port"/>
+                <field name="active"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- PAX Terminal Action -->
+    <record id="action_pax_terminal" model="ir.actions.act_window">
+        <field name="name">PAX Terminals</field>
+        <field name="res_model">pax.terminal</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new PAX terminal
+            </p>
+            <p>
+                Configure PAX payment terminals to use with your POS.
+                <br/>
+                <strong>Tip:</strong> Enable "Demo Mode" to test without a real PAX device.
+            </p>
+        </field>
+    </record>
+
+    <!-- PAX Transaction List View (Changed from Tree to List) -->
+    <record id="view_pax_transaction_log_list" model="ir.ui.view">
+        <field name="name">pax.transaction.log.list</field>
+        <field name="model">pax.transaction.log</field>
+        <field name="arch" type="xml">
+            <list string="PAX Transactions">
+                <field name="name"/>
+                <field name="transaction_date"/>
+                <field name="terminal_id"/>
+                <field name="transaction_type"/>
+                <field name="amount"/>
+                <field name="card_type"/>
+                <field name="state"/>
+                <field name="response_message"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- PAX Transaction Form View -->
+    <record id="view_pax_transaction_log_form" model="ir.ui.view">
+        <field name="name">pax.transaction.log.form</field>
+        <field name="model">pax.transaction.log</field>
+        <field name="arch" type="xml">
+            <form string="PAX Transaction">
+                <header>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,pending,approved,declined"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+
+                    <!-- Demo Mode Alert -->
+                    <div class="alert alert-warning" role="alert"
+                         invisible="'DEMO MODE' not in (response_message or '')">
+                        <strong>Demo Transaction:</strong> This transaction was processed in demo mode.
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="terminal_id"/>
+                            <field name="transaction_type"/>
+                            <field name="transaction_date"/>
+                            <field name="has_signature" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="amount"/>
+                            <field name="tip_amount"/>
+                            <field name="total_amount"/>
+                        </group>
+                    </group>
+
+                    <group string="Card Information">
+                        <field name="card_type"/>
+                        <field name="card_number"/>
+                        <field name="cardholder_name"/>
+                    </group>
+
+                    <group string="Transaction Details">
+                        <field name="response_code"/>
+                        <field name="response_message"/>
+                        <field name="auth_code"/>
+                        <field name="reference_number"/>
+                        <field name="pos_order_id"/>
+                        <field name="pos_payment_id"/>
+                    </group>
+
+                    <notebook>
+                        <page string="Signature" name="signature" invisible="not has_signature">
+                            <field name="signature_data" widget="image"/>
+                        </page>
+                        <page string="Technical Data" name="technical" groups="base.group_erp_manager">
+                            <group>
+                                <field name="raw_request"/>
+                                <field name="raw_response"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- PAX Transaction Action -->
+    <record id="action_pax_transaction_log" model="ir.actions.act_window">
+        <field name="name">PAX Transactions</field>
+        <field name="res_model">pax.transaction.log</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No PAX transactions found
+            </p>
+            <p>
+                Here you can see all PAX terminal transactions.
+                Demo transactions will be marked accordingly.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu Items -->
+    <menuitem id="menu_pax_terminal_root"
+              name="PAX Terminals"
+              parent="point_of_sale.menu_point_config_product"
+              sequence="50"/>
+
+    <menuitem id="menu_pax_terminal"
+              name="Terminals"
+              parent="menu_pax_terminal_root"
+              action="action_pax_terminal"
+              sequence="10"/>
+
+    <menuitem id="menu_pax_transaction_log"
+              name="Transactions"
+              parent="menu_pax_terminal_root"
+              action="action_pax_transaction_log"
+              sequence="20"/>
+</odoo>

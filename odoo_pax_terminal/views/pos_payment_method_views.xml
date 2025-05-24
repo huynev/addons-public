@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inherit POS Payment Method Form View -->
+    <record id="pos_payment_method_view_form_inherit_pax" model="ir.ui.view">
+        <field name="name">pos.payment.method.form.inherit.pax</field>
+        <field name="model">pos.payment.method</field>
+        <field name="inherit_id" ref="point_of_sale.pos_payment_method_view_form"/>
+        <field name="arch" type="xml">
+            <field name="use_payment_terminal" position="after">
+                <field name="pax_terminal_id"
+                       invisible="use_payment_terminal != 'pax'"
+                       required="use_payment_terminal == 'pax'"/>
+                <field name="pax_transaction_type"
+                       invisible="use_payment_terminal != 'pax'"/>
+                <field name="pax_capture_signature"
+                       invisible="use_payment_terminal != 'pax'"/>
+                <field name="pax_clerk_id"
+                       invisible="use_payment_terminal != 'pax'"/>
+            </field>
+        </field>
+    </record>
+</odoo>
