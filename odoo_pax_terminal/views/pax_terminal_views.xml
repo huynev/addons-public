@@ -37,7 +37,6 @@
                         <group>
                             <field name="ip_address"/>
                             <field name="port"/>
-                            <field name="timeout"/>
                         </group>
                     </group>
 
@@ -45,7 +44,17 @@
                         <group>
                             <field name="ip_address" readonly="1" help="Not used in demo mode"/>
                             <field name="port" readonly="1" help="Not used in demo mode"/>
-                            <field name="timeout" help="Simulated processing time will be 1-3 seconds"/>
+                        </group>
+                    </group>
+
+                    <!-- PAX Protocol Timeout Settings -->
+                    <group string="Timeout Settings (milliseconds)">
+                        <group>
+                            <field name="timeout_initialize" help="Timeout for Initialize command (default: 120000ms)"/>
+                            <field name="timeout_signature" help="Timeout for GetSignature/DoSignature commands (default: 120000ms)"/>
+                        </group>
+                        <group>
+                            <field name="timeout_credit" help="Timeout for DoCredit transactions (default: 120000ms)"/>
                         </group>
                     </group>
 
@@ -69,6 +78,32 @@
                         <page string="Transaction Logs" name="transaction_logs">
                             <field name="transaction_log_ids" readonly="1"/>
                         </page>
+                        <page string="PAX Protocol Info" name="protocol_info">
+                            <div class="o_form_sheet">
+                                <h3>PAX Protocol Information</h3>
+                                <p>This terminal uses the PAX binary protocol with the following specifications:</p>
+                                <ul>
+                                    <li><strong>Communication:</strong> HTTP GET requests with Base64 encoded binary data</li>
+                                    <li><strong>Protocol Constants:</strong>
+                                        <ul>
+                                            <li>STX (Start of Text): 0x02</li>
+                                            <li>ETX (End of Text): 0x03</li>
+                                            <li>FS (Field Separator): 0x1C</li>
+                                            <li>US (Unit Separator): 0x1F</li>
+                                        </ul>
+                                    </li>
+                                    <li><strong>Commands:</strong>
+                                        <ul>
+                                            <li>A08 - Initialize Terminal</li>
+                                            <li>T00 - DoCredit Transaction</li>
+                                            <li>A20 - GetSignature</li>
+                                            <li>A22 - DoSignature</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                                <p><strong>URL Format:</strong> http://ip:port?base64_encoded_command</p>
+                            </div>
+                        </page>
                         <page string="Demo Mode Info" name="demo_info" invisible="not demo_mode">
                             <div class="o_form_sheet">
                                 <h3>Demo Mode Information</h3>
@@ -80,6 +115,7 @@
                                     <li>Processing time is simulated (1-3 seconds)</li>
                                     <li>Transaction logs are still created for testing purposes</li>
                                     <li>All transactions are marked as "DEMO MODE" in the logs</li>
+                                    <li>Realistic response codes and messages are generated</li>
                                 </ul>
                                 <p><strong>Note:</strong> Demo mode is perfect for:</p>
                                 <ul>
@@ -107,6 +143,7 @@
                 <field name="protocol_type"/>
                 <field name="ip_address"/>
                 <field name="port"/>
+                <field name="timeout_credit" string="Credit Timeout (ms)"/>
                 <field name="active" widget="boolean"/>
                 <field name="company_id" groups="base.group_multi_company"/>
                 <button name="test_connection" type="object" string="Test"
@@ -125,12 +162,15 @@
                 Create a new PAX terminal
             </p>
             <p>
-                Configure PAX payment terminals to use with your POS.
+                Configure PAX payment terminals to use with your POS using the official PAX binary protocol.
                 <br/>
                 <strong>Tip:</strong> Enable "Demo Mode" to test without a real PAX device.
             </p>
         </field>
     </record>
+
+    <!-- Transaction Log Model (need to create this model too) -->
+    <!-- Since the model references pax.transaction.log, we need basic views for it -->
 
     <!-- PAX Transaction List View -->
     <record id="view_pax_transaction_log_list" model="ir.ui.view">
@@ -138,24 +178,22 @@
         <field name="model">pax.transaction.log</field>
         <field name="arch" type="xml">
             <list string="PAX Transactions" default_order="transaction_date desc">
-                <field name="name"/>
                 <field name="transaction_date"/>
                 <field name="terminal_id"/>
                 <field name="transaction_type"/>
                 <field name="amount" sum="Total Amount"/>
-                <field name="card_type"/>
-                <field name="state" decoration-success="state == 'approved'"
-                       decoration-danger="state in ['declined', 'error']"
-                       decoration-warning="state == 'pending'"
-                       decoration-muted="state == 'voided'"/>
-                <field name="response_message"/>
-                <field name="is_successful" invisible="1"/>
+                <field name="reference"/>
+                <field name="result_code"/>
+                <field name="success" widget="boolean" decoration-success="success == True"
+                       decoration-danger="success == False"/>
+                <field name="result_message"/>
+                <field name="auth_code"/>
                 <button name="action_void_transaction" type="object" string="Void"
                         class="btn-secondary" title="Void Transaction"
-                        invisible="state != 'approved'"/>
+                        invisible="success != True"/>
                 <button name="action_get_signature" type="object" string="Get Signature"
                         class="btn-secondary" title="Capture Signature"
-                        invisible="state != 'approved' or has_signature"/>
+                        invisible="success != True"/>
             </list>
         </field>
     </record>
@@ -168,33 +206,29 @@
             <form string="PAX Transaction">
                 <header>
                     <button name="action_void_transaction" type="object" string="Void Transaction"
-                            class="oe_highlight" invisible="state != 'approved'"/>
+                            class="oe_highlight" invisible="success != True"/>
                     <button name="action_get_signature" type="object" string="Get Signature"
-                            invisible="state != 'approved' or has_signature"/>
-                    <button name="action_print_receipt" type="object" string="Print Receipt"
-                            invisible="not receipt_customer and not receipt_merchant"/>
-                    <field name="state" widget="statusbar"
-                           statusbar_visible="draft,pending,approved,declined"/>
+                            invisible="success != True"/>
                 </header>
                 <sheet>
                     <div class="oe_title">
-                        <label for="name" class="oe_edit_only"/>
-                        <h1><field name="name"/></h1>
+                        <h1>
+                            <field name="reference" readonly="1"/>
+                        </h1>
                     </div>
 
                     <!-- Demo Mode Alert -->
                     <div class="alert alert-warning" role="alert"
-                         invisible="'DEMO MODE' not in (response_message or '')">
+                         invisible="'DEMO MODE' not in (result_message or '')">
                         <strong>Demo Transaction:</strong> This transaction was processed in demo mode.
                     </div>
 
                     <!-- Success/Failure Alert -->
-                    <div class="alert alert-success" role="alert" invisible="not is_successful">
+                    <div class="alert alert-success" role="alert" invisible="not success">
                         <strong>Transaction Approved:</strong> This transaction was processed successfully.
                     </div>
-                    <div class="alert alert-danger" role="alert"
-                         invisible="is_successful or state not in ['declined', 'error']">
-                        <strong>Transaction Failed:</strong> <field name="error_message" readonly="1" nolabel="1"/>
+                    <div class="alert alert-danger" role="alert" invisible="success">
+                        <strong>Transaction Failed:</strong> <field name="result_message" readonly="1" nolabel="1"/>
                     </div>
 
                     <group>
@@ -202,66 +236,31 @@
                             <field name="terminal_id"/>
                             <field name="transaction_type"/>
                             <field name="transaction_date"/>
-                            <field name="processed_date"/>
-                            <field name="has_signature" invisible="1"/>
-                            <field name="is_successful" invisible="1"/>
+                            <field name="success"/>
                         </group>
                         <group>
                             <field name="amount"/>
-                            <field name="tip_amount"/>
-                            <field name="total_amount"/>
-                            <field name="clerk_id"/>
-                        </group>
-                    </group>
-
-                    <group string="Card Information">
-                        <group>
-                            <field name="card_type"/>
-                            <field name="card_number"/>
-                            <field name="cardholder_name"/>
-                            <field name="entry_method"/>
+                            <field name="reference"/>
+                            <field name="result_code"/>
+                            <field name="result_message"/>
                         </group>
                     </group>
 
                     <group string="Transaction Details">
                         <group>
-                            <field name="response_code"/>
-                            <field name="response_message"/>
                             <field name="auth_code"/>
-                            <field name="reference_number"/>
-                            <field name="host_reference"/>
+                            <field name="transaction_id"/>
                         </group>
                         <group>
                             <field name="pos_order_id"/>
                             <field name="pos_payment_id"/>
-                            <field name="batch_number"/>
-                            <field name="station_id"/>
                         </group>
                     </group>
 
                     <notebook>
-                        <page string="Signature" name="signature" invisible="not has_signature">
-                            <group>
-                                <field name="signature_data" widget="image" class="oe_avatar"/>
-                            </group>
-                        </page>
-                        <page string="Receipt Data" name="receipt"
-                              invisible="not receipt_customer and not receipt_merchant">
-                            <group>
-                                <group string="Customer Receipt">
-                                    <field name="receipt_customer" nolabel="1" readonly="1"/>
-                                </group>
-                                <group string="Merchant Receipt">
-                                    <field name="receipt_merchant" nolabel="1" readonly="1"/>
-                                </group>
-                            </group>
-                        </page>
                         <page string="Technical Data" name="technical" groups="base.group_erp_manager">
                             <group>
-                                <field name="raw_request" readonly="1"/>
-                                <field name="raw_response" readonly="1"/>
-                                <field name="error_code"/>
-                                <field name="error_message"/>
+                                <field name="raw_response" readonly="1" widget="text"/>
                             </group>
                         </page>
                     </notebook>
@@ -276,34 +275,28 @@
         <field name="model">pax.transaction.log</field>
         <field name="arch" type="xml">
             <search string="PAX Transactions">
-                <field name="name"/>
+                <field name="reference"/>
                 <field name="terminal_id"/>
-                <field name="reference_number"/>
-                <field name="card_type"/>
-                <field name="clerk_id"/>
-                <field name="pos_order_id"/>
+                <field name="transaction_type"/>
+                <field name="auth_code"/>
 
-                <filter string="Approved" name="approved" domain="[('state', '=', 'approved')]"/>
-                <filter string="Declined" name="declined" domain="[('state', '=', 'declined')]"/>
-                <filter string="Pending" name="pending" domain="[('state', '=', 'pending')]"/>
-                <filter string="Voided" name="voided" domain="[('state', '=', 'voided')]"/>
+                <filter string="Successful" name="successful" domain="[('success', '=', True)]"/>
+                <filter string="Failed" name="failed" domain="[('success', '=', False)]"/>
 
                 <separator/>
                 <filter string="Today" name="today"
-                        domain="[('transaction_date', '&gt;=', datetime.datetime.combine(context_today(), datetime.time(0,0,0)))]"/>
-                <filter string="This Week" name="this_week"
-                        domain="[('transaction_date', '&gt;=', (context_today() - datetime.timedelta(weeks=1)).strftime('%Y-%m-%d'))]"/>
-                <filter string="This Month" name="this_month"
-                        domain="[('transaction_date', '&gt;=', (context_today().replace(day=1)).strftime('%Y-%m-%d'))]"/>
+                        domain="[('transaction_date', '&gt;=', context_today())]"/>
+                <filter string="Last 7 Days" name="last_7_days"
+                        domain="[('transaction_date', '&gt;=', (context_today() - datetime.timedelta(days=7)))]"/>
+                <filter string="Last 30 Days" name="last_30_days"
+                        domain="[('transaction_date', '&gt;=', (context_today() - datetime.timedelta(days=30)))]"/>
 
                 <separator/>
-                <filter string="With Signature" name="with_signature" domain="[('has_signature', '=', True)]"/>
-                <filter string="Demo Transactions" name="demo" domain="[('response_message', 'ilike', 'DEMO MODE')]"/>
+                <filter string="Demo Transactions" name="demo" domain="[('result_message', 'ilike', 'DEMO MODE')]"/>
 
                 <group expand="0" string="Group By">
                     <filter string="Terminal" name="group_terminal" context="{'group_by': 'terminal_id'}"/>
-                    <filter string="State" name="group_state" context="{'group_by': 'state'}"/>
-                    <filter string="Card Type" name="group_card_type" context="{'group_by': 'card_type'}"/>
+                    <filter string="Success Status" name="group_success" context="{'group_by': 'success'}"/>
                     <filter string="Transaction Type" name="group_transaction_type" context="{'group_by': 'transaction_type'}"/>
                     <filter string="Date" name="group_date" context="{'group_by': 'transaction_date:day'}"/>
                 </group>
@@ -322,7 +315,7 @@
                 No PAX transactions found
             </p>
             <p>
-                Here you can see all PAX terminal transactions.
+                Here you can see all PAX terminal transactions processed through the binary protocol.
                 Demo transactions will be marked accordingly.
                 <br/>
                 Use filters to find specific transactions or group them by different criteria.
