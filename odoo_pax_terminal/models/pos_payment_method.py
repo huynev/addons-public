@@ -105,10 +105,8 @@ class PosPaymentMethod(models.Model):
             transaction_data = {
                 'amount': amount,
                 'transaction_type': data.get('transaction_type', payment_method.pax_transaction_type or '01'),
-                'reference': data.get('reference', self._generate_reference()),
-                'clerk_id': (data.get('clerk_id') or
-                             payment_method.pax_clerk_id or
-                             terminal.default_clerk_id or 'CASHIER01'),
+                'reference': (data.get('reference', self._generate_reference()))[-16:],
+                'clerk_id': (terminal.default_clerk_id or ''),
             }
 
             # Process payment using terminal's method
@@ -148,10 +146,10 @@ class PosPaymentMethod(models.Model):
             }
 
     def _generate_reference(self):
-        """Generate unique reference number"""
-        timestamp = int(time.time())
-        random_num = random.randint(100, 999)
-        return f"REF{timestamp}{random_num}"[-12:]  # Keep last 12 chars
+        """Generate unique reference number for PAX terminal (12 chars max)"""
+        timestamp = str(int(time.time()))[-6:]  # 6 digits
+        random_num = random.randint(100, 999)  # 3 digits
+        return f"REF{timestamp}{random_num}"
 
     @api.model
     def pax_void_payment(self, data):

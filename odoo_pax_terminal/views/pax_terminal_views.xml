@@ -25,7 +25,6 @@
                             <field name="demo_mode"/>
                             <field name="demo_success_rate" invisible="not demo_mode"
                                    help="Percentage of demo transactions that will succeed (0-100%)"/>
-                            <field name="protocol_type" invisible="demo_mode"/>
                         </group>
                         <group>
                             <field name="active"/>
@@ -140,7 +139,6 @@
             <list string="PAX Terminals">
                 <field name="name"/>
                 <field name="demo_mode" widget="boolean"/>
-                <field name="protocol_type"/>
                 <field name="ip_address"/>
                 <field name="port"/>
                 <field name="timeout_credit" string="Credit Timeout (ms)"/>
