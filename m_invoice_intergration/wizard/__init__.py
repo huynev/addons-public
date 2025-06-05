@@ -1,0 +1,1 @@
+from . import minvoice_send_wizard

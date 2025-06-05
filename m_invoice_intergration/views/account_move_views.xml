@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Extend Invoice Form View -->
+        <record id="view_move_form_minvoice" model="ir.ui.view">
+            <field name="name">account.move.form.minvoice</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <!-- Add M-Invoice buttons to header -->
+                <xpath expr="//header" position="inside">
+                    <button name="action_send_to_minvoice" string="Send to M-Invoice"
+                            type="object" class="btn-primary"
+                            invisible="move_type not in ['out_invoice', 'out_refund'] or state != 'posted'"/>
+                    <button name="action_minvoice_print" string="Print M-Invoice"
+                            type="object" class="btn-secondary"
+                            invisible="not minvoice_id"/>
+                    <button name="action_minvoice_get_xml" string="Download XML"
+                            type="object" class="btn-secondary"
+                            invisible="not minvoice_id"/>
+                </xpath>
+
+                <!-- Add M-Invoice fields -->
+                <xpath expr="//page[@name='other_info']" position="after">
+                    <page string="M-Invoice" name="minvoice_info"
+                          invisible="move_type not in ['out_invoice', 'out_refund']">
+                        <group>
+                            <group string="M-Invoice Information">
+                                <field name="minvoice_series_id"
+                                       domain="[('company_id', '=', company_id), ('active', '=', True)]"/>
+                                <field name="minvoice_number" readonly="1"/>
+                                <field name="minvoice_id" readonly="1"/>
+                                <field name="minvoice_status" readonly="1"/>
+                                <field name="minvoice_code" readonly="1"/>
+                                <field name="minvoice_cqt_code" readonly="1"/>
+                            </group>
+                            <group string="Files">
+                                <field name="minvoice_xml_file" filename="minvoice_xml_filename"/>
+                                <field name="minvoice_pdf_file" filename="minvoice_pdf_filename"/>
+                            </group>
+                        </group>
+                        <group string="Error Message" invisible="not minvoice_error_message">
+                            <field name="minvoice_error_message" readonly="1" nolabel="1"/>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Extend Invoice Tree View -->
+        <record id="view_invoice_tree_minvoice" model="ir.ui.view">
+            <field name="name">account.move.tree.minvoice</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_out_invoice_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='state']" position="after">
+                    <field name="minvoice_status" optional="hide"/>
+                    <field name="minvoice_number" optional="hide"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
