@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- M-Invoice Main Menu -->
+        <menuitem id="menu_minvoice_root"
+                  name="M-Invoice"
+                  web_icon="account,static/description/icon.png"
+                  sequence="50"/>
+
+        <!-- Configuration Menu -->
+        <menuitem id="menu_minvoice_config"
+                  name="Configuration"
+                  parent="menu_minvoice_root"
+                  sequence="10"/>
+
+        <menuitem id="menu_minvoice_config_settings"
+                  name="M-Invoice Settings"
+                  parent="menu_minvoice_config"
+                  action="action_minvoice_config"
+                  sequence="10"/>
+
+        <menuitem id="menu_minvoice_series"
+                  name="Invoice Series"
+                  parent="menu_minvoice_config"
+                  action="action_minvoice_series"
+                  sequence="20"/>
+
+        <!-- Add sync action to series menu -->
+        <menuitem id="menu_sync_series"
+                  name="Sync Series"
+                  parent="menu_minvoice_config"
+                  action="action_sync_series"
+                  sequence="30"/>
+    </data>
+</odoo>

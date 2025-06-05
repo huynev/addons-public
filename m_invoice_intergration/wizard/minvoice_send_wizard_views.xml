@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Send to M-Invoice Wizard -->
+        <record id="view_minvoice_send_wizard_form" model="ir.ui.view">
+            <field name="name">minvoice.send.wizard.form</field>
+            <field name="model">minvoice.send.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Send to M-Invoice">
+                    <group>
+                        <field name="invoice_id" readonly="1"/>
+                        <field name="company_id" invisible="1"/>
+                        <field name="series_id" domain="[('company_id', '=', company_id), ('active', '=', True)]" required="1"/>
+                        <field name="auto_sign"/>
+                    </group>
+                    <footer>
+                        <button name="action_send" string="Send" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Send to M-Invoice Action -->
+        <record id="action_minvoice_send_wizard" model="ir.actions.act_window">
+            <field name="name">Send to M-Invoice</field>
+            <field name="res_model">minvoice.send.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

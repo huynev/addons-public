@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- M-Invoice Config Form View -->
+        <record id="view_minvoice_config_form" model="ir.ui.view">
+            <field name="name">minvoice.config.form</field>
+            <field name="model">minvoice.config</field>
+            <field name="arch" type="xml">
+                <form string="M-Invoice Configuration">
+                    <header>
+                        <button name="action_test_connection" string="Test Connection" type="object" class="btn-primary"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="company_id"/>
+                                <field name="base_url"/>
+                                <field name="username"/>
+                                <field name="password" password="True"/>
+                                <field name="ma_dvcs"/>
+                            </group>
+                            <group>
+                                <field name="active"/>
+                                <field name="token" readonly="1"/>
+                                <field name="token_expiry" readonly="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- M-Invoice Config Tree View -->
+        <record id="view_minvoice_config_tree" model="ir.ui.view">
+            <field name="name">minvoice.config.tree</field>
+            <field name="model">minvoice.config</field>
+            <field name="arch" type="xml">
+                <tree string="M-Invoice Configurations">
+                    <field name="company_id"/>
+                    <field name="username"/>
+                    <field name="base_url"/>
+                    <field name="active"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- M-Invoice Config Action -->
+        <record id="action_minvoice_config" model="ir.actions.act_window">
+            <field name="name">M-Invoice Configuration</field>
+            <field name="res_model">minvoice.config</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Tạo cấu hình M-Invoice đầu tiên!
+                </p>
+                <p>
+                    Cấu hình kết nối với hệ thống hóa đơn điện tử M-Invoice
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

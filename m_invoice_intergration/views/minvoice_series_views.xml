@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- M-Invoice Series Form View -->
+        <record id="view_minvoice_series_form" model="ir.ui.view">
+            <field name="name">minvoice.series.form</field>
+            <field name="model">minvoice.series</field>
+            <field name="arch" type="xml">
+                <form string="Invoice Series">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="company_id"/>
+                                <field name="khhdon"/>
+                                <field name="value"/>
+                                <field name="invoice_form"/>
+                            </group>
+                            <group>
+                                <field name="invoice_year"/>
+                                <field name="invoice_type_name"/>
+                                <field name="series_id"/>
+                                <field name="active"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- M-Invoice Series Tree View -->
+        <record id="view_minvoice_series_tree" model="ir.ui.view">
+            <field name="name">minvoice.series.tree</field>
+            <field name="model">minvoice.series</field>
+            <field name="arch" type="xml">
+                <tree string="Invoice Series">
+                    <field name="company_id"/>
+                    <field name="khhdon"/>
+                    <field name="value"/>
+                    <field name="invoice_form"/>
+                    <field name="invoice_type_name"/>
+                    <field name="active"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- M-Invoice Series Action -->
+        <record id="action_minvoice_series" model="ir.actions.act_window">
+            <field name="name">Invoice Series</field>
+            <field name="res_model">minvoice.series</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Đồng bộ ký hiệu hóa đơn từ M-Invoice!
+                </p>
+                <p>
+                    Quản lý các ký hiệu hóa đơn điện tử
+                </p>
+            </field>
+        </record>
+
+        <!-- Sync Series Action -->
+        <record id="action_sync_series" model="ir.actions.server">
+            <field name="name">Sync Invoice Series</field>
+            <field name="model_id" ref="model_minvoice_series"/>
+            <field name="state">code</field>
+            <field name="code">
+count = model.sync_series_from_minvoice()
+action = {
+    'type': 'ir.actions.client',
+    'tag': 'display_notification',
+    'params': {
+        'title': 'Success',
+        'message': f'Đã đồng bộ {count} ký hiệu hóa đơn',
+        'type': 'success'
+    }
+}
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_minvoice_config_manager,minvoice.config.manager,model_minvoice_config,account.group_account_manager,1,1,1,1
+access_minvoice_config_user,minvoice.config.user,model_minvoice_config,account.group_account_user,1,0,0,0
+access_minvoice_series_manager,minvoice.series.manager,model_minvoice_series,account.group_account_manager,1,1,1,1
+access_minvoice_series_user,minvoice.series.user,model_minvoice_series,account.group_account_user,1,0,0,0
+access_minvoice_send_wizard,minvoice.send.wizard,model_minvoice_send_wizard,account.group_account_user,1,1,1,1
