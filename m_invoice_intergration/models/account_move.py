@@ -64,9 +64,12 @@ class AccountMove(models.Model):
         if pdf_data:
             self.minvoice_pdf_file = pdf_data
 
+            filename = f"invoice_{self.name}.pdf".replace('/', '_')
+            url = f"/web/content?model=account.move&id={self.id}&field=minvoice_pdf_file&filename={filename}&download=true"
+
             return {
                 'type': 'ir.actions.act_url',
-                'url': f'/web/content/account.move/{self.id}/minvoice_pdf_file/invoice_{self.name}.pdf',
+                'url': url,
                 'target': 'new',
             }
 
@@ -79,13 +82,19 @@ class AccountMove(models.Model):
         xml_data = minvoice_api.get_xml_file(self.minvoice_id, self.company_id.id)
 
         if xml_data:
+            xml_data = xml_data.get('data')
             self.minvoice_xml_file = xml_data
+
+            filename = f"invoice_{self.name}.xml".replace('/', '_')
+            url = f"/web/content?model=account.move&id={self.id}&field=minvoice_xml_file&filename={filename}&download=true"
 
             return {
                 'type': 'ir.actions.act_url',
-                'url': f'/web/content/account.move/{self.id}/minvoice_xml_file/invoice_{self.name}.xml',
+                'url': url,
                 'target': 'new',
             }
+        else:
+            raise ValidationError(_('Không thể lấy file XML từ M-Invoice'))
 
     def action_minvoice_cancel(self):
         """Hủy hóa đơn trên M-Invoice"""
@@ -103,13 +112,18 @@ class AccountMove(models.Model):
         if not self.partner_id:
             raise ValidationError(_('Vui lòng chọn khách hàng'))
 
+        # Logic kiểm tra hóa đơn đã tồn tại trên M-Invoice
+        is_update = bool(self.minvoice_id)
+        editmode = '2' if is_update else '1'  # 2: Sửa, 1: Thêm mới
+
         # Thông tin đầu phiếu
         data = {
-            'editmode': '1',  # Thêm mới
+            'editmode': editmode,
             'data': [{
                 'inv_invoiceIssuedDate': self.invoice_date.strftime('%Y-%m-%d'),
                 'inv_invoiceSeries': self.minvoice_series_id.value,
                 'inv_currencyCode': self.currency_id.name or 'VND',
+                'so_benh_an': self._get_sale_order_number(),
                 'inv_exchangeRate': 1.0 if self.currency_id.name == 'VND' else self.currency_id.rate,
 
                 # Thông tin khách hàng
@@ -133,7 +147,29 @@ class AccountMove(models.Model):
             }]
         }
 
+        # Nếu là update, thêm thông tin để M-Invoice biết cần sửa hóa đơn nào
+        if is_update:
+            if self.minvoice_number:
+                # Trường hợp đã có số hóa đơn
+                data['data'][0]['inv_invoiceNumber'] = int(self.minvoice_number)
+            if self.minvoice_id:
+                # Trường hợp có ID hóa đơn
+                data['data'][0]['inv_invoiceAuth_Id'] = self.minvoice_id
+
         return data
+
+    def _get_sale_order_number(self):
+        """Lấy số đơn hàng từ Sale Order"""
+        if self.invoice_origin:
+            return self.invoice_origin
+
+        if self.ref:
+            return self.ref
+
+        if self.partner_ref:
+            return self.partner_ref
+
+        return self.name
 
     def _get_partner_address(self):
         """Lấy địa chỉ khách hàng"""
@@ -152,8 +188,59 @@ class AccountMove(models.Model):
         return ', '.join(address_parts)
 
     def _get_payment_method(self):
-        """Lấy hình thức thanh toán"""
-        # TODO: Map payment terms to M-Invoice payment methods
+        """Lấy hình thức thanh toán từ Odoo và map sang M-Invoice"""
+
+        # Mapping phương thức thanh toán Odoo -> M-Invoice
+        payment_method_mapping = {
+            # Từ Payment Terms Name
+            'immediate payment': 'Tiền mặt',
+            'cash': 'Tiền mặt',
+            'tiền mặt': 'Tiền mặt',
+            'cash on delivery': 'Tiền mặt',
+            'cod': 'Tiền mặt',
+            'bank transfer': 'Chuyển khoản',
+            'chuyển khoản': 'Chuyển khoản',
+            'transfer': 'Chuyển khoản',
+            'wire transfer': 'Chuyển khoản',
+            'credit card': 'Chuyển khoản',
+            'thẻ tín dụng': 'Chuyển khoản',
+            'online payment': 'Chuyển khoản',
+            'electronic payment': 'Chuyển khoản',
+            # Từ Payment Terms với thời hạn
+            '15 days': 'Chuyển khoản',
+            '30 days': 'Chuyển khoản',
+            '45 days': 'Chuyển khoản',
+            '60 days': 'Chuyển khoản',
+            '90 days': 'Chuyển khoản',
+        }
+
+        # Ưu tiên 1: Lấy từ payment term của invoice
+        if self.invoice_payment_term_id:
+            term_name = self.invoice_payment_term_id.name.lower()
+
+            # Kiểm tra exact match trước
+            if term_name in payment_method_mapping:
+                return payment_method_mapping[term_name]
+
+            # Kiểm tra contains
+            for key, value in payment_method_mapping.items():
+                if key in term_name:
+                    return value
+
+            # Logic đặc biệt cho payment terms có số ngày
+            if any(word in term_name for word in ['days', 'ngày', 'day']):
+                return 'Chuyển khoản'
+            elif any(word in term_name for word in ['immediate', 'ngay', 'cash']):
+                return 'Tiền mặt'
+
+        if hasattr(self, 'line_ids'):
+            for line in self.line_ids:
+                if line.account_id.account_type in ['asset_cash', 'asset_current']:
+                    if 'cash' in line.account_id.name.lower() or 'tiền mặt' in line.account_id.name.lower():
+                        return 'Tiền mặt'
+                    elif 'bank' in line.account_id.name.lower() or 'ngân hàng' in line.account_id.name.lower():
+                        return 'Chuyển khoản'
+
         return 'TM/CK'
 
     def _prepare_invoice_lines(self):
@@ -178,7 +265,7 @@ class AccountMove(models.Model):
             }
             lines.append(line_data)
 
-        return lines
+        return [{'data': lines}]
 
     def _get_tax_rate(self, line):
         """Lấy thuế suất của dòng hàng"""
