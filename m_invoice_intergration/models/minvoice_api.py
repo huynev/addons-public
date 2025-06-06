@@ -63,30 +63,6 @@ class MInvoiceApi(models.AbstractModel):
             raise ValidationError(f"Lỗi kết nối M-Invoice: {str(e)}")
 
     @api.model
-    def get_invoice_info(self, invoice_id, company_id):
-        """Lấy thông tin hóa đơn"""
-        config = self.env['minvoice.config'].get_config(company_id)
-        token = config.get_valid_token()
-
-        url = f"{config.base_url}/api/InvoiceApi78/GetInfoInvoice?id={invoice_id}"
-        headers = {
-            'Authorization': f'Bearer {token}',
-        }
-
-        try:
-            response = requests.get(url, headers=headers, timeout=30)
-            response.raise_for_status()
-
-            result = response.json()
-            if result.get('code') == '00':
-                return result.get('data')
-            else:
-                return None
-
-        except requests.exceptions.RequestException:
-            return None
-
-    @api.model
     def print_invoice(self, invoice_id, company_id):
         """In hóa đơn"""
         config = self.env['minvoice.config'].get_config(company_id)
@@ -136,3 +112,92 @@ class MInvoiceApi(models.AbstractModel):
 
         except requests.exceptions.RequestException as e:
             raise ValidationError(f"Lỗi kết nối M-Invoice: {str(e)}")
+
+    @api.model
+    def get_invoice_info(self, invoice_id, company_id):
+        """Lấy thông tin hóa đơn chi tiết từ M-Invoice"""
+        config = self.env['minvoice.config'].get_config(company_id)
+        token = config.get_valid_token()
+
+        url = f"{config.base_url}/api/InvoiceApi78/GetInfoInvoice?id={invoice_id}"
+        headers = {
+            'Authorization': f'Bearer {token}',
+        }
+
+        try:
+            response = requests.get(url, headers=headers, timeout=30)
+            response.raise_for_status()
+
+            result = response.json()
+            if result.get('code') == '00':
+                data = result.get('data')
+                if data:
+                    # Trả về thông tin chi tiết với các trường cần thiết
+                    return {
+                        'id': data.get('id'),
+                        'invoiceNumber': data.get('inv_invoiceNumber'),
+                        'invoiceSeries': data.get('inv_invoiceSeries'),
+                        'invoiceDate': data.get('inv_invoiceIssuedDate'),
+                        'status': data.get('status'),  # Trạng thái từ M-Invoice
+                        'statusName': data.get('statusName'),
+                        'lookupCode': data.get('lookupCode'),  # Mã tra cứu
+                        'cqtCode': data.get('cqtCode'),  # Mã CQT
+                        'totalAmount': data.get('inv_TotalAmount'),
+                        'vatAmount': data.get('inv_vatAmount'),
+                        'amountWithoutVat': data.get('inv_TotalAmountWithoutVat'),
+                        'errorMessage': data.get('errorMessage'),
+                        'signedDate': data.get('signedDate'),
+                        'sentDate': data.get('sentDate'),
+                    }
+            return None
+
+        except requests.exceptions.RequestException:
+            return None
+
+    @api.model
+    def batch_get_invoice_status(self, invoice_ids, company_id):
+        """Lấy trạng thái nhiều hóa đơn cùng lúc (nếu API hỗ trợ)"""
+        config = self.env['minvoice.config'].get_config(company_id)
+        token = config.get_valid_token()
+
+        # Nếu M-Invoice có API batch, sử dụng nó
+        # Ngược lại, gọi từng invoice
+        results = {}
+        for invoice_id in invoice_ids:
+            try:
+                info = self.get_invoice_info(invoice_id, company_id)
+                if info:
+                    results[invoice_id] = info
+            except:
+                continue
+
+        return results
+
+    @api.model
+    def check_invoice_exists(self, invoice_number, series_value, company_id):
+        """Kiểm tra hóa đơn đã tồn tại trên M-Invoice"""
+        config = self.env['minvoice.config'].get_config(company_id)
+        token = config.get_valid_token()
+
+        url = f"{config.base_url}/api/InvoiceApi78/CheckInvoiceExists"
+        headers = {
+            'Authorization': f'Bearer {token}',
+            'Content-Type': 'application/json'
+        }
+
+        data = {
+            'invoiceNumber': invoice_number,
+            'invoiceSeries': series_value
+        }
+
+        try:
+            response = requests.post(url, json=data, headers=headers, timeout=30)
+            response.raise_for_status()
+
+            result = response.json()
+            if result.get('code') == '00':
+                return result.get('data', {}).get('exists', False)
+            return False
+
+        except requests.exceptions.RequestException:
+            return False

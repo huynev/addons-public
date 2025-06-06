@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Batch Update Wizard View -->
+    <record id="view_minvoice_batch_update_form" model="ir.ui.view">
+        <field name="name">minvoice.batch.update.form</field>
+        <field name="model">minvoice.batch.update</field>
+        <field name="arch" type="xml">
+            <form string="Batch Update M-Invoice Status">
+                <group>
+                    <group>
+                        <field name="company_id"/>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                        <field name="status_filter"/>
+                    </group>
+                    <group>
+                        <field name="total_count" readonly="1"/>
+                        <field name="updated_count" readonly="1"/>
+                        <field name="error_count" readonly="1"/>
+                    </group>
+                </group>
+
+                <field name="invoice_ids" readonly="1">
+                    <tree>
+                        <field name="name"/>
+                        <field name="partner_id"/>
+                        <field name="invoice_date"/>
+                        <field name="amount_total"/>
+                        <field name="minvoice_status"/>
+                        <field name="minvoice_number"/>
+                    </tree>
+                </field>
+
+                <footer>
+                    <button name="action_batch_update" type="object"
+                            string="Update Status" class="oe_highlight"/>
+                    <button name="action_view_results" type="object"
+                            string="View Results"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Status Report Wizard View -->
+    <record id="view_minvoice_status_report_form" model="ir.ui.view">
+        <field name="name">minvoice.status.report.form</field>
+        <field name="model">minvoice.status.report</field>
+        <field name="arch" type="xml">
+            <form string="M-Invoice Status Report">
+                <group>
+                    <group>
+                        <field name="company_id"/>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                    </group>
+                    <group>
+                        <field name="total_invoices" readonly="1"/>
+                        <field name="success_percentage" readonly="1" widget="percentage"/>
+                    </group>
+                </group>
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="card text-center">
+                            <div class="card-header bg-success text-white">
+                                <h5>Success</h5>
+                            </div>
+                            <div class="card-body">
+                                <h3><field name="success_count" readonly="1"/></h3>
+                                <button name="action_view_invoices_by_status" type="object"
+                                        string="View" class="btn btn-sm btn-primary"
+                                        context="{'status_filter': 'success'}"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="card text-center">
+                            <div class="card-header bg-warning text-white">
+                                <h5>Pending</h5>
+                            </div>
+                            <div class="card-body">
+                                <h3><field name="pending_count" readonly="1"/></h3>
+                                <button name="action_view_invoices_by_status" type="object"
+                                        string="View" class="btn btn-sm btn-primary"
+                                        context="{'status_filter': 'pending'}"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="card text-center">
+                            <div class="card-header bg-danger text-white">
+                                <h5>Error</h5>
+                            </div>
+                            <div class="card-body">
+                                <h3><field name="error_count" readonly="1"/></h3>
+                                <button name="action_view_invoices_by_status" type="object"
+                                        string="View" class="btn btn-sm btn-primary"
+                                        context="{'status_filter': 'error'}"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="card text-center">
+                            <div class="card-header bg-secondary text-white">
+                                <h5>Not Sent</h5>
+                            </div>
+                            <div class="card-body">
+                                <h3><field name="not_sent_count" readonly="1"/></h3>
+                                <button name="action_view_invoices_by_status" type="object"
+                                        string="View" class="btn btn-sm btn-primary"
+                                        context="{'status_filter': 'not_sent'}"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <footer>
+                    <button string="Close" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Enhanced Invoice Form View -->
+    <record id="view_move_form_minvoice_enhanced" model="ir.ui.view">
+        <field name="name">account.move.form.minvoice.enhanced</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_sync_minvoice_status" type="object"
+                        string="Sync Status"
+                        invisible="minvoice_id == False"
+                        icon="fa-refresh"/>
+            </xpath>
+
+            <xpath expr="//field[@name='minvoice_status']" position="after">
+                <field name="minvoice_error_message"
+                       invisible="minvoice_status not in ['error', 'rejected']"
+                       readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Action Windows -->
+    <record id="action_minvoice_batch_update" model="ir.actions.act_window">
+        <field name="name">Batch Update M-Invoice Status</field>
+        <field name="res_model">minvoice.batch.update</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="action_minvoice_status_report" model="ir.actions.act_window">
+        <field name="name">M-Invoice Status Report</field>
+        <field name="res_model">minvoice.status.report</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Menu Items -->
+    <menuitem id="menu_minvoice_monitoring"
+              name="M-Invoice Monitoring"
+              parent="account.menu_finance"
+              sequence="99"/>
+
+    <menuitem id="menu_minvoice_batch_update"
+              name="Batch Update Status"
+              parent="menu_minvoice_monitoring"
+              action="action_minvoice_batch_update"
+              sequence="10"/>
+
+    <menuitem id="menu_minvoice_status_report"
+              name="Status Report"
+              parent="menu_minvoice_monitoring"
+              action="action_minvoice_status_report"
+              sequence="20"/>
+
+    <!-- Server Actions for Cron -->
+    <record id="server_action_batch_update_all_pending" model="ir.actions.server">
+        <field name="name">Update All Pending M-Invoice Status</field>
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="state">code</field>
+        <field name="code">
+# Update all pending invoices for all companies
+companies = model.env['res.company'].search([])
+for company in companies:
+    try:
+        pending_invoices = model.search([
+            ('company_id', '=', company.id),
+            ('minvoice_id', '!=', False),
+            ('minvoice_status', 'in', ['draft', 'waiting', 'signed', 'sent'])
+        ])
+        for invoice in pending_invoices:
+            try:
+                invoice._update_minvoice_status()
+            except:
+                continue
+    except:
+        continue
+        </field>
+    </record>
+
+    <menuitem id="menu_server_action_batch_update"
+              name="Update All Pending Status"
+              parent="menu_minvoice_monitoring"
+              action="server_action_batch_update_all_pending"
+              sequence="30"/>
+</odoo>

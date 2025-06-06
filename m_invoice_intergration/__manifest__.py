@@ -17,11 +17,13 @@
     'data': [
         'security/ir.model.access.csv',
         'data/invoice_series_data.xml',
+        'data/ir_cron.xml',
         'views/minvoice_config_views.xml',
         'views/account_move_views.xml',
         'views/minvoice_series_views.xml',
         'views/menu_views.xml',
         'wizard/minvoice_send_wizard_views.xml',
+        'wizard/minvoice_batch_update_view.xml',
     ],
     'installable': True,
     'application': False,

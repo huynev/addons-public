@@ -1,5 +1,8 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
+import logging
+
+_logger = logging.getLogger(__name__)
 
 class AccountMove(models.Model):
     _inherit = 'account.move'
@@ -277,3 +280,111 @@ class AccountMove(models.Model):
                 return tax.amount
 
         return 0
+
+    @api.model
+    def _cron_update_minvoice_status(self):
+        """Cron job để cập nhật trạng thái hóa đơn M-Invoice"""
+        # Lấy các hóa đơn đã gửi lên M-Invoice nhưng chưa hoàn thành
+        invoices = self.search([
+            ('minvoice_id', '!=', False),
+            ('minvoice_status', 'in', ['draft', 'waiting', 'signed', 'sent'])
+        ])
+
+        for invoice in invoices:
+            try:
+                invoice._update_minvoice_status()
+            except Exception as e:
+                _logger.error(f"Error updating M-Invoice status for {invoice.name}: {str(e)}")
+
+    def _update_minvoice_status(self):
+        """Cập nhật trạng thái hóa đơn từ M-Invoice"""
+        if not self.minvoice_id:
+            return
+
+        minvoice_api = self.env['minvoice.api']
+        try:
+            invoice_info = minvoice_api.get_invoice_info(self.minvoice_id, self.company_id.id)
+
+            if invoice_info:
+                # Map trạng thái từ M-Invoice sang Odoo
+                status_mapping = {
+                    '0': 'draft',  # Nháp
+                    '1': 'waiting',  # Chờ ký
+                    '2': 'signed',  # Đã ký
+                    '3': 'sent',  # Đã gửi
+                    '4': 'success',  # Thành công
+                    '-1': 'error',  # Lỗi
+                    '-2': 'rejected',  # Từ chối
+                }
+
+                minvoice_status_code = str(invoice_info.get('status', '0'))
+                new_status = status_mapping.get(minvoice_status_code, 'draft')
+
+                # Cập nhật các thông tin từ M-Invoice
+                update_vals = {
+                    'minvoice_status': new_status,
+                }
+
+                # Cập nhật số hóa đơn nếu có
+                if invoice_info.get('invoiceNumber'):
+                    update_vals['minvoice_number'] = str(invoice_info.get('invoiceNumber'))
+
+                # Cập nhật mã tra cứu
+                if invoice_info.get('lookupCode'):
+                    update_vals['minvoice_code'] = invoice_info.get('lookupCode')
+
+                # Cập nhật mã CQT
+                if invoice_info.get('cqtCode'):
+                    update_vals['minvoice_cqt_code'] = invoice_info.get('cqtCode')
+
+                # Cập nhật thông báo lỗi nếu có
+                if new_status in ['error', 'rejected']:
+                    update_vals['minvoice_error_message'] = invoice_info.get('errorMessage', '')
+
+                self.write(update_vals)
+
+                # Tự động tải file PDF và XML khi hóa đơn thành công
+                if new_status == 'success':
+                    self._auto_download_minvoice_files()
+
+        except Exception as e:
+            self.minvoice_status = 'error'
+            self.minvoice_error_message = str(e)
+
+    def _auto_download_minvoice_files(self):
+        """Tự động tải file PDF và XML khi hóa đơn thành công"""
+        minvoice_api = self.env['minvoice.api']
+
+        try:
+            # Tải file PDF
+            if not self.minvoice_pdf_file:
+                pdf_data = minvoice_api.print_invoice(self.minvoice_id, self.company_id.id)
+                if pdf_data:
+                    self.minvoice_pdf_file = pdf_data
+
+            # Tải file XML
+            if not self.minvoice_xml_file:
+                xml_data = minvoice_api.get_xml_file(self.minvoice_id, self.company_id.id)
+                if xml_data:
+                    self.minvoice_xml_file = xml_data.get('data')
+
+        except Exception as e:
+            _logger.warning(f"Error downloading M-Invoice files for {self.name}: {str(e)}")
+
+    # Thêm button để sync thủ công
+    def action_sync_minvoice_status(self):
+        """Đồng bộ trạng thái M-Invoice thủ công"""
+        if not self.minvoice_id:
+            raise ValidationError(_('Hóa đơn chưa được gửi lên M-Invoice'))
+
+        self._update_minvoice_status()
+
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': _('Thành công'),
+                'message': _('Đã cập nhật trạng thái hóa đơn M-Invoice'),
+                'type': 'success'
+            }
+        }
