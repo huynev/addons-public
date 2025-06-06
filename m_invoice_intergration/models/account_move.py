@@ -169,9 +169,6 @@ class AccountMove(models.Model):
         if self.ref:
             return self.ref
 
-        if self.partner_ref:
-            return self.partner_ref
-
         return self.name
 
     def _get_partner_address(self):
