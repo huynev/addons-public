@@ -16,10 +16,10 @@ class MInvoiceBatchUpdate(models.TransientModel):
     date_to = fields.Date('To Date', required=True,
                           default=fields.Date.today())
     status_filter = fields.Selection([
-        ('pending', 'Pending Status Only'),
+        ('incomplete', 'Incomplete Status Only'),  # pending, waiting, signed, sent
         ('all', 'All M-Invoice Records'),
-        ('error', 'Error Status Only')
-    ], string='Filter', default='pending', required=True)
+        ('error', 'Error Status Only')            # error, rejected
+    ], string='Filter', default='incomplete', required=True)
 
     invoice_ids = fields.Many2many('account.move', string='Invoices to Update')
     total_count = fields.Integer('Total Invoices', readonly=True)
@@ -37,8 +37,9 @@ class MInvoiceBatchUpdate(models.TransientModel):
             ('move_type', 'in', ['out_invoice', 'out_refund'])
         ]
 
-        if self.status_filter == 'pending':
-            domain.append(('minvoice_status', 'in', ['draft', 'waiting', 'signed', 'sent']))
+        # ✅ CẬP NHẬT: Sử dụng trạng thái mới
+        if self.status_filter == 'incomplete':
+            domain.append(('minvoice_status', 'in', ['pending', 'waiting', 'signed', 'sent']))
         elif self.status_filter == 'error':
             domain.append(('minvoice_status', 'in', ['error', 'rejected']))
 
@@ -116,6 +117,7 @@ class MInvoiceStatusReport(models.TransientModel):
     total_invoices = fields.Integer('Total Invoices', readonly=True)
     success_count = fields.Integer('Success', readonly=True)
     pending_count = fields.Integer('Pending', readonly=True)
+    incomplete_count = fields.Integer('Incomplete', readonly=True)  # pending + waiting + signed + sent
     error_count = fields.Integer('Error', readonly=True)
     not_sent_count = fields.Integer('Not Sent', readonly=True)
 
@@ -126,8 +128,8 @@ class MInvoiceStatusReport(models.TransientModel):
         """Tính toán thống kê"""
         domain = [
             ('company_id', '=', self.company_id.id),
-            ('invoice_date', '>=', self.date_from),
-            ('invoice_date', '<=', self.date_to),
+            ('invoice_date', '>=', self.date_from.strftime('%Y-%m-%d') if self.date_from else 'N/A'),
+            ('invoice_date', '<=', self.date_to.strftime('%Y-%m-%d') if self.date_from else 'N/A'),
             ('move_type', 'in', ['out_invoice', 'out_refund'])
         ]
 
@@ -135,10 +137,11 @@ class MInvoiceStatusReport(models.TransientModel):
         self.total_invoices = len(all_invoices)
 
         if self.total_invoices > 0:
-            # Count by status
+            # ✅ CẬP NHẬT: Count by status với trạng thái mới
             self.success_count = len(all_invoices.filtered(lambda x: x.minvoice_status == 'success'))
-            self.pending_count = len(all_invoices.filtered(
-                lambda x: x.minvoice_status in ['draft', 'waiting', 'signed', 'sent']))
+            self.pending_count = len(all_invoices.filtered(lambda x: x.minvoice_status == 'pending'))
+            self.incomplete_count = len(all_invoices.filtered(
+                lambda x: x.minvoice_status in ['pending', 'waiting', 'signed', 'sent']))
             self.error_count = len(all_invoices.filtered(
                 lambda x: x.minvoice_status in ['error', 'rejected']))
             self.not_sent_count = len(all_invoices.filtered(lambda x: not x.minvoice_id))
@@ -146,9 +149,16 @@ class MInvoiceStatusReport(models.TransientModel):
             # Calculate success rate
             sent_invoices = self.total_invoices - self.not_sent_count
             if sent_invoices > 0:
-                self.success_percentage = (self.success_count / sent_invoices) * 100
+                self.success_percentage = (self.success_count / sent_invoices)
             else:
                 self.success_percentage = 0
+        else:
+            self.success_count = 0
+            self.pending_count = 0
+            self.incomplete_count = 0
+            self.error_count = 0
+            self.not_sent_count = 0
+            self.success_percentage = 0
 
     def action_view_invoices_by_status(self):
         """Xem hóa đơn theo trạng thái"""
@@ -156,17 +166,19 @@ class MInvoiceStatusReport(models.TransientModel):
 
         domain = [
             ('company_id', '=', self.company_id.id),
-            ('invoice_date', '>=', self.date_from),
-            ('invoice_date', '<=', self.date_to),
+            ('invoice_date', '>=', self.date_from.strftime('%Y-%m-%d')),
+            ('invoice_date', '<=', self.date_to.strftime('%Y-%m-%d')),
             ('move_type', 'in', ['out_invoice', 'out_refund'])
         ]
 
-        # Get status from context
+        # ✅ CẬP NHẬT: Get status from context với trạng thái mới
         status = self.env.context.get('status_filter')
         if status == 'success':
             domain.append(('minvoice_status', '=', 'success'))
         elif status == 'pending':
-            domain.append(('minvoice_status', 'in', ['draft', 'waiting', 'signed', 'sent']))
+            domain.append(('minvoice_status', '=', 'pending'))
+        elif status == 'incomplete' or status == ['pending', 'waiting', 'signed', 'sent']:
+            domain.append(('minvoice_status', 'in', ['pending', 'waiting', 'signed', 'sent']))
         elif status == 'error':
             domain.append(('minvoice_status', 'in', ['error', 'rejected']))
         elif status == 'not_sent':

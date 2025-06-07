@@ -78,13 +78,13 @@
                     <div class="col-md-3">
                         <div class="card text-center">
                             <div class="card-header bg-warning text-white">
-                                <h5>Pending</h5>
+                                <h5>Incomplete</h5>
                             </div>
                             <div class="card-body">
-                                <h3><field name="pending_count" readonly="1"/></h3>
+                                <h3><field name="incomplete_count" readonly="1"/></h3>
                                 <button name="action_view_invoices_by_status" type="object"
                                         string="View" class="btn btn-sm btn-primary"
-                                        context="{'status_filter': 'pending'}"/>
+                                        context="{'status_filter': ['pending', 'waiting', 'signed', 'sent']}"/>
                             </div>
                         </div>
                     </div>

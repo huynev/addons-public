@@ -36,10 +36,10 @@ class MInvoiceSendWizard(models.TransientModel):
             minvoice_api = self.env['minvoice.api']
             result = minvoice_api.create_invoice(invoice_data, self.invoice_id.company_id.id)
 
-            # Cập nhật thông tin M-Invoice (chỉ khi tạo mới hoặc có data mới)
+            # ✅ CẬP NHẬT: Cập nhật thông tin M-Invoice với trạng thái mới
             update_vals = {
-                'minvoice_status': 'waiting',
-                'minvoice_error_message': False,  # Clear error message
+                'minvoice_status': 'pending',
+                'minvoice_error_message': False,
             }
 
             # Nếu là tạo mới hoặc có thông tin mới từ response
@@ -60,6 +60,7 @@ class MInvoiceSendWizard(models.TransientModel):
                     self.invoice_id.company_id.id
                 )
                 if success:
+                    # ✅ CẬP NHẬT: Sau khi ký thành công, trạng thái sẽ là 'signed' (Đã ký)
                     self.invoice_id.minvoice_status = 'signed'
 
             return {

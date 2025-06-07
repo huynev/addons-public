@@ -138,7 +138,7 @@ class MInvoiceApi(models.AbstractModel):
                         'invoiceNumber': data.get('inv_invoiceNumber'),
                         'invoiceSeries': data.get('inv_invoiceSeries'),
                         'invoiceDate': data.get('inv_invoiceIssuedDate'),
-                        'status': data.get('status'),  # Trạng thái từ M-Invoice
+                        'status': data.get('trang_thai'),  # Trạng thái từ M-Invoice
                         'statusName': data.get('statusName'),
                         'lookupCode': data.get('lookupCode'),  # Mã tra cứu
                         'cqtCode': data.get('cqtCode'),  # Mã CQT

@@ -12,7 +12,7 @@ class AccountMove(models.Model):
     minvoice_number = fields.Char('Số hóa đơn M-Invoice', readonly=True)
     minvoice_id = fields.Char('M-Invoice ID', readonly=True)
     minvoice_status = fields.Selection([
-        ('draft', 'Nháp'),
+        ('pending', 'Chờ duyệt'),
         ('waiting', 'Chờ ký'),
         ('signed', 'Đã ký'),
         ('sent', 'Đã gửi'),
@@ -284,7 +284,7 @@ class AccountMove(models.Model):
         # Lấy các hóa đơn đã gửi lên M-Invoice nhưng chưa hoàn thành
         invoices = self.search([
             ('minvoice_id', '!=', False),
-            ('minvoice_status', 'in', ['draft', 'waiting', 'signed', 'sent'])
+            ('minvoice_status', 'in', ['pending', 'waiting', 'signed', 'sent'])
         ])
 
         for invoice in invoices:
@@ -305,17 +305,18 @@ class AccountMove(models.Model):
             if invoice_info:
                 # Map trạng thái từ M-Invoice sang Odoo
                 status_mapping = {
-                    '0': 'draft',  # Nháp
+                    '0': 'pending',  # Chờ duyệt
                     '1': 'waiting',  # Chờ ký
                     '2': 'signed',  # Đã ký
                     '3': 'sent',  # Đã gửi
                     '4': 'success',  # Thành công
-                    '-1': 'error',  # Lỗi
-                    '-2': 'rejected',  # Từ chối
+                    '5': 'error',  # Có lỗi
+                    '6': 'rejected',  # Từ chối
                 }
 
                 minvoice_status_code = str(invoice_info.get('status', '0'))
-                new_status = status_mapping.get(minvoice_status_code, 'draft')
+                new_status = status_mapping.get(minvoice_status_code, 'pending')
+                print(f"new_status: {invoice_info}")
 
                 # Cập nhật các thông tin từ M-Invoice
                 update_vals = {
