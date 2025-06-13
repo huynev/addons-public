@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ZKTeco Device Views -->
+    <record id="view_zkteco_device_tree" model="ir.ui.view">
+        <field name="name">zkteco.device.tree</field>
+        <field name="model">zkteco.device</field>
+        <field name="arch" type="xml">
+            <tree string="ZKTeco Devices">
+                <field name="device_name"/>
+                <field name="device_serial"/>
+                <field name="device_ip"/>
+                <field name="location"/>
+                <field name="connection_status" decoration-success="connection_status=='connected'" decoration-danger="connection_status=='disconnected'"/>
+                <field name="last_activity"/>
+                <field name="today_records"/>
+                <field name="total_records"/>
+                <field name="is_active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_zkteco_device_form" model="ir.ui.view">
+        <field name="name">zkteco.device.form</field>
+        <field name="model">zkteco.device</field>
+        <field name="arch" type="xml">
+            <form string="ZKTeco Device">
+                <header>
+                    <button name="action_connect" string="Connect" type="object" class="oe_highlight" invisible="connection_status == 'connected'"/>
+                    <button name="action_disconnect" string="Disconnect" type="object" invisible="connection_status != 'connected'"/>
+                    <field name="connection_status" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="device_name" placeholder="Device Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="device_serial"/>
+                            <field name="device_ip"/>
+                            <field name="device_port"/>
+                            <field name="location"/>
+                        </group>
+                        <group>
+                            <field name="is_active"/>
+                            <field name="last_activity"/>
+                            <field name="today_records"/>
+                            <field name="total_records"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Commands" name="commands">
+                            <div class="oe_button_box">
+                                <button name="restart_device" string="Restart Device" type="object" class="oe_stat_button" icon="fa-power-off"/>
+                                <button name="sync_time" string="Sync Time" type="object" class="oe_stat_button" icon="fa-clock-o"/>
+                                <button name="clear_data" string="Clear Data" type="object" class="oe_stat_button" icon="fa-trash"/>
+                            </div>
+                            <field name="command_ids" nolabel="1">
+                                <tree editable="bottom">
+                                    <field name="command"/>
+                                    <field name="priority"/>
+                                    <field name="status" decoration-info="status=='pending'" decoration-success="status=='confirmed'" decoration-danger="status=='failed'"/>
+                                    <field name="scheduled_time"/>
+                                    <field name="sent_time"/>
+                                    <button name="action_retry" string="Retry" type="object" icon="fa-refresh" invisible="status not in ['failed', 'expired']"/>
+                                    <button name="action_confirm" string="Confirm" type="object" icon="fa-check" invisible="status != 'sent'"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_zkteco_device" model="ir.actions.act_window">
+        <field name="name">ZKTeco Devices</field>
+        <field name="res_model">zkteco.device</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Enhanced HR Attendance Views -->
+    <record id="view_hr_attendance_tree_enhanced" model="ir.ui.view">
+        <field name="name">hr.attendance.tree.enhanced</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id" ref="hr_attendance.view_attendance_tree"/>
+        <field name="arch" type="xml">
+            <field name="check_out" position="after">
+                <field name="device_serial" optional="hide"/>
+                <field name="attendance_type" optional="hide"/>
+                <field name="attendance_timestamp" optional="hide"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_hr_attendance_form_enhanced" model="ir.ui.view">
+        <field name="name">hr.attendance.form.enhanced</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id" ref="hr_attendance.hr_attendance_view_form"/>
+        <field name="arch" type="xml">
+            <field name="check_out" position="after">
+                <field name="device_serial"/>
+                <field name="device_id"/>
+                <field name="attendance_type"/>
+                <field name="attendance_timestamp"/>
+                <field name="raw_data" widget="text"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- Unknown Attendance Views -->
+    <record id="view_zkteco_unknown_attendance_tree" model="ir.ui.view">
+        <field name="name">zkteco.unknown.attendance.tree</field>
+        <field name="model">zkteco.unknown.attendance</field>
+        <field name="arch" type="xml">
+            <tree string="Unknown Attendance Records">
+                <field name="device_serial"/>
+                <field name="device_user_id"/>
+                <field name="timestamp"/>
+                <field name="status"/>
+                <field name="processed" decoration-success="processed==True"/>
+                <field name="employee_id"/>
+                <button name="action_assign_employee" string="Assign" type="object" icon="fa-user-plus" invisible="processed == True"/>
+                <button name="action_ignore" string="Ignore" type="object" icon="fa-times" invisible="processed == True"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_zkteco_unknown_attendance_form" model="ir.ui.view">
+        <field name="name">zkteco.unknown.attendance.form</field>
+        <field name="model">zkteco.unknown.attendance</field>
+        <field name="arch" type="xml">
+            <form string="Unknown Attendance Record">
+                <header>
+                    <button name="action_assign_employee" string="Assign Employee" type="object" class="oe_highlight" invisible="processed == True"/>
+                    <button name="action_ignore" string="Ignore" type="object" invisible="processed == True"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="device_serial"/>
+                            <field name="device_user_id"/>
+                            <field name="timestamp"/>
+                            <field name="status"/>
+                        </group>
+                        <group>
+                            <field name="processed"/>
+                            <field name="employee_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="notes" widget="text"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_zkteco_unknown_attendance" model="ir.actions.act_window">
+        <field name="name">Unknown Attendance Records</field>
+        <field name="res_model">zkteco.unknown.attendance</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('processed', '=', False)]</field>
+    </record>
+
+    <!-- Assign Employee Wizard -->
+    <record id="view_zkteco_assign_employee_wizard" model="ir.ui.view">
+        <field name="name">zkteco.assign.employee.wizard</field>
+        <field name="model">zkteco.assign.employee.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Assign Employee">
+                <group>
+                    <field name="unknown_attendance_id" invisible="1"/>
+                    <field name="device_user_id" readonly="1"/>
+                    <field name="employee_id" options="{'no_create': True}"/>
+                    <field name="update_employee_device_id"/>
+                    <field name="create_attendance_record"/>
+                </group>
+                <footer>
+                    <button name="action_assign" string="Assign" type="object" class="oe_highlight"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Device Commands Views -->
+    <record id="view_zkteco_device_command_tree" model="ir.ui.view">
+        <field name="name">zkteco.device.command.tree</field>
+        <field name="model">zkteco.device.command</field>
+        <field name="arch" type="xml">
+            <tree string="Device Commands">
+                <field name="device_id"/>
+                <field name="command"/>
+                <field name="priority"/>
+                <field name="status" decoration-info="status=='pending'" decoration-success="status=='confirmed'" decoration-danger="status=='failed'" decoration-warning="status=='sent'"/>
+                <field name="scheduled_time"/>
+                <field name="sent_time"/>
+                <field name="retry_count"/>
+                <button name="action_retry" string="Retry" type="object" icon="fa-refresh" invisible="status not in ['failed', 'expired']"/>
+                <button name="action_confirm" string="Confirm" type="object" icon="fa-check" invisible="status != 'sent'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_zkteco_device_command_form" model="ir.ui.view">
+        <field name="name">zkteco.device.command.form</field>
+        <field name="model">zkteco.device.command</field>
+        <field name="arch" type="xml">
+            <form string="Device Command">
+                <header>
+                    <button name="action_retry" string="Retry" type="object" class="oe_highlight" invisible="status not in ['failed', 'expired']"/>
+                    <button name="action_confirm" string="Confirm" type="object" invisible="status != 'sent'"/>
+                    <field name="status" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="device_id"/>
+                            <field name="priority"/>
+                            <field name="scheduled_time"/>
+                        </group>
+                        <group>
+                            <field name="sent_time"/>
+                            <field name="confirmed_time"/>
+                            <field name="retry_count"/>
+                            <field name="max_retries"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Command">
+                            <field name="command" widget="text" nolabel="1"/>
+                        </page>
+                        <page string="Notes">
+                            <field name="notes" widget="text" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_zkteco_device_command" model="ir.actions.act_window">
+        <field name="name">Device Commands</field>
+        <field name="res_model">zkteco.device.command</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Dashboard/Statistics Views -->
+    <record id="view_zkteco_dashboard" model="ir.ui.view">
+        <field name="name">zkteco.dashboard</field>
+        <field name="model">zkteco.device</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_dashboard">
+                <field name="device_name"/>
+                <field name="device_serial"/>
+                <field name="connection_status"/>
+                <field name="today_records"/>
+                <field name="total_records"/>
+                <field name="last_activity"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div class="o_kanban_card_header">
+                                <div class="o_kanban_card_header_title">
+                                    <div class="o_primary">
+                                        <field name="device_name"/>
+                                    </div>
+                                    <div class="o_secondary">
+                                        <field name="device_serial"/>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_manage_button_section">
+                                    <a class="o_kanban_manage_toggle_button" href="#">
+                                        <i class="fa fa-ellipsis-v" role="img" aria-label="Manage" title="Manage"/>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="container o_kanban_card_content">
+                                <div class="row">
+                                    <div class="col-6 o_kanban_primary_left">
+                                        <button class="btn btn-primary" name="action_connect" type="object" t-if="record.connection_status.raw_value != 'connected'">
+                                            Connect
+                                        </button>
+                                        <span class="badge badge-success" t-if="record.connection_status.raw_value == 'connected'">
+                                            Connected
+                                        </span>
+                                    </div>
+                                    <div class="col-6 o_kanban_primary_right">
+                                        <div class="mb4">
+                                            <span class="o_value">
+                                                <field name="today_records"/>
+                                            </span>
+                                            <span class="o_label">Today</span>
+                                        </div>
+                                        <div class="mb4">
+                                            <span class="o_value">
+                                                <field name="total_records"/>
+                                            </span>
+                                            <span class="o_label">Total</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="o_kanban_card_manage_pane dropdown-menu" role="menu">
+                                <a role="menuitem" type="edit" class="dropdown-item">Settings</a>
+                                <a role="menuitem" name="action_connect" type="object" class="dropdown-item" t-if="record.connection_status.raw_value != 'connected'">Connect</a>
+                                <a role="menuitem" name="action_disconnect" type="object" class="dropdown-item" t-if="record.connection_status.raw_value == 'connected'">Disconnect</a>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="action_zkteco_dashboard" model="ir.actions.act_window">
+        <field name="name">ZKTeco Dashboard</field>
+        <field name="res_model">zkteco.device</field>
+        <field name="view_mode">kanban,tree,form</field>
+    </record>
+</odoo>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Attendance Log Views -->
+        <record id="view_zkteco_attendance_log_tree" model="ir.ui.view">
+            <field name="name">zkteco.attendance.log.tree</field>
+            <field name="model">zkteco.attendance.log</field>
+            <field name="arch" type="xml">
+                <tree string="Attendance Processing Logs">
+                    <field name="create_date"/>
+                    <field name="device_serial"/>
+                    <field name="processed_records"/>
+                    <field name="processing_time"/>
+                    <field name="status" decoration-success="status=='success'" decoration-warning="status=='partial'" decoration-danger="status=='error'"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_zkteco_attendance_log_form" model="ir.ui.view">
+            <field name="name">zkteco.attendance.log.form</field>
+            <field name="model">zkteco.attendance.log</field>
+            <field name="arch" type="xml">
+                <form string="Attendance Processing Log">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="create_date"/>
+                                <field name="device_serial"/>
+                                <field name="processed_records"/>
+                                <field name="processing_time"/>
+                                <field name="status"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Raw Data">
+                                <field name="raw_data" widget="text" nolabel="1"/>
+                            </page>
+                            <page string="Error Message" invisible="not error_message">
+                                <field name="error_message" widget="text" nolabel="1"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_zkteco_attendance_log" model="ir.actions.act_window">
+            <field name="name">Attendance Processing Logs</field>
+            <field name="res_model">zkteco.attendance.log</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    </data>
+</odoo>

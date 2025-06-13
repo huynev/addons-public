@@ -1,0 +1,12 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_zkteco_device_user,zkteco.device.user,model_zkteco_device,base.group_user,1,0,0,0
+access_zkteco_device_manager,zkteco.device.manager,model_zkteco_device,hr.group_hr_manager,1,1,1,1
+access_zkteco_unknown_attendance_user,zkteco.unknown.attendance.user,model_zkteco_unknown_attendance,base.group_user,1,0,0,0
+access_zkteco_unknown_attendance_manager,zkteco.unknown.attendance.manager,model_zkteco_unknown_attendance,hr.group_hr_manager,1,1,1,1
+access_zkteco_assign_employee_wizard_manager,zkteco.assign.employee.wizard.manager,model_zkteco_assign_employee_wizard,hr.group_hr_manager,1,1,1,1
+access_zkteco_attendance_log_user,zkteco.attendance.log.user,model_zkteco_attendance_log,base.group_user,1,0,0,0
+access_zkteco_attendance_log_manager,zkteco.attendance.log.manager,model_zkteco_attendance_log,hr.group_hr_manager,1,1,1,1
+access_zkteco_device_command_user,zkteco.device.command.user,model_zkteco_device_command,base.group_user,1,0,0,0
+access_zkteco_device_command_manager,zkteco.device.command.manager,model_zkteco_device_command,hr.group_hr_manager,1,1,1,1
+access_zkteco_attendance_log_user,zkteco.attendance.log.user,model_zkteco_attendance_log,base.group_user,1,0,0,0
+access_zkteco_attendance_log_hr_user,zkteco.attendance.log.hr.user,model_zkteco_attendance_log,hr.group_hr_manager,1,1,1,1
