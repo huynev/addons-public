@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_attendance_dashboard_user,attendance.dashboard.user,model_attendance_dashboard,base.group_user,1,0,0,0
+access_attendance_dashboard_hr_user,attendance.dashboard.hr.user,model_attendance_dashboard,hr.group_hr_user,1,1,1,1

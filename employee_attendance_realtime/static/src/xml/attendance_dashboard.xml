@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="AttendanceDashboardTemplate" owl="1">
+        <div class="attendance_dashboard_container" t-ref="container">
+            <div class="dashboard_header">
+                <h1>Employee Attendance Dashboard</h1>
+                <div class="refresh_info">
+                    <span id="last_update">Last updated: --:--:--</span>
+                    <button type="button" class="btn btn-primary" id="refresh_btn" t-on-click="onRefreshClick">
+                        <i class="fa fa-refresh"/> Refresh
+                    </button>
+                </div>
+            </div>
+
+            <div class="dashboard_stats">
+                <div class="stat_card checked_in_card">
+                    <div class="stat_header">
+                        <h3>Checked In</h3>
+                        <i class="fa fa-sign-in"/>
+                    </div>
+                    <div class="stat_count" id="checked_in_count">0</div>
+                </div>
+
+                <div class="stat_card not_checked_in_card">
+                    <div class="stat_header">
+                        <h3>Not Checked In</h3>
+                        <i class="fa fa-clock-o"/>
+                    </div>
+                    <div class="stat_count" id="not_checked_in_count">0</div>
+                </div>
+
+                <div class="stat_card checked_out_card">
+                    <div class="stat_header">
+                        <h3>Checked Out</h3>
+                        <i class="fa fa-sign-out"/>
+                    </div>
+                    <div class="stat_count" id="checked_out_count">0</div>
+                </div>
+
+                <div class="stat_card total_card">
+                    <div class="stat_header">
+                        <h3>Total Employees</h3>
+                        <i class="fa fa-users"/>
+                    </div>
+                    <div class="stat_count" id="total_count">0</div>
+                </div>
+            </div>
+
+            <div class="dashboard_content">
+                <div class="employee_section">
+                    <h2><i class="fa fa-sign-in"/> Checked In (<span id="checked_in_title_count">0</span>)</h2>
+                    <div class="employee_grid" id="checked_in_grid"></div>
+                </div>
+
+                <div class="employee_section">
+                    <h2><i class="fa fa-clock-o"/> Not Checked In (<span id="not_checked_in_title_count">0</span>)</h2>
+                    <div class="employee_grid" id="not_checked_in_grid"></div>
+                </div>
+
+                <div class="employee_section">
+                    <h2><i class="fa fa-sign-out"/> Checked Out (<span id="checked_out_title_count">0</span>)</h2>
+                    <div class="employee_grid" id="checked_out_grid"></div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

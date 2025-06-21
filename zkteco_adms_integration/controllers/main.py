@@ -4,9 +4,11 @@ from odoo.http import request
 import json
 import logging
 import werkzeug
-from datetime import datetime
+from datetime import datetime, timedelta
 import re
 import time
+import pytz
+from datetime import timezone
 
 _logger = logging.getLogger(__name__)
 
@@ -117,8 +119,8 @@ class ZKTecoADMSController(http.Controller):
                 _logger.warning("Missing serial number in cdata request")
                 return 'ERROR: Missing serial number'
 
-            print("Received cdata from device: %s (Method: %s)", serial_number, request.httprequest.method)
-            print("Device params - options: %s, language: %s, pushver: %s, type: %s, flag: %s",
+            _logger.info("Received cdata from device: %s (Method: %s)", serial_number, request.httprequest.method)
+            _logger.info("Device params - options: %s, language: %s, pushver: %s, type: %s, flag: %s",
                          options, language, pushver, device_type, push_options_flag)
 
             # Find the device
@@ -171,6 +173,7 @@ class ZKTecoADMSController(http.Controller):
                         break
 
             _logger.info("Raw attendance data: '%s'", data)
+            print(f"Raw attendance data: {data}")
 
             # Log the raw data received
             self._log_attendance_processing(
@@ -208,7 +211,7 @@ class ZKTecoADMSController(http.Controller):
                 status='success',
                 processing_time=processing_time
             )
-            return 'OK'
+            return http.Response('OK', headers={'Content-Type': 'text/plain'})
 
         except Exception as e:
             processing_time = time.time() - start_time
@@ -258,7 +261,6 @@ class ZKTecoADMSController(http.Controller):
     def _parse_operlog_format(self, content):
         """Parse OPERLOG/ATTLOG format data"""
         records = []
-
         for line in content.strip().split('\n'):
             line = line.strip()
             if not line:
@@ -381,7 +383,6 @@ class ZKTecoADMSController(http.Controller):
                         'record_id': match.group(1),
                         'raw_data': line
                     }
-                    print(f"Parsed space record: {record}")
                     records.append(record)
                 else:
                     # Try other patterns for different formats
@@ -498,7 +499,8 @@ class ZKTecoADMSController(http.Controller):
                     # Try different datetime formats
                     for fmt in ['%Y-%m-%d %H:%M:%S', '%d/%m/%Y %H:%M:%S', '%Y/%m/%d %H:%M:%S']:
                         try:
-                            timestamp = datetime.strptime(timestamp_str, fmt)
+                            # timestamp = datetime.strptime(timestamp_str, fmt)
+                            timestamp = datetime.strptime(timestamp_str, fmt) - timedelta(hours=7)
                             break
                         except ValueError:
                             continue
@@ -511,46 +513,35 @@ class ZKTecoADMSController(http.Controller):
                 return False
 
             # Check for duplicate records
+            attendance_date = timestamp.date()
+
+            # Search for existing attendance record on the same date
             existing_record = request.env['hr.attendance'].sudo().search([
                 ('employee_id', '=', employee.id),
-                ('attendance_timestamp', '=', timestamp),
-                ('device_id', '=', device.id if hasattr(device, 'id') else False)
-            ], limit=1)
+                ('check_in', '>=', attendance_date.strftime('%Y-%m-%d 00:00:00')),
+                ('check_in', '<=', attendance_date.strftime('%Y-%m-%d 23:59:59')),
+                '|',
+                ('device_id', '=', device.id if (device and hasattr(device, 'id')) else False),
+                ('device_serial', '=', device.device_serial if (device and hasattr(device, 'device_serial')) else False)
+            ], limit=1, order='create_date desc')
 
             if existing_record:
-                _logger.debug("Duplicate attendance record found, skipping: %s", record_data)
-                return False
-
-            # Determine check-in or check-out based on status
-            # Status: 0=Check Out, 1=Check In, 4=Break Out, 5=Break In
-            attendance_data = {
-                'employee_id': employee.id,
-                'attendance_timestamp': timestamp,
-                'device_serial': device.device_serial if hasattr(device, 'device_serial') else '',
-                'raw_data': str(record_data),
-            }
-
-            # Add device_id if the field exists
-            if hasattr(device, 'id'):
-                attendance_data['device_id'] = device.id
-
-            if status in ['1', '5']:  # Check in or Break in
-                attendance_data['check_in'] = timestamp
-                attendance_data['attendance_type'] = 'check_in'
-            elif status in ['0', '4']:  # Check out or Break out
-                attendance_data['check_out'] = timestamp
-                attendance_data['attendance_type'] = 'check_out'
+                if (not existing_record.check_out) \
+                        or (existing_record.check_out and existing_record.check_out < timestamp):
+                    existing_record.write({
+                        'check_out': timestamp,
+                        'raw_data': (existing_record.raw_data or '') +
+                                    f"\nCheck-out: {record_data}"
+                    })
             else:
-                # Unknown status, default to check in
-                attendance_data['check_in'] = timestamp
-                attendance_data['attendance_type'] = 'check_in'
-
-            # Create the attendance record
-            attendance_record = request.env['hr.attendance'].sudo().create(attendance_data)
-
-            _logger.info("Created attendance record: Employee %s, Time %s, Type %s",
-                         employee.name, timestamp, attendance_data.get('attendance_type'))
-
+                # Create the attendance record
+                request.env.cr.execute("""
+                    INSERT INTO hr_attendance 
+                    (employee_id, check_in, device_id, raw_data, create_date, create_uid, write_date, write_uid)
+                    VALUES (%s, %s, %s, %s, NOW(), 1, NOW(), 1)
+                """, (employee.id, timestamp, device.id, str(record_data)))
+                result = request.env.cr.fetchone()
+                request.env.cr.commit()
             return True
 
         except Exception as e:
@@ -574,6 +565,7 @@ class ZKTecoADMSController(http.Controller):
 
     @http.route('/iclock/devicecmd', type='http', auth='none', csrf=False, methods=['GET', 'POST'])
     def device_cmd(self, **kwargs):
+        print("device_cmd")
         """Handle device command check from ZKTeco device
 
         The device periodically checks if there are commands to execute

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Main Menu -->
+    <menuitem id="menu_attendance_dashboard_root"
+              name="Attendance Dashboard"
+              sequence="50"/>
+
+    <!-- Dashboard Menu Item -->
+    <menuitem id="menu_attendance_dashboard"
+              name="Dashboard"
+              parent="menu_attendance_dashboard_root"
+              action="action_attendance_dashboard"
+              sequence="10"/>
+</odoo>

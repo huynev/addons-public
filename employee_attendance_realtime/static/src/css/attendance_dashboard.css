@@ -1,0 +1,432 @@
+/* Attendance Dashboard Styles */
+/* Dashboard Container */
+.attendance_dashboard_container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    box-sizing: border-box;
+    background: #f8f9fa;
+}
+
+/* Header Styles */
+.dashboard_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 20px 30px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+    flex-shrink: 0;
+}
+
+.dashboard_header h1 {
+    color: #2c3e50;
+    margin: 0;
+    font-size: 28px;
+    font-weight: 600;
+}
+
+.refresh_info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.refresh_info span {
+    color: #6c757d;
+    font-size: 14px;
+}
+
+#refresh_btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#refresh_btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+/* Stats Cards */
+.dashboard_stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+    flex-shrink: 0;
+}
+
+.stat_card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stat_card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+.stat_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.stat_header h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #495057;
+}
+
+.stat_header i {
+    font-size: 24px;
+    opacity: 0.8;
+}
+
+.stat_count {
+    font-size: 36px;
+    font-weight: 700;
+    margin: 0;
+}
+
+/* Card Colors */
+.checked_in_card {
+    border-left: 4px solid #28a745;
+}
+
+.checked_in_card .stat_count {
+    color: #28a745;
+}
+
+.checked_in_card .stat_header i {
+    color: #28a745;
+}
+
+.not_checked_in_card {
+    border-left: 4px solid #ffc107;
+}
+
+.not_checked_in_card .stat_count {
+    color: #ffc107;
+}
+
+.not_checked_in_card .stat_header i {
+    color: #ffc107;
+}
+
+.checked_out_card {
+    border-left: 4px solid #6c757d;
+}
+
+.checked_out_card .stat_count {
+    color: #6c757d;
+}
+
+.checked_out_card .stat_header i {
+    color: #6c757d;
+}
+
+.total_card {
+    border-left: 4px solid #007bff;
+}
+
+.total_card .stat_count {
+    color: #007bff;
+}
+
+.total_card .stat_header i {
+    color: #007bff;
+}
+
+/* Dashboard Content - Scrollable Area */
+.dashboard_content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 10px;
+    margin-right: -10px;
+}
+
+/* Custom Scrollbar */
+.dashboard_content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.dashboard_content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.dashboard_content::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+.dashboard_content::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* Employee Sections */
+.employee_section {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.employee_section:last-child {
+    margin-bottom: 0;
+}
+
+.employee_section h2 {
+    color: #2c3e50;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.employee_section h2 i {
+    margin-right: 10px;
+}
+
+/* Employee Grid */
+.employee_grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+}
+
+.employee_card {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: all 0.3s ease;
+    border-left: 4px solid transparent;
+}
+
+.employee_card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* Employee Card Types */
+.checked_in_employee {
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    border-left-color: #28a745;
+}
+
+.not_checked_in_employee {
+    background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+    border-left-color: #ffc107;
+}
+
+.checked_out_employee {
+    background: linear-gradient(135deg, #e2e3e5 0%, #d6d8db 100%);
+    border-left-color: #6c757d;
+}
+
+/* Employee Avatar */
+.employee_avatar {
+    flex-shrink: 0;
+}
+
+.employee_avatar img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+/* Employee Info */
+.employee_info {
+    flex-grow: 1;
+}
+
+.employee_name {
+    margin: 0 0 5px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.employee_department {
+    margin: 0 0 2px 0;
+    font-size: 13px;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.employee_job {
+    margin: 0 0 8px 0;
+    font-size: 12px;
+    color: #868e96;
+}
+
+/* Time Info */
+.time_info {
+    margin-top: 8px;
+}
+
+.check_in_time,
+.check_times {
+    display: block;
+    font-size: 12px;
+    color: #495057;
+    font-weight: 500;
+}
+
+.working_hours,
+.worked_hours {
+    display: block;
+    font-size: 11px;
+    color: #6c757d;
+    margin-top: 2px;
+}
+
+/* No Employees Message */
+.no_employees {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px;
+    color: #6c757d;
+    font-style: italic;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 2px dashed #dee2e6;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .attendance_dashboard_container {
+        padding: 10px;
+        height: calc(100vh - 20px);
+    }
+
+    .dashboard_header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+        padding: 15px 20px;
+    }
+
+    .dashboard_stats {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+    }
+
+    .employee_grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .employee_section {
+        padding: 20px 15px;
+        margin-bottom: 20px;
+    }
+
+    .stat_card {
+        padding: 20px 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .attendance_dashboard_container {
+        padding: 5px;
+        height: calc(100vh - 10px);
+    }
+
+    .dashboard_header h1 {
+        font-size: 24px;
+    }
+
+    .dashboard_stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .stat_card {
+        padding: 15px 10px;
+    }
+
+    .stat_count {
+        font-size: 28px;
+    }
+
+    .employee_section h2 {
+        font-size: 18px;
+    }
+}
+
+/* Fix for Odoo 17 action container */
+.o_content {
+    overflow: visible !important;
+    height: 100vh !important;
+}
+
+.o_action_manager {
+    overflow: visible !important;
+    height: 100vh !important;
+}
+
+/* Ensure scrollable content */
+body .o_action_manager .o_action {
+    overflow: hidden !important;
+    height: 100vh !important;
+    max-height: 100vh !important;
+}
+
+/* Loading Animation */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.employee_card,
+.stat_card {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Auto-refresh indicator */
+.refresh_info::before {
+    content: '🔄';
+    animation: spin 2s linear infinite;
+    margin-right: 5px;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}

@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-# File: models/zkteco_models.py
-
 from odoo import models, fields, api
 from datetime import datetime
 import logging
@@ -115,52 +112,6 @@ class ZktecoDevice(models.Model):
         # The actual processing is now done in the controller
         return True
 
-
-class HrAttendance(models.Model):
-    _inherit = 'hr.attendance'
-
-    # Add fields for ZKTeco integration
-    device_serial = fields.Char('Device Serial')
-    device_id = fields.Many2one('zkteco.device', 'Device')
-    attendance_timestamp = fields.Datetime('Original Timestamp')
-    attendance_type = fields.Selection([
-        ('check_in', 'Check In'),
-        ('check_out', 'Check Out')
-    ], string='Type')
-    raw_data = fields.Text('Raw Data')
-
-    @api.model_create_multi
-    def create(self, vals_list):
-        """Override create to handle ZKTeco attendance logic"""
-        for vals in vals_list:
-            # If we have a device_serial, try to find the device
-            if vals.get('device_serial') and not vals.get('device_id'):
-                device = self.env['zkteco.device'].search([
-                    ('device_serial', '=', vals['device_serial'])
-                ], limit=1)
-                if device:
-                    vals['device_id'] = device.id
-
-            # Handle auto check-out logic
-            if vals.get('check_in') and not vals.get('check_out'):
-                employee_id = vals.get('employee_id')
-                if employee_id:
-                    # Check if there's an open attendance (check-in without check-out)
-                    open_attendance = self.search([
-                        ('employee_id', '=', employee_id),
-                        ('check_out', '=', False)
-                    ], limit=1, order='check_in desc')
-
-                    if open_attendance:
-                        # Close the previous attendance with this check-in time
-                        # (This assumes the new check-in is actually a missed check-out)
-                        if vals.get('attendance_timestamp'):
-                            open_attendance.check_out = vals['attendance_timestamp']
-                        else:
-                            open_attendance.check_out = vals['check_in']
-
-        return super(HrAttendance, self).create(vals_list)
-
 class ZktecoUnknownAttendance(models.Model):
     _name = 'zkteco.unknown.attendance'
     _description = 'Unknown Attendance Records'
@@ -216,22 +167,34 @@ class ZktecoAssignEmployeeWizard(models.TransientModel):
 
         # Create attendance record if requested
         if self.create_attendance_record:
-            attendance_data = {
-                'employee_id': self.employee_id.id,
-                'attendance_timestamp': unknown_attendance.timestamp,
-                'device_serial': unknown_attendance.device_serial,
-                'raw_data': f"Manual assignment from unknown attendance ID: {unknown_attendance.id}",
-            }
+            # Get the date of the attendance timestamp
+            attendance_date = unknown_attendance.timestamp.date()
 
-            # Determine check-in or check-out based on status
-            if unknown_attendance.status in ['1', '5']:
-                attendance_data['check_in'] = unknown_attendance.timestamp
-                attendance_data['attendance_type'] = 'check_in'
+            # Search for existing attendance record on the same date
+            existing_attendance = self.env['hr.attendance'].search([
+                ('employee_id', '=', self.employee_id.id),
+                ('attendance_timestamp', '>=', attendance_date.strftime('%Y-%m-%d 00:00:00')),
+                ('attendance_timestamp', '<=', attendance_date.strftime('%Y-%m-%d 23:59:59')),
+            ], limit=1, order='create_date desc')
+
+            if not existing_attendance:
+                # No existing record for today - create new record with check_in
+                attendance_data = {
+                    'employee_id': self.employee_id.id,
+                    'attendance_timestamp': unknown_attendance.timestamp,
+                    'device_serial': unknown_attendance.device_serial,
+                    'raw_data': f"Manual assignment from unknown attendance ID: {unknown_attendance.id}",
+                    'check_in': unknown_attendance.timestamp,
+                }
+                self.env['hr.attendance'].create(attendance_data)
+
             else:
-                attendance_data['check_out'] = unknown_attendance.timestamp
-                attendance_data['attendance_type'] = 'check_out'
-
-            self.env['hr.attendance'].create(attendance_data)
+                # Existing record found - update with check_out
+                existing_attendance.write({
+                    'check_out': unknown_attendance.timestamp,
+                    'raw_data': (existing_attendance.raw_data or '') +
+                                f"\nCheck-out updated from unknown attendance ID: {unknown_attendance.id}"
+                })
 
         # Mark unknown attendance as processed
         unknown_attendance.write({

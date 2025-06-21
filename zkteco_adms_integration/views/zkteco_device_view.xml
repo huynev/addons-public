@@ -88,7 +88,6 @@
         <field name="arch" type="xml">
             <field name="check_out" position="after">
                 <field name="device_serial" optional="hide"/>
-                <field name="attendance_type" optional="hide"/>
                 <field name="attendance_timestamp" optional="hide"/>
             </field>
         </field>
@@ -102,7 +101,6 @@
             <field name="check_out" position="after">
                 <field name="device_serial"/>
                 <field name="device_id"/>
-                <field name="attendance_type"/>
                 <field name="attendance_timestamp"/>
                 <field name="raw_data" widget="text"/>
             </field>
