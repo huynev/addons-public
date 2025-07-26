@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Default VNPT Configuration for Main Company -->
+        <record id="vnpt_config_default" model="vnpt.invoice.config">
+            <field name="name">Default VNPT Configuration</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="vnpt_url">https://vnptmnadmin.vnpt-invoice.com.vn/PublishService.asmx</field>
+            <field name="vnpt_username">your_vnpt_username</field>
+            <field name="vnpt_password">your_vnpt_password</field>
+            <field name="vnpt_tax_code">0123456789</field>
+            <field name="invoice_template">2/005</field>
+            <field name="invoice_serial">K25TBS</field>
+            <field name="invoice_type">1</field>
+            <field name="is_default">True</field>
+            <field name="is_test_mode">True</field>
+            <field name="active">False</field>
+        </record>
+
+        <!-- Invoice Sequence for VNPT -->
+        <record id="seq_vnpt_invoice" model="ir.sequence">
+            <field name="name">VNPT Invoice Sequence</field>
+            <field name="code">vnpt.invoice</field>
+            <field name="prefix">VNPT/</field>
+            <field name="suffix"></field>
+            <field name="padding">5</field>
+            <field name="number_increment">1</field>
+            <field name="number_next_actual">1</field>
+            <field name="company_id" ref="base.main_company"/>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- VNPT Invoice Publishing Wizard -->
+    <record id="view_vnpt_invoice_wizard_form" model="ir.ui.view">
+        <field name="name">vnpt.invoice.wizard.form</field>
+        <field name="model">vnpt.invoice.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Publish Invoices to VNPT">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>Publish Invoices to VNPT</h1>
+                        <p>Select invoices to publish to VNPT e-invoice system</p>
+                    </div>
+
+                    <group>
+                        <group name="config">
+                            <field name="company_id" readonly="1"/>
+                            <field name="vnpt_config_id"
+                                   domain="[('company_id', '=', company_id), ('active', '=', True)]"/>
+                        </group>
+                        <group name="options">
+                            <field name="ignore_errors"/>
+                            <field name="test_mode"/>
+                        </group>
+                    </group>
+
+                    <group string="Invoices to Publish">
+                        <field name="invoice_ids" nolabel="1"
+                               domain="[('company_id', '=', company_id), ('state', '=', 'posted'), ('move_type', 'in', ['out_invoice', 'out_refund']), ('vnpt_status', 'in', ['draft', False])]">
+                            <tree>
+                                <field name="name"/>
+                                <field name="partner_id"/>
+                                <field name="invoice_date"/>
+                                <field name="amount_total"/>
+                                <field name="vnpt_status"/>
+                            </tree>
+                        </field>
+                    </group>
+
+                    <!-- Results section (shown after processing) -->
+                    <group string="Results" invisible="not processing_log">
+                        <group>
+                            <field name="success_count" readonly="1"/>
+                            <field name="error_count" readonly="1"/>
+                        </group>
+                        <field name="processing_log" nolabel="1" widget="text" readonly="1"/>
+                    </group>
+                </sheet>
+
+                <footer>
+                    <button name="action_publish_invoices" type="object"
+                            string="Publish to VNPT" class="btn-primary"
+                            invisible="processing_log"/>
+                    <button name="action_view_results" type="object"
+                            string="View Details" class="btn-secondary"
+                            invisible="not processing_log"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- VNPT Invoice Sync Wizard -->
+    <record id="view_vnpt_sync_wizard_form" model="ir.ui.view">
+        <field name="name">vnpt.invoice.sync.wizard.form</field>
+        <field name="model">vnpt.invoice.sync.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Sync VNPT Invoice Status">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>Sync VNPT Invoice Status</h1>
+                        <p>Synchronize invoice status with VNPT system</p>
+                    </div>
+
+                    <group>
+                        <field name="company_id" readonly="1"/>
+                    </group>
+
+                    <group string="Invoices to Sync">
+                        <field name="invoice_ids" nolabel="1"
+                               domain="[('company_id', '=', company_id), ('vnpt_invoice_id', '!=', False)]">
+                            <tree>
+                                <field name="name"/>
+                                <field name="partner_id"/>
+                                <field name="vnpt_invoice_number"/>
+                                <field name="vnpt_status"/>
+                                <field name="vnpt_invoice_date"/>
+                            </tree>
+                        </field>
+                    </group>
+
+                    <!-- Results section -->
+                    <group string="Results" invisible="not sync_log">
+                        <group>
+                            <field name="sync_count" readonly="1"/>
+                            <field name="error_count" readonly="1"/>
+                        </group>
+                        <field name="sync_log" nolabel="1" widget="text" readonly="1"/>
+                    </group>
+                </sheet>
+
+                <footer>
+                    <button name="action_sync_invoices" type="object"
+                            string="Sync Status" class="btn-primary"
+                            invisible="sync_log"/>
+                    <button string="Close" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Wizard Actions -->
+    <record id="action_vnpt_invoice_wizard" model="ir.actions.act_window">
+        <field name="name">Publish to VNPT</field>
+        <field name="res_model">vnpt.invoice.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="account.model_account_move"/>
+        <field name="binding_view_types">list</field>
+    </record>
+
+    <record id="action_vnpt_sync_wizard" model="ir.actions.act_window">
+        <field name="name">Sync VNPT Status</field>
+        <field name="res_model">vnpt.invoice.sync.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="account.model_account_move"/>
+        <field name="binding_view_types">list</field>
+    </record>
+</odoo>

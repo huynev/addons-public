@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- VNPT Root Menu -->
+    <menuitem id="menu_vnpt_root"
+              name="VNPT E-Invoice"
+              web_icon="vnpt_invoice,static/description/icon.png"
+              sequence="65"/>
+
+    <!-- VNPT Configuration Menu -->
+    <menuitem id="menu_vnpt_config"
+              name="Configuration"
+              parent="menu_vnpt_root"
+              action="action_vnpt_config"
+              sequence="10"/>
+
+    <!-- VNPT Invoices Menu -->
+    <menuitem id="menu_vnpt_invoices"
+              name="VNPT Invoices"
+              parent="menu_vnpt_root"
+              action="action_vnpt_invoice_report"
+              sequence="20"/>
+
+    <!-- Add to Accounting Configuration menu -->
+    <menuitem id="menu_vnpt_config_accounting"
+              name="VNPT E-Invoice"
+              parent="account.menu_finance_configuration"
+              action="action_vnpt_config"
+              sequence="50"/>
+
+    <!-- Add to Accounting Reports menu -->
+    <menuitem id="menu_vnpt_reports_accounting"
+              name="VNPT Invoice Status"
+              parent="account.menu_finance_reports"
+              action="action_vnpt_invoice_report"
+              sequence="50"/>
+</odoo>

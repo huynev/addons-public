@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_vnpt_config_manager,vnpt.invoice.config.manager,model_vnpt_invoice_config,account.group_account_manager,1,1,1,1
+access_vnpt_config_user,vnpt.invoice.config.user,model_vnpt_invoice_config,account.group_account_user,1,0,0,0
+access_vnpt_config_invoice,vnpt.invoice.config.invoice,model_vnpt_invoice_config,account.group_account_invoice,1,0,0,0
+access_vnpt_wizard_manager,vnpt.invoice.wizard.manager,model_vnpt_invoice_wizard,account.group_account_manager,1,1,1,1
+access_vnpt_wizard_user,vnpt.invoice.wizard.user,model_vnpt_invoice_wizard,account.group_account_user,1,1,1,1
+access_vnpt_wizard_invoice,vnpt.invoice.wizard.invoice,model_vnpt_invoice_wizard,account.group_account_invoice,1,1,1,1
+access_vnpt_sync_wizard_manager,vnpt.invoice.sync.wizard.manager,model_vnpt_invoice_sync_wizard,account.group_account_manager,1,1,1,1
+access_vnpt_sync_wizard_user,vnpt.invoice.sync.wizard.user,model_vnpt_invoice_sync_wizard,account.group_account_user,1,1,1,1
+access_vnpt_sync_wizard_invoice,vnpt.invoice.sync.wizard.invoice,model_vnpt_invoice_sync_wizard,account.group_account_invoice,1,1,1,1

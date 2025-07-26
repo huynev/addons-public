@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inherit Account Move Form View -->
+    <record id="view_move_form_vnpt" model="ir.ui.view">
+        <field name="name">account.move.form.vnpt</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Add VNPT buttons to header -->
+            <xpath expr="//header" position="inside">
+                <button name="action_publish_to_vnpt" type="object"
+                        string="Publish to VNPT" class="btn-primary"
+                        invisible="state != 'posted' or move_type not in ('out_invoice', 'out_refund') or vnpt_status == 'published'"
+                        icon="fa-cloud-upload"/>
+                <button name="action_sync_vnpt_status" type="object"
+                        string="Sync VNPT Status" class="btn-secondary"
+                        invisible="not vnpt_invoice_id"
+                        icon="fa-refresh"/>
+                <button name="action_cancel_vnpt_invoice" type="object"
+                        string="Cancel VNPT Invoice" class="btn-danger"
+                        invisible="vnpt_status != 'published'"
+                        confirm="Are you sure you want to cancel this invoice in VNPT system?"
+                        icon="fa-times"/>
+                <button name="action_test_vnpt_connection" type="object"
+                        string="Test VNPT Connection" class="btn-secondary"
+                        icon="fa-plug"/>
+                <button name="action_debug_vnpt_xml" type="object"
+                        string="Debug vnpt xml" class="btn-secondary"
+                        icon="fa-plug"/>
+            </xpath>
+
+            <!-- Add VNPT tab -->
+            <xpath expr="//notebook" position="inside">
+                <page string="VNPT E-Invoice" name="vnpt_invoice"
+                      invisible="move_type not in ('out_invoice', 'out_refund')">
+                    <group>
+                        <group string="VNPT Invoice Information">
+                            <field name="vnpt_invoice_number" readonly="1"/>
+                            <field name="vnpt_invoice_id" readonly="1"/>
+                            <field name="vnpt_invoice_date" readonly="1"/>
+                            <field name="vnpt_lookup_code" readonly="1"/>
+                            <field name="vnpt_invoice_url" widget="url" readonly="1"/>
+                            <field name="vnpt_status" widget="badge"
+                               decoration-info="vnpt_status == 'draft'"
+                               decoration-warning="vnpt_status == 'pending'"
+                               decoration-success="vnpt_status == 'published'"
+                               decoration-danger="vnpt_status in ('cancelled', 'error')"
+                               invisible="move_type not in ('out_invoice', 'out_refund')"/>
+                        </group>
+                        <group string="Configuration">
+                            <field name="vnpt_config_id"
+                                   domain="[('company_id', '=', company_id), ('active', '=', True)]"
+                                   readonly="vnpt_status == 'published'"/>
+                            <field name="vnpt_template" readonly="1"/>
+                            <field name="vnpt_serial" readonly="1"/>
+                            <field name="vnpt_type" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <group string="Error Information"
+                           invisible="not vnpt_error_message">
+                        <field name="vnpt_error_message" readonly="1"
+                               nolabel="1" widget="text" class="text-danger"/>
+                    </group>
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- Inherit Account Move Tree View -->
+    <record id="view_move_tree_vnpt" model="ir.ui.view">
+        <field name="name">account.move.tree.vnpt</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_out_invoice_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='state']" position="after">
+                <field name="vnpt_status" widget="badge"
+                       decoration-info="vnpt_status == 'draft'"
+                       decoration-warning="vnpt_status == 'pending'"
+                       decoration-success="vnpt_status == 'published'"
+                       decoration-danger="vnpt_status in ('cancelled', 'error')"
+                       optional="hide"/>
+                <field name="vnpt_invoice_number" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Inherit Account Move Search View -->
+<!--    <record id="view_account_move_filter_vnpt" model="ir.ui.view">-->
+<!--        <field name="name">account.move.select.vnpt</field>-->
+<!--        <field name="model">account.move</field>-->
+<!--        <field name="inherit_id" ref="account.view_account_move_filter"/>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <xpath expr="//filter[@name='late']" position="after">-->
+<!--                <separator/>-->
+<!--                <filter string="VNPT Published" name="vnpt_published"-->
+<!--                        domain="[('vnpt_status', '=', 'published')]"/>-->
+<!--                <filter string="VNPT Pending" name="vnpt_pending"-->
+<!--                        domain="[('vnpt_status', '=', 'pending')]"/>-->
+<!--                <filter string="VNPT Error" name="vnpt_error"-->
+<!--                        domain="[('vnpt_status', '=', 'error')]"/>-->
+<!--                <filter string="Not Published to VNPT" name="vnpt_not_published"-->
+<!--                        domain="[('move_type', 'in', ['out_invoice', 'out_refund']), ('vnpt_status', 'in', ['draft', False])]"/>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//group[@name='groupby']" position="inside">-->
+<!--                <filter string="VNPT Status" name="group_vnpt_status"-->
+<!--                        context="{'group_by': 'vnpt_status'}"/>-->
+<!--            </xpath>-->
+<!--        </field>-->
+<!--    </record>-->
+
+    <!-- VNPT Invoice Report Action -->
+    <record id="action_vnpt_invoice_report" model="ir.actions.act_window">
+        <field name="name">VNPT Invoice Report</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('move_type', 'in', ['out_invoice', 'out_refund'])]</field>
+        <field name="context">{
+            'search_default_posted': 1,
+            'default_move_type': 'out_invoice',
+        }</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('view_move_tree_vnpt')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_move_form_vnpt')})]"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No invoices found for VNPT processing
+            </p>
+            <p>
+                Here you can see all customer invoices and their VNPT e-invoice status.
+                Published invoices will have official VNPT invoice numbers.
+            </p>
+        </field>
+    </record>
+</odoo>

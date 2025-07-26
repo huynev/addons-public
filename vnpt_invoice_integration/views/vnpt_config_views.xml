@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- VNPT Configuration Form View -->
+    <record id="view_vnpt_config_form" model="ir.ui.view">
+        <field name="name">vnpt.invoice.config.form</field>
+        <field name="model">vnpt.invoice.config</field>
+        <field name="arch" type="xml">
+            <form string="VNPT Invoice Configuration">
+                <header>
+                    <button name="test_connection" type="object" string="Test Connection"
+                            class="btn-primary" icon="fa-plug"/>
+                    <field name="connection_status" widget="badge"
+                           decoration-success="connection_status == 'success'"
+                           decoration-danger="connection_status == 'failed'"
+                           decoration-muted="connection_status == 'not_tested'"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                            <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+                        </button>
+                    </div>
+
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Configuration Name"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group name="basic_info">
+                            <field name="company_id" options="{'no_create': True}"/>
+                            <field name="is_default"/>
+                            <field name="is_test_mode"/>
+                        </group>
+                        <group name="status_info">
+                            <field name="last_test_date" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Configuration" name="configuration">
+                            <group>
+                                <group string="Service URLs">
+                                    <field name="vnpt_url" widget="url" string="Publish Service URL"/>
+                                    <field name="vnpt_portal_url" widget="url" string="Portal Service URL"/>
+                                    <field name="vnpt_business_url" widget="url" string="Business Service URL"/>
+                                </group>
+                                <group string="Authentication">
+                                    <field name="vnpt_account" string="Account"/>
+                                    <field name="vnpt_password" password="True" string="Password"/>
+                                    <field name="vnpt_username" string="Username"/>
+                                    <field name="vnpt_user_password" password="True" string="User Password"/>
+                                </group>
+                            </group>
+
+                            <group>
+                                <group string="Company Information">
+                                    <field name="vnpt_tax_code"/>
+                                </group>
+                                <group string="Invoice Template">
+                                    <field name="invoice_template"/>
+                                    <field name="invoice_serial"/>
+                                    <field name="invoice_type"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Accounting" name="accounting">
+                            <group>
+                                <field name="name" readonly="1" string="Configuration Type"/>
+                                <label for="company_id" string="Company"/>
+                                <div>
+                                    <field name="company_id" readonly="1" nolabel="1"/>
+                                </div>
+                            </group>
+
+                            <separator string="Invoice Settings"/>
+                            <group>
+                                <group>
+                                    <label for="invoice_template" string="Template"/>
+                                    <div>
+                                        <field name="invoice_template" nolabel="1" readonly="1"/>
+                                    </div>
+                                    <label for="invoice_serial" string="Serial"/>
+                                    <div>
+                                        <field name="invoice_serial" nolabel="1" readonly="1"/>
+                                    </div>
+                                </group>
+                                <group>
+                                    <label for="invoice_type" string="Type"/>
+                                    <div>
+                                        <field name="invoice_type" nolabel="1" readonly="1"/>
+                                    </div>
+                                    <label for="is_test_mode" string="State"/>
+                                    <div>
+                                        <field name="is_test_mode" widget="radio"
+                                               options="{'horizontal': true}" nolabel="1"/>
+                                    </div>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Error Log" name="error_log"
+                              invisible="not last_error_message">
+                            <group>
+                                <field name="last_error_message" readonly="1"
+                                       nolabel="1" widget="text"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- VNPT Configuration Tree View -->
+    <record id="view_vnpt_config_tree" model="ir.ui.view">
+        <field name="name">vnpt.invoice.config.tree</field>
+        <field name="model">vnpt.invoice.config</field>
+        <field name="arch" type="xml">
+            <tree string="VNPT Configurations">
+                <field name="name"/>
+                <field name="company_id"/>
+                <field name="vnpt_account" string="Account"/>
+                <field name="vnpt_username" string="Username"/>
+                <field name="invoice_template"/>
+                <field name="invoice_serial"/>
+                <field name="is_default"/>
+                <field name="is_test_mode" widget="boolean"/>
+                <field name="connection_status" widget="badge"
+                       decoration-success="connection_status == 'success'"
+                       decoration-danger="connection_status == 'failed'"
+                       decoration-muted="connection_status == 'not_tested'"/>
+                <field name="last_test_date"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- VNPT Configuration Search View -->
+    <record id="view_vnpt_config_search" model="ir.ui.view">
+        <field name="name">vnpt.invoice.config.search</field>
+        <field name="model">vnpt.invoice.config</field>
+        <field name="arch" type="xml">
+            <search string="VNPT Configurations">
+                <field name="name"/>
+                <field name="company_id"/>
+                <field name="vnpt_account"/>
+                <field name="vnpt_username"/>
+                <separator/>
+                <filter string="Default" name="default" domain="[('is_default', '=', True)]"/>
+                <filter string="Test Mode" name="test_mode" domain="[('is_test_mode', '=', True)]"/>
+                <filter string="Production Mode" name="production_mode" domain="[('is_test_mode', '=', False)]"/>
+                <filter string="Active" name="active" domain="[('active', '=', True)]"/>
+                <separator/>
+                <filter string="Connected" name="connected"
+                        domain="[('connection_status', '=', 'success')]"/>
+                <filter string="Connection Failed" name="failed"
+                        domain="[('connection_status', '=', 'failed')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Company" name="group_company"
+                            context="{'group_by': 'company_id'}"/>
+                    <filter string="Connection Status" name="group_status"
+                            context="{'group_by': 'connection_status'}"/>
+                    <filter string="Mode" name="group_mode"
+                            context="{'group_by': 'is_test_mode'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- VNPT Configuration Action -->
+    <record id="action_vnpt_config" model="ir.actions.act_window">
+        <field name="name">VNPT Configurations</field>
+        <field name="res_model">vnpt.invoice.config</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a VNPT Invoice Configuration
+            </p>
+            <p>
+                Configure your VNPT e-invoice service connection settings.
+                You need to have a valid VNPT Invoice account and digital certificate.
+            </p>
+        </field>
+    </record>
+</odoo>
