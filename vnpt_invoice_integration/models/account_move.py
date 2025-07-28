@@ -199,10 +199,10 @@ Contact VNPT support if issue persists.'''
             raise UserError(error_msg)
 
     def _validate_vnpt_prerequisites(self, vnpt_config):
-        """Validate all prerequisites before sending to VNPT - ENHANCED"""
+        """Validate all prerequisites before sending to VNPT - UPDATED for TT78"""
         errors = []
 
-        # FIXED: Check VNPT configuration theo tài liệu
+        # Check VNPT configuration
         if not vnpt_config.vnpt_account:
             errors.append('VNPT Account (Account) is not configured')
         if not vnpt_config.vnpt_password:
@@ -216,40 +216,50 @@ Contact VNPT support if issue persists.'''
         if not vnpt_config.invoice_serial:
             errors.append('Invoice serial is not configured')
 
-        # Check company information - required fields theo XML format
+        # Check company information - seller (NBan)
         if not self.company_id.vat:
             errors.append('Company tax code (MST) is required')
         if not self.company_id.name:
-            errors.append('Company name (Ten) is required')
-        if not self.company_id.street:
-            errors.append('Company address (DChi) is required')
+            errors.append('Company name is required')
 
-        # Check invoice data - required fields theo XML format
+        # Check invoice data - buyer (NMua) - REQUIRED fields per TT78
         if not self.partner_id:
             errors.append('Customer (NMua) is required')
         if not self.partner_id.name:
-            errors.append('Customer name (Ten) is required')
-        if not self.invoice_line_ids:
-            errors.append('Invoice must have at least one line (HHDVu)')
+            errors.append('Customer name (Ten) is required - TT78 mandatory field')
 
-        # Check invoice lines - required fields theo XML format
+        # DChi - Địa chỉ is REQUIRED per TT78
+        partner_address = self._get_partner_address(self.partner_id)
+        if not partner_address and not self.partner_id.street:
+            errors.append('Customer address (DChi) is required - TT78 mandatory field')
+
+        # Check invoice lines - REQUIRED fields per TT78
+        if not self.invoice_line_ids.filtered(lambda l: l.display_type):
+            errors.append('Invoice must have at least one product/service line (HHDVu)')
+
         for line in self.invoice_line_ids.filtered(lambda l: not l.display_type):
-            if not line.name:
-                errors.append(f'Product name (THHDVu) is required for line {line.sequence}')
+            line_name = line.product_id.name or line.name
+            if not line_name:
+                errors.append(f'Product/service name (THHDVu) is required for line - TT78 mandatory field')
             if line.quantity <= 0:
-                errors.append(f'Quantity (SLuong) must be positive for line {line.sequence}')
+                errors.append(f'Quantity (SLuong) must be positive for line: {line_name}')
             if line.price_unit < 0:
-                errors.append(f'Unit price (DGia) cannot be negative for line {line.sequence}')
+                errors.append(f'Unit price (DGia) cannot be negative for line: {line_name}')
 
-        # FIXED: Validate currency - must be VND theo tài liệu
+        # Currency validation - TT78 format
         if self.currency_id.name != 'VND':
-            errors.append('Invoice currency must be VND for VNPT e-invoice')
+            errors.append('Invoice currency must be VND for VNPT e-invoice (DVTTe field requirement)')
 
-        # FIXED: Validate invoice date
+        # Invoice date validation
         if not self.invoice_date:
-            errors.append('Invoice date (NBKe) is required')
+            errors.append('Invoice date is required')
 
-        # FIXED: Test VNPT connection
+        # Payment method validation - TT78 requires HTTToan
+        payment_method = self._get_payment_method()
+        if not payment_method:
+            errors.append('Payment method (HTTToan) is required - TT78 mandatory field')
+
+        # Test VNPT connection
         try:
             client = vnpt_config._get_soap_client()
             available_ops = self._get_available_operations(client)
@@ -264,7 +274,7 @@ Contact VNPT support if issue persists.'''
 
         if errors:
             raise UserError(
-                _('Cannot send to VNPT due to validation errors:\n') +
+                _('Cannot send to VNPT due to TT78 validation errors:\n') +
                 '\n'.join(f'• {error}' for error in errors)
             )
 
@@ -330,27 +340,28 @@ Contact VNPT support if issue persists.'''
         return invoice_data
 
     def _prepare_invoice_lines(self):
-        """Prepare invoice lines data"""
+        """Prepare invoice lines data - UPDATED for TT78 format"""
         lines = []
-        for idx, line in enumerate(self.invoice_line_ids.filtered(lambda l: l.display_type), 1):
+        for line in self.invoice_line_ids.filtered(lambda l: l.display_type):
             # Calculate VAT properly
             vat_rate = 0
             vat_amount = 0
             if line.tax_ids:
+                # Take first tax rate (assume single tax per line)
                 vat_rate = line.tax_ids[0].amount
                 vat_amount = line.price_subtotal * vat_rate / 100
 
             line_data = {
-                'stt': idx,
+                'stt': len(lines) + 1,
                 'tchat': '1',  # 1-Hàng hóa, dịch vụ
                 'mhhdvu': line.product_id.default_code or '',
-                'thhdvu': line.product_id.name or line.name,
-                'dvtinh': line.product_uom_id.name or 'cái',
+                'thhdvu': line.product_id.name or line.name,  # REQUIRED *
+                'dvtinh': line.product_uom_id.name if line.product_uom_id else '',
                 'sluong': line.quantity,
                 'dgia': line.price_unit,
                 'thtien': line.price_subtotal,  # Thành tiền chưa thuế
-                'tsuat': vat_rate,
-                'tthue': vat_amount,
+                'tsuat': vat_rate,  # Thuế suất
+                'tthue': vat_amount,  # Tiền thuế
                 'tsthue': line.price_total,  # Tiền sau thuế
             }
             lines.append(line_data)
@@ -397,23 +408,22 @@ Contact VNPT support if issue persists.'''
         return 'Tiền mặt'  # Default
 
     def _send_to_vnpt(self, vnpt_config, invoice_data):
-        """FIXED: Send to VNPT với đúng format API theo tài liệu"""
+        """UPDATED: Send to VNPT với format TT78 chuẩn"""
         client = vnpt_config._get_soap_client()
 
-        # Create XML data theo format Invoices
-        xml_data = self._create_vnpt_xml_invoices(invoice_data)
-
+        # Create XML data theo format TT78
+        xml_data = self._create_vnpt_xml_tt78(invoice_data)
         # Log the XML being sent for debugging
-        _logger.info(f"VNPT XML Data for invoice {self.name}:\n{xml_data}")
+        _logger.info(f"VNPT XML Data (TT78 format) for invoice {self.name}:\n{xml_data}")
 
         try:
-            # FIXED: Call ImportAndPublishInv với đúng tham số theo tài liệu
-            _logger.info(f"Calling ImportAndPublishInv for invoice {self.name}...")
+            # Call ImportAndPublishInv với XML TT78
+            _logger.info(f"Calling ImportAndPublishInv (TT78 format) for invoice {self.name}...")
 
             response = client.service.ImportAndPublishInv(
                 Account=invoice_data['Account'],
                 ACpass=invoice_data['ACpass'],
-                xmlInvData=xml_data,  # XML data
+                xmlInvData=xml_data,  # XML data theo format TT78
                 username=invoice_data['username'],
                 password=invoice_data['password'],
                 pattern=invoice_data['pattern'],
@@ -422,16 +432,323 @@ Contact VNPT support if issue persists.'''
             )
 
             # Enhanced response logging
-            _logger.info(f"VNPT Response: {response}")
+            _logger.info(f"VNPT Response (TT78 format): {response}")
 
-            # FIXED: Parse response theo format trong tài liệu
+            # Parse response theo format trong tài liệu
             self._parse_vnpt_response_format(response)
 
             return response
 
         except Exception as e:
-            _logger.error(f"VNPT API call failed for invoice {self.name}: {str(e)}")
+            _logger.error(f"VNPT API call failed (TT78 format) for invoice {self.name}: {str(e)}")
             raise UserError(f'VNPT service call failed: {str(e)}')
+
+    def _create_vnpt_xml_tt78(self, invoice_data):
+        """Create XML theo format TT78 chuẩn Việt Nam - FIXED ERR:3 Issues"""
+        import xml.etree.ElementTree as ET
+        from datetime import datetime
+
+        # Create root element DSHDon
+        root = ET.Element('DSHDon')
+
+        # Create HDon element
+        hdon = ET.SubElement(root, 'HDon')
+
+        # key element - unique invoice key (REQUIRED *)
+        key = ET.SubElement(hdon, 'key')
+        key.text = f"ODOO_{self.id}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+
+        # DLHDon element - Dữ liệu hóa đơn
+        dlhdon = ET.SubElement(hdon, 'DLHDon')
+
+        # TTChung - Thông tin chung
+        ttchung = ET.SubElement(dlhdon, 'TTChung')
+
+        # SHDon - Số hóa đơn (để trống rõ ràng)
+        # shdon = ET.SubElement(ttchung, 'SHDon')
+        # shdon.text = ''  # FIXED: Empty string instead of self-closing tag
+
+        # DVTTe - Đơn vị tiền tệ * (REQUIRED)
+        dvtte = ET.SubElement(ttchung, 'DVTTe')
+        dvtte.text = 'VND'
+
+        # HTTToan - Hình thức thanh toán * (REQUIRED)
+        htttoan = ET.SubElement(ttchung, 'HTTToan')
+        htttoan.text = invoice_data['payment_method']
+
+        # HDDThu - Hóa đơn đặc thù (0-hóa đơn thường)
+        hddthu = ET.SubElement(ttchung, 'HDDThu')
+        hddthu.text = '0'
+
+        # NDHDon - Nội dung hóa đơn
+        ndhdon = ET.SubElement(dlhdon, 'NDHDon')
+
+        # NBan - Thông tin người bán - FIXED: Bắt buộc có email
+        nban = ET.SubElement(ndhdon, 'NBan')
+
+        company = invoice_data['company']
+
+        # SDThoai - REQUIRED for NBan
+        if company.phone:
+            sdthoai_nban = ET.SubElement(nban, 'SDThoai')
+            sdthoai_nban.text = str(company.phone).strip()
+
+        # DCTDTu - EMAIL REQUIRED for NBan - CRITICAL FIX
+        if company.email:
+            dctdtu_nban = ET.SubElement(nban, 'DCTDTu')
+            dctdtu_nban.text = str(company.email).strip()
+        else:
+            # VNPT có thể yêu cầu email bắt buộc
+            dctdtu_nban = ET.SubElement(nban, 'DCTDTu')
+            dctdtu_nban.text = f"noreply@{company.name.lower().replace(' ', '')}.vn"
+
+        # Website
+        if company.website:
+            website = ET.SubElement(nban, 'Website')
+            website.text = str(company.website).strip()
+
+        # Bank information if available
+        if hasattr(company, 'bank_ids') and company.bank_ids:
+            bank_account = company.bank_ids[0]
+            if bank_account.acc_number:
+                stkn_hang = ET.SubElement(nban, 'STKNHang')
+                stkn_hang.text = str(bank_account.acc_number).strip()
+
+            if bank_account.bank_id and bank_account.bank_id.name:
+                tn_hang = ET.SubElement(nban, 'TNHang')
+                tn_hang.text = str(bank_account.bank_id.name).strip()
+
+        # TCHang - Tên cửa hàng
+        if company.name:
+            tc_hang = ET.SubElement(nban, 'TCHang')
+            tc_hang.text = str(company.name).strip()
+
+        # NMua - Thông tin người mua
+        nmua = ET.SubElement(ndhdon, 'NMua')
+
+        partner = invoice_data['partner']
+
+        # CRITICAL CHECK: Ensure NBan != NMua
+        if partner.id == company.partner_id.id:
+            # Internal transaction - create distinct buyer info
+            ten = ET.SubElement(nmua, 'Ten')
+            ten.text = f"{partner.name} - Chi nhánh"
+
+            if partner.vat:
+                mst = ET.SubElement(nmua, 'MST')
+                mst.text = str(partner.vat).strip()
+
+            dchi = ET.SubElement(nmua, 'DChi')
+            dchi.text = f"Chi nhánh - {self._get_partner_address(partner) or 'Địa chỉ không xác định'}"
+
+        else:
+            # External customer
+            ten = ET.SubElement(nmua, 'Ten')
+            ten.text = str(partner.name or 'Khách lẻ').strip()
+
+            # MST - Mã số thuế (Bắt buộc nếu có)
+            if partner.vat:
+                mst = ET.SubElement(nmua, 'MST')
+                mst.text = str(partner.vat).strip()
+
+            # DChi - Địa chỉ * (REQUIRED)
+            dchi = ET.SubElement(nmua, 'DChi')
+            dchi.text = str(self._get_partner_address(partner) or 'Địa chỉ không xác định').strip()
+
+        # MKHang - Mã khách hàng
+        if partner.ref:
+            mkhang = ET.SubElement(nmua, 'MKHang')
+            mkhang.text = str(partner.ref).strip()
+
+        # SDThoai - Số điện thoại
+        if partner.phone:
+            sdthoai_nmua = ET.SubElement(nmua, 'SDThoai')
+            sdthoai_nmua.text = str(partner.phone).strip()
+
+        # DCTDTu - Địa chỉ thư điện tử
+        if partner.email:
+            dctdtu_nmua = ET.SubElement(nmua, 'DCTDTu')
+            dctdtu_nmua.text = str(partner.email).strip()
+
+        # HVTNMHang - Họ và tên người mua hàng (Contact person) - ALWAYS ADD
+        contact_name = self._get_buyer_contact_name(partner)
+        hvtn_mhang = ET.SubElement(nmua, 'HVTNMHang')
+
+        if contact_name:
+            # Có contact person cụ thể
+            hvtn_mhang.text = str(contact_name).strip()
+            _logger.info(f"Added HVTNMHang: {contact_name}")
+        elif not partner.is_company:
+            # Partner là cá nhân → dùng tên chính
+            hvtn_mhang.text = str(partner.name).strip()
+            _logger.info(f"HVTNMHang fallback (individual): {partner.name}")
+        else:
+            # Company không có contact → tạo generic
+            hvtn_mhang.text = f"Đại diện {partner.name}"
+            _logger.info(f"HVTNMHang fallback (company): Đại diện {partner.name}")
+
+        # Bank information for customer (if available)
+        if hasattr(partner, 'bank_ids') and partner.bank_ids:
+            customer_bank = partner.bank_ids[0]
+            if customer_bank.acc_number:
+                stkn_hang_customer = ET.SubElement(nmua, 'STKNHang')
+                stkn_hang_customer.text = str(customer_bank.acc_number).strip()
+
+            if customer_bank.bank_id and customer_bank.bank_id.name:
+                tn_hang_customer = ET.SubElement(nmua, 'TNHang')
+                tn_hang_customer.text = str(customer_bank.bank_id.name).strip()
+
+        # DSHHDVu - Danh sách hàng hóa dịch vụ
+        dshhvu = ET.SubElement(ndhdon, 'DSHHDVu')
+
+        # Add each invoice line as HHDVu
+        for idx, line_data in enumerate(invoice_data['invoice_lines'], 1):
+            hhdvu = ET.SubElement(dshhvu, 'HHDVu')
+
+            # TChat - Tính chất * (REQUIRED)
+            tchat = ET.SubElement(hhdvu, 'TChat')
+            tchat.text = '1'  # 1-Hàng hóa, dịch vụ
+
+            # STT - Số thứ tự
+            stt = ET.SubElement(hhdvu, 'STT')
+            stt.text = str(idx)
+
+            # MHHDVu - Mã hàng hóa, dịch vụ - FIXED: Always include
+            mhhdvu = ET.SubElement(hhdvu, 'MHHDVu')
+            mhhdvu.text = line_data.get('mhhdvu') or f"SP{str(idx).zfill(3)}"
+
+            # THHDVu - Tên hàng hóa, dịch vụ * (REQUIRED)
+            thhdvu = ET.SubElement(hhdvu, 'THHDVu')
+            thhdvu.text = str(line_data['thhdvu']).strip()
+
+            # DVTinh - Đơn vị tính - FIXED: Use standard units
+            dvtinh = ET.SubElement(hhdvu, 'DVTinh')
+            dvt = line_data.get('dvtinh', '').strip()
+            if dvt in ['Đơn vị', '']:
+                dvtinh.text = 'cái'  # Default standard unit
+            else:
+                dvtinh.text = dvt
+
+            # SLuong - Số lượng - FIXED: Integer format
+            if line_data.get('sluong') is not None:
+                sluong = ET.SubElement(hhdvu, 'SLuong')
+                sluong.text = str(int(line_data['sluong']))  # Remove decimals
+
+            # DGia - Đơn giá - FIXED: Integer format
+            if line_data.get('dgia') is not None:
+                dgia = ET.SubElement(hhdvu, 'DGia')
+                dgia.text = str(int(line_data['dgia']))  # Remove decimals
+
+            # ThTien - Thành tiền - FIXED: Integer format
+            thtien = ET.SubElement(hhdvu, 'ThTien')
+            thtien.text = str(int(line_data['thtien']))
+
+            # TSuat - Thuế suất
+            if line_data.get('tsuat') is not None:
+                tsuat = ET.SubElement(hhdvu, 'TSuat')
+                tsuat.text = str(int(line_data['tsuat']))  # Remove decimals
+
+            # TThue - Tiền thuế
+            if line_data.get('tthue') is not None:
+                tthue = ET.SubElement(hhdvu, 'TThue')
+                tthue.text = str(int(line_data['tthue']))
+
+            # TSThue - Tiền sau thuế
+            if line_data.get('tsthue') is not None:
+                tsthue = ET.SubElement(hhdvu, 'TSThue')
+                tsthue.text = str(int(line_data['tsthue']))
+
+        # TToan - Thông tin thanh toán
+        ttoan = ET.SubElement(ndhdon, 'TToan')
+        totals = invoice_data['totals']
+
+        # THTTLTSuat - Tổng hợp theo từng loại thuế suất
+        if any(line.get('tsuat', 0) > 0 for line in invoice_data['invoice_lines']):
+            thttltsuat = ET.SubElement(ttoan, 'THTTLTSuat')
+
+            # Group by tax rate
+            tax_groups = {}
+            for line_data in invoice_data['invoice_lines']:
+                tax_rate = int(line_data.get('tsuat', 0))  # Integer tax rates
+                if tax_rate not in tax_groups:
+                    tax_groups[tax_rate] = {
+                        'thtien': 0,
+                        'tthue': 0
+                    }
+                tax_groups[tax_rate]['thtien'] += line_data.get('thtien', 0)
+                tax_groups[tax_rate]['tthue'] += line_data.get('tthue', 0)
+
+            # Create LTSuat for each tax rate
+            for tax_rate, amounts in tax_groups.items():
+                ltsuat = ET.SubElement(thttltsuat, 'LTSuat')
+
+                tsuat_elem = ET.SubElement(ltsuat, 'TSuat')
+                tsuat_elem.text = str(tax_rate)
+
+                thtien_elem = ET.SubElement(ltsuat, 'ThTien')
+                thtien_elem.text = str(int(amounts['thtien']))
+
+                tthue_elem = ET.SubElement(ltsuat, 'TThue')
+                tthue_elem.text = str(int(amounts['tthue']))
+
+        # TgTCThue - Tổng tiền chưa thuế (Integer format)
+        tgtcthue = ET.SubElement(ttoan, 'TgTCThue')
+        tgtcthue.text = str(int(totals['tgtcthue']))
+
+        # TgTThue - Tổng tiền thuế (Integer format)
+        tgtthue = ET.SubElement(ttoan, 'TgTThue')
+        tgtthue.text = str(int(totals['tgtthue']))
+
+        # TgTTTBSo - Tổng tiền thanh toán bằng số (Integer format)
+        tgtttbso = ET.SubElement(ttoan, 'TgTTTBSo')
+        tgtttbso.text = str(int(totals['tgtttbso']))
+
+        # TgTTTBChu - Tổng tiền thanh toán bằng chữ
+        tgtttbchu = ET.SubElement(ttoan, 'TgTTTBChu')
+        tgtttbchu.text = str(totals['tgtttbchu']).strip()
+
+        # Convert to string with proper encoding
+        xml_str = ET.tostring(root, encoding='utf-8', method='xml')
+
+        # Add XML declaration and format nicely
+        xml_declaration = '<?xml version="1.0" encoding="utf-8"?>\n'
+        formatted_xml = xml_declaration + xml_str.decode('utf-8')
+
+        return formatted_xml
+
+    def _get_buyer_contact_name(self, partner):
+        # 1. CONTACT PERSON trong child_ids (ưu tiên cao nhất)
+        if partner.child_ids:
+            # Tìm contact có function chứa "contact"
+            contact_person = partner.child_ids.filtered(
+                lambda c: c.function and 'contact' in c.function.lower()
+            )
+            if contact_person:
+                return contact_person[0].name
+
+            # Tìm person child đầu tiên
+            person_child = partner.child_ids.filtered(lambda c: not c.is_company)
+            if person_child:
+                return person_child[0].name
+
+        # 2. CUSTOM FIELD contact_name
+        if hasattr(partner, 'contact_name') and partner.contact_name:
+            return partner.contact_name
+
+        # 3. PARTNER CÁ NHÂN
+        if not partner.is_company and partner.name:
+            return partner.name
+
+        # 4. LINKED USERS
+        if partner.user_ids:
+            return partner.user_ids[0].name
+
+        # 5. SALESPERSON (fallback)
+        if self.user_id:
+            return f"Đại diện: {self.user_id.name}"
+
+        # Không tìm thấy
+        return None
 
     def _parse_vnpt_response_format(self, response):
         """FIXED: Parse VNPT response theo format trong tài liệu"""
@@ -579,134 +896,6 @@ Contact VNPT support if issue persists.'''
         except Exception as e:
             _logger.warning(f"Could not get available operations: {str(e)}")
             return []
-
-    def _create_vnpt_xml_invoices(self, invoice_data):
-        """SIMPLIFIED: Create XML theo format Invoices đơn giản"""
-        import xml.etree.ElementTree as ET
-        from datetime import datetime
-
-        # Create root element Invoices
-        root = ET.Element('Invoices')
-
-        # Create Inv element
-        inv = ET.SubElement(root, 'Inv')
-
-        # key element - unique invoice key (REQUIRED *)
-        key = ET.SubElement(inv, 'key')
-        key.text = f"ODOO_{self.id}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
-
-        # Invoice element - chứa thông tin chính của hóa đơn
-        invoice_elem = ET.SubElement(inv, 'Invoice')
-
-        # Customer Information
-        # CusCode - Mã khách hàng
-        cuscode = ET.SubElement(invoice_elem, 'CusCode')
-        cuscode.text = invoice_data['partner'].ref or str(invoice_data['partner'].id)
-
-        # CusName - Tên khách hàng (REQUIRED *)
-        cusname = ET.SubElement(invoice_elem, 'CusName')
-        cusname.text = invoice_data['partner'].name or 'Khách lẻ'
-
-        # CusAddress - Địa chỉ khách hàng (REQUIRED *)
-        cusaddress = ET.SubElement(invoice_elem, 'CusAddress')
-        cusaddress.text = self._get_partner_address(invoice_data['partner']) or 'Không cung cấp'
-
-        # PaymentMethod - Phương thức thanh toán
-        paymentmethod = ET.SubElement(invoice_elem, 'PaymentMethod')
-        paymentmethod.text = invoice_data['payment_method']
-
-        # KindOfService - Tháng hóa đơn
-        kindofservice = ET.SubElement(invoice_elem, 'KindOfService')
-        kindofservice.text = invoice_data['invoice_date'].strftime('%m/%Y') if invoice_data['invoice_date'] else ''
-
-        # Products section
-        products = ET.SubElement(invoice_elem, 'Products')
-
-        # Add each invoice line as Product
-        for line_data in invoice_data['invoice_lines']:
-            product = ET.SubElement(products, 'Product')
-
-            # ProdName - Tên sản phẩm (REQUIRED *)
-            prodname = ET.SubElement(product, 'ProdName')
-            prodname.text = line_data['thhdvu']
-
-            # ProdUnit - Đơn vị tính
-            produnit = ET.SubElement(product, 'ProdUnit')
-            produnit.text = line_data['dvtinh'] or 'cái'
-
-            # ProdQuantity - Số lượng
-            prodquantity = ET.SubElement(product, 'ProdQuantity')
-            prodquantity.text = str(line_data['sluong'])
-
-            # ProdPrice - Đơn giá
-            prodprice = ET.SubElement(product, 'ProdPrice')
-            prodprice.text = str(line_data['dgia'])
-
-            # Amount - Tổng tiền sau thuế
-            amount_prod = ET.SubElement(product, 'Amount')
-            amount_prod.text = str(line_data['tsthue'])
-
-            # Total - Tổng tiền trước thuế (REQUIRED *)
-            total_prod = ET.SubElement(product, 'Total')
-            total_prod.text = str(line_data['thtien'])
-
-            # VATRate - Thuế GTGT (REQUIRED *)
-            vatrate_prod = ET.SubElement(product, 'VATRate')
-            vatrate_prod.text = str(line_data['tsuat'])
-
-            # VATAmount - Tổng tiền thuế (REQUIRED *)
-            vatamount_prod = ET.SubElement(product, 'VATAmount')
-            vatamount_prod.text = str(line_data['tthue'])
-
-            # IsSum - Tính chất (REQUIRED *)
-            # (0-Hàng hóa, dịch vụ; 1-Khuyến mại; 2-Chiết khấu thương mại; 4-Ghi chú/diễn giải; 5-hàng hóa đặc trưng)
-            issum = ET.SubElement(product, 'IsSum')
-            issum.text = '0'  # Default: Hàng hóa, dịch vụ
-
-        # Invoice totals
-        totals = invoice_data['totals']
-
-        # Total - Tổng tiền trước thuế (REQUIRED *)
-        total = ET.SubElement(invoice_elem, 'Total')
-        total.text = str(int(totals['tgtcthue']))
-
-        # DiscountAmount - Tiền giảm trừ
-        discountamount_inv = ET.SubElement(invoice_elem, 'DiscountAmount')
-        discountamount_inv.text = '0'
-
-        # VATRate - Thuế GTGT (REQUIRED *)
-        vatrate = ET.SubElement(invoice_elem, 'VATRate')
-        # Calculate weighted average VAT rate
-        if totals['tgtcthue'] > 0:
-            avg_vat_rate = (totals['tgtthue'] / totals['tgtcthue']) * 100
-            vatrate.text = str(int(avg_vat_rate))
-        else:
-            vatrate.text = '0'
-
-        # VATAmount - Tiền thuế GTGT (REQUIRED *)
-        vatamount = ET.SubElement(invoice_elem, 'VATAmount')
-        vatamount.text = str(int(totals['tgtthue']))
-
-        # Amount - Tổng tiền (REQUIRED *)
-        amount = ET.SubElement(invoice_elem, 'Amount')
-        amount.text = str(int(totals['tgtttbso']))
-
-        # AmountInWords - Số tiền viết bằng chữ (REQUIRED *)
-        amountinwords = ET.SubElement(invoice_elem, 'AmountInWords')
-        amountinwords.text = totals['tgtttbchu']
-
-        # CurrencyUnit - Đơn vị tiền tệ
-        currencyunit = ET.SubElement(invoice_elem, 'CurrencyUnit')
-        currencyunit.text = 'VND'
-
-        # Convert to string with proper encoding
-        xml_str = ET.tostring(root, encoding='utf-8', method='xml')
-
-        # Add XML declaration and format nicely
-        xml_declaration = '<?xml version="1.0" encoding="utf-8"?>\n'
-        formatted_xml = xml_declaration + xml_str.decode('utf-8')
-
-        return formatted_xml
 
     def _number_to_words(self, amount):
         """Convert number to Vietnamese words - Enhanced version"""
@@ -878,7 +1067,7 @@ Contact VNPT support if issue persists.'''
                 raise UserError(f'Failed to cancel VNPT invoice: {str(e)}')
 
     def action_debug_vnpt_xml(self):
-        """Debug XML that will be sent to VNPT"""
+        """Debug XML that will be sent to VNPT - UPDATED for TT78 format"""
         vnpt_config = self._get_vnpt_config()
         if not vnpt_config:
             raise UserError(_('No VNPT configuration found'))
@@ -890,15 +1079,15 @@ Contact VNPT support if issue persists.'''
             # Prepare invoice data
             invoice_data = self._prepare_vnpt_invoice_data(vnpt_config)
 
-            # Generate XML
-            xml_data = self._create_vnpt_xml_invoices(invoice_data)
+            # Generate XML theo format TT78
+            xml_data = self._create_vnpt_xml_tt78(invoice_data)
 
             # Log for debugging
-            _logger.info(f"Generated XML for invoice {self.name}:\n{xml_data}")
+            _logger.info(f"Generated TT78 XML for invoice {self.name}:\n{xml_data}")
 
             # Create attachment with XML for easy viewing
             attachment = self.env['ir.attachment'].create({
-                'name': f'VNPT_XML_Debug_{self.name}.xml',
+                'name': f'VNPT_XML_TT78_Debug_{self.name}.xml',
                 'type': 'binary',
                 'datas': xml_data.encode('utf-8'),
                 'res_model': 'account.move',
@@ -907,7 +1096,7 @@ Contact VNPT support if issue persists.'''
             })
 
             self.message_post(
-                body=f'''XML Debug Information (Invoices Format):
+                body=f'''XML Debug Information (TT78 Format):
 
 Invoice: {self.name}
 XML Length: {len(xml_data)} characters
@@ -920,9 +1109,18 @@ Configuration Used:
 • Serial: {vnpt_config.invoice_serial}
 • Type: {vnpt_config.invoice_type}
 
+XML Structure (TT78 Standard):
+• Root: DSHDon
+• HDon/key: Unique invoice key
+• HDon/DLHDon/TTChung: General information
+• HDon/DLHDon/NDHDon/NBan: Seller information
+• HDon/DLHDon/NDHDon/NMua: Buyer information
+• HDon/DLHDon/NDHDon/DSHHDVu: Product/Service details
+• HDon/DLHDon/NDHDon/TToan: Payment information
+
 XML file attached for review.
 Check server logs for full XML content.''',
-                subject='VNPT XML Debug (Invoices Format)',
+                subject='VNPT XML Debug (TT78 Format)',
                 attachment_ids=[attachment.id]
             )
 
