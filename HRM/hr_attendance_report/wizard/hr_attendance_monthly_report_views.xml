@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Wizard Form View -->
+    <record id="view_hr_attendance_monthly_report_form" model="ir.ui.view">
+        <field name="name">hr.attendance.monthly.report.form</field>
+        <field name="model">hr.attendance.monthly.report</field>
+        <field name="arch" type="xml">
+            <form string="Báo Cáo Chấm Công Hàng Tháng">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="month" class="oe_inline" widget="selection"/>
+                            <span>/</span>
+                            <field name="year" class="oe_inline"/>
+                        </h1>
+                        <p class="oe_grey">
+                            Tạo báo cáo chấm công chi tiết với xử lý timezone chính xác và tích hợp nghỉ phép
+                        </p>
+                    </div>
+
+                    <group>
+                        <group string="Cấu hình báo cáo">
+                            <field name="report_type" widget="radio" options="{'horizontal': true}"/>
+                            <field name="show_summary"/>
+                            <field name="include_leaves"/>
+                        </group>
+                        <group string="Bộ lọc dữ liệu">
+                            <field name="filter_type" widget="radio"/>
+                            <field name="department_ids"
+                                   widget="many2many_tags"
+                                   placeholder="Chọn phòng ban..."
+                                   options="{'color_field': 'color'}"
+                                   invisible="filter_type != 'department'"/>
+                            <field name="employee_ids"
+                                   widget="many2many_tags"
+                                   placeholder="Chọn nhân viên..."
+                                   options="{'color_field': 'color'}"
+                                   invisible="filter_type != 'employee'"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group string="Tùy chọn nâng cao">
+                            <field name="include_inactive"/>
+                        </group>
+                        <group string="Thống kê">
+                            <field name="employee_count" readonly="1"/>
+                            <label for="employee_count" string="nhân viên sẽ được bao gồm trong báo cáo"/>
+                        </group>
+                    </group>
+
+                    <!-- Hướng dẫn màu sắc với layout đơn giản -->
+                    <notebook invisible="not include_leaves">
+                        <page string="Hướng dẫn màu sắc">
+
+                            <!-- Thông báo -->
+                            <div class="alert alert-info">
+                                <strong>Màu sắc trên báo cáo Excel:</strong>
+                                <p>Mỗi trạng thái sẽ được hiển thị với màu nền khác nhau để dễ phân biệt</p>
+                            </div>
+
+                            <!-- Sử dụng group chuẩn Odoo -->
+                            <group col="2">
+                                <group string="Trạng thái chấm công">
+                                    <!-- Item 1 -->
+                                    <strong>Nền trắng:</strong>
+                                    <div>
+                                        <span class="badge badge-light" style="background-color: #FFFFFF; border: 1px solid #ddd; color: #333;">08:30</span>
+                                        <span style="margin-left: 10px;">Ngày làm việc có chấm công đầy đủ</span>
+                                    </div>
+
+                                    <!-- Item 2 -->
+                                    <strong>Xanh nhạt:</strong>
+                                    <div>
+                                        <span class="badge badge-info" style="background-color: #E3F2FD; color: #1976D2;">--:--</span>
+                                        <span style="margin-left: 10px;">Ngày cuối tuần (Thứ 7, Chủ nhật)</span>
+                                    </div>
+
+                                    <!-- Item 3 -->
+                                    <strong>Hồng nhạt:</strong>
+                                    <div>
+                                        <span class="badge badge-danger" style="background-color: #FFEBEE; color: #D32F2F;">--:--</span>
+                                        <span style="margin-left: 10px;">Không có dữ liệu chấm công</span>
+                                    </div>
+                                </group>
+
+                                <group string="Trạng thái nghỉ phép">
+                                    <!-- Item 1 -->
+                                    <strong>Vàng nhạt:</strong>
+                                    <div>
+                                        <span class="badge badge-warning" style="background-color: #FFF8E1; color: #F57C00; font-weight: bold;">Phép</span>
+                                        <span style="margin-left: 10px;">Nghỉ phép cả ngày</span>
+                                    </div>
+
+                                    <!-- Item 2 -->
+                                    <strong>Xanh lá nhạt:</strong>
+                                    <div>
+                                        <span class="badge badge-success" style="background-color: #E8F5E8; color: #388E3C;">08:00</span>
+                                        <span style="margin-left: 10px;">Nghỉ phép nửa ngày</span>
+                                    </div>
+
+                                    <!-- Lưu ý -->
+                                    <strong> </strong>
+                                    <div class="alert alert-warning" style="margin-top: 10px; padding: 10px;">
+                                        <small>
+                                            <strong>Lưu ý:</strong> Nghỉ nửa ngày vẫn có thể hiển thị giờ vào/ra nếu có chấm công
+                                        </small>
+                                    </div>
+                                </group>
+                            </group>
+
+                            <!-- Mẹo sử dụng -->
+                            <separator string="Mẹo sử dụng"/>
+                            <div class="alert alert-success">
+                                <ul>
+                                    <li><strong>Bật tính năng nghỉ phép:</strong> Tick vào checkbox "Bao gồm dữ liệu nghỉ phép" phía trên</li>
+                                    <li><strong>Báo cáo Excel:</strong> Tự động áp dụng màu sắc theo từng trạng thái</li>
+                                    <li><strong>Cuối tuần:</strong> Được tính theo múi giờ của người dùng/công ty</li>
+                                    <li><strong>Nghỉ phép:</strong> Chỉ hiển thị những đơn đã được duyệt (trạng thái "Validated")</li>
+                                </ul>
+                            </div>
+
+                            <!-- Ví dụ minh họa -->
+                            <separator string="Ví dụ minh họa trên Excel"/>
+                            <div>
+                                <table class="table table-bordered table-sm">
+                                    <thead>
+                                        <tr class="table-active text-center">
+                                            <th>Tên NV</th>
+                                            <th>1<br/><small>T2</small></th>
+                                            <th>2<br/><small>T3</small></th>
+                                            <th>3<br/><small>T4</small></th>
+                                            <th>4<br/><small>T5</small></th>
+                                            <th>5<br/><small>T6</small></th>
+                                            <th>6<br/><small>T7</small></th>
+                                            <th>7<br/><small>CN</small></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="text-center">
+                                            <td class="text-left font-weight-bold">Nguyễn Văn A</td>
+                                            <td style="background-color: #FFFFFF; border: 1px solid #ddd;">08:00<br/>17:30</td>
+                                            <td style="background-color: #FFF8E1; color: #F57C00; font-weight: bold;">Phép năm</td>
+                                            <td style="background-color: #E8F5E8; color: #388E3C;">08:00<br/>12:00</td>
+                                            <td style="background-color: #FFEBEE; color: #D32F2F;">--:--<br/>--:--</td>
+                                            <td style="background-color: #FFFFFF; border: 1px solid #ddd;">07:45<br/>17:15</td>
+                                            <td style="background-color: #E3F2FD; color: #1976D2;">--:--<br/>--:--</td>
+                                            <td style="background-color: #E3F2FD; color: #1976D2;">--:--<br/>--:--</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <p class="text-muted text-center">
+                                    <small><em>Minh họa cách hiển thị màu sắc trên file Excel thực tế</em></small>
+                                </p>
+                            </div>
+                        </page>
+                    </notebook>
+                </sheet>
+
+                <footer>
+                    <button name="action_print_report"
+                            string="In PDF"
+                            type="object"
+                            class="btn-info"
+                            invisible="report_type != 'pdf' or employee_count == 0"/>
+                    <button name="action_export_excel"
+                            string="Xuất Excel"
+                            type="object"
+                            class="btn-success"
+                            invisible="report_type != 'excel' or employee_count == 0"/>
+                    <button string="Hủy" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Wizard Action -->
+    <record id="action_hr_attendance_monthly_report_wizard" model="ir.actions.act_window">
+        <field name="name">Báo Cáo Chấm Công Hàng Tháng</field>
+        <field name="res_model">hr.attendance.monthly.report</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{}</field>
+    </record>
+
+    <!-- Menu Item -->
+    <menuitem id="menu_hr_attendance_monthly_report"
+                  name="Báo Cáo Chấm Công Hàng Tháng"
+                  parent="hr_attendance.menu_hr_attendance_reporting"
+                  action="action_hr_attendance_monthly_report_wizard"
+                  sequence="15"
+                  groups="hr.group_hr_user"/>
+</odoo>

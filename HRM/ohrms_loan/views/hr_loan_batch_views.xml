@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Batch Tree View -->
+    <record id="view_hr_loan_batch_tree" model="ir.ui.view">
+        <field name="name">hr.loan.batch.tree</field>
+        <field name="model">hr.loan.batch</field>
+        <field name="arch" type="xml">
+            <tree string="Đợt ứng lương" default_order="date_created desc">
+                <field name="name"/>
+                <field name="month"/>
+                <field name="year"/>
+                <field name="sequence"/>
+                <field name="date_created"/>
+                <field name="employee_count"/>
+                <field name="loan_count"/>
+                <field name="total_amount" widget="monetary"/>
+                <field name="state" widget="badge"
+                    decoration-info="state == 'draft'"
+                    decoration-warning="state == 'confirmed'"
+                    decoration-success="state == 'done'"
+                    decoration-muted="state == 'cancelled'"/>
+                <field name="auto_config_id"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Batch Form View -->
+    <record id="view_hr_loan_batch_form" model="ir.ui.view">
+        <field name="name">hr.loan.batch.form</field>
+        <field name="model">hr.loan.batch</field>
+        <field name="arch" type="xml">
+            <form string="Đợt ứng lương">
+                <header>
+                    <button name="action_confirm" type="object" string="Xác nhận"
+                        invisible="state != 'draft'" class="oe_highlight"/>
+                    <button name="action_done" type="object" string="Hoàn thành"
+                        invisible="state != 'confirmed'" class="oe_highlight"/>
+                    <button name="action_cancel" type="object" string="Hủy"
+                        invisible="state not in ['draft', 'confirmed']"/>
+                    <button name="action_reset_to_draft" type="object" string="Chuyển về nháp"
+                        invisible="state not in ['done', 'cancelled']"/>
+                    <button name="action_batch_approve_loans" type="object" string="Duyệt tất cả khoản ứng"
+                        class="btn-primary" invisible="state != 'confirmed'"/>
+                    <button name="%(hr_loan_batch_process_wizard_action)d" string="Xử lý hàng loạt"
+                        type="action" class="btn-secondary" context="{'default_batch_id': active_id}"/>
+                    <button name="%(hr_loan_bulk_create_wizard_action)d" string="Tạo khoản ứng hàng loạt"
+                        type="action" class="btn-secondary" context="{'default_batch_id': active_id}"/>
+                    <button name="action_export_excel" type="object" string="Xuất Excel"
+                        class="btn-secondary" icon="fa-file-excel-o"/>
+                    <field name="state" widget="statusbar"
+                        statusbar_visible="draft,confirmed,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_loans" type="object" class="oe_stat_button" icon="fa-money">
+                            <div class="o_stat_info">
+                                <field name="loan_count" class="o_stat_value"/>
+                                <span class="o_stat_text">Khoản ứng</span>
+                            </div>
+                        </button>
+                    </div>
+
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="month" readonly="1"/>
+                            <field name="year" readonly="1"/>
+                            <field name="sequence" readonly="1"/>
+                            <field name="date_created" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="auto_config_id" readonly="1"/>
+                            <field name="execution_date" readonly="1"/>
+                            <field name="execution_day" readonly="1"/>
+                            <field name="company_id" readonly="1" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Thống kê">
+                            <group>
+                                <group string="Số lượng">
+                                    <field name="employee_count" readonly="1"/>
+                                    <field name="loan_count" readonly="1"/>
+                                    <field name="approved_loan_count" readonly="1"/>
+                                    <field name="pending_loan_count" readonly="1"/>
+                                    <field name="draft_loan_count" readonly="1"/>
+                                </group>
+                                <group string="Số tiền">
+                                    <field name="total_amount" widget="monetary" readonly="1"/>
+                                    <field name="total_paid_amount" widget="monetary" readonly="1"/>
+                                    <field name="total_balance_amount" widget="monetary" readonly="1"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Khoản ứng">
+                            <field name="loan_ids">
+                                <tree editable="bottom" create="false">
+                                    <field name="name" readonly="1"/>
+                                    <field name="employee_id" readonly="1"/>
+                                    <field name="loan_amount" widget="monetary"
+                                           readonly="state == 'approve'"
+                                           decoration-muted="state == 'approve'"/>
+                                    <field name="state" widget="badge" readonly="1"
+                                        decoration-info="state == 'draft'"
+                                        decoration-warning="state == 'waiting_approval_1'"
+                                        decoration-success="state == 'approve'"
+                                        decoration-danger="state == 'refuse'"
+                                        decoration-muted="state == 'cancel'"/>
+                                    <field name="total_paid_amount" widget="monetary" readonly="1"/>
+                                    <field name="balance_amount" widget="monetary" readonly="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Batch Search View -->
+    <record id="view_hr_loan_batch_search" model="ir.ui.view">
+        <field name="name">hr.loan.batch.search</field>
+        <field name="model">hr.loan.batch</field>
+        <field name="arch" type="xml">
+            <search string="Tìm kiếm đợt ứng lương">
+                <field name="name"/>
+                <field name="auto_config_id"/>
+                <field name="month"/>
+                <field name="year"/>
+
+                <filter string="Nháp" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Đã xác nhận" name="confirmed" domain="[('state', '=', 'confirmed')]"/>
+                <filter string="Hoàn thành" name="done" domain="[('state', '=', 'done')]"/>
+                <filter string="Đã hủy" name="cancelled" domain="[('state', '=', 'cancelled')]"/>
+
+                <separator/>
+                <filter string="Tháng hiện tại" name="current_month"
+                    domain="[('month', '=', context_today().month), ('year', '=', context_today().year)]"/>
+                <filter string="Tự động" name="auto_generated"
+                    domain="[('auto_config_id', '!=', False)]"/>
+                <filter string="Thủ công" name="manual"
+                    domain="[('auto_config_id', '=', False)]"/>
+
+                <group expand="0" string="Nhóm theo">
+                    <filter string="Trạng thái" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Tháng" name="group_month" context="{'group_by': 'month'}"/>
+                    <filter string="Năm" name="group_year" context="{'group_by': 'year'}"/>
+                    <filter string="Cấu hình tự động" name="group_config" context="{'group_by': 'auto_config_id'}"/>
+                    <filter string="Công ty" name="group_company" context="{'group_by': 'company_id'}" groups="base.group_multi_company"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Batch Kanban View -->
+    <record id="view_hr_loan_batch_kanban" model="ir.ui.view">
+        <field name="name">hr.loan.batch.kanban</field>
+        <field name="model">hr.loan.batch</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_small_column">
+                <field name="name"/>
+                <field name="state"/>
+                <field name="total_amount"/>
+                <field name="loan_count"/>
+                <field name="employee_count"/>
+                <field name="month"/>
+                <field name="year"/>
+                <field name="date_created"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_card oe_kanban_global_click">
+                            <div class="oe_kanban_content">
+                                <div class="o_kanban_record_top">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title">
+                                            <field name="name"/>
+                                        </strong>
+                                    </div>
+                                    <span class="badge badge-pill" t-attf-class="badge-{{
+                                        'primary' if record.state.raw_value == 'draft' else
+                                        'warning' if record.state.raw_value == 'confirmed' else
+                                        'success' if record.state.raw_value == 'done' else
+                                        'secondary'
+                                    }}">
+                                        <field name="state"/>
+                                    </span>
+                                </div>
+                                <div class="o_kanban_record_body">
+                                    <div>
+                                        <i class="fa fa-calendar"/> <t t-esc="record.month.value"/>/<t t-esc="record.year.value"/>
+                                    </div>
+                                    <div>
+                                        <i class="fa fa-users"/> <t t-esc="record.employee_count.value"/> nhân viên
+                                    </div>
+                                    <div>
+                                        <i class="fa fa-money"/> <t t-esc="record.loan_count.value"/> khoản ứng
+                                    </div>
+                                    <div>
+                                        <strong>Tổng: <field name="total_amount" widget="monetary"/></strong>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_record_bottom">
+                                    <div class="oe_kanban_bottom_left">
+                                        <field name="date_created" widget="date"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Batch Calendar View -->
+    <record id="view_hr_loan_batch_calendar" model="ir.ui.view">
+        <field name="name">hr.loan.batch.calendar</field>
+        <field name="model">hr.loan.batch</field>
+        <field name="arch" type="xml">
+            <calendar string="Đợt ứng lương" date_start="date_created" color="state">
+                <field name="name"/>
+                <field name="total_amount"/>
+                <field name="state"/>
+            </calendar>
+        </field>
+    </record>
+
+    <!-- Batch Graph View -->
+    <record id="view_hr_loan_batch_graph" model="ir.ui.view">
+        <field name="name">hr.loan.batch.graph</field>
+        <field name="model">hr.loan.batch</field>
+        <field name="arch" type="xml">
+            <graph string="Thống kê đợt ứng lương" type="bar">
+                <field name="month" type="row"/>
+                <field name="total_amount" type="measure"/>
+                <field name="loan_count" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="action_hr_loan_batch" model="ir.actions.act_window">
+        <field name="name">Đợt ứng lương</field>
+        <field name="res_model">hr.loan.batch</field>
+        <field name="view_mode">tree,kanban,form,calendar,graph</field>
+        <field name="context">{'search_default_current_month': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Chưa có đợt ứng lương nào
+            </p>
+            <p>
+                Đợt ứng lương sẽ được tạo tự động hoặc thủ công để quản lý các khoản ứng theo từng đợt.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_hr_loan_batch_filtered" model="ir.actions.act_window">
+        <field name="name">Đợt ứng lương</field>
+        <field name="res_model">hr.loan.batch</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Menu Items -->
+    <menuitem id="menu_hr_loan_batch"
+              action="action_hr_loan_batch"
+              parent="hr_loan_menu_root"
+              name="Đợt ứng lương"
+              sequence="5"/>
+
+</odoo>

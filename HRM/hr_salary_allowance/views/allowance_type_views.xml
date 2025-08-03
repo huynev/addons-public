@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View for Allowance Types -->
+    <record id="view_salary_allowance_type_tree" model="ir.ui.view">
+        <field name="name">salary.allowance.type.tree</field>
+        <field name="model">salary.allowance.type</field>
+        <field name="arch" type="xml">
+            <tree string="Loại Phụ Cấp">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="default_amount"/>
+                <field name="is_taxable"/>
+                <field name="is_fixed"/>
+                <field name="allowance_count"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View for Allowance Types -->
+    <record id="view_salary_allowance_type_form" model="ir.ui.view">
+        <field name="name">salary.allowance.type.form</field>
+        <field name="model">salary.allowance.type</field>
+        <field name="arch" type="xml">
+            <form string="Loại Phụ Cấp">
+                <header>
+                    <button name="action_open_mass_allowance_wizard" string="Đăng Ký phụ cấp" type="object" class="oe_highlight"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_allowances" type="object" class="oe_stat_button" icon="fa-user">
+                            <field string="Đăng Ký" name="allowance_count" widget="statinfo"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Tên Loại Phụ Cấp"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="is_fixed"/>
+                            <field name="default_amount" invisible_if="not is_fixed"/>
+                            <field name="company_currency_id" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="is_taxable"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Mô Tả">
+                            <field name="description" placeholder="Mô tả chi tiết về loại phụ cấp này..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View for Allowance Types -->
+    <record id="view_salary_allowance_type_search" model="ir.ui.view">
+        <field name="name">salary.allowance.type.search</field>
+        <field name="model">salary.allowance.type</field>
+        <field name="arch" type="xml">
+            <search string="Tìm Kiếm Loại Phụ Cấp">
+                <field name="name"/>
+                <field name="code"/>
+                <separator/>
+                <filter string="Chịu Thuế" name="taxable" domain="[('is_taxable', '=', True)]"/>
+                <filter string="Không Chịu Thuế" name="non_taxable" domain="[('is_taxable', '=', False)]"/>
+                <filter string="Giá Trị Cố Định" name="fixed" domain="[('is_fixed', '=', True)]"/>
+                <filter string="Giá Trị Thay Đổi" name="non_fixed" domain="[('is_fixed', '=', False)]"/>
+                <filter string="Đang Hoạt Động" name="active" domain="[('active', '=', True)]"/>
+                <filter string="Lưu Trữ" name="inactive" domain="[('active', '=', False)]"/>
+                <group expand="0" string="Nhóm Theo">
+                    <filter string="Chịu Thuế" name="group_by_taxable" context="{'group_by': 'is_taxable'}"/>
+                    <filter string="Giá Trị Cố Định" name="group_by_fixed" context="{'group_by': 'is_fixed'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action for Allowance Types -->
+    <record id="action_salary_allowance_type" model="ir.actions.act_window">
+        <field name="name">Loại Phụ Cấp</field>
+        <field name="res_model">salary.allowance.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_salary_allowance_type_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Tạo loại phụ cấp mới
+            </p>
+            <p>
+                Quản lý các loại phụ cấp khác nhau trong hệ thống lương.
+            </p>
+        </field>
+    </record>
+</odoo>

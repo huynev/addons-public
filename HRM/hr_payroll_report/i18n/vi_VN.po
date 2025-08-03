@@ -1,0 +1,407 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* hr_payroll_report
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-05-13 12:00+0000\n"
+"PO-Revision-Date: 2025-05-13 12:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: hr_payroll_report
+#: model:ir.model.fields,field_description:hr_payroll_report.field_hr_payroll_report_minhduc__name
+msgid "Name"
+msgstr "Tên"
+
+#. module: hr_payroll_report
+#: model:ir.model.fields,field_description:hr_payroll_report.field_hr_payroll_report_minhduc__date_from
+#: model:ir.model.fields,field_description:hr_payroll_report.field_hr_payroll_excel_export__date_from
+msgid "Date From"
+msgstr "Từ ngày"
+
+#. module: hr_payroll_report
+#: model:ir.model.fields,field_description:hr_payroll_report.field_hr_payroll_report_minhduc__date_to
+#: model:ir.model.fields,field_description:hr_payroll_report.field_hr_payroll_excel_export__date_to
+msgid "Date To"
+msgstr "Đến ngày"
+
+#. module: hr_payroll_report
+#: model:ir.model.fields,field_description:hr_payroll_report.field_hr_payroll_report_minhduc__company_id
+msgid "Company"
+msgstr "Công ty"
+
+#. module: hr_payroll_report
+#: model:ir.model.fields,field_description:hr_payroll_report.field_hr_payroll_report_minhduc__report_type
+msgid "Report Type"
+msgstr "Loại báo cáo"
+
+#. module: hr_payroll_report
+#: model:ir.model.fields.selection,name:hr_payroll_report.selection__hr_payroll_report_minhduc__report_type__summary
+msgid "Summary"
+msgstr "Tóm tắt"
+
+#. module: hr_payroll_report
+#: model:ir.model.fields.selection,name:hr_payroll_report.selection__hr_payroll_report_minhduc__report_type__detailed
+msgid "Detailed"
+msgstr "Chi tiết"
+
+#. module: hr_payroll_report
+#: model:ir.model.fields,field_description:hr_payroll_report.field_hr_payroll_report_minhduc__employee_ids
+#: model:ir.model.fields,field_description:hr_payroll_report.field_hr_payroll_excel_export__employee_ids
+msgid "Employees"
+msgstr "Nhân viên"
+
+#. module: hr_payroll_report
+#: model:ir.model.fields,field_description:hr_payroll_report.field_hr_payroll_report_minhduc__department_ids
+#: model:ir.model.fields,field_description:hr_payroll_report.field_hr_payroll_excel_export__department_ids
+msgid "Departments"
+msgstr "Phòng ban"
+
+#. module: hr_payroll_report
+#: model:ir.model.fields,field_description:hr_payroll_report.field_hr_payroll_report_minhduc__state
+#: model:ir.model.fields,field_description:hr_payroll_report.field_hr_payroll_excel_export__state
+msgid "Status"
+msgstr "Trạng thái"
+
+#. module: hr_payroll_report
+#: model:ir.model.fields.selection,name:hr_payroll_report.selection__hr_payroll_report_minhduc__state__draft
+msgid "Draft"
+msgstr "Nháp"
+
+#. module: hr_payroll_report
+#: model:ir.model.fields.selection,name:hr_payroll_report.selection__hr_payroll_report_minhduc__state__generated
+msgid "Generated"
+msgstr "Đã tạo"
+
+#. module: hr_payroll_report
+#: model:ir.model.fields,field_description:hr_payroll_report.field_hr_payroll_report_minhduc__payslip_ids
+msgid "Payslips"
+msgstr "Phiếu lương"
+
+#. module: hr_payroll_report
+#: model:ir.model.fields,field_description:hr_payroll_report.field_hr_payroll_report_minhduc__pdf_report
+msgid "PDF Report"
+msgstr "Báo cáo PDF"
+
+#. module: hr_payroll_report
+#: model:ir.model.fields,field_description:hr_payroll_report.field_hr_payroll_report_minhduc__pdf_filename
+msgid "PDF Filename"
+msgstr "Tên file PDF"
+
+#. module: hr_payroll_report
+#: model_terms:ir.ui.view,arch_db:hr_payroll_report.view_hr_payroll_report_form
+msgid "Generate Report"
+msgstr "Tạo báo cáo"
+
+#. module: hr_payroll_report
+#: model_terms:ir.ui.view,arch_db:hr_payroll_report.view_hr_payroll_report_form
+msgid "Reset to Draft"
+msgstr "Đặt về trạng thái nháp"
+
+#. module: hr_payroll_report
+#: model_terms:ir.ui.view,arch_db:hr_payroll_report.view_hr_payroll_report_form
+msgid "Download Report"
+msgstr "Tải báo cáo"
+
+#. module: hr_payroll_report
+#: model_terms:ir.ui.view,arch_db:hr_payroll_report.view_hr_payroll_report_form
+msgid "Selection Criteria"
+msgstr "Tiêu chí lựa chọn"
+
+#. module: hr_payroll_report
+#: model:ir.model.fields,field_description:hr_payroll_report.field_hr_payroll_excel_export__group_by_department
+msgid "Group by Department"
+msgstr "Nhóm theo phòng ban"
+
+#. module: hr_payroll_report
+#: model:ir.model.fields,field_description:hr_payroll_report.field_hr_payroll_excel_export__excel_file
+msgid "Excel Report"
+msgstr "Báo cáo Excel"
+
+#. module: hr_payroll_report
+#: model:ir.model.fields,field_description:hr_payroll_report.field_hr_payroll_excel_export__file_name
+msgid "File Name"
+msgstr "Tên tệp"
+
+#. module: hr_payroll_report
+#: model_terms:ir.ui.view,arch_db:hr_payroll_report.view_hr_payroll_excel_export_form
+msgid "Export Payroll to Excel"
+msgstr "Xuất báo cáo lương ra Excel"
+
+#. module: hr_payroll_report
+#: model_terms:ir.ui.view,arch_db:hr_payroll_report.view_hr_payroll_excel_export_form
+msgid "Your Excel Report is Ready!"
+msgstr "Báo cáo Excel của bạn đã sẵn sàng!"
+
+#. module: hr_payroll_report
+#: model_terms:ir.ui.view,arch_db:hr_payroll_report.view_hr_payroll_excel_export_form
+msgid "Generate Excel"
+msgstr "Tạo Excel"
+
+#. module: hr_payroll_report
+#: model_terms:ir.ui.view,arch_db:hr_payroll_report.view_hr_payroll_excel_export_form
+msgid "Regenerate Excel"
+msgstr "Tạo lại Excel"
+
+#. module: hr_payroll_report
+#: model_terms:ir.ui.view,arch_db:hr_payroll_report.view_hr_payroll_excel_export_form
+msgid "Close"
+msgstr "Đóng"
+
+#. module: hr_payroll_report
+#: model:ir.actions.act_window,name:hr_payroll_report.action_hr_payroll_excel_export
+#: model:ir.ui.menu,name:hr_payroll_report.menu_hr_payroll_excel_export
+msgid "Export to Excel"
+msgstr "Xuất ra Excel"
+
+#. module: hr_payroll_report
+#: model:ir.actions.act_window,name:hr_payroll_report.action_hr_payroll_report
+#: model:ir.ui.menu,name:hr_payroll_report.menu_hr_payroll_report
+msgid "Payroll Reports"
+msgstr "Báo cáo bảng lương"
+
+#. module: hr_payroll_report
+#: model:ir.ui.menu,name:hr_payroll_report.menu_hr_payroll_report_root
+msgid "Payroll Reports"
+msgstr "Báo cáo bảng lương"
+
+#. module: hr_payroll_report
+#: model_terms:ir.ui.view,arch_db:hr_payroll_report.view_hr_payroll_report_search
+msgid "Search Payroll Reports"
+msgstr "Tìm kiếm báo cáo lương"
+
+#. module: hr_payroll_report
+#: model_terms:ir.ui.view,arch_db:hr_payroll_report.view_hr_payroll_report_search
+msgid "This Month"
+msgstr "Tháng này"
+
+#. module: hr_payroll_report
+#: model_terms:ir.ui.view,arch_db:hr_payroll_report.view_hr_payroll_report_search
+msgid "Last Month"
+msgstr "Tháng trước"
+
+#. module: hr_payroll_report
+#: model_terms:ir.ui.view,arch_db:hr_payroll_report.view_hr_payroll_report_search
+msgid "Group By"
+msgstr "Nhóm theo"
+
+#. module: hr_payroll_report
+#: model_terms:ir.ui.view,arch_db:hr_payroll_report.report_payroll
+msgid "Period:"
+msgstr "Kỳ:"
+
+#. module: hr_payroll_report
+#: model_terms:ir.ui.view,arch_db:hr_payroll_report.report_payroll
+msgid "Generated on:"
+msgstr "Ngày tạo:"
+
+#. module: hr_payroll_report
+#: model_terms:ir.ui.view,arch_db:hr_payroll_report.report_payroll
+msgid "Payroll Summary"
+msgstr "Tóm tắt bảng lương"
+
+#. module: hr_payroll_report
+#: model_terms:ir.ui.view,arch_db:hr_payroll_report.report_payroll
+msgid "Employee"
+msgstr "Nhân viên"
+
+#. module: hr_payroll_report
+#: model_terms:ir.ui.view,arch_db:hr_payroll_report.report_payroll
+msgid "Department"
+msgstr "Phòng ban"
+
+#. module: hr_payroll_report
+#: model_terms:ir.ui.view,arch_db:hr_payroll_report.report_payroll
+msgid "Gross Amount"
+msgstr "Tổng thu nhập"
+
+#. module: hr_payroll_report
+#: model_terms:ir.ui.view,arch_db:hr_payroll_report.report_payroll
+msgid "Net Amount"
+msgstr "Thu nhập thực lãnh"
+
+#. module: hr_payroll_report
+#: model_terms:ir.ui.view,arch_db:hr_payroll_report.report_payroll
+msgid "Total"
+msgstr "Tổng cộng"
+
+#. module: hr_payroll_report
+#: model_terms:ir.ui.view,arch_db:hr_payroll_report.report_payroll
+msgid "Department:"
+msgstr "Phòng ban:"
+
+#. module: hr_payroll_report
+#: model_terms:ir.ui.view,arch_db:hr_payroll_report.report_payroll
+msgid "Position:"
+msgstr "Vị trí:"
+
+#. module: hr_payroll_report
+#: model_terms:ir.ui.view,arch_db:hr_payroll_report.report_payroll
+msgid "Payslip:"
+msgstr "Phiếu lương:"
+
+#. module: hr_payroll_report
+#: model_terms:ir.ui.view,arch_db:hr_payroll_report.report_payroll
+msgid "Code"
+msgstr "Mã"
+
+#. module: hr_payroll_report
+#: model_terms:ir.ui.view,arch_db:hr_payroll_report.report_payroll
+msgid "Quantity"
+msgstr "Số lượng"
+
+#. module: hr_payroll_report
+#: model_terms:ir.ui.view,arch_db:hr_payroll_report.report_payroll
+msgid "Rate"
+msgstr "Tỷ lệ"
+
+#. module: hr_payroll_report
+#: model_terms:ir.ui.view,arch_db:hr_payroll_report.report_payroll
+msgid "Amount"
+msgstr "Số tiền"
+
+#. module: hr_payroll_report
+#: model_terms:ir.ui.view,arch_db:hr_payroll_report.report_payroll
+msgid "Net"
+msgstr "Thực lãnh"
+
+#. module: hr_payroll_report
+#: model_terms:ir.ui.view,arch_db:hr_payroll_report.report_payroll
+msgid "Period Summary"
+msgstr "Tóm tắt kỳ lương"
+
+#. module: hr_payroll_report
+#: model_terms:ir.ui.view,arch_db:hr_payroll_report.report_payroll
+msgid "Total Payslips:"
+msgstr "Tổng số phiếu lương:"
+
+#. module: hr_payroll_report
+#: model_terms:ir.ui.view,arch_db:hr_payroll_report.report_payroll
+msgid "Total Gross:"
+msgstr "Tổng thu nhập gộp:"
+
+#. module: hr_payroll_report
+#: model_terms:ir.ui.view,arch_db:hr_payroll_report.report_payroll
+msgid "Total Net:"
+msgstr "Tổng thực lãnh:"
+
+#. module: hr_payroll_report
+#: code:addons/hr_payroll_report/models/hr_payroll_report.py:0
+#, python-format
+msgid "No payslips found for the selected criteria."
+msgstr "Không tìm thấy phiếu lương nào theo tiêu chí đã chọn."
+
+#. module: hr_payroll_report
+#: code:addons/hr_payroll_report/models/hr_payroll_report.py:0
+#, python-format
+msgid "Report hasn't been generated yet."
+msgstr "Báo cáo chưa được tạo."
+
+#. module: hr_payroll_report
+#: code:addons/hr_payroll_report/wizards/hr_payroll_excel_export.py:0
+#, python-format
+msgid "No employees found in the selected departments."
+msgstr "Không tìm thấy nhân viên nào trong các phòng ban đã chọn."
+
+#. module: hr_payroll_report
+#: code:addons/hr_payroll_report/wizards/hr_payroll_excel_export.py:0
+#, python-format
+msgid "No payslips found for the selected period."
+msgstr "Không tìm thấy phiếu lương nào trong kỳ đã chọn."
+
+#. module: hr_payroll_report
+#: model:ir.actions.report,name:hr_payroll_report.action_report_hr_payroll
+msgid "Payroll Report"
+msgstr "Báo cáo lương"
+
+#. module: hr_payroll_report
+#: model:ir.model,name:hr_payroll_report.model_hr_payroll_report_minhduc
+msgid "HR Payroll Report for Minh Duc"
+msgstr "Báo cáo lương nhân sự Minh Đức"
+
+#. module: hr_payroll_report
+#: model:ir.model,name:hr_payroll_report.model_hr_payroll_excel_export
+msgid "Payroll Excel Export"
+msgstr "Xuất báo cáo lương ra Excel"
+
+#. module: hr_payroll_report
+#: model_terms:ir.ui.view,arch_db:hr_payroll_report.view_hr_payroll_report_form
+msgid "Report Name"
+msgstr "Tên báo cáo"
+
+#. module: hr_payroll_report
+#: model_terms:ir.ui.view,arch_db:hr_payroll_report.view_hr_payroll_excel_export_form
+msgid "No."
+msgstr "STT"
+
+#. module: hr_payroll_report
+#: model_terms:ir.ui.view,arch_db:hr_payroll_report.view_hr_payroll_excel_export_form
+msgid "Department Total:"
+msgstr "Tổng theo phòng ban:"
+
+#. module: hr_payroll_report
+#: model_terms:ir.ui.view,arch_db:hr_payroll_report.view_hr_payroll_excel_export_form
+msgid "Grand Total:"
+msgstr "Tổng cộng:"
+
+#. module: hr_payroll_report
+#: model:ir.model.fields,field_description:hr_payroll_report.field_hr_payroll_excel_export__include_draft
+msgid "Include Draft Payslips"
+msgstr "Bao gồm phiếu lương nháp"
+
+#. module: hr_payroll_report
+#: model:ir.model.fields,field_description:hr_payroll_report.field_hr_payroll_excel_export__include_waiting
+msgid "Include Waiting Payslips"
+msgstr "Bao gồm phiếu lương đang chờ"
+
+#. module: hr_payroll_report
+#: model:ir.model.fields,field_description:hr_payroll_report.field_hr_payroll_excel_export__include_done
+msgid "Include Done Payslips"
+msgstr "Bao gồm phiếu lương đã duyệt"
+
+#. module: hr_payroll_report
+#: model:ir.model.fields,field_description:hr_payroll_report.field_hr_payroll_excel_export__include_rejected
+msgid "Include Rejected Payslips"
+msgstr "Bao gồm phiếu lương bị từ chối"
+
+#. module: hr_payroll_report
+#: model_terms:ir.ui.view,arch_db:hr_payroll_report.view_hr_payroll_excel_export_form
+msgid "Payslip States"
+msgstr "Trạng thái phiếu lương"
+
+#. module: hr_payroll_report
+#: code:addons/hr_payroll_report/wizards/hr_payroll_excel_export.py:0
+#, python-format
+msgid "Please select at least one payslip state."
+msgstr "Vui lòng chọn ít nhất một trạng thái phiếu lương."
+
+#. module: hr_payroll_report
+#: code:addons/hr_payroll_report/wizards/hr_payroll_excel_export.py:0
+#, python-format
+msgid "Draft"
+msgstr "Nháp"
+
+#. module: hr_payroll_report
+#: code:addons/hr_payroll_report/wizards/hr_payroll_excel_export.py:0
+#, python-format
+msgid "Waiting"
+msgstr "Đang chờ"
+
+#. module: hr_payroll_report
+#: code:addons/hr_payroll_report/wizards/hr_payroll_excel_export.py:0
+#, python-format
+msgid "Done"
+msgstr "Đã hoàn thành"
+
+#. module: hr_payroll_report
+#: code:addons/hr_payroll_report/wizards/hr_payroll_excel_export.py:0
+#, python-format
+msgid "Rejected"
+msgstr "Bị từ chối"

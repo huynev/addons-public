@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_employee_import_wizard_form" model="ir.ui.view">
+        <field name="name">employee.import.wizard.form</field>
+        <field name="model">employee.import.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Import Employees">
+                <group>
+                    <group string="File Settings">
+                        <field name="file_data" filename="file_name"/>
+                        <field name="file_name" invisible="1"/>
+                        <field name="sheet_name"/>
+                    </group>
+                    <group string="Import Options">
+                        <field name="update_existing"/>
+                        <field name="create_new"/>
+                    </group>
+                </group>
+
+                <group string="Column Mapping">
+                    <group>
+                        <field name="employee_code_column" required="1"/>
+                        <field name="name_column"/>
+                        <field name="email_column"/>
+                        <field name="phone_column"/>
+                        <field name="department_column"/>
+                        <field name="job_title_column"/>
+                        <field name="hire_date_column"/>
+                    </group>
+                    <group>
+                        <field name="work_location_column"/>
+                        <field name="birthday_column"/>
+                        <field name="gender_column"/>
+                        <field name="marital_column"/>
+                        <field name="identification_column"/>
+                        <field name="address_column"/>
+                    </group>
+                </group>
+
+                <div invisible="not context.get('show_results')">
+                    <separator string="Import Results"/>
+                    <field name="import_results" nolabel="1"/>
+                </div>
+
+                <footer>
+                    <button name="action_import_employees"
+                            string="Import Employees"
+                            type="object"
+                            class="btn-primary"
+                            invisible="context.get('show_results')"/>
+                    <button string="Close" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_employee_import_wizard" model="ir.actions.act_window">
+        <field name="name">Import Employees</field>
+        <field name="res_model">employee.import.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

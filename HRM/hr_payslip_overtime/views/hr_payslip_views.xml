@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Thêm tab tăng ca vào form phiếu lương -->
+    <record id="view_hr_payslip_form_overtime" model="ir.ui.view">
+        <field name="name">hr.payslip.form.overtime</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id" ref="payroll.hr_payslip_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Chi tiết tăng ca" name="overtime_details">
+                    <group>
+                        <button name="action_get_overtime_data" string="Lấy dữ liệu tăng ca" type="object" class="oe_highlight"/>
+                    </group>
+                    <field name="overtime_plan_line_ids">
+                        <tree editable="bottom">
+                            <field name="name"/>
+                            <field name="date_from" string="Từ ngày"/>
+                            <field name="date_to" string="Tới ngày"/>
+<!--                            <field name="date_to"/>-->
+<!--                            <field name="overtime_type"/>-->
+                            <field name="overtime_hours" string="Số giờ tăng ca"/>
+                            <field name="payment_percentage" string="Tỷ lệ chi trả (%)"/>
+                            <field name="standard_pay" string="Chi theo giờ tiêu chuẩn"/>
+                            <field name="actual_overtime_pay" string="Tổng tiền tăng ca"/>
+                        </tree>
+                    </field>
+                    <group>
+                        <field name="overtime_hours" string="Tổng số giờ tăng ca"/>
+                        <field name="overtime_standard_pay" string="Tổng tiền theo giờ tiêu chuẩn"/>
+                        <field name="overtime_actual_pay" string="Tổng tiền tăng ca"/>
+                    </group>
+                    <div class="alert alert-info" role="alert">
+                        <h4>Hướng dẫn tính toán tăng ca</h4>
+                        <p>Bạn có thể truy cập đến các giá trị bản ghi tăng ca này trong mã rule's Python của quy tắc lương như sau:</p>
+                        <ul>
+                            <li>hoặc <code>payslip.overtime_plan_line_ids</code></li>
+                        </ul>
+                        <p>Dưới đây là một vài ví dụ:</p>
+                        <ol>
+                            <li>Để tính phần lương tăng ca theo công thức lương hợp đồng * tỷ lệ chi trả:<br/>
+                                <code>result=sum(payslip.overtime_plan_line_ids.mapped('actual_overtime_pay'))</code>
+                            </li>
+                            <li>Để tính tổng lương tăng ca dựa trên lương hợp đồng tiêu chuẩn:<br/>
+                                <code>result=sum(payslip.overtime_plan_line_ids.mapped('standard_pay'))</code>
+                            </li>
+                            <li>Để tính phần lương tăng ca phụ trội (không chịu thuế):<br/>
+                                <code>
+                                    actual_overtime_pay = sum(payslip.overtime_plan_line_ids.mapped('actual_overtime_pay'))<br/>
+                                    standard_pay = sum(payslip.overtime_plan_line_ids.mapped('standard_pay'))<br/>
+                                    result = actual_overtime_pay - standard_pay
+                                </code>
+                            </li>
+                        </ol>
+                    </div>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

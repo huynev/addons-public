@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_employee_import"
+              name="Import thông tin nhân viên"
+              parent="hr.menu_hr_root"
+              action="action_employee_import_wizard"
+              sequence="100"/>
+</odoo>

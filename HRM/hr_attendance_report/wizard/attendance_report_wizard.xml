@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Wizard Form View -->
+        <record id="view_attendance_report_wizard_form" model="ir.ui.view">
+            <field name="name">attendance.report.wizard.form</field>
+            <field name="model">attendance.report.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Attendance Report">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="report_type" widget="radio" options="{'horizontal': true}"/>
+                            </h1>
+                        </div>
+
+                        <group>
+                            <group string="Time Period">
+                                <field name="filter_type" widget="radio" options="{'horizontal': true}"/>
+
+                                <field name="date_from"
+                                       invisible="filter_type == 'month'"
+                                       required="filter_type == 'date_range'"/>
+                                <field name="date_to"
+                                       invisible="filter_type == 'month'"
+                                       required="filter_type == 'date_range'"/>
+
+                                <field name="month_year"
+                                       invisible="filter_type == 'date_range'"
+                                       required="filter_type == 'month'"
+                                       widget="date"/>
+                            </group>
+
+                            <group string="Filter Options">
+                                <field name="department_ids"
+                                       widget="many2many_tags"
+                                       placeholder="All departments"
+                                       options="{'no_create': True}"/>
+                                <field name="employee_ids"
+                                       widget="many2many_tags"
+                                       placeholder="All employees"
+                                       options="{'no_create': True}"/>
+                            </group>
+                        </group>
+
+                        <group>
+                            <group string="Report Options">
+                                <field name="include_discharge"
+                                       help="Include discharge shifts in report"/>
+                                <field name="include_leave_data"
+                                       help="Include leave data with different leave types as separate columns"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <page string="Instructions">
+                                <div class="alert alert-info">
+                                    <h4>How to use:</h4>
+                                    <ul>
+                                        <li><strong>Detailed Report:</strong> Shows each attendance record with full information</li>
+                                        <li><strong>Summary Report:</strong> Shows totals by employee</li>
+                                        <li><strong>Both:</strong> Creates Excel file with 2 sheets</li>
+                                    </ul>
+
+                                    <h4>Detailed Report Content:</h4>
+                                    <ul>
+                                        <li>Employee info: No, Employee Code, Name, Department, Date</li>
+                                        <li>Attendance: Check in/out times (actual vs scheduled)</li>
+                                        <li>Work time: Work hours, overtime details by category</li>
+                                        <li>Issues: Late/early minutes, discharge status</li>
+                                        <li><strong>Leave data:</strong> Hours of leave by leave type (if enabled)</li>
+                                    </ul>
+
+                                    <h4>Summary Report Content:</h4>
+                                    <ul>
+                                        <li>Work summary: Total work days, total work hours</li>
+                                        <li>Overtime: Total overtime by category (early, regular, evening, night, holiday)</li>
+                                        <li>Violations: Total late/early minutes and violation days</li>
+                                        <li>Special: Discharge shifts count</li>
+                                        <li><strong>Leave summary:</strong> Total leave hours by leave type (if enabled)</li>
+                                    </ul>
+
+                                    <h4>Leave Data Features:</h4>
+                                    <div class="alert alert-warning" style="margin-top: 10px;">
+                                        <ul>
+                                            <li>Automatically includes all leave types configured in the system</li>
+                                            <li>Shows approved leaves only (validated status)</li>
+                                            <li>Calculates leave hours: Full day = 8h, Half day = 4h</li>
+                                            <li>Each leave type appears as a separate column</li>
+                                            <li>Color coding: Blue background for cells with leave data</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </page>
+
+                            <page string="Tips &amp; Notes">
+                                <div class="alert alert-success">
+                                    <h4>Color Coding in Excel:</h4>
+                                    <ul>
+                                        <li><span style="background-color: #FFCCCC; padding: 2px 5px;">Red background:</span> Late attendance</li>
+                                        <li><span style="background-color: #FFFFCC; padding: 2px 5px;">Yellow background:</span> Early departure</li>
+                                        <li><span style="background-color: #CCCCCC; padding: 2px 5px;">Gray background:</span> Discharge shifts</li>
+                                        <li><span style="background-color: #E6F3FF; padding: 2px 5px;">Light blue background:</span> Leave data</li>
+                                    </ul>
+
+                                    <h4>Report Performance:</h4>
+                                    <ul>
+                                        <li>For large date ranges, consider filtering by department or employees</li>
+                                        <li>Summary reports process faster than detailed reports</li>
+                                        <li>Leave data processing may take additional time for large datasets</li>
+                                    </ul>
+
+                                    <h4>Data Requirements:</h4>
+                                    <ul>
+                                        <li>Attendance records must have both check-in and check-out times</li>
+                                        <li>Leave data requires validated leave requests in the selected period</li>
+                                        <li>Employee codes and department assignments improve report readability</li>
+                                    </ul>
+                                </div>
+                            </page>
+                        </notebook>
+                    </sheet>
+
+                    <footer>
+                        <button name="action_generate_report"
+                                string="Generate Excel Report"
+                                type="object"
+                                class="btn-primary"/>
+                        <button name="action_preview_data"
+                                string="Preview Data"
+                                type="object"
+                                class="btn-secondary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Action to open wizard -->
+        <record id="action_attendance_report_wizard" model="ir.actions.act_window">
+            <field name="name">Attendance Report</field>
+            <field name="res_model">attendance.report.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="view_id" ref="view_attendance_report_wizard_form"/>
+            <field name="context">{}</field>
+        </record>
+
+        <!-- Menu Item -->
+        <menuitem
+            id="menu_attendance_report_wizard_reports"
+            name="Xuất excel báo cáo chấm công"
+            parent="hr_attendance.menu_hr_attendance_reporting"
+            action="action_attendance_report_wizard"
+            sequence="10"/>
+
+        <!-- Server Action -->
+        <record id="action_server_attendance_report" model="ir.actions.server">
+            <field name="name">Generate Attendance Report</field>
+            <field name="model_id" ref="hr_attendance.model_hr_attendance"/>
+            <field name="binding_model_id" ref="hr_attendance.model_hr_attendance"/>
+            <field name="binding_view_types">list</field>
+            <field name="state">code</field>
+            <field name="code">
+# Get employees from selected records
+employee_ids = records.mapped('employee_id').ids
+date_from = min(records.mapped('check_in')).date() if records else fields.Date.today()
+date_to = max(records.mapped('check_in')).date() if records else fields.Date.today()
+
+# Create wizard with pre-filled data
+wizard = env['attendance.report.wizard'].create({
+    'date_from': date_from,
+    'date_to': date_to,
+    'employee_ids': [(6, 0, employee_ids)],
+    'report_type': 'detailed',
+    'include_leave_data': True,  # Enable leave data by default
+})
+
+action = {
+    'name': 'Attendance Report',
+    'type': 'ir.actions.act_window',
+    'res_model': 'attendance.report.wizard',
+    'view_mode': 'form',
+    'res_id': wizard.id,
+    'target': 'new',
+}
+            </field>
+        </record>
+
+    </data>
+</odoo>

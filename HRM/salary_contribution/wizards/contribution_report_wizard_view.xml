@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="salary_contribution_report_wizard_form" model="ir.ui.view">
+        <field name="name">Salary Contribution Report Wizard</field>
+        <field name="model">salary.contribution.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Tạo Báo Cáo Đóng Góp">
+                <group>
+                    <group>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                    </group>
+                    <group>
+                        <field name="contribution_type"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="generate_report"
+                            string="Tạo Báo Cáo"
+                            type="object"
+                            class="oe_highlight"/>
+                    <button string="Hủy" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_salary_contribution_report_wizard" model="ir.actions.act_window">
+        <field name="name">Tạo Báo Cáo Đóng Góp</field>
+        <field name="res_model">salary.contribution.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+   <menuitem
+        id="menu_salary_contribution_report_wizard"
+        name="Tạo Báo Cáo Đóng Góp"
+        parent="payroll.payroll_menu_root"
+        action="action_salary_contribution_report_wizard"
+        sequence="100"/>
+</odoo>

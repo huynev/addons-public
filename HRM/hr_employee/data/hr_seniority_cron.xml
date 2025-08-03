@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Cron Job để cập nhật thâm niên của nhân viên -->
+        <record id="ir_cron_update_employee_seniority" model="ir.cron">
+            <field name="name">Cập nhật thâm niên nhân viên</field>
+            <field name="model_id" ref="model_hr_employee"/>
+            <field name="state">code</field>
+            <field name="code">model.update_all_employment_years()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">months</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+            <field name="active" eval="True"/>
+            <field name="nextcall" eval="(DateTime.now().replace(day=1) + relativedelta(months=1)).strftime('%Y-%m-%d 02:00:00')"/>
+            <field name="user_id" ref="base.user_root"/>
+        </record>
+    </data>
+</odoo>

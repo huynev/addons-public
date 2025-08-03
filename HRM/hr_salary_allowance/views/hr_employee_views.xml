@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Extend Employee Form View -->
+    <record id="view_employee_form_inherit_allowance" model="ir.ui.view">
+        <field name="name">hr.employee.form.inherit.allowance</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <button name="action_view_salary_allowances" type="object" class="oe_stat_button" icon="fa-money">
+                    <field name="salary_allowance_count" widget="statinfo" string="Phụ Cấp"/>
+                </button>
+            </div>
+        </field>
+    </record>
+
+    <!-- Add Multi-Action to Employee Tree View -->
+    <record id="action_create_mass_allowance" model="ir.actions.act_window">
+        <field name="name">Đăng Ký Phụ Cấp Hàng Loạt</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">mass.allowance.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="hr.model_hr_employee"/>
+        <field name="binding_view_types">list</field>
+        <field name="context">{'hide_employee_selection': True}</field>
+    </record>
+</odoo>

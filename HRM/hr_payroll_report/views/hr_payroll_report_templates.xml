@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="assets_backend" name="hr_payroll_report assets" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet" href="/hr_payroll_report/static/src/css/payroll_report.css"/>
+        </xpath>
+    </template>
+</odoo>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2024 Wokwy - quochuy.software@gmail.com -->
+<odoo>
+    <record id="view_zalo_zns_message_tree" model="ir.ui.view">
+        <field name="name">zalo.zns.message.tree</field>
+        <field name="model">zalo.zns.message</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="error_message"/>
+                <field name="phone"/>
+                <field
+                    name="state"
+                    decoration-success="state == 'done'"
+                    decoration-warning="state == 'failed'"
+                    decoration-info="state == 'draft'"
+                    decoration-danger="state == 'sent'"
+                    widget="badge"
+                    optional="show"
+                />
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_zalo_zns_message_form" model="ir.ui.view">
+        <field name="name">zalo.zns.message.form</field>
+        <field name="model">zalo.zns.message</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_send_message_zalo_zns" string="Send Zalo Message" type="object" class="oe_highlight"/>
+                    <button name="action_update_status_send_zns_from_zalo" string="Update status form Zalo" invisible="state == 'draft'" type="object" class="oe_highlight"/>
+                    <button name="action_cancel" string="Cancel" type="object" invisible="state not in ('draft', 'failed')" confirm="Are you sure you want to cancel this message?"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="batch_id"/>
+                        <field name="name"/>
+                        <field name="model_id"/>
+                        <field name="record_id"/>
+                        <field name="template_id"/>
+                        <field name="zalo_msg_id"/>
+                        <field name="phone"/>
+                        <field name="error_message" invisible="state != 'failed'"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_zalo_zns_message" model="ir.actions.act_window">
+        <field name="name">Zalo ZNS Messages</field>
+        <field name="res_model">zalo.zns.message</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Tree view specific actions -->
+    <record id="action_send_selected_messages" model="ir.actions.server">
+        <field name="name">Send Zalo ZNS Selected Messages</field>
+        <field name="model_id" ref="model_zalo_zns_message"/>
+        <field name="binding_model_id" ref="model_zalo_zns_message"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+            records.action_send_message_zalo_zns()
+        </field>
+    </record>
+</odoo>

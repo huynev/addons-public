@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View for Salary Allowances -->
+    <record id="view_salary_allowance_tree" model="ir.ui.view">
+        <field name="name">salary.allowance.tree</field>
+        <field name="model">salary.allowance</field>
+        <field name="arch" type="xml">
+            <tree string="Phụ Cấp Lương" decoration-info="state == 'draft'" decoration-success="state == 'confirmed'" decoration-muted="state == 'closed'" decoration-warning="state == 'suspended'">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="allowance_type_id"/>
+                <field name="amount"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="is_taxable"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View for Salary Allowances -->
+    <record id="view_salary_allowance_form" model="ir.ui.view">
+        <field name="name">salary.allowance.form</field>
+        <field name="model">salary.allowance</field>
+        <field name="arch" type="xml">
+            <form string="Phụ Cấp Lương">
+                <header>
+                    <button name="action_confirm" string="Xác Nhận" type="object" class="oe_highlight" invisible_if="state != 'draft'"/>
+                    <button name="action_suspend" string="Tạm Dừng" type="object" invisible_if="state != 'confirmed'"/>
+                    <button name="action_close" string="Đóng" type="object" invisible_if="state not in ('confirmed', 'suspended')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,suspended,closed"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Tên Phụ Cấp" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="employee_id" readonly_if="state != 'draft'"/>
+                            <field name="allowance_type_id" readonly_if="state != 'draft'"/>
+                            <field name="amount"/>
+                            <field name="company_currency_id" invisible="1"/>
+                            <field name="is_taxable" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="registration_date"/>
+                            <field name="start_date" readonly_if="state != 'draft'"/>
+                            <field name="end_date" readonly_if="state == 'closed'"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Ghi Chú">
+                            <field name="notes" placeholder="Nhập ghi chú về phụ cấp..."/>
+                        </page>
+                        <page string="Lịch Sử Thay Đổi">
+                            <field name="history_ids" readonly="1">
+                                <tree>
+                                    <field name="start_date"/>
+                                    <field name="end_date"/>
+                                    <field name="amount"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View for Salary Allowances -->
+    <record id="view_salary_allowance_search" model="ir.ui.view">
+        <field name="name">salary.allowance.search</field>
+        <field name="model">salary.allowance</field>
+        <field name="arch" type="xml">
+            <search string="Tìm Kiếm Phụ Cấp">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="allowance_type_id"/>
+                <separator/>
+                <filter string="Đang Hoạt Động" name="active" domain="[('state', '=', 'confirmed')]"/>
+                <filter string="Dự Thảo" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Tạm Dừng" name="suspended" domain="[('state', '=', 'suspended')]"/>
+                <filter string="Đã Đóng" name="closed" domain="[('state', '=', 'closed')]"/>
+                <separator/>
+                <filter string="Chịu Thuế" name="taxable" domain="[('is_taxable', '=', True)]"/>
+                <filter string="Không Chịu Thuế" name="non_taxable" domain="[('is_taxable', '=', False)]"/>
+                <group expand="0" string="Nhóm Theo">
+                    <filter string="Nhân Viên" name="group_by_employee" context="{'group_by': 'employee_id'}"/>
+                    <filter string="Loại Phụ Cấp" name="group_by_type" context="{'group_by': 'allowance_type_id'}"/>
+                    <filter string="Trạng Thái" name="group_by_state" context="{'group_by': 'state'}"/>
+                    <filter string="Ngày Bắt Đầu" name="group_by_start_date" context="{'group_by': 'start_date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action for Salary Allowances -->
+    <record id="action_salary_allowance" model="ir.actions.act_window">
+        <field name="name">Phụ Cấp Lương</field>
+        <field name="res_model">salary.allowance</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_salary_allowance_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Tạo đăng ký phụ cấp mới
+            </p>
+            <p>
+                Quản lý các phụ cấp lương cho nhân viên của bạn.
+            </p>
+        </field>
+    </record>
+</odoo>

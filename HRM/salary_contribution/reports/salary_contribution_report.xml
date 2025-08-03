@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="salary_contribution_report_document">
+        <t t-call="web.external_layout">
+            <div class="page">
+                <h2>Báo Cáo Đóng Góp Từ Lương</h2>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Nhân Viên</th>
+                            <th>Loại Đóng Góp</th>
+                            <th>Cơ Sở Tính Toán</th>
+                            <th>Tỷ Lệ NV (%)</th>
+                            <th>Tỷ Lệ Công Ty (%)</th>
+                            <th>Số Tiền NV</th>
+                            <th>Số Tiền Công Ty</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="docs" t-as="contribution">
+                            <tr>
+                                <td><t t-esc="contribution.employee_id.name"/></td>
+                                <td><t t-esc="contribution.contribution_type"/></td>
+                                <td><t t-esc="contribution.calculation_base"/></td>
+                                <td><t t-esc="contribution.employee_contribution_rate"/></td>
+                                <td><t t-esc="contribution.company_contribution_rate"/></td>
+                                <td><t t-esc="contribution.calculate_contribution_amount()['employee_contribution']"/></td>
+                                <td><t t-esc="contribution.calculate_contribution_amount()['company_contribution']"/></td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </div>
+        </t>
+    </template>
+
+    <report
+        id="action_salary_contribution_report"
+        model="salary.contribution"
+        string="Báo Cáo Đóng Góp"
+        report_type="qweb-pdf"
+        name="salary_contribution.salary_contribution_report_document"
+        file="salary_contribution.salary_contribution_report"
+        attachment_use="False"
+    />
+</odoo>

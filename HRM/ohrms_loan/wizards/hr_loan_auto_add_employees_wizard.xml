@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Add Employees Wizard Form View -->
+    <record id="view_hr_loan_auto_add_employees_wizard_form" model="ir.ui.view">
+        <field name="name">hr.loan.auto.add.employees.wizard.form</field>
+        <field name="model">hr.loan.auto.add.employees.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="alert alert-info" role="alert" invisible="employee_count == 0">
+                        Bạn đang thêm <field name="employee_count" readonly="1"/> nhân viên đã chọn.
+                    </div>
+                    <div class="alert alert-warning" role="alert" invisible="employee_count > 0 or config_id == False">
+                        Vui lòng chọn nhân viên để tiếp tục.
+                    </div>
+                    <div class="alert alert-success" role="alert" invisible="config_id == False or available_employee_count &lt;= 0">
+                        Có <field name="available_employee_count" readonly="1"/> nhân viên có thể thêm vào cấu hình.
+                    </div>
+                    <div class="alert alert-danger" role="alert" invisible="config_id == False or available_employee_count &gt; 0">
+                        Tất cả nhân viên đã được thêm vào cấu hình này!
+                    </div>
+                    <group>
+                        <group>
+                            <field name="config_id" invisible="1"/>
+                            <field name="default_loan_amount"/>
+                            <field name="employee_count" invisible="1"/>
+                            <field name="available_employee_count" invisible="1"/>
+                            <field name="available_employee_domain" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="department_id" options="{'no_create': True}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Nhân Viên" name="employees">
+                            <field name="employee_ids" nolabel="1" widget="many2many" options="{'no_create': True}" domain="available_employee_domain">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="barcode" string="Employee Code"/>
+                                    <field name="department_id"/>
+                                    <field name="job_id"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <footer>
+                    <button name="action_add_employees" string="Add Employees" type="object" class="btn-primary"
+                            invisible="employee_ids == [] or config_id == False"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Add Employees Wizard Action -->
+    <record id="hr_loan_auto_add_employees_wizard_action" model="ir.actions.act_window">
+        <field name="name">Add Employees</field>
+        <field name="res_model">hr.loan.auto.add.employees.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="model_hr_loan_auto_config"/>
+        <field name="binding_view_types">form</field>
+    </record>
+
+    <!-- Batch Create Wizard -->
+    <record id="view_hr_loan_batch_create_wizard_form" model="ir.ui.view">
+        <field name="name">hr.loan.batch.create.wizard.form</field>
+        <field name="model">hr.loan.batch.create.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Create Loan Batch">
+                <group>
+                    <field name="name" placeholder="Leave empty for auto-generation"/>
+                    <field name="month"/>
+                    <field name="year"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                </group>
+                <footer>
+                    <button name="create_batch" string="Create Batch" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="hr_loan_batch_create_wizard_action" model="ir.actions.act_window">
+        <field name="name">Create Loan Batch</field>
+        <field name="res_model">hr.loan.batch.create.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Batch Process Wizard -->
+    <record id="view_hr_loan_batch_process_wizard_form" model="ir.ui.view">
+        <field name="name">hr.loan.batch.process.wizard.form</field>
+        <field name="model">hr.loan.batch.process.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Xử lý tạm ứng hàng loạt">
+                <sheet>
+                    <group col="2">
+                        <field name="batch_id" readonly="1" string="Đợt"/>
+                        <field name="action_type" string="Hành động"/>
+                    </group>
+
+                    <notebook>
+                        <page string="Xác nhận">
+                            <div class="alert alert-info" role="alert">
+                                <field name="confirmation_message" readonly="1" nolabel="1"/>
+                            </div>
+                        </page>
+                    </notebook>
+                </sheet>
+
+                <footer>
+                    <button name="process_loans" string="Xử lý" type="object"
+                            class="btn-primary"/>
+                    <button string="Hủy" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="hr_loan_batch_process_wizard_action" model="ir.actions.act_window">
+        <field name="name">Process Batch Loans</field>
+        <field name="res_model">hr.loan.batch.process.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Bulk Create Loans Wizard -->
+    <record id="view_hr_loan_bulk_create_wizard_form" model="ir.ui.view">
+        <field name="name">hr.loan.bulk.create.wizard.form</field>
+        <field name="model">hr.loan.bulk.create.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Bulk Create Loans">
+                <group>
+                    <group>
+                        <field name="batch_id"
+                               domain="[('state', 'in', ['draft', 'confirmed'])]"
+                               context="{'default_month': context_today().month, 'default_year': context_today().year}"/>
+                        <field name="loan_amount" widget="monetary"/>
+                        <field name="installment"/>
+                        <field name="payment_date"/>
+                    </group>
+                    <group>
+                        <field name="auto_compute_installments"/>
+                        <field name="auto_submit"/>
+                    </group>
+                </group>
+                <notebook>
+                    <page string="Nhân Viên" name="employees">
+                        <field name="employee_ids" nolabel="1" widget="many2many" options="{'no_create': True}">
+                            <tree>
+                                <field name="name"/>
+                                <field name="barcode" string="Employee Code"/>
+                                <field name="department_id"/>
+                                <field name="job_id"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+                <footer>
+                    <button name="create_loans" string="Create Loans" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="hr_loan_bulk_create_wizard_action" model="ir.actions.act_window">
+        <field name="name">Bulk Create Loans</field>
+        <field name="res_model">hr.loan.bulk.create.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Add create batch action to main menu -->
+    <record id="action_create_batch_shortcut" model="ir.actions.act_window">
+        <field name="name">Tạo đợt ứng lương</field>
+        <field name="res_model">hr.loan.batch.create.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

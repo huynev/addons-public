@@ -1,0 +1,25 @@
+{
+    'name': 'HR Attendance Overtime Management',
+    'version': '17.0.1.0.0',
+    'category': 'Human Resources',
+    'summary': 'Advanced Overtime Calculation for HR Attendance',
+    'description': """HR Attendance Overtime Management""",
+    'author': 'Wokwy (quochuy.software@gmail.com)',
+    'website': 'https://www.c2bgroup.net',
+    'license': 'LGPL-3',
+    'depends': [
+        'hr_attendance',
+        'hr_contract',
+        'resource',
+        'payroll',
+    ],
+    'data': [
+        'views/hr_attendance_overtime_views.xml',
+        # 'wizard/attendance_report_wizard.xml',
+    ],
+    'demo': [],
+    'installable': True,
+    'auto_install': False,
+    'application': False,
+    'sequence': 100,
+}

@@ -1,0 +1,674 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* zkteco_adms_integration
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-30 07:15+0000\n"
+"PO-Revision-Date: 2025-07-30 07:15+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: zkteco_adms_integration
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_dashboard
+msgid "<i class=\"fa fa-ellipsis-v\" role=\"img\" aria-label=\"Manage\" title=\"Manage\"/>"
+msgstr "<i class=\"fa fa-ellipsis-v\" role=\"img\" aria-label=\"Quản lý\" title=\"Quản lý\"/>"
+
+#. module: zkteco_adms_integration
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_dashboard
+msgid "<span class=\"o_label\">Today</span>"
+msgstr "<span class=\"o_label\">Hôm nay</span>"
+
+#. module: zkteco_adms_integration
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_dashboard
+msgid "<span class=\"o_label\">Total</span>"
+msgstr "<span class=\"o_label\">Tổng cộng</span>"
+
+#. module: zkteco_adms_integration
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_attendance_log_form
+msgid "<span class=\"o_stat_text\">Raw Data</span>"
+msgstr "<span class=\"o_stat_text\">Dữ liệu thô</span>"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_device__is_active
+msgid "Active"
+msgstr "Hoạt động"
+
+#. module: zkteco_adms_integration
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_attendance_log_form
+msgid "Are you sure you want to reprocess this attendance data?"
+msgstr "Bạn có chắc chắn muốn xử lý lại dữ liệu chấm công này không?"
+
+#. module: zkteco_adms_integration
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_assign_employee_wizard
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_unknown_attendance_tree
+msgid "Assign"
+msgstr "Gán"
+
+#. module: zkteco_adms_integration
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_assign_employee_wizard
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_unknown_attendance_form
+msgid "Assign Employee"
+msgstr "Gán nhân viên"
+
+#. module: zkteco_adms_integration
+#: model:ir.model,name:zkteco_adms_integration.model_zkteco_assign_employee_wizard
+msgid "Assign Employee to Unknown Attendance"
+msgstr "Gán nhân viên cho chấm công chưa xác định"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_unknown_attendance__employee_id
+msgid "Assigned Employee"
+msgstr "Nhân viên được gán"
+
+#. module: zkteco_adms_integration
+#: model:ir.model,name:zkteco_adms_integration.model_hr_attendance
+msgid "Attendance"
+msgstr "Chấm công"
+
+#. module: zkteco_adms_integration
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_hr_employee_form_enhanced
+msgid "Attendance Device"
+msgstr "Thiết bị chấm công"
+
+#. module: zkteco_adms_integration
+#: model:ir.ui.menu,name:zkteco_adms_integration.menu_zkteco_attendance_log
+msgid "Attendance Logs"
+msgstr "Nhật ký chấm công"
+
+#. module: zkteco_adms_integration
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_assign_employee_wizard
+msgid "Cancel"
+msgstr "Hủy"
+
+#. module: zkteco_adms_integration
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_device_form
+msgid "Clear Data"
+msgstr "Xóa dữ liệu"
+
+#. module: zkteco_adms_integration
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_attendance_log_raw_data_dialog
+msgid "Close"
+msgstr "Đóng"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_device_command__command
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_device_command_form
+msgid "Command"
+msgstr "Lệnh"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_device__command_ids
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_device_form
+msgid "Commands"
+msgstr "Lệnh"
+
+#. module: zkteco_adms_integration
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_device_command_form
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_device_command_tree
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_device_form
+msgid "Confirm"
+msgstr "Xác nhận"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields.selection,name:zkteco_adms_integration.selection__zkteco_device_command__status__confirmed
+msgid "Confirmed"
+msgstr "Đã xác nhận"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_device_command__confirmed_time
+msgid "Confirmed Time"
+msgstr "Thời gian xác nhận"
+
+#. module: zkteco_adms_integration
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_dashboard
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_device_form
+msgid "Connect"
+msgstr "Kết nối"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields.selection,name:zkteco_adms_integration.selection__zkteco_device__connection_status__connected
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_dashboard
+msgid "Connected"
+msgstr "Đã kết nối"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_assign_employee_wizard__create_attendance_record
+msgid "Create Attendance Record"
+msgstr "Tạo bản ghi chấm công"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_assign_employee_wizard__create_uid
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_attendance_log__create_uid
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_device__create_uid
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_device_command__create_uid
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_unknown_attendance__create_uid
+msgid "Created by"
+msgstr "Được tạo bởi"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_assign_employee_wizard__create_date
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_attendance_log__create_date
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_device__create_date
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_device_command__create_date
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_unknown_attendance__create_date
+msgid "Created on"
+msgstr "Được tạo vào"
+
+#. module: zkteco_adms_integration
+#: model:ir.ui.menu,name:zkteco_adms_integration.menu_zkteco_dashboard
+msgid "Dashboard"
+msgstr "Bảng điều khiển"
+
+#. module: zkteco_adms_integration
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_attendance_log_search
+msgid "Date"
+msgstr "Ngày"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_hr_attendance__device_id
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_device_command__device_id
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_attendance_log_search
+msgid "Device"
+msgstr "Thiết bị"
+
+#. module: zkteco_adms_integration
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_device_command_form
+msgid "Device Command"
+msgstr "Lệnh thiết bị"
+
+#. module: zkteco_adms_integration
+#: model:ir.actions.act_window,name:zkteco_adms_integration.action_zkteco_device_command
+#: model:ir.ui.menu,name:zkteco_adms_integration.menu_zkteco_commands
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_device_command_tree
+msgid "Device Commands"
+msgstr "Lệnh thiết bị"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_device__device_name
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_device_form
+msgid "Device Name"
+msgstr "Tên thiết bị"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_hr_attendance__device_serial
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_attendance_log__device_serial
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_unknown_attendance__device_serial
+msgid "Device Serial"
+msgstr "Số serial thiết bị"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_hr_employee__attendance_device_id
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_assign_employee_wizard__device_user_id
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_unknown_attendance__device_user_id
+msgid "Device User ID"
+msgstr "ID người dùng thiết bị"
+
+#. module: zkteco_adms_integration
+#: model:ir.ui.menu,name:zkteco_adms_integration.menu_zkteco_devices
+msgid "Devices"
+msgstr "Thiết bị"
+
+#. module: zkteco_adms_integration
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_dashboard
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_device_form
+msgid "Disconnect"
+msgstr "Ngắt kết nối"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields.selection,name:zkteco_adms_integration.selection__zkteco_device__connection_status__disconnected
+msgid "Disconnected"
+msgstr "Đã ngắt kết nối"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_assign_employee_wizard__display_name
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_attendance_log__display_name
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_device__display_name
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_device_command__display_name
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_unknown_attendance__display_name
+msgid "Display Name"
+msgstr "Tên hiển thị"
+
+#. module: zkteco_adms_integration
+#: model:ir.model,name:zkteco_adms_integration.model_hr_employee
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_assign_employee_wizard__employee_id
+msgid "Employee"
+msgstr "Nhân viên"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields.selection,name:zkteco_adms_integration.selection__zkteco_attendance_log__status__error
+#: model:ir.model.fields.selection,name:zkteco_adms_integration.selection__zkteco_device__connection_status__error
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_attendance_log_search
+msgid "Error"
+msgstr "Lỗi"
+
+#. module: zkteco_adms_integration
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_attendance_log_form
+msgid "Error Details"
+msgstr "Chi tiết lỗi"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_attendance_log__error_message
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_attendance_log_raw_data_dialog
+msgid "Error Message"
+msgstr "Thông báo lỗi"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields.selection,name:zkteco_adms_integration.selection__zkteco_device_command__status__expired
+msgid "Expired"
+msgstr "Đã hết hạn"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields.selection,name:zkteco_adms_integration.selection__zkteco_device_command__status__failed
+msgid "Failed"
+msgstr "Thất bại"
+
+#. module: zkteco_adms_integration
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_attendance_log_search
+msgid "Group By"
+msgstr "Nhóm theo"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,help:zkteco_adms_integration.field_zkteco_device_command__priority
+msgid "Higher number = higher priority"
+msgstr "Số càng cao = mức ưu tiên càng cao"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_assign_employee_wizard__id
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_attendance_log__id
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_device__id
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_device_command__id
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_unknown_attendance__id
+msgid "ID"
+msgstr "ID"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_device__device_ip
+msgid "IP Address"
+msgstr "Địa chỉ IP"
+
+#. module: zkteco_adms_integration
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_unknown_attendance_form
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_unknown_attendance_tree
+msgid "Ignore"
+msgstr "Bỏ qua"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,help:zkteco_adms_integration.field_zkteco_attendance_log__reprocessed
+msgid "Indicates if this log has been reprocessed"
+msgstr "Cho biết nhật ký này đã được xử lý lại chưa"
+
+#. module: zkteco_adms_integration
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_attendance_log_search
+msgid "Last 7 Days"
+msgstr "7 ngày qua"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_device__last_activity
+msgid "Last Activity"
+msgstr "Hoạt động cuối"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_attendance_log__last_reprocess_date
+msgid "Last Reprocess Date"
+msgstr "Ngày xử lý lại cuối"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_assign_employee_wizard__write_uid
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_attendance_log__write_uid
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_device__write_uid
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_device_command__write_uid
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_unknown_attendance__write_uid
+msgid "Last Updated by"
+msgstr "Cập nhật cuối bởi"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_assign_employee_wizard__write_date
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_attendance_log__write_date
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_device__write_date
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_device_command__write_date
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_unknown_attendance__write_date
+msgid "Last Updated on"
+msgstr "Cập nhật cuối vào"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_device__location
+msgid "Location"
+msgstr "Vị trí"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_device_command__max_retries
+msgid "Max Retries"
+msgstr "Số lần thử lại tối đa"
+
+#. module: zkteco_adms_integration
+#: model_terms:ir.actions.act_window,help:zkteco_adms_integration.action_zkteco_attendance_log
+msgid "No attendance logs found!"
+msgstr "Không tìm thấy nhật ký chấm công nào!"
+
+#. module: zkteco_adms_integration
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_attendance_log_form
+msgid "No raw data available"
+msgstr "Không có dữ liệu thô"
+
+#. module: zkteco_adms_integration
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_attendance_log_search
+msgid "Not Reprocessed"
+msgstr "Chưa xử lý lại"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_device_command__notes
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_unknown_attendance__notes
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_device_command_form
+msgid "Notes"
+msgstr "Ghi chú"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_hr_attendance__attendance_timestamp
+msgid "Original Timestamp"
+msgstr "Thời gian gốc"
+
+#. module: zkteco_adms_integration
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_attendance_log_search
+msgid "Partial"
+msgstr "Một phần"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields.selection,name:zkteco_adms_integration.selection__zkteco_attendance_log__status__partial
+msgid "Partial Success"
+msgstr "Thành công một phần"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields.selection,name:zkteco_adms_integration.selection__zkteco_device_command__status__pending
+msgid "Pending"
+msgstr "Đang chờ"
+
+#. module: zkteco_adms_integration
+#. odoo-python
+#: code:addons/zkteco_adms_integration/models/zkteco_attendance_log.py:0
+#, python-format
+msgid "Please select at least one record to reprocess."
+msgstr "Vui lòng chọn ít nhất một bản ghi để xử lý lại."
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_device__device_port
+msgid "Port"
+msgstr "Cổng"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_device_command__priority
+msgid "Priority"
+msgstr "Ưu tiên"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_unknown_attendance__processed
+msgid "Processed"
+msgstr "Đã xử lý"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_attendance_log__processed_records
+msgid "Processed Records"
+msgstr "Bản ghi đã xử lý"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields.selection,name:zkteco_adms_integration.selection__zkteco_attendance_log__status__processing
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_attendance_log_search
+msgid "Processing"
+msgstr "Đang xử lý"
+
+#. module: zkteco_adms_integration
+#: model:ir.ui.menu,name:zkteco_adms_integration.menu_zkteco_logs
+msgid "Processing Logs"
+msgstr "Nhật ký xử lý"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_attendance_log__processing_time
+msgid "Processing Time (seconds)"
+msgstr "Thời gian xử lý (giây)"
+
+#. module: zkteco_adms_integration
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_attendance_log_raw_data_dialog
+msgid "Raw Attendance Data"
+msgstr "Dữ liệu chấm công thô"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_hr_attendance__raw_data
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_attendance_log__raw_data
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_attendance_log_form
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_attendance_log_raw_data_dialog
+msgid "Raw Data"
+msgstr "Dữ liệu thô"
+
+#. module: zkteco_adms_integration
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_attendance_log_kanban
+msgid "Records:"
+msgstr "Bản ghi:"
+
+#. module: zkteco_adms_integration
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_attendance_log_raw_data_dialog
+msgid "Reprocess"
+msgstr "Xử lý lại"
+
+#. module: zkteco_adms_integration
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_attendance_log_form
+msgid "Reprocess Attendance"
+msgstr "Xử lý lại chấm công"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_attendance_log__reprocess_count
+msgid "Reprocess Count"
+msgstr "Số lần xử lý lại"
+
+#. module: zkteco_adms_integration
+#: model:ir.actions.server,name:zkteco_adms_integration.action_reprocess_selected_logs
+msgid "Reprocess Selected Logs"
+msgstr "Xử lý lại nhật ký đã chọn"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_attendance_log__reprocessed
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_attendance_log_kanban
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_attendance_log_search
+msgid "Reprocessed"
+msgstr "Đã xử lý lại"
+
+#. module: zkteco_adms_integration
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_device_form
+msgid "Restart Device"
+msgstr "Khởi động lại thiết bị"
+
+#. module: zkteco_adms_integration
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_device_command_form
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_device_command_tree
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_device_form
+msgid "Retry"
+msgstr "Thử lại"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_device_command__retry_count
+msgid "Retry Count"
+msgstr "Số lần thử lại"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_device_command__scheduled_time
+msgid "Scheduled Time"
+msgstr "Thời gian lên lịch"
+
+#. module: zkteco_adms_integration
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_attendance_log_search
+msgid "Search ZKTeco Attendance Logs"
+msgstr "Tìm kiếm nhật ký chấm công ZKTeco"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields.selection,name:zkteco_adms_integration.selection__zkteco_device_command__status__sent
+msgid "Sent"
+msgstr "Đã gửi"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_device_command__sent_time
+msgid "Sent Time"
+msgstr "Thời gian gửi"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_device__device_serial
+msgid "Serial Number"
+msgstr "Số serial"
+
+#. module: zkteco_adms_integration
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_dashboard
+msgid "Settings"
+msgstr "Cài đặt"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_attendance_log__status
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_device__connection_status
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_device_command__status
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_unknown_attendance__status
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_attendance_log_search
+msgid "Status"
+msgstr "Trạng thái"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields.selection,name:zkteco_adms_integration.selection__zkteco_attendance_log__status__success
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_attendance_log_search
+msgid "Success"
+msgstr "Thành công"
+
+#. module: zkteco_adms_integration
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_device_form
+msgid "Sync Time"
+msgstr "Đồng bộ thời gian"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_hr_employee__this_month_attendances
+msgid "This Month"
+msgstr "Tháng này"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_unknown_attendance__timestamp
+msgid "Timestamp"
+msgstr "Thời gian"
+
+#. module: zkteco_adms_integration
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_attendance_log_search
+msgid "Today"
+msgstr "Hôm nay"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_device__today_records
+msgid "Today Records"
+msgstr "Bản ghi hôm nay"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_hr_employee__total_attendances
+msgid "Total Attendances"
+msgstr "Tổng số chấm công"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_device__total_records
+msgid "Total Records"
+msgstr "Tổng số bản ghi"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_assign_employee_wizard__unknown_attendance_id
+msgid "Unknown Attendance"
+msgstr "Chấm công chưa xác định"
+
+#. module: zkteco_adms_integration
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_unknown_attendance_form
+msgid "Unknown Attendance Record"
+msgstr "Bản ghi chấm công chưa xác định"
+
+#. module: zkteco_adms_integration
+#: model:ir.actions.act_window,name:zkteco_adms_integration.action_zkteco_unknown_attendance
+#: model:ir.model,name:zkteco_adms_integration.model_zkteco_unknown_attendance
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_unknown_attendance_tree
+msgid "Unknown Attendance Records"
+msgstr "Bản ghi chấm công chưa xác định"
+
+#. module: zkteco_adms_integration
+#: model:ir.ui.menu,name:zkteco_adms_integration.menu_zkteco_unknown
+msgid "Unknown Records"
+msgstr "Bản ghi chưa xác định"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,field_description:zkteco_adms_integration.field_zkteco_assign_employee_wizard__update_employee_device_id
+msgid "Update Employee Device ID"
+msgstr "Cập nhật ID thiết bị nhân viên"
+
+#. module: zkteco_adms_integration
+#: model:ir.model.fields,help:zkteco_adms_integration.field_hr_employee__attendance_device_id
+msgid "User ID in attendance device"
+msgstr "ID người dùng trong thiết bị chấm công"
+
+#. module: zkteco_adms_integration
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_attendance_log_form
+msgid "View Related Records"
+msgstr "Xem bản ghi liên quan"
+
+#. module: zkteco_adms_integration
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_attendance_log_search
+msgid "Yesterday"
+msgstr "Hôm qua"
+
+#. module: zkteco_adms_integration
+#: model:ir.ui.menu,name:zkteco_adms_integration.menu_zkteco_main
+msgid "ZKTeco Attendance"
+msgstr "Chấm công ZKTeco"
+
+#. module: zkteco_adms_integration
+#: model:ir.model,name:zkteco_adms_integration.model_zkteco_device
+msgid "ZKTeco Attendance Device"
+msgstr "Thiết bị chấm công ZKTeco"
+
+#. module: zkteco_adms_integration
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_attendance_log_form
+msgid "ZKTeco Attendance Log"
+msgstr "Nhật ký chấm công ZKTeco"
+
+#. module: zkteco_adms_integration
+#: model:ir.actions.act_window,name:zkteco_adms_integration.action_zkteco_attendance_log
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_attendance_log_kanban
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_attendance_log_tree
+msgid "ZKTeco Attendance Logs"
+msgstr "Nhật ký chấm công ZKTeco"
+
+#. module: zkteco_adms_integration
+#: model:ir.model,name:zkteco_adms_integration.model_zkteco_attendance_log
+msgid "ZKTeco Attendance Processing Log"
+msgstr "Nhật ký xử lý chấm công ZKTeco"
+
+#. module: zkteco_adms_integration
+#: model:ir.actions.act_window,name:zkteco_adms_integration.action_zkteco_dashboard
+msgid "ZKTeco Dashboard"
+msgstr "Bảng điều khiển ZKTeco"
+
+#. module: zkteco_adms_integration
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_device_form
+msgid "ZKTeco Device"
+msgstr "Thiết bị ZKTeco"
+
+#. module: zkteco_adms_integration
+#: model:ir.model,name:zkteco_adms_integration.model_zkteco_device_command
+msgid "ZKTeco Device Commands"
+msgstr "Lệnh thiết bị ZKTeco"
+
+#. module: zkteco_adms_integration
+#: model:ir.actions.act_window,name:zkteco_adms_integration.action_zkteco_device
+#: model_terms:ir.ui.view,arch_db:zkteco_adms_integration.view_zkteco_device_tree
+msgid "ZKTeco Devices"
+msgstr "Thiết bị ZKTeco"
+
+#. module: zkteco_adms_integration
+#: model_terms:ir.actions.act_window,help:zkteco_adms_integration.action_zkteco_attendance_log
+msgid ""
+"ZKTeco attendance logs will appear here when devices send attendance data to the server.\n"
+"                    You can reprocess failed or partial logs to retry creating attendance records."
+msgstr ""
+"Nhật ký chấm công ZKTeco sẽ xuất hiện ở đây khi các thiết bị gửi dữ liệu chấm công đến máy chủ.\n"
+"                    Bạn có thể xử lý lại các nhật ký thất bại hoặc một phần để thử lại tạo bản ghi chấm công."

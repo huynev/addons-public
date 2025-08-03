@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Menu Items -->
+    <menuitem id="menu_hr_salary_allowance_root"
+              name="Phụ Cấp Lương"
+              parent="payroll.payroll_menu_root"
+              sequence="20"/>
+
+    <menuitem id="menu_hr_salary_allowance"
+              name="Phụ Cấp"
+              parent="menu_hr_salary_allowance_root"
+              action="action_salary_allowance"
+              sequence="10"/>
+
+    <menuitem id="menu_hr_salary_allowance_type"
+              name="Loại Phụ Cấp"
+              parent="menu_hr_salary_allowance_root"
+              action="action_salary_allowance_type"
+              sequence="20"/>
+</odoo>

@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- ZKTeco Attendance Log Tree View -->
+        <record id="view_zkteco_attendance_log_tree" model="ir.ui.view">
+            <field name="name">zkteco.attendance.log.tree</field>
+            <field name="model">zkteco.attendance.log</field>
+            <field name="arch" type="xml">
+                <tree string="ZKTeco Attendance Logs" multi_edit="1" sample="1">
+                    <field name="device_serial"/>
+                    <field name="processed_records"/>
+                    <field name="status" decoration-success="status == 'success'"
+                           decoration-warning="status == 'partial'"
+                           decoration-danger="status == 'error'"
+                           decoration-info="status == 'processing'"/>
+                    <field name="reprocessed" widget="boolean_toggle"/>
+                    <field name="reprocess_count"/>
+                    <field name="last_reprocess_date"/>
+                    <field name="processing_time"/>
+                    <field name="raw_data"/>
+                    <field name="create_date"/>
+                    <field name="error_message" optional="hide"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- ZKTeco Attendance Log Form View -->
+        <record id="view_zkteco_attendance_log_form" model="ir.ui.view">
+            <field name="name">zkteco.attendance.log.form</field>
+            <field name="model">zkteco.attendance.log</field>
+            <field name="arch" type="xml">
+                <form string="ZKTeco Attendance Log">
+                    <header>
+                        <button name="action_reprocess_attendance"
+                                string="Reprocess Attendance"
+                                type="object"
+                                class="btn-primary"
+                                confirm="Are you sure you want to reprocess this attendance data?"/>
+                        <button name="action_view_attendance_records"
+                                string="View Related Records"
+                                type="object"
+                                class="btn-secondary"/>
+                        <field name="status" widget="statusbar" statusbar_visible="processing,success,partial,error"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_show_raw_data"
+                                    type="object"
+                                    class="oe_stat_button"
+                                    icon="fa-code">
+                                <div class="o_field_widget o_stat_info">
+                                    <span class="o_stat_text">Raw Data</span>
+                                </div>
+                            </button>
+                        </div>
+
+                        <group>
+                            <group>
+                                <field name="device_serial"/>
+                                <field name="processed_records"/>
+                                <field name="processing_time"/>
+                                <field name="create_date"/>
+                            </group>
+                            <group>
+                                <field name="reprocessed"/>
+                                <field name="reprocess_count" invisible="reprocess_count == 0"/>
+                                <field name="last_reprocess_date" invisible="not last_reprocess_date"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <page string="Raw Data" name="raw_data">
+                                <field name="raw_data" widget="text" placeholder="No raw data available"/>
+                            </page>
+                            <page string="Error Details" name="error_details" invisible="not error_message">
+                                <field name="error_message" widget="text" readonly="1"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- ZKTeco Attendance Log Search View -->
+        <record id="view_zkteco_attendance_log_search" model="ir.ui.view">
+            <field name="name">zkteco.attendance.log.search</field>
+            <field name="model">zkteco.attendance.log</field>
+            <field name="arch" type="xml">
+                <search string="Search ZKTeco Attendance Logs">
+                    <field name="device_serial"/>
+                    <field name="status"/>
+                    <field name="create_date"/>
+
+                    <filter string="Success" name="filter_success" domain="[('status', '=', 'success')]"/>
+                    <filter string="Error" name="filter_error" domain="[('status', '=', 'error')]"/>
+                    <filter string="Partial" name="filter_partial" domain="[('status', '=', 'partial')]"/>
+                    <filter string="Processing" name="filter_processing" domain="[('status', '=', 'processing')]"/>
+
+                    <separator/>
+                    <filter string="Reprocessed" name="filter_reprocessed" domain="[('reprocessed', '=', True)]"/>
+                    <filter string="Not Reprocessed" name="filter_not_reprocessed" domain="[('reprocessed', '=', False)]"/>
+
+                    <separator/>
+                    <filter string="Today" name="filter_today" domain="[('create_date', '&gt;=', datetime.datetime.combine(context_today(), datetime.time(0,0,0)))]"/>
+                    <filter string="Yesterday" name="filter_yesterday" domain="[('create_date', '&gt;=', (datetime.datetime.combine(context_today(), datetime.time(0,0,0)) - datetime.timedelta(days=1)).strftime('%Y-%m-%d')), ('create_date', '&lt;', datetime.datetime.combine(context_today(), datetime.time(0,0,0)).strftime('%Y-%m-%d'))]"/>
+                    <filter string="Last 7 Days" name="filter_week" domain="[('create_date', '&gt;=', (datetime.datetime.now() - datetime.timedelta(days=7)).strftime('%Y-%m-%d'))]"/>
+
+                    <group expand="0" string="Group By">
+                        <filter string="Device" name="group_device" domain="[]" context="{'group_by': 'device_serial'}"/>
+                        <filter string="Status" name="group_status" domain="[]" context="{'group_by': 'status'}"/>
+                        <filter string="Date" name="group_date" domain="[]" context="{'group_by': 'create_date:day'}"/>
+                        <filter string="Reprocessed" name="group_reprocessed" domain="[]" context="{'group_by': 'reprocessed'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Action for ZKTeco Attendance Log -->
+        <record id="action_zkteco_attendance_log" model="ir.actions.act_window">
+            <field name="name">ZKTeco Attendance Logs</field>
+            <field name="res_model">zkteco.attendance.log</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_filter_today': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No attendance logs found!
+                </p>
+                <p>
+                    ZKTeco attendance logs will appear here when devices send attendance data to the server.
+                    You can reprocess failed or partial logs to retry creating attendance records.
+                </p>
+            </field>
+        </record>
+
+        <!-- Menu item -->
+        <menuitem id="menu_zkteco_attendance_log"
+                  name="Attendance Logs"
+                  parent="hr_attendance.menu_hr_attendance_root"
+                  action="action_zkteco_attendance_log"
+                  sequence="15"/>
+
+        <!-- Add reprocess action to tree view -->
+        <record id="action_reprocess_selected_logs" model="ir.actions.server">
+            <field name="name">Reprocess Selected Logs</field>
+            <field name="model_id" ref="model_zkteco_attendance_log"/>
+            <field name="binding_model_id" ref="model_zkteco_attendance_log"/>
+            <field name="binding_view_types">list</field>
+            <field name="state">code</field>
+            <field name="code">
+                if records:
+                    action = records.action_reprocess_attendance()
+            </field>
+        </record>
+
+        <!-- Raw Data Dialog View -->
+        <record id="view_zkteco_attendance_log_raw_data_dialog" model="ir.ui.view">
+            <field name="name">zkteco.attendance.log.raw.data.dialog</field>
+            <field name="model">zkteco.attendance.log</field>
+            <field name="arch" type="xml">
+                <form string="Raw Attendance Data">
+                    <sheet>
+                        <group>
+                            <field name="device_serial" readonly="1"/>
+                            <field name="create_date" readonly="1"/>
+                            <field name="status" readonly="1"/>
+                            <field name="processed_records" readonly="1"/>
+                        </group>
+                        <separator string="Raw Data"/>
+                        <field name="raw_data" widget="text" readonly="1" nolabel="1"/>
+                        <separator string="Error Message" invisible="not error_message"/>
+                        <field name="error_message" widget="text" readonly="1" nolabel="1" invisible="not error_message"/>
+                    </sheet>
+                    <footer>
+                        <button string="Reprocess" name="action_reprocess_attendance" type="object" class="btn-primary"/>
+                        <button string="Close" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Dashboard View (Optional) -->
+        <record id="view_zkteco_attendance_log_kanban" model="ir.ui.view">
+            <field name="name">zkteco.attendance.log.kanban</field>
+            <field name="model">zkteco.attendance.log</field>
+            <field name="arch" type="xml">
+                <kanban string="ZKTeco Attendance Logs" class="o_kanban_mobile">
+                    <field name="device_serial"/>
+                    <field name="status"/>
+                    <field name="processed_records"/>
+                    <field name="reprocessed"/>
+                    <field name="create_date"/>
+                    <field name="error_message"/>
+
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_card oe_kanban_global_click">
+                                <div class="o_kanban_record_top">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title">
+                                            <field name="device_serial"/>
+                                        </strong>
+                                        <small class="o_kanban_record_subtitle text-muted">
+                                            <field name="create_date"/>
+                                        </small>
+                                    </div>
+                                    <span t-attf-class="badge badge-pill #{record.status.raw_value == 'success' ? 'badge-success' : record.status.raw_value == 'error' ? 'badge-danger' : record.status.raw_value == 'partial' ? 'badge-warning' : 'badge-info'}">
+                                        <field name="status"/>
+                                    </span>
+                                </div>
+                                <div class="o_kanban_record_body">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <span>Records: <field name="processed_records"/></span>
+                                        </div>
+                                        <div class="col-6">
+                                            <span t-if="record.reprocessed.raw_value" class="badge badge-info">Reprocessed</span>
+                                        </div>
+                                    </div>
+                                    <div t-if="record.error_message.raw_value" class="mt-2">
+                                        <small class="text-muted">
+                                            <field name="error_message"/>
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- Update the action to include kanban view -->
+        <record id="action_zkteco_attendance_log" model="ir.actions.act_window">
+            <field name="view_mode">kanban,tree,form</field>
+        </record>
+
+    </data>
+</odoo>

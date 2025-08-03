@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2024 Wokwy - quochuy.software@gmail.com -->
+<odoo>
+    <data noupdate="1">
+        <record id="ir_cron_zalo_zns_send_messages" model="ir.cron">
+            <field name="name">Send Zalo ZNS Messages</field>
+            <field name="model_id" ref="model_zalo_zns_message"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_send_messages_zalo_zns()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+        </record>
+
+        <record id="ir_cron_update_status_send_from_zalo" model="ir.cron">
+            <field name="name">Update status send zns from Zalo</field>
+            <field name="model_id" ref="model_zalo_zns_message"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_update_status_send_zns_from_zalo()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+        </record>
+    </data>
+</odoo>

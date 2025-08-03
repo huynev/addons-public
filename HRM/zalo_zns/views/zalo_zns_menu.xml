@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2024 Wokwy - quochuy.software@gmail.com -->
+<odoo>
+    <menuitem id="menu_zalo_zns_root" name="Zalo ZNS" sequence="100" web_icon="zalo_zns,static/description/icon.png">
+        <menuitem id="menu_zalo_zns_batch" name="Batches" action="action_zalo_zns_batch" sequence="10"/>
+        <menuitem id="menu_zalo_zns_message" name="Messages" action="action_zalo_zns_message" sequence="20"/>
+        <menuitem id="menu_zalo_zns_template" name="Templates" action="action_zalo_zns_template" sequence="30"/>
+        <menuitem id="menu_zalo_zns_config" name="Configuration" action="action_zalo_zns_config" sequence="40"/>
+    </menuitem>
+</odoo>

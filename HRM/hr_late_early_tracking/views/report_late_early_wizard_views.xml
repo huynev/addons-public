@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form view cho wizard tạo báo cáo -->
+    <record id="view_hr_late_early_report_wizard_form" model="ir.ui.view">
+        <field name="name">hr.late.early.report.wizard.form</field>
+        <field name="model">hr.late.early.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Tạo báo cáo đi trễ/về sớm">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <field name="department_id"/>
+                        </group>
+                        <group>
+                            <field name="employee_ids" widget="many2many_tags"/>
+                            <field name="group_by"/>
+                        </group>
+                    </group>
+                    <group string="Lọc theo trạng thái">
+                        <group>
+                            <field name="include_draft"/>
+                            <field name="include_confirmed"/>
+                        </group>
+                        <group>
+                            <field name="include_approved"/>
+                            <field name="include_exception"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="action_generate_report" string="Tạo báo cáo" type="object" class="btn-primary"/>
+                        <button string="Hủy" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action mở wizard tạo báo cáo -->
+    <record id="action_hr_late_early_report_wizard" model="ir.actions.act_window">
+        <field name="name">Báo cáo đi trễ/về sớm</field>
+        <field name="res_model">hr.late.early.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Menu cho báo cáo đi trễ/về sớm -->
+    <menuitem id="menu_hr_late_early_report_wizard"
+              name="Báo cáo đi trễ/về sớm"
+              parent="hr_attendance.menu_hr_attendance_reporting"
+              action="action_hr_late_early_report_wizard"
+              sequence="31"/>
+</odoo>

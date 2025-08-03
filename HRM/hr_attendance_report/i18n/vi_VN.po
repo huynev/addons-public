@@ -1,0 +1,850 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* hr_attendance_report
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-31 06:24+0000\n"
+"PO-Revision-Date: 2025-07-31 06:24+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: vi_VN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_hr_attendance_monthly_report_form
+msgid ""
+"<span class=\"badge badge-danger\">Đỏ nhạt</span> - Không có dữ liệu chấm "
+"công"
+msgstr ""
+"<span class=\"badge badge-danger\">Đỏ nhạt</span> - Không có dữ liệu chấm "
+"công"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_hr_attendance_monthly_report_form
+msgid "<span class=\"badge badge-info\">Xanh nhạt</span> - Ngày cuối tuần"
+msgstr "<span class=\"badge badge-info\">Xanh nhạt</span> - Ngày cuối tuần"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_hr_attendance_monthly_report_form
+msgid ""
+"<span class=\"badge badge-secondary\">Trắng</span> - Ngày làm việc có chấm "
+"công"
+msgstr ""
+"<span class=\"badge badge-secondary\">Trắng</span> - Ngày làm việc có chấm "
+"công"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_hr_attendance_monthly_report_form
+msgid ""
+"<span class=\"badge badge-success\">Xanh lá nhạt</span> - Nghỉ phép nửa ngày"
+msgstr ""
+"<span class=\"badge badge-success\">Xanh lá nhạt</span> - Nghỉ phép nửa ngày"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_hr_attendance_monthly_report_form
+msgid "<span class=\"badge badge-warning\">Vàng</span> - Nghỉ phép cả ngày"
+msgstr "<span class=\"badge badge-warning\">Vàng</span> - Nghỉ phép cả ngày"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid ""
+"<span style=\"background-color: #CCCCCC; padding: 2px 5px;\">Gray "
+"background:</span> Discharge shifts"
+msgstr ""
+"<span style=\"background-color: #CCCCCC; padding: 2px 5px;\">Nền xám:</span> Ca nghỉ bù"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid ""
+"<span style=\"background-color: #E6F3FF; padding: 2px 5px;\">Light blue "
+"background:</span> Leave data"
+msgstr ""
+"<span style=\"background-color: #E6F3FF; padding: 2px 5px;\">Nền xanh nhạt:</span> Dữ liệu nghỉ phép"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid ""
+"<span style=\"background-color: #FFCCCC; padding: 2px 5px;\">Red "
+"background:</span> Late attendance"
+msgstr ""
+"<span style=\"background-color: #FFCCCC; padding: 2px 5px;\">Nền đỏ:</span> Đi muộn"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid ""
+"<span style=\"background-color: #FFFFCC; padding: 2px 5px;\">Yellow "
+"background:</span> Early departure"
+msgstr ""
+"<span style=\"background-color: #FFFFCC; padding: 2px 5px;\">Nền vàng:</span> Về sớm"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_hr_attendance_monthly_report_form
+msgid "<span>/</span>"
+msgstr "<span>/</span>"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid "<strong>Both:</strong> Creates Excel file with 2 sheets"
+msgstr "<strong>Cả hai:</strong> Tạo file Excel với 2 sheet"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.hr_attendance_monthly_report_template
+msgid "<strong>Bộ lọc:</strong>"
+msgstr "<strong>Bộ lọc:</strong>"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid ""
+"<strong>Detailed Report:</strong> Shows each attendance record with full "
+"information"
+msgstr ""
+"<strong>Báo cáo chi tiết:</strong> Hiển thị từng bản ghi chấm công với thông tin đầy đủ"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.hr_attendance_monthly_report_template
+msgid "<strong>Ghi chú:</strong>"
+msgstr "<strong>Ghi chú:</strong>"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid "<strong>Leave data:</strong> Hours of leave by leave type (if enabled)"
+msgstr "<strong>Dữ liệu nghỉ phép:</strong> Số giờ nghỉ phép theo loại (nếu được bật)"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid ""
+"<strong>Leave summary:</strong> Total leave hours by leave type (if enabled)"
+msgstr ""
+"<strong>Tổng kết nghỉ phép:</strong> Tổng số giờ nghỉ phép theo loại (nếu được bật)"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_hr_attendance_monthly_report_form
+msgid "<strong>Màu sắc trên báo cáo:</strong>"
+msgstr "<strong>Màu sắc trên báo cáo:</strong>"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.hr_attendance_monthly_report_template
+msgid "<strong>Ngày tạo:</strong>"
+msgstr "<strong>Ngày tạo:</strong>"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.hr_attendance_monthly_report_template
+msgid "<strong>Người tạo:</strong>"
+msgstr "<strong>Người tạo:</strong>"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.hr_attendance_monthly_report_template
+msgid "<strong>Năm:</strong>"
+msgstr "<strong>Năm:</strong>"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid "<strong>Summary Report:</strong> Shows totals by employee"
+msgstr "<strong>Báo cáo tổng hợp:</strong> Hiển thị tổng kết theo nhân viên"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.hr_attendance_monthly_report_template
+msgid "<strong>Số nhân viên:</strong>"
+msgstr "<strong>Số nhân viên:</strong>"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.hr_attendance_monthly_report_template
+msgid "<strong>Tháng:</strong>"
+msgstr "<strong>Tháng:</strong>"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.hr_attendance_monthly_report_template
+msgid "<strong>Tổng giờ làm việc:</strong>"
+msgstr "<strong>Tổng giờ làm việc:</strong>"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.hr_attendance_monthly_report_template
+msgid "<strong>Tổng ngày làm việc:</strong>"
+msgstr "<strong>Tổng ngày làm việc:</strong>"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.hr_attendance_monthly_report_template
+msgid "<strong>Tổng số nhân viên:</strong>"
+msgstr "<strong>Tổng số nhân viên:</strong>"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.hr_attendance_monthly_report_template
+msgid "<strong>Tỷ lệ chấm công:</strong>"
+msgstr "<strong>Tỷ lệ chấm công:</strong>"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid "All departments"
+msgstr "Tất cả phòng ban"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid "All employees"
+msgstr "Tất cả nhân viên"
+
+#. module: hr_attendance_report
+#: model:ir.actions.act_window,name:hr_attendance_report.action_attendance_report_wizard
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid "Attendance Report"
+msgstr "Báo cáo chấm công"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid "Attendance records must have both check-in and check-out times"
+msgstr "Bản ghi chấm công phải có cả thời gian vào và ra"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid "Attendance: Check in/out times (actual vs scheduled)"
+msgstr "Chấm công: Thời gian vào/ra (thực tế so với lịch trình)"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid "Automatically includes all leave types configured in the system"
+msgstr "Tự động bao gồm tất cả loại nghỉ phép được cấu hình trong hệ thống"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields,field_description:hr_attendance_report.field_hr_attendance_monthly_report__include_leaves
+msgid "Bao gồm dữ liệu nghỉ phép"
+msgstr "Bao gồm dữ liệu nghỉ phép"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields,field_description:hr_attendance_report.field_hr_attendance_monthly_report__include_inactive
+msgid "Bao gồm nhân viên không active"
+msgstr "Bao gồm nhân viên không hoạt động"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields.selection,name:hr_attendance_report.selection__attendance_report_wizard__report_type__both
+msgid "Both Types"
+msgstr "Cả hai loại"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields.selection,name:hr_attendance_report.selection__attendance_report_wizard__filter_type__month
+msgid "By Month"
+msgstr "Theo tháng"
+
+#. module: hr_attendance_report
+#: model:ir.actions.act_window,name:hr_attendance_report.action_hr_attendance_monthly_report_wizard
+#: model:ir.ui.menu,name:hr_attendance_report.menu_hr_attendance_monthly_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_hr_attendance_monthly_report_form
+msgid "Báo Cáo Chấm Công Hàng Tháng"
+msgstr "Báo Cáo Chấm Công Hàng Tháng"
+
+#. module: hr_attendance_report
+#: model:ir.actions.report,name:hr_attendance_report.action_hr_attendance_monthly_report
+msgid "Báo Cáo Chấm Công PDF"
+msgstr "Báo Cáo Chấm Công PDF"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields.selection,name:hr_attendance_report.selection__hr_attendance_monthly_report__report_type__pdf
+msgid "Báo cáo PDF"
+msgstr "Báo cáo PDF"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.hr_attendance_monthly_report_template
+msgid "BẢNG CHẤM CÔNG GIỜ"
+msgstr "BẢNG CHẤM CÔNG GIỜ"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields,field_description:hr_attendance_report.field_hr_attendance_monthly_report__filter_type
+msgid "Bộ lọc"
+msgstr "Bộ lọc"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_hr_attendance_monthly_report_form
+msgid "Bộ lọc dữ liệu"
+msgstr "Bộ lọc dữ liệu"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid "Calculates leave hours: Full day = 8h, Half day = 4h"
+msgstr "Tính giờ nghỉ phép: Cả ngày = 8 giờ, Nửa ngày = 4 giờ"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid "Cancel"
+msgstr "Hủy"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_hr_attendance_monthly_report_form
+msgid "Chú thích màu sắc"
+msgstr "Chú thích màu sắc"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields,help:hr_attendance_report.field_hr_attendance_monthly_report__employee_ids
+msgid "Chọn các nhân viên cần xuất báo cáo (để trống = tất cả)"
+msgstr "Chọn các nhân viên cần xuất báo cáo (để trống = tất cả)"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields,help:hr_attendance_report.field_hr_attendance_monthly_report__department_ids
+msgid "Chọn các phòng ban cần xuất báo cáo (để trống = tất cả)"
+msgstr "Chọn các phòng ban cần xuất báo cáo (để trống = tất cả)"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_hr_attendance_monthly_report_form
+msgid "Chọn nhân viên..."
+msgstr "Chọn nhân viên..."
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_hr_attendance_monthly_report_form
+msgid "Chọn phòng ban..."
+msgstr "Chọn phòng ban..."
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.hr_attendance_monthly_report_template
+msgid "Chức vụ"
+msgstr "Chức vụ"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid "Color Coding in Excel:"
+msgstr "Mã màu trong Excel:"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid "Color coding: Blue background for cells with leave data"
+msgstr "Mã màu: Nền xanh cho các ô có dữ liệu nghỉ phép"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields,field_description:hr_attendance_report.field_attendance_report_wizard__create_uid
+#: model:ir.model.fields,field_description:hr_attendance_report.field_hr_attendance_monthly_report__create_uid
+msgid "Created by"
+msgstr "Tạo bởi"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields,field_description:hr_attendance_report.field_attendance_report_wizard__create_date
+#: model:ir.model.fields,field_description:hr_attendance_report.field_hr_attendance_monthly_report__create_date
+msgid "Created on"
+msgstr "Tạo vào"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_hr_attendance_monthly_report_form
+msgid "Cấu hình báo cáo"
+msgstr "Cấu hình báo cáo"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid "Data Requirements:"
+msgstr "Yêu cầu dữ liệu:"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields.selection,name:hr_attendance_report.selection__attendance_report_wizard__filter_type__date_range
+msgid "Date Range"
+msgstr "Khoảng thời gian"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields,field_description:hr_attendance_report.field_attendance_report_wizard__department_ids
+msgid "Departments"
+msgstr "Phòng ban"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields.selection,name:hr_attendance_report.selection__attendance_report_wizard__report_type__detailed
+msgid "Detailed Report"
+msgstr "Báo cáo chi tiết"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid "Detailed Report Content:"
+msgstr "Nội dung báo cáo chi tiết:"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields,field_description:hr_attendance_report.field_attendance_report_wizard__display_name
+#: model:ir.model.fields,field_description:hr_attendance_report.field_hr_attendance_monthly_report__display_name
+msgid "Display Name"
+msgstr "Tên hiển thị"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.hr_attendance_monthly_report_template
+msgid "Dữ liệu được xử lý theo timezone:"
+msgstr "Dữ liệu được xử lý theo múi giờ:"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid "Each leave type appears as a separate column"
+msgstr "Mỗi loại nghỉ phép xuất hiện như một cột riêng biệt"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid "Employee codes and department assignments improve report readability"
+msgstr "Mã nhân viên và phân công phòng ban cải thiện khả năng đọc báo cáo"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid "Employee info: No, Employee Code, Name, Department, Date"
+msgstr "Thông tin nhân viên: STT, Mã NV, Tên, Phòng ban, Ngày"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields,field_description:hr_attendance_report.field_attendance_report_wizard__employee_ids
+msgid "Employees"
+msgstr "Nhân viên"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields.selection,name:hr_attendance_report.selection__hr_attendance_monthly_report__report_type__excel
+msgid "File Excel"
+msgstr "File Excel"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid "Filter Options"
+msgstr "Tùy chọn lọc"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields,field_description:hr_attendance_report.field_attendance_report_wizard__filter_type
+msgid "Filter Type"
+msgstr "Loại bộ lọc"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid "For large date ranges, consider filtering by department or employees"
+msgstr "Đối với khoảng thời gian lớn, hãy xem xét lọc theo phòng ban hoặc nhân viên"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields,field_description:hr_attendance_report.field_attendance_report_wizard__date_from
+msgid "From Date"
+msgstr "Từ ngày"
+
+#. module: hr_attendance_report
+#. odoo-python
+#: code:addons/hr_attendance_report/wizard/attendance_report_wizard.py:0
+#, python-format
+msgid "From date must be less than to date!"
+msgstr "Ngày bắt đầu phải nhỏ hơn ngày kết thúc!"
+
+#. module: hr_attendance_report
+#: model:ir.actions.server,name:hr_attendance_report.action_server_attendance_report
+msgid "Generate Attendance Report"
+msgstr "Tạo báo cáo chấm công"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid "Generate Excel Report"
+msgstr "Tạo báo cáo Excel"
+
+#. module: hr_attendance_report
+#: model:ir.model,name:hr_attendance_report.model_hr_attendance_monthly_report
+msgid "HR Attendance Monthly Report Wizard"
+msgstr "Trình tạo báo cáo chấm công hàng tháng"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields,help:hr_attendance_report.field_hr_attendance_monthly_report__include_leaves
+msgid "Hiển thị thông tin nghỉ phép trên báo cáo"
+msgstr "Hiển thị thông tin nghỉ phép trên báo cáo"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields,help:hr_attendance_report.field_hr_attendance_monthly_report__show_summary
+msgid "Hiển thị thống kê tổng quan"
+msgstr "Hiển thị thống kê tổng quan"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields,field_description:hr_attendance_report.field_hr_attendance_monthly_report__show_summary
+msgid "Hiển thị tổng kết"
+msgstr "Hiển thị tổng kết"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid "How to use:"
+msgstr "Cách sử dụng:"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_hr_attendance_monthly_report_form
+msgid "Hủy"
+msgstr "Hủy"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields,field_description:hr_attendance_report.field_attendance_report_wizard__id
+#: model:ir.model.fields,field_description:hr_attendance_report.field_hr_attendance_monthly_report__id
+msgid "ID"
+msgstr "ID"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_hr_attendance_monthly_report_form
+msgid "In PDF"
+msgstr "In PDF"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields,field_description:hr_attendance_report.field_attendance_report_wizard__include_discharge
+msgid "Include Discharge Shifts"
+msgstr "Bao gồm ca nghỉ bù"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields,field_description:hr_attendance_report.field_attendance_report_wizard__include_leave_data
+msgid "Include Leave Data"
+msgstr "Bao gồm dữ liệu nghỉ phép"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields,help:hr_attendance_report.field_attendance_report_wizard__include_discharge
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid "Include discharge shifts in report"
+msgstr "Bao gồm ca nghỉ bù trong báo cáo"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields,help:hr_attendance_report.field_attendance_report_wizard__include_leave_data
+msgid "Include leave data in report"
+msgstr "Bao gồm dữ liệu nghỉ phép trong báo cáo"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid "Include leave data with different leave types as separate columns"
+msgstr "Bao gồm dữ liệu nghỉ phép với các loại nghỉ phép khác nhau như các cột riêng biệt"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid "Instructions"
+msgstr "Hướng dẫn"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid "Issues: Late/early minutes, discharge status"
+msgstr "Vấn đề: Phút muộn/sớm, trạng thái nghỉ bù"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields,field_description:hr_attendance_report.field_attendance_report_wizard__write_uid
+#: model:ir.model.fields,field_description:hr_attendance_report.field_hr_attendance_monthly_report__write_uid
+msgid "Last Updated by"
+msgstr "Cập nhật cuối bởi"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields,field_description:hr_attendance_report.field_attendance_report_wizard__write_date
+#: model:ir.model.fields,field_description:hr_attendance_report.field_hr_attendance_monthly_report__write_date
+msgid "Last Updated on"
+msgstr "Cập nhật cuối vào"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid "Leave Data Features:"
+msgstr "Tính năng dữ liệu nghỉ phép:"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid "Leave data processing may take additional time for large datasets"
+msgstr "Việc xử lý dữ liệu nghỉ phép có thể mất thêm thời gian cho bộ dữ liệu lớn"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid "Leave data requires validated leave requests in the selected period"
+msgstr "Dữ liệu nghỉ phép yêu cầu các đơn xin nghỉ đã được phê duyệt trong khoảng thời gian đã chọn"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields,help:hr_attendance_report.field_attendance_report_wizard__department_ids
+msgid "Leave empty for all departments"
+msgstr "Để trống cho tất cả phòng ban"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields,help:hr_attendance_report.field_attendance_report_wizard__employee_ids
+msgid "Leave empty for all employees"
+msgstr "Để trống cho tất cả nhân viên"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields,field_description:hr_attendance_report.field_hr_attendance_monthly_report__report_type
+msgid "Loại báo cáo"
+msgstr "Loại báo cáo"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields,field_description:hr_attendance_report.field_attendance_report_wizard__month_year
+msgid "Month/Year"
+msgstr "Tháng/Năm"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.hr_attendance_monthly_report_template
+msgid "Mã NV"
+msgstr "Mã NV"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields,field_description:hr_attendance_report.field_hr_attendance_monthly_report__employee_ids
+msgid "Nhân viên"
+msgstr "Nhân viên"
+
+#. module: hr_attendance_report
+#. odoo-python
+#: code:addons/hr_attendance_report/wizard/attendance_report_wizard.py:0
+#, python-format
+msgid "No attendance data found in selected period!"
+msgstr "Không tìm thấy dữ liệu chấm công trong khoảng thời gian đã chọn!"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields,field_description:hr_attendance_report.field_hr_attendance_monthly_report__year
+msgid "Năm"
+msgstr "Năm"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields,help:hr_attendance_report.field_hr_attendance_monthly_report__year
+msgid "Năm cần xuất báo cáo (2000-2100)"
+msgstr "Năm cần xuất báo cáo (2000-2100)"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid ""
+"Overtime: Total overtime by category (early, regular, evening, night, "
+"holiday)"
+msgstr ""
+"Tăng ca: Tổng tăng ca theo danh mục (sáng sớm, thường, tối, đêm, ngày lễ)"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields,field_description:hr_attendance_report.field_hr_attendance_monthly_report__department_ids
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.hr_attendance_monthly_report_template
+msgid "Phòng ban"
+msgstr "Phòng ban"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid "Preview Data"
+msgstr "Xem trước dữ liệu"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.hr_attendance_monthly_report_template
+msgid "Ra"
+msgstr "Ra"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid "Report Options"
+msgstr "Tùy chọn báo cáo"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid "Report Performance:"
+msgstr "Hiệu suất báo cáo:"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields,field_description:hr_attendance_report.field_attendance_report_wizard__report_type
+msgid "Report Type"
+msgstr "Loại báo cáo"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.hr_attendance_monthly_report_template
+msgid "STT"
+msgstr "STT"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields,help:hr_attendance_report.field_attendance_report_wizard__month_year
+msgid "Select month for report"
+msgstr "Chọn tháng cho báo cáo"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid "Shows approved leaves only (validated status)"
+msgstr "Chỉ hiển thị nghỉ phép đã được phê duyệt (trạng thái đã xác nhận)"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid "Special: Discharge shifts count"
+msgstr "Đặc biệt: Số lượng ca nghỉ bù"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields.selection,name:hr_attendance_report.selection__attendance_report_wizard__report_type__summary
+msgid "Summary Report"
+msgstr "Báo cáo tổng hợp"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid "Summary Report Content:"
+msgstr "Nội dung báo cáo tổng hợp:"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid "Summary reports process faster than detailed reports"
+msgstr "Báo cáo tổng hợp xử lý nhanh hơn báo cáo chi tiết"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields,field_description:hr_attendance_report.field_hr_attendance_monthly_report__employee_count
+msgid "Số lượng nhân viên"
+msgstr "Số lượng nhân viên"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields,help:hr_attendance_report.field_hr_attendance_monthly_report__employee_count
+msgid "Số lượng nhân viên sẽ được bao gồm trong báo cáo"
+msgstr "Số lượng nhân viên sẽ được bao gồm trong báo cáo"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields.selection,name:hr_attendance_report.selection__hr_attendance_monthly_report__filter_type__employee
+msgid "Theo nhân viên cụ thể"
+msgstr "Theo nhân viên cụ thể"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields.selection,name:hr_attendance_report.selection__hr_attendance_monthly_report__filter_type__department
+msgid "Theo phòng ban"
+msgstr "Theo phòng ban"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields,field_description:hr_attendance_report.field_hr_attendance_monthly_report__month
+msgid "Tháng"
+msgstr "Tháng"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields.selection,name:hr_attendance_report.selection__hr_attendance_monthly_report__month__1
+msgid "Tháng 1"
+msgstr "Tháng 1"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields.selection,name:hr_attendance_report.selection__hr_attendance_monthly_report__month__10
+msgid "Tháng 10"
+msgstr "Tháng 10"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields.selection,name:hr_attendance_report.selection__hr_attendance_monthly_report__month__11
+msgid "Tháng 11"
+msgstr "Tháng 11"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields.selection,name:hr_attendance_report.selection__hr_attendance_monthly_report__month__12
+msgid "Tháng 12"
+msgstr "Tháng 12"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields.selection,name:hr_attendance_report.selection__hr_attendance_monthly_report__month__2
+msgid "Tháng 2"
+msgstr "Tháng 2"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields.selection,name:hr_attendance_report.selection__hr_attendance_monthly_report__month__3
+msgid "Tháng 3"
+msgstr "Tháng 3"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields.selection,name:hr_attendance_report.selection__hr_attendance_monthly_report__month__4
+msgid "Tháng 4"
+msgstr "Tháng 4"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields.selection,name:hr_attendance_report.selection__hr_attendance_monthly_report__month__5
+msgid "Tháng 5"
+msgstr "Tháng 5"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields.selection,name:hr_attendance_report.selection__hr_attendance_monthly_report__month__6
+msgid "Tháng 6"
+msgstr "Tháng 6"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields.selection,name:hr_attendance_report.selection__hr_attendance_monthly_report__month__7
+msgid "Tháng 7"
+msgstr "Tháng 7"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields.selection,name:hr_attendance_report.selection__hr_attendance_monthly_report__month__8
+msgid "Tháng 8"
+msgstr "Tháng 8"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields.selection,name:hr_attendance_report.selection__hr_attendance_monthly_report__month__9
+msgid "Tháng 9"
+msgstr "Tháng 9"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_hr_attendance_monthly_report_form
+msgid "Thống kê"
+msgstr "Thống kê"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.hr_attendance_monthly_report_template
+msgid "Thời gian trống: Chưa check-out hoặc không đầy đủ"
+msgstr "Thời gian trống: Chưa check-out hoặc không đầy đủ"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields,help:hr_attendance_report.field_hr_attendance_monthly_report__include_inactive
+msgid "Tick để bao gồm cả nhân viên đã nghỉ việc"
+msgstr "Tick để bao gồm cả nhân viên đã nghỉ việc"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid "Time Period"
+msgstr "Khoảng thời gian"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid "Tips & Notes"
+msgstr "Mẹo & Ghi chú"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields,field_description:hr_attendance_report.field_attendance_report_wizard__date_to
+msgid "To Date"
+msgstr "Đến ngày"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.hr_attendance_monthly_report_template
+msgid "Tên nhân viên"
+msgstr "Tên nhân viên"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_hr_attendance_monthly_report_form
+msgid "Tùy chọn nâng cao"
+msgstr "Tùy chọn nâng cao"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_hr_attendance_monthly_report_form
+msgid "Tạo Báo Cáo"
+msgstr "Tạo Báo Cáo"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_hr_attendance_monthly_report_form
+msgid ""
+"Tạo báo cáo chấm công chi tiết với xử lý timezone chính xác và tích hợp nghỉ"
+" phép"
+msgstr ""
+"Tạo báo cáo chấm công chi tiết với xử lý múi giờ chính xác và tích hợp nghỉ phép"
+
+#. module: hr_attendance_report
+#: model:ir.model.fields.selection,name:hr_attendance_report.selection__hr_attendance_monthly_report__filter_type__all
+msgid "Tất cả nhân viên"
+msgstr "Tất cả nhân viên"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.hr_attendance_monthly_report_template
+msgid "Tổng kết"
+msgstr "Tổng kết"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid "Violations: Total late/early minutes and violation days"
+msgstr "Vi phạm: Tổng số phút muộn/sớm và số ngày vi phạm"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.hr_attendance_monthly_report_template
+msgid "Vào"
+msgstr "Vào"
+
+#. module: hr_attendance_report
+#: model:ir.model,name:hr_attendance_report.model_attendance_report_wizard
+msgid "Wizard Báo cáo Chấm công"
+msgstr "Trình tạo báo cáo chấm công"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid "Work summary: Total work days, total work hours"
+msgstr "Tổng kết công việc: Tổng số ngày làm việc, tổng số giờ làm việc"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_attendance_report_wizard_form
+msgid "Work time: Work hours, overtime details by category"
+msgstr "Thời gian làm việc: Số giờ làm việc, chi tiết tăng ca theo danh mục"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_hr_attendance_monthly_report_form
+msgid "Xuất Excel"
+msgstr "Xuất Excel"
+
+#. module: hr_attendance_report
+#: model:ir.ui.menu,name:hr_attendance_report.menu_attendance_report_wizard_reports
+msgid "Xuất excel báo cáo chấm công"
+msgstr "Xuất Excel báo cáo chấm công"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.hr_attendance_monthly_report_template
+msgid "giờ"
+msgstr "giờ"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.view_hr_attendance_monthly_report_form
+msgid "nhân viên sẽ được bao gồm trong báo cáo"
+msgstr "nhân viên sẽ được bao gồm trong báo cáo"
+
+#. module: hr_attendance_report
+#: model_terms:ir.ui.view,arch_db:hr_attendance_report.hr_attendance_monthly_report_template
+msgid "Ô màu hồng: Không có dữ liệu chấm công"
+msgstr "Ô màu hồng: Không có dữ liệu chấm công"

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Employee Loans Menu -->
+    <menuitem id="hr_loan_menu_employee"
+              name="Employee Loans"
+              parent="hr_loan_menu_root"
+              sequence="1"/>
+
+    <menuitem id="hr_loan_menu_requests"
+              name="Loan Requests"
+              parent="hr_loan_menu_employee"
+              action="hr_loan_action"
+              sequence="1"/>
+
+    <menuitem id="menu_hr_loan_batch"
+              name="Đợt ứng lương"
+              parent="hr_loan_menu_employee"
+              action="action_hr_loan_batch"
+              sequence="2"/>
+
+    <!-- Configuration Menu -->
+    <menuitem id="hr_loan_menu_config"
+              name="Configuration"
+              parent="hr_loan_menu_root"
+              sequence="10"/>
+
+    <menuitem id="menu_hr_loan_auto_config"
+              name="Auto Configurations"
+              parent="hr_loan_menu_config"
+              action="action_hr_loan_auto_config"
+              sequence="1"/>
+
+    <!-- Reports Menu -->
+    <menuitem id="hr_loan_menu_reports"
+              name="Reports"
+              parent="hr_loan_menu_root"
+              sequence="20"/>
+
+    <menuitem id="menu_hr_loan_auto_log"
+              name="Execution Logs"
+              parent="hr_loan_menu_reports"
+              action="action_hr_loan_auto_log"
+              sequence="1"/>
+</odoo>

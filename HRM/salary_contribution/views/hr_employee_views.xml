@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_employee_inherit_salary_contribution_view" model="ir.ui.view">
+        <field name="name">hr.employee.inherit.salary.contribution</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_salary_contributions"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-money">
+                    <div class="o_stat_info">
+                        <field name="salary_contribution_count"
+                               string="Đóng góp"
+                               class="o_stat_value"/>
+                        <span class="o_stat_text">Ghi nhận đóng góp</span>
+                    </div>
+                </button>
+            </xpath>
+        </field>
+    </record>
+</odoo>

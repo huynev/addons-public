@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2024 Wokwy - quochuy.software@gmail.com -->
+<odoo>
+    <record id="view_zalo_zns_send_message_wizard_form" model="ir.ui.view">
+        <field name="name">zalo.zns.send.message.wizard.form</field>
+        <field name="model">zalo.zns.send.message.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="template_id"/>
+                        <field name="recipient_ids" widget="many2many_tags"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="Schedule Messages" name="action_schedule_messages" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_zalo_zns_send_message_wizard" model="ir.actions.act_window">
+        <field name="name">Schedule Zalo ZNS Messages</field>
+        <field name="res_model">zalo.zns.send.message.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

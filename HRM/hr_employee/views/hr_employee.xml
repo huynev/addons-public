@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_employee_view_form_inherit_minhduc" model="ir.ui.view">
+        <field name="name">hr.employee.form.inherit.minhduc</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <field name="work_email" position="after">
+                <field name="employee_code"/>
+            </field>
+            <notebook position="inside">
+                <page string="Thông tin làm việc" name="hire_info">
+                    <group>
+                        <group>
+                            <field name="hire_date"/>
+                            <field name="employment_duration"/>
+                        </group>
+                    </group>
+                </page>
+            </notebook>
+        </field>
+    </record>
+
+    <record id="hr_employee_view_tree_inherit_hire_date" model="ir.ui.view">
+        <field name="name">hr.employee.tree.inherit.hire.date</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_tree"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="hire_date" optional="show"/>
+                <field name="employment_duration" optional="show"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_employee_filter_inherit_hire_date" model="ir.ui.view">
+        <field name="name">hr.employee.filter.inherit.hire.date</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_filter"/>
+        <field name="arch" type="xml">
+            <filter name="group_department" position="after">
+                <filter string="Ngày vào làm" name="group_hire_date" domain="[]" context="{'group_by': 'hire_date'}"/>
+            </filter>
+        </field>
+    </record>
+
+    <record id="hr_employee_view_search_extend" model="ir.ui.view">
+        <field name="name">hr.employee.search.extend</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_filter"/>
+        <field name="arch" type="xml">
+            <!-- Cập nhật filter_domain của trường name để bao gồm employee_code -->
+            <field name="name" position="attributes">
+                <attribute name="filter_domain">['|', '|', ('work_email', 'ilike', self), ('name', 'ilike', self), ('employee_code', 'ilike', self)]</attribute>
+            </field>
+        </field>
+    </record>
+</odoo>

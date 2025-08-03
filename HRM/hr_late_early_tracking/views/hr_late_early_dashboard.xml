@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form View cho Dashboard -->
+    <record id="view_hr_late_early_dashboard_form" model="ir.ui.view">
+        <field name="name">hr.late.early.dashboard.form</field>
+        <field name="model">hr.late.early.dashboard</field>
+        <field name="arch" type="xml">
+            <form string="Dashboard Đi trễ/Về sớm">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                        </group>
+                        <group>
+                            <button name="action_update_dashboard" string="Cập nhật Dashboard" type="object" class="oe_highlight"/>
+                        </group>
+                    </group>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="alert alert-info">
+                                Trang tổng quan này hiển thị thống kê về tình hình đi trễ/về sớm của nhân viên trong khoảng thời gian đã chọn.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Thống kê tháng hiện tại -->
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="o_stat_info" style="text-align: center; border: 1px solid #ccc; padding: 15px; margin: 10px; border-radius: 5px;">
+                                <span class="o_stat_text"><strong>Tổng số bản ghi đi trễ/về sớm</strong></span>
+                                <span class="o_stat_value" style="font-size: 24px; display: block; margin-top: 10px; color: #875A7B;">
+                                    <field name="current_month_count" widget="statinfo"/>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="o_stat_info" style="text-align: center; border: 1px solid #ccc; padding: 15px; margin: 10px; border-radius: 5px;">
+                                <span class="o_stat_text"><strong>Tổng số phút đi trễ</strong></span>
+                                <span class="o_stat_value" style="font-size: 24px; display: block; margin-top: 10px; color: #D9534F;">
+                                    <field name="current_month_late_minutes" widget="statinfo"/>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="o_stat_info" style="text-align: center; border: 1px solid #ccc; padding: 15px; margin: 10px; border-radius: 5px;">
+                                <span class="o_stat_text"><strong>Tổng số phút về sớm</strong></span>
+                                <span class="o_stat_value" style="font-size: 24px; display: block; margin-top: 10px; color: #F0AD4E;">
+                                    <field name="current_month_early_minutes" widget="statinfo"/>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt16">
+                        <div class="col-md-6">
+                            <div style="border: 1px solid #ccc; padding: 15px; margin: 10px; border-radius: 5px;">
+                                <h3 style="margin-top: 0;">Top 5 nhân viên đi trễ nhiều nhất</h3>
+                                <field name="top_late_employees_ids" readonly="1">
+                                    <tree>
+                                        <field name="employee_id"/>
+                                        <field name="late_minutes" sum="Tổng phút đi trễ"/>
+                                    </tree>
+                                </field>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div style="border: 1px solid #ccc; padding: 15px; margin: 10px; border-radius: 5px;">
+                                <h3 style="margin-top: 0;">Top 5 nhân viên về sớm nhiều nhất</h3>
+                                <field name="top_early_employees_ids" readonly="1">
+                                    <tree>
+                                        <field name="employee_id"/>
+                                        <field name="early_minutes" sum="Tổng phút về sớm"/>
+                                    </tree>
+                                </field>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt16">
+                        <div class="col-12">
+                            <div style="border: 1px solid #ccc; padding: 15px; margin: 10px; border-radius: 5px;">
+                                <h3 style="margin-top: 0;">Thống kê theo phòng ban</h3>
+                                <field name="department_stats_ids" readonly="1">
+                                    <tree>
+                                        <field name="department_id"/>
+                                        <field name="employee_count"/>
+                                        <field name="late_early_count"/>
+                                        <field name="total_late_minutes" sum="Tổng phút đi trễ"/>
+                                        <field name="total_early_minutes" sum="Tổng phút về sớm"/>
+                                        <field name="total_penalty_amount" sum="Tổng tiền phạt"/>
+                                    </tree>
+                                </field>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt16">
+                        <div class="col-12 text-center">
+                            <button name="action_view_all_records" string="Xem tất cả dữ liệu" type="object" class="btn-primary"/>
+                            <button name="action_generate_full_report" string="Tạo báo cáo đầy đủ" type="object" class="btn-secondary ml8"/>
+                        </div>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action cho Dashboard -->
+    <record id="action_hr_late_early_dashboard" model="ir.actions.act_window">
+        <field name="name">Dashboard Đi trễ/Về sớm</field>
+        <field name="res_model">hr.late.early.dashboard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_hr_late_early_dashboard_form"/>
+        <field name="target">current</field>
+    </record>
+
+    <!-- Menu cho Dashboard -->
+    <menuitem id="menu_hr_late_early_dashboard"
+              name="Dashboard Đi trễ/Về sớm"
+              parent="hr_attendance.menu_hr_attendance_root"
+              action="action_hr_late_early_dashboard"
+              sequence="20"/>
+</odoo>

@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Sequences -->
+    <data noupdate="1">
+        <record id="seq_hr_loan_auto_log" model="ir.sequence">
+            <field name="name">Automatic Loan Log</field>
+            <field name="code">hr.loan.auto.log</field>
+            <field name="prefix">AUTO/LOAN/LOG/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+
+    <record id="action_hr_loan_auto_log" model="ir.actions.act_window">
+        <field name="name">Automatic Loan Logs</field>
+        <field name="res_model">hr.loan.auto.log</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_neutral_face">
+                No automatic loan generation has been executed yet
+            </p>
+            <p>
+                This view shows the history of automatic loan generation executions.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_hr_loan_auto_log_filtered" model="ir.actions.act_window">
+        <field name="name">Execution Logs</field>
+        <field name="res_model">hr.loan.auto.log</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_hr_loan_filtered" model="ir.actions.act_window">
+        <field name="name">Generated Loans</field>
+        <field name="res_model">hr.loan</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('is_auto_generated', '=', True)]</field>
+    </record>
+
+    <record id="hr_loan_auto_generation_wizard_action" model="ir.actions.act_window">
+        <field name="name">Generate Loans Now</field>
+        <field name="res_model">hr.loan.auto.generation.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Views -->
+    <record id="view_hr_loan_auto_generation_wizard_form" model="ir.ui.view">
+        <field name="name">hr.loan.auto.generation.wizard.form</field>
+        <field name="model">hr.loan.auto.generation.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <p>This will generate loans for all active employees in this configuration.</p>
+                <p>Do you want to continue?</p>
+                <group>
+                    <field name="config_id" readonly="1"/>
+                </group>
+                <footer>
+                    <button name="generate_loans" string="Generate" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Configuration Form View -->
+    <record id="view_hr_loan_auto_config_form" model="ir.ui.view">
+        <field name="name">hr.loan.auto.config.form</field>
+        <field name="model">hr.loan.auto.config</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="%(hr_loan_auto_add_employees_wizard_action)d"
+                        string="Add Employees"
+                        type="action"
+                        class="btn btn-primary"
+                        context="{'active_id': active_id}"
+                        help="Add selected employees to this configuration"/>
+                    <button name="%(hr_loan_auto_generation_wizard_action)d" string="Generate Loans Now"
+                        type="action" class="btn-primary" context="{'default_config_id': active_id}"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="%(action_hr_loan_auto_log_filtered)d"
+                            type="action"
+                            class="oe_stat_button"
+                            icon="fa-history"
+                            context="{'search_default_config_id': active_id}">
+                            <div class="o_stat_info">
+                                <field name="log_count" class="o_stat_value"/>
+                                <span class="o_stat_text">Execution Logs</span>
+                            </div>
+                        </button>
+                        <button name="%(action_hr_loan_filtered)d"
+                            type="action"
+                            class="oe_stat_button"
+                            icon="fa-money"
+                            context="{'search_default_auto_config_id': active_id}">
+                            <div class="o_stat_info">
+                                <field name="loan_count" class="o_stat_value"/>
+                                <span class="o_stat_text">Generated Loans</span>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Configuration Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="active" widget="boolean_toggle"/>
+                            <field name="execution_day"/>
+                            <field name="installment"/>
+                        </group>
+                        <group>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Employees">
+                            <div class="oe_right">
+                                <group col="2" class="oe_subtotal_footer_separator">
+                                    <field name="total_amount"
+                                           string="Tổng số tiền tạm ứng"
+                                           widget="monetary"
+                                           class="oe_subtotal_footer_separator"
+                                           style="font-weight: bold; font-size: 14px;"
+                                           readonly="1"/>
+                                </group>
+                            </div>
+                            <field name="employee_line_ids" nolabel="1" >
+                                <tree editable="bottom">
+                                    <field name="employee_id"/>
+                                    <field name="loan_amount" widget="monetary"/>
+                                    <field name="active" widget="boolean_toggle"/>
+                                    <field name="notes"/>
+                                </tree>
+                                <form>
+                                    <group>
+                                        <group>
+                                            <field name="employee_id"/>
+                                            <field name="loan_amount" widget="monetary"/>
+                                            <field name="active" widget="boolean_toggle"/>
+                                        </group>
+                                        <group>
+                                            <field name="notes"/>
+                                        </group>
+                                    </group>
+                                </form>
+                            </field>
+
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Configuration Tree View -->
+    <record id="view_hr_loan_auto_config_tree" model="ir.ui.view">
+        <field name="name">hr.loan.auto.config.tree</field>
+        <field name="model">hr.loan.auto.config</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="execution_day"/>
+                <field name="installment"/>
+                <field name="active" widget="boolean_toggle"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Log Form View -->
+    <record id="view_hr_loan_auto_log_form" model="ir.ui.view">
+        <field name="name">hr.loan.auto.log.form</field>
+        <field name="model">hr.loan.auto.log</field>
+        <field name="arch" type="xml">
+            <form create="false" edit="false">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="execution_date"/>
+                            <field name="loan_count"/>
+                            <field name="state" widget="badge"
+                                decoration-success="state == 'success'"
+                                decoration-warning="state == 'partial'"
+                                decoration-danger="state == 'failed'"/>
+                        </group>
+                        <group>
+                            <field name="config_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Execution Notes">
+                            <field name="note"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Log Tree View -->
+    <record id="view_hr_loan_auto_log_tree" model="ir.ui.view">
+        <field name="name">hr.loan.auto.log.tree</field>
+        <field name="model">hr.loan.auto.log</field>
+        <field name="arch" type="xml">
+            <tree create="false" default_order="execution_date desc">
+                <field name="name"/>
+                <field name="execution_date"/>
+                <field name="config_id"/>
+                <field name="loan_count"/>
+                <field name="state" widget="badge"
+                    decoration-success="state == 'success'"
+                    decoration-warning="state == 'partial'"
+                    decoration-danger="state == 'failed'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Extend HR Loan Form View -->
+    <record id="view_hr_loan_form_inherit" model="ir.ui.view">
+        <field name="name">hr.loan.form.auto.inherit</field>
+        <field name="model">hr.loan</field>
+        <field name="inherit_id" ref="hr_loan_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='state']" position="after">
+                <field name="is_auto_generated" invisible="1"/>
+                <div class="alert alert-info" role="alert" invisible="not is_auto_generated">
+                    This loan was automatically generated by
+                    <field name="auto_config_id" readonly="1" class="oe_inline"/> on
+                    <field name="create_date" readonly="1" widget="date" class="oe_inline"/>.
+                </div>
+            </xpath>
+            <xpath expr="//field[@name='company_id']" position="after">
+                <field name="auto_log_id" invisible="not is_auto_generated"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Scheduled Action -->
+    <data noupdate="1">
+        <record id="ir_cron_generate_automatic_loans" model="ir.cron">
+            <field name="name">Generate Automatic Loans</field>
+            <field name="model_id" ref="model_hr_loan_auto_generation"/>
+            <field name="state">code</field>
+            <field name="code">model._generate_auto_loans()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+            <field name="active" eval="True"/>
+        </record>
+    </data>
+
+    <record id="action_hr_loan_auto_config" model="ir.actions.act_window">
+        <field name="name">Automatic Loan Configurations</field>
+        <field name="res_model">hr.loan.auto.config</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new automatic loan configuration
+            </p>
+            <p>
+                Set up automatic loan generation for your employees.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu Items -->
+    <menuitem id="menu_hr_loan_auto_config"
+              action="action_hr_loan_auto_config"
+              parent="hr_loan_menu_root"
+              name="Configurations"
+              sequence="10"/>
+
+    <menuitem id="menu_hr_loan_auto_log"
+              action="action_hr_loan_auto_log"
+              parent="hr_loan_menu_root"
+              name="Execution Logs"
+              sequence="20"/>
+</odoo>

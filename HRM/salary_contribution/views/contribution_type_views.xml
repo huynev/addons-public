@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="contribution_type_tree_view" model="ir.ui.view">
+        <field name="name">salary.contribution.type.tree</field>
+        <field name="model">salary.contribution.type</field>
+        <field name="arch" type="xml">
+            <tree string="Các Loại Đóng Góp" multi_edit="1">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="employee_contribution_rate"/>
+                <field name="company_contribution_rate"/>
+                <field name="active" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="contribution_type_form_view" model="ir.ui.view">
+        <field name="name">salary.contribution.type.form</field>
+        <field name="model">salary.contribution.type</field>
+        <field name="arch" type="xml">
+            <form string="Loại Đóng Góp">
+                <header>
+<!--                    <button name="toggle_active"-->
+<!--                            type="object"-->
+<!--                            class="oe_stat_button"-->
+<!--                            icon="fa-archive">-->
+<!--                        <field name="active" widget="boolean_button"-->
+<!--                               options='{"terminology": "archive"}'/>-->
+<!--                    </button>-->
+                    <button name="action_register_contribution"
+                            string="Đăng Ký đóng góp"
+                            type="object"
+                            class="oe_highlight"/>
+                    <button name="action_view_contributions"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-list">
+                        <field name="contribution_count" string="Đăng Ký" widget="statinfo"/>
+                    </button>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Tên Loại Đóng Góp"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="description"/>
+                        </group>
+                        <group>
+                            <field name="employee_contribution_rate"/>
+                            <field name="company_contribution_rate"/>
+                            <field name="max_unpaid_days"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="contribution_type_search_view" model="ir.ui.view">
+        <field name="name">salary.contribution.type.search</field>
+        <field name="model">salary.contribution.type</field>
+        <field name="arch" type="xml">
+            <search string="Tìm Kiếm Loại Đóng Góp">
+                <field name="name"/>
+                <field name="code"/>
+                <filter string="Đang Hoạt Động" name="active" domain="[('active','=',True)]"/>
+                <filter string="Ngừng Hoạt Động" name="inactive" domain="[('active','=',False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_contribution_type" model="ir.actions.act_window">
+        <field name="name">Loại Đóng Góp</field>
+        <field name="res_model">salary.contribution.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="contribution_type_tree_view"/>
+        <field name="search_view_id" ref="contribution_type_search_view"/>
+    </record>
+
+    <menuitem
+        id="menu_contribution_type"
+        name="Loại Đóng Góp"
+        parent="salary_contribution_menu"
+        action="action_contribution_type"
+        sequence="5"/>
+</odoo>

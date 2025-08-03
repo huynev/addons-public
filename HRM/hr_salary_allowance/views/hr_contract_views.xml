@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Extend Contract Form View -->
+    <record id="hr_contract_view_form_inherit_allowance" model="ir.ui.view">
+        <field name="name">hr.contract.form.inherit.allowance</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <button name="action_view_salary_allowances" type="object" class="oe_stat_button" icon="fa-money">
+                    <field name="salary_allowance_ids" widget="statinfo" string="Phụ Cấp"/>
+                </button>
+            </div>
+            <notebook position="inside">
+                <page string="Phụ Cấp Lương" name="salary_allowances">
+                    <field name="salary_allowance_ids" readonly="1">
+                        <tree decoration-info="state == 'draft'" decoration-success="state == 'confirmed'" decoration-muted="state == 'closed'" decoration-warning="state == 'suspended'">
+                            <field name="name"/>
+                            <field name="allowance_type_id"/>
+                            <field name="amount"/>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="is_taxable"/>
+                            <field name="state"/>
+                        </tree>
+                    </field>
+                </page>
+            </notebook>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="salary_contribution_tree_view" model="ir.ui.view">
+        <field name="name">salary.contribution.tree</field>
+        <field name="model">salary.contribution</field>
+        <field name="arch" type="xml">
+            <tree string="Đóng góp từ lương" multi_edit="1">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="contract_id"/>
+                <field name="contribution_type_id"/>
+                <field name="calculation_base_type"/>
+                <field name="calculation_base"/>
+                <field name="employee_contribution_rate"/>
+                <field name="company_contribution_rate"/>
+                <field name="registration_date"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="salary_contribution_form_view" model="ir.ui.view">
+        <field name="name">salary.contribution.form</field>
+        <field name="model">salary.contribution</field>
+        <field name="arch" type="xml">
+            <form string="Đăng ký đóng góp từ lương">
+                <header>
+                    <field name="state" widget="statusbar"
+                        statusbar_visible="draft,confirmed,suspended,closed"/>
+                    <button name="action_confirm"
+                            string="Xác nhận"
+                            type="object"
+                            class="oe_highlight"
+                            invisible="context.get('state') != 'draft'"/>
+                    <button name="action_suspend"
+                            string="Tạm dừng"
+                            type="object"
+                            invisible="context.get('state') != 'confirmed'"/>
+                    <button name="action_close"
+                            string="Đóng"
+                            type="object"
+                            invisible="context.get('state') != 'suspended'"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Tên đăng ký"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="employee_id"/>
+                            <field name="contract_id" domain="[('employee_id', '=', employee_id)]" options="{'no_create': True}"/>
+                            <field name="contribution_type_id"/>
+                            <field name="calculation_base_type" widget="radio"/>
+                            <field name="calculation_base_fixed"
+                                   invisible="calculation_base_type != 'fixed'"
+                                   required="calculation_base_type == 'fixed'" />
+                            <field name="calculation_base_contract_field"
+                                   invisible="calculation_base_type != 'contract_field'"
+                                   required="calculation_base_type == 'contract_field'" />
+                            <field name="calculation_base" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="employee_contribution_rate"/>
+                            <field name="company_contribution_rate"/>
+                            <field name="registration_date"/>
+                            <field name="company_currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Chi tiết">
+                            <group>
+                                <group>
+                                    <field name="start_date"/>
+                                    <field name="end_date"/>
+                                </group>
+                                <group>
+                                    <field name="max_unpaid_days"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Lịch sử thay đổi">
+                            <field name="history_ids">
+                                <tree>
+                                    <field name="start_date"/>
+                                    <field name="end_date"/>
+                                    <field name="calculation_base"/>
+                                    <field name="employee_contribution_rate"/>
+                                    <field name="company_contribution_rate"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="salary_contribution_search_view" model="ir.ui.view">
+        <field name="name">salary.contribution.search</field>
+        <field name="model">salary.contribution</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="employee_id"/>
+                <field name="contract_id"/>
+                <field name="contribution_type_id"/>
+                <field name="state"/>
+                <filter string="Dự thảo" name="draft" domain="[('state','=','draft')]"/>
+                <filter string="Đã xác nhận" name="confirmed" domain="[('state','=','confirmed')]"/>
+                <filter string="Số tiền cố định" name="fixed_base" domain="[('calculation_base_type','=','fixed')]"/>
+                <filter string="Từ hợp đồng" name="contract_field_base" domain="[('calculation_base_type','=','contract_field')]"/>
+                <group expand="0" string="Nhóm theo">
+                    <filter name="group_by_employee" string="Nhân viên" context="{'group_by':'employee_id'}"/>
+                    <filter name="group_by_contract" string="Hợp đồng" context="{'group_by':'contract_id'}"/>
+                    <filter name="group_by_type" string="Loại đóng góp" context="{'group_by':'contribution_type_id'}"/>
+                    <filter name="group_by_calculation_type" string="Loại cơ sở tính toán" context="{'group_by':'calculation_base_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="salary_contribution_action" model="ir.actions.act_window">
+        <field name="name">Đóng góp từ lương</field>
+        <field name="res_model">salary.contribution</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="salary_contribution_tree_view"/>
+        <field name="search_view_id" ref="salary_contribution_search_view"/>
+    </record>
+
+    <menuitem
+        id="salary_contribution_menu"
+        name="Đóng góp từ lương"
+        parent="payroll.payroll_menu_root"
+        action="salary_contribution_action"
+        sequence="30"/>
+</odoo>

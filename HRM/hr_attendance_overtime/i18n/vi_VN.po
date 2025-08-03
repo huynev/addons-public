@@ -1,0 +1,774 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* hr_attendance_overtime
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-29 10:43+0000\n"
+"PO-Revision-Date: 2025-07-29 10:43+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid ""
+"<span style=\"background-color: #CCCCCC; padding: 2px 5px;\">Gray "
+"background:</span> Discharge shifts"
+msgstr ""
+"<span style=\"background-color: #CCCCCC; padding: 2px 5px;\">Nền xám:</span> Ca xả"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid ""
+"<span style=\"background-color: #E6F3FF; padding: 2px 5px;\">Light blue "
+"background:</span> Leave data"
+msgstr ""
+"<span style=\"background-color: #E6F3FF; padding: 2px 5px;\">Nền xanh nhạt:</span> Dữ liệu nghỉ phép"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid ""
+"<span style=\"background-color: #FFCCCC; padding: 2px 5px;\">Red "
+"background:</span> Late attendance"
+msgstr ""
+"<span style=\"background-color: #FFCCCC; padding: 2px 5px;\">Nền đỏ:</span> Đi trễ"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid ""
+"<span style=\"background-color: #FFFFCC; padding: 2px 5px;\">Yellow "
+"background:</span> Early departure"
+msgstr ""
+"<span style=\"background-color: #FFFFCC; padding: 2px 5px;\">Nền vàng:</span> Về sớm"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid "<strong>Both:</strong> Creates Excel file with 2 sheets"
+msgstr "<strong>Cả hai:</strong> Tạo file Excel với 2 sheet"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid ""
+"<strong>Detailed Report:</strong> Shows each attendance record with full "
+"information"
+msgstr ""
+"<strong>Báo cáo chi tiết:</strong> Hiển thị từng bản ghi chấm công với thông"
+" tin đầy đủ"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid "<strong>Leave data:</strong> Days of leave by leave type (if enabled)"
+msgstr "<strong>Dữ liệu nghỉ phép:</strong> Số ngày nghỉ theo loại phép (nếu được bật)"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid ""
+"<strong>Leave summary:</strong> Total leave days by leave type (if enabled)"
+msgstr ""
+"<strong>Tổng hợp nghỉ phép:</strong> Tổng số ngày nghỉ theo loại phép (nếu được bật)"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid "<strong>Summary Report:</strong> Shows totals by employee"
+msgstr "<strong>Báo cáo tổng hợp:</strong> Hiển thị tổng số theo nhân viên"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid "All departments"
+msgstr "Tất cả phòng ban"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid "All employees"
+msgstr "Tất cả nhân viên"
+
+#. module: hr_attendance_overtime
+#: model:ir.model,name:hr_attendance_overtime.model_hr_attendance
+msgid "Attendance"
+msgstr "Chấm công"
+
+#. module: hr_attendance_overtime
+#: model:ir.actions.act_window,name:hr_attendance_overtime.action_attendance_report_wizard
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid "Attendance Report"
+msgstr "Báo cáo chấm công"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid "Attendance records must have both check-in and check-out times"
+msgstr "Bản ghi chấm công phải có cả thời gian vào và ra"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid "Attendance: Check in/out times (actual vs scheduled)"
+msgstr "Chấm công: Thời gian vào/ra (thực tế vs theo lịch)"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid "Automatically includes all leave types configured in the system"
+msgstr "Tự động bao gồm tất cả loại nghỉ phép được cấu hình trong hệ thống"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields.selection,name:hr_attendance_overtime.selection__attendance_report_wizard__report_type__both
+msgid "Both Types"
+msgstr "Cả hai loại"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields.selection,name:hr_attendance_overtime.selection__attendance_report_wizard__filter_type__month
+msgid "By Month"
+msgstr "Theo tháng"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_search_overtime
+msgid "Ca thường"
+msgstr "Ca thường"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid "Calculates leave days: Full day = 1 day, Half day = 0.5 day"
+msgstr "Tính ngày nghỉ phép: Ngày full = 1 ngày, Nửa ngày = 0.5 ngày"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid "Cancel"
+msgstr "Hủy"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_form_overtime
+msgid "Chi tiết tăng ca"
+msgstr "Chi tiết tăng ca"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_form_overtime
+msgid "Chi tiết đi trễ/về sớm"
+msgstr "Chi tiết đi trễ/về sớm"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid "Color Coding in Excel:"
+msgstr "Ý nghĩa màu sắc trong Excel:"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid "Color coding: Blue background for cells with leave data"
+msgstr "Mã màu: Nền xanh cho các ô có dữ liệu nghỉ phép"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields,field_description:hr_attendance_overtime.field_attendance_report_wizard__create_uid
+msgid "Created by"
+msgstr "Tạo bởi"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields,field_description:hr_attendance_overtime.field_attendance_report_wizard__create_date
+msgid "Created on"
+msgstr "Ngày tạo"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_search_overtime
+msgid "Có về sớm"
+msgstr "Có về sớm"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields,help:hr_attendance_overtime.field_hr_attendance__is_early
+msgid "Có về sớm hay không"
+msgstr "Có về sớm hay không"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_search_overtime
+msgid "Có đi trễ"
+msgstr "Có đi trễ"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields,help:hr_attendance_overtime.field_hr_attendance__is_late
+msgid "Có đi trễ hay không"
+msgstr "Có đi trễ hay không"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid "Data Requirements:"
+msgstr "Yêu cầu dữ liệu:"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields.selection,name:hr_attendance_overtime.selection__attendance_report_wizard__filter_type__date_range
+msgid "Date Range"
+msgstr "Khoảng thời gian"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields,field_description:hr_attendance_overtime.field_attendance_report_wizard__department_ids
+msgid "Departments"
+msgstr "Phòng ban"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields.selection,name:hr_attendance_overtime.selection__attendance_report_wizard__report_type__detailed
+msgid "Detailed Report"
+msgstr "Báo cáo chi tiết"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid "Detailed Report Content:"
+msgstr "Nội dung báo cáo chi tiết:"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_search_overtime
+msgid "Discharge Shift"
+msgstr "Xả ca"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields,field_description:hr_attendance_overtime.field_attendance_report_wizard__display_name
+msgid "Display Name"
+msgstr "Tên hiển thị"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid "Each leave type appears as a separate column"
+msgstr "Mỗi loại nghỉ phép xuất hiện như một cột riêng biệt"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_tree_overtime
+msgid "Early"
+msgstr "Sớm"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_tree_overtime
+msgid "Early (min)"
+msgstr "Sớm (phút)"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields,field_description:hr_attendance_overtime.field_hr_attendance__early_minutes
+msgid "Early Minutes"
+msgstr "Số phút về sớm"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_tree_overtime
+msgid "Early OT"
+msgstr "TC Sớm"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_search_overtime
+msgid "Early Overtime"
+msgstr "Tăng ca sớm"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_form_overtime
+msgid "Early Overtime (Before Work)"
+msgstr "Tăng ca sớm (Trước giờ làm việc)"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields,field_description:hr_attendance_overtime.field_hr_attendance__overtime_early
+msgid "Early Overtime (before work)"
+msgstr "Tăng ca sớm (trước giờ làm việc)"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid "Employee codes and department assignments improve report readability"
+msgstr "Mã nhân viên và phân công phòng ban giúp báo cáo dễ đọc hơn"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid "Employee info: No, Employee Code, Name, Department, Date"
+msgstr "Thông tin nhân viên: STT, Mã NV, Tên, Phòng ban, Ngày"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields,field_description:hr_attendance_overtime.field_attendance_report_wizard__employee_ids
+msgid "Employees"
+msgstr "Nhân viên"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_tree_overtime
+msgid "Evening OT"
+msgstr "TC Tối"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_search_overtime
+msgid "Evening Overtime"
+msgstr "Tăng ca tối"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields,field_description:hr_attendance_overtime.field_hr_attendance__overtime_evening
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_form_overtime
+msgid "Evening Overtime (18h-21h)"
+msgstr "Tăng ca tối (18h-21h)"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_form_overtime
+msgid "Evening overtime from 18:00 to 21:00"
+msgstr "Tăng ca buổi tối từ 18:00 đến 21:00"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid "Filter Options"
+msgstr "Tùy chọn lọc"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields,field_description:hr_attendance_overtime.field_attendance_report_wizard__filter_type
+msgid "Filter Type"
+msgstr "Loại bộ lọc"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid "For large date ranges, consider filtering by department or employees"
+msgstr "Với khoảng thời gian lớn, nên lọc theo phòng ban hoặc nhân viên"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields,field_description:hr_attendance_overtime.field_attendance_report_wizard__date_from
+msgid "From Date"
+msgstr "Từ ngày"
+
+#. module: hr_attendance_overtime
+#. odoo-python
+#: code:addons/hr_attendance_overtime/wizard/attendance_report_wizard.py:0
+#, python-format
+msgid "From date must be less than to date!"
+msgstr "Ngày bắt đầu phải nhỏ hơn ngày kết thúc!"
+
+#. module: hr_attendance_overtime
+#: model:ir.actions.server,name:hr_attendance_overtime.action_server_attendance_report
+msgid "Generate Attendance Report"
+msgstr "Tạo báo cáo chấm công"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid "Generate Excel Report"
+msgstr "Tạo báo cáo Excel"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_form_overtime
+msgid "Giờ ra (qui định)"
+msgstr "Giờ ra (qui định)"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields,help:hr_attendance_overtime.field_hr_attendance__scheduled_check_out
+msgid "Giờ ra theo lịch làm việc"
+msgstr "Giờ ra theo lịch làm việc"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_form_overtime
+msgid "Giờ vào (qui định)"
+msgstr "Giờ vào (qui định)"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields,help:hr_attendance_overtime.field_hr_attendance__scheduled_check_in
+msgid "Giờ vào theo lịch làm việc"
+msgstr "Giờ vào theo lịch làm việc"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_search_overtime
+msgid "Has Overtime"
+msgstr "Có tăng ca"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_tree_overtime
+msgid "Holiday OT"
+msgstr "TC Nghỉ"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields,field_description:hr_attendance_overtime.field_hr_attendance__overtime_holiday
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_form_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_search_overtime
+msgid "Holiday Overtime"
+msgstr "Tăng ca ngày nghỉ"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid "How to use:"
+msgstr "Cách sử dụng:"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields,field_description:hr_attendance_overtime.field_attendance_report_wizard__id
+msgid "ID"
+msgstr "ID"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields,field_description:hr_attendance_overtime.field_attendance_report_wizard__include_discharge
+msgid "Include Discharge Shifts"
+msgstr "Bao gồm ca xả"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields,field_description:hr_attendance_overtime.field_attendance_report_wizard__include_leave_data
+msgid "Include Leave Data"
+msgstr "Bao gồm dữ liệu nghỉ phép"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields,help:hr_attendance_overtime.field_attendance_report_wizard__include_discharge
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid "Include discharge shifts in report"
+msgstr "Bao gồm ca xả trong báo cáo"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields,help:hr_attendance_overtime.field_attendance_report_wizard__include_leave_data
+msgid "Include leave data in report"
+msgstr "Bao gồm dữ liệu nghỉ phép trong báo cáo"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid "Include leave data with different leave types as separate columns"
+msgstr "Bao gồm dữ liệu nghỉ phép với các loại phép khác nhau như các cột riêng biệt"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid "Instructions"
+msgstr "Hướng dẫn"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields,field_description:hr_attendance_overtime.field_hr_attendance__is_early
+msgid "Is Early"
+msgstr "Về sớm"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields,field_description:hr_attendance_overtime.field_hr_attendance__is_late
+msgid "Is Late"
+msgstr "Đi trễ"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid "Issues: Late/early minutes, discharge status"
+msgstr "Vấn đề: Số phút trễ/sớm, trạng thái xả ca"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields,field_description:hr_attendance_overtime.field_attendance_report_wizard__write_uid
+msgid "Last Updated by"
+msgstr "Cập nhật cuối bởi"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields,field_description:hr_attendance_overtime.field_attendance_report_wizard__write_date
+msgid "Last Updated on"
+msgstr "Cập nhật cuối vào"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_tree_overtime
+msgid "Late"
+msgstr "Trễ"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_tree_overtime
+msgid "Late (min)"
+msgstr "Trễ (phút)"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields,field_description:hr_attendance_overtime.field_hr_attendance__late_minutes
+msgid "Late Minutes"
+msgstr "Số phút đi trễ"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid "Leave Data Features:"
+msgstr "Tính năng dữ liệu nghỉ phép:"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid "Leave data processing may take additional time for large datasets"
+msgstr "Xử lý dữ liệu nghỉ phép có thể mất thêm thời gian với tập dữ liệu lớn"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid "Leave data requires validated leave requests in the selected period"
+msgstr "Dữ liệu nghỉ phép yêu cầu các đơn xin nghỉ đã được phê duyệt trong thời gian đã chọn"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields,help:hr_attendance_overtime.field_attendance_report_wizard__department_ids
+msgid "Leave empty for all departments"
+msgstr "Để trống cho tất cả phòng ban"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields,help:hr_attendance_overtime.field_attendance_report_wizard__employee_ids
+msgid "Leave empty for all employees"
+msgstr "Để trống cho tất cả nhân viên"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields,field_description:hr_attendance_overtime.field_attendance_report_wizard__month_year
+msgid "Month/Year"
+msgstr "Tháng/Năm"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_tree_overtime
+msgid "Night OT"
+msgstr "TC Đêm"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_search_overtime
+msgid "Night Overtime"
+msgstr "Tăng ca đêm"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_form_overtime
+msgid "Night Overtime (After 21h)"
+msgstr "Tăng ca đêm (Sau 21h)"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields,field_description:hr_attendance_overtime.field_hr_attendance__overtime_night
+msgid "Night Overtime (after 21h)"
+msgstr "Tăng ca đêm (sau 21h)"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_form_overtime
+msgid "Night overtime after 21:00"
+msgstr "Tăng ca ban đêm sau 21:00"
+
+#. module: hr_attendance_overtime
+#. odoo-python
+#: code:addons/hr_attendance_overtime/wizard/attendance_report_wizard.py:0
+#, python-format
+msgid "No attendance data found in selected period!"
+msgstr "Không tìm thấy dữ liệu chấm công trong khoảng thời gian đã chọn!"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.actions.act_window,help:hr_attendance_overtime.action_attendance_overtime_analysis
+msgid "No overtime records found!"
+msgstr "Không tìm thấy bản ghi tăng ca nào!"
+
+#. module: hr_attendance_overtime
+#: model:ir.actions.act_window,name:hr_attendance_overtime.action_attendance_overtime_analysis
+#: model:ir.ui.menu,name:hr_attendance_overtime.menu_attendance_overtime_analysis
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_pivot_overtime
+msgid "Overtime Analysis"
+msgstr "Phân tích tăng ca"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_calendar_overtime
+msgid "Overtime Calendar"
+msgstr "Lịch tăng ca"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields,field_description:hr_attendance_overtime.field_hr_attendance__overtime_hours
+msgid "Overtime Hours"
+msgstr "Giờ tăng ca"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_graph_overtime
+msgid "Overtime Trends"
+msgstr "Xu hướng tăng ca"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_form_overtime
+msgid "Overtime before work hours (must arrive 1+ hour early)"
+msgstr "Tăng ca trước giờ làm việc (phải đến sớm hơn 1 tiếng)"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.actions.act_window,help:hr_attendance_overtime.action_attendance_overtime_analysis
+msgid ""
+"Overtime hours are automatically calculated based on work schedules and "
+"attendance records."
+msgstr ""
+"Số giờ tăng ca được tính toán tự động dựa trên lịch làm việc và bản ghi chấm"
+" công."
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_form_overtime
+msgid "Overtime on rest days or holidays"
+msgstr "Tăng ca vào ngày nghỉ hoặc ngày lễ"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid ""
+"Overtime: Total overtime by category (early, regular, evening, night, "
+"holiday)"
+msgstr ""
+"Tăng ca: Tổng tăng ca theo danh mục (sớm, thường, tối, đêm, nghỉ lễ)"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid "Preview Data"
+msgstr "Xem trước dữ liệu"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_tree_overtime
+msgid "Regular OT"
+msgstr "TC Thường"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_search_overtime
+msgid "Regular Overtime"
+msgstr "Tăng ca thường"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_form_overtime
+msgid "Regular Overtime (Before 18h)"
+msgstr "Tăng ca thường (Trước 18h)"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields,field_description:hr_attendance_overtime.field_hr_attendance__overtime_regular
+msgid "Regular Overtime (before 18h)"
+msgstr "Tăng ca thường (trước 18h)"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_form_overtime
+msgid "Regular overtime after work, before 18:00"
+msgstr "Tăng ca thường sau giờ làm việc, trước 18:00"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid "Report Options"
+msgstr "Tùy chọn báo cáo"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid "Report Performance:"
+msgstr "Hiệu suất báo cáo:"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields,field_description:hr_attendance_overtime.field_attendance_report_wizard__report_type
+msgid "Report Type"
+msgstr "Loại báo cáo"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields,field_description:hr_attendance_overtime.field_hr_attendance__scheduled_check_in
+msgid "Scheduled Check In"
+msgstr "Giờ vào theo lịch"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields,field_description:hr_attendance_overtime.field_hr_attendance__scheduled_check_out
+msgid "Scheduled Check Out"
+msgstr "Giờ ra theo lịch"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields,help:hr_attendance_overtime.field_attendance_report_wizard__month_year
+msgid "Select month for report"
+msgstr "Chọn tháng cho báo cáo"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid "Shows approved leaves only (validated status)"
+msgstr "Chỉ hiển thị nghỉ phép được phê duyệt (trạng thái đã xác thực)"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid "Special: Discharge shifts count"
+msgstr "Đặc biệt: Số ca xả"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields.selection,name:hr_attendance_overtime.selection__attendance_report_wizard__report_type__summary
+msgid "Summary Report"
+msgstr "Báo cáo tổng hợp"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid "Summary Report Content:"
+msgstr "Nội dung báo cáo tổng hợp:"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid "Summary reports process faster than detailed reports"
+msgstr "Báo cáo tổng hợp xử lý nhanh hơn báo cáo chi tiết"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_form_overtime
+msgid "Số phút về sớm"
+msgstr "Số phút về sớm"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields,help:hr_attendance_overtime.field_hr_attendance__early_minutes
+msgid "Số phút về sớm so với giờ quy định"
+msgstr "Số phút về sớm so với giờ quy định"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_form_overtime
+msgid "Số phút đi trễ"
+msgstr "Số phút đi trễ"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields,help:hr_attendance_overtime.field_hr_attendance__late_minutes
+msgid "Số phút đi trễ so với giờ quy định"
+msgstr "Số phút đi trễ so với giờ quy định"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid "Time Period"
+msgstr "Khoảng thời gian"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid "Tips & Notes"
+msgstr "Mẹo & Ghi chú"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields,field_description:hr_attendance_overtime.field_attendance_report_wizard__date_to
+msgid "To Date"
+msgstr "Đến ngày"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_form_overtime
+msgid "Tính giờ làm việc"
+msgstr "Tính giờ làm việc"
+
+#. module: hr_attendance_overtime
+#: model:ir.actions.server,name:hr_attendance_overtime.action_server_recompute_overtime
+msgid "Tính toán lại giờ tăng ca và đi trễ,về sớm"
+msgstr "Tính toán lại giờ tăng ca và đi trễ, về sớm"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_form_overtime
+msgid "Tính trễ"
+msgstr "Tính trễ"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_form_overtime
+msgid "Tính về sớm"
+msgstr "Tính về sớm"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields,help:hr_attendance_overtime.field_hr_attendance__overtime_early
+msgid "Tăng ca trước giờ làm việc (vào sớm hơn 1 tiếng)"
+msgstr "Tăng ca trước giờ làm việc (vào sớm hơn 1 tiếng)"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields,help:hr_attendance_overtime.field_hr_attendance__overtime_hours
+msgid ""
+"Tổng số giờ tăng ca được tính toán tự động (bao gồm tăng ca trước và sau giờ"
+" làm việc)"
+msgstr ""
+"Tổng số giờ tăng ca được tính toán tự động (bao gồm tăng ca trước và sau giờ"
+" làm việc)"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid "Violations: Total late/early minutes and violation days"
+msgstr "Vi phạm: Tổng số phút trễ/sớm và số ngày vi phạm"
+
+#. module: hr_attendance_overtime
+#: model:ir.model,name:hr_attendance_overtime.model_attendance_report_wizard
+msgid "Wizard Báo cáo Chấm công"
+msgstr "Wizard Báo cáo Chấm công"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid "Work summary: Total work days, total work hours"
+msgstr "Tổng hợp công việc: Tổng số ngày làm việc, tổng số giờ làm việc"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_report_wizard_form
+msgid "Work time: Work hours, overtime details by category"
+msgstr "Thời gian làm việc: Giờ làm việc, chi tiết tăng ca theo danh mục"
+
+#. module: hr_attendance_overtime
+#: model:ir.ui.menu,name:hr_attendance_overtime.menu_attendance_report_wizard_reports
+msgid "Xuất excel báo cáo chấm công"
+msgstr "Báo cáo Excel chấm công"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields,field_description:hr_attendance_overtime.field_hr_attendance__is_discharge_shift
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_form_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_search_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_tree_overtime
+msgid "Xả ca"
+msgstr "Xả ca"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_form_overtime
+msgid "Đánh dấu ca làm việc này là xả ca (không tính lương)"
+msgstr "Đánh dấu ca làm việc này là xả ca (không tính lương)"
+
+#. module: hr_attendance_overtime
+#: model:ir.model.fields,help:hr_attendance_overtime.field_hr_attendance__is_discharge_shift
+msgid "Đánh dấu ngày công hôm nay nhân viên xả ca"
+msgstr "Đánh dấu ca làm việc này là xả ca"
+
+#. module: hr_attendance_overtime
+#: model_terms:ir.ui.view,arch_db:hr_attendance_overtime.view_attendance_search_overtime
+msgid "Đúng giờ"
+msgstr "Đúng giờ"

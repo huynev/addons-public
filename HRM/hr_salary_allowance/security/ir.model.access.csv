@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_salary_allowance_type_hr_user,salary.allowance.type.hr.user,model_salary_allowance_type,hr.group_hr_user,1,1,1,0
+access_salary_allowance_type_hr_manager,salary.allowance.type.hr.manager,model_salary_allowance_type,hr.group_hr_manager,1,1,1,1
+access_salary_allowance_hr_user,salary.allowance.hr.user,model_salary_allowance,hr.group_hr_user,1,1,1,0
+access_salary_allowance_hr_manager,salary.allowance.hr.manager,model_salary_allowance,hr.group_hr_manager,1,1,1,1
+access_salary_allowance_history_hr_user,salary.allowance.history.hr.user,model_salary_allowance_history,hr.group_hr_user,1,1,1,0
+access_salary_allowance_history_hr_manager,salary.allowance.history.hr.manager,model_salary_allowance_history,hr.group_hr_manager,1,1,1,1
+access_mass_allowance_wizard_hr_user,mass.allowance.wizard.hr.user,model_mass_allowance_wizard,hr.group_hr_user,1,1,1,0
+access_mass_allowance_wizard_hr_manager,mass.allowance.wizard.hr.manager,model_mass_allowance_wizard,hr.group_hr_manager,1,1,1,1
+access_employee_allowance_report_user,employee.allowance.report.user,model_employee_allowance_report,hr.group_hr_user,1,1,1,1
+access_employee_allowance_report_manager,employee.allowance.report.manager,model_employee_allowance_report,hr.group_hr_manager,1,1,1,1

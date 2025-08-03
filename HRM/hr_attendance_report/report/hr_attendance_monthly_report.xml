@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_hr_attendance_monthly_report" model="ir.actions.report">
+        <field name="name">Báo Cáo Chấm Công PDF</field>
+        <field name="model">hr.attendance.monthly.report</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hr_attendance_report.hr_attendance_monthly_report_template</field>
+        <field name="report_file">hr_attendance_report.hr_attendance_monthly_report_template</field>
+        <field name="binding_model_id" ref="model_hr_attendance_monthly_report"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

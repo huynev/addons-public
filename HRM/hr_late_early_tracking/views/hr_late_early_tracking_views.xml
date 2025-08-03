@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Late/Early Tracking Tree View -->
+    <record id="view_hr_late_early_tracking_tree" model="ir.ui.view">
+        <field name="name">hr.late.early.tracking.tree</field>
+        <field name="model">hr.late.early.tracking</field>
+        <field name="arch" type="xml">
+            <tree decoration-danger="late_minutes>0" decoration-info="early_minutes>0">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="date"/>
+                <field name="scheduled_check_in"/>
+                <field name="actual_check_in"/>
+                <field name="late_minutes"/>
+                <field name="scheduled_check_out"/>
+                <field name="actual_check_out"/>
+                <field name="early_minutes"/>
+                <field name="total_penalty_minutes"/>
+                <field name="penalty_amount" sum="Total Penalty"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Late/Early Tracking Form View -->
+    <record id="view_hr_late_early_tracking_form" model="ir.ui.view">
+        <field name="name">hr.late.early.tracking.form</field>
+        <field name="model">hr.late.early.tracking</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_confirm" string="Confirm" type="object"
+                            invisible="state != 'draft'"
+                            class="oe_highlight"/>
+                    <button name="action_approve" string="Approve" type="object"
+                            invisible="state != 'confirmed'"
+                            class="oe_highlight"/>
+                    <button name="action_mark_exception" string="Mark as Exception"
+                            type="object"
+                            invisible="state not in ['draft', 'confirmed']"/>
+                    <button name="action_reset_to_draft" string="Reset to Draft"
+                            type="object"
+                            invisible="state not in ['confirmed', 'exception']"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,confirmed,approved"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="employee_id"/>
+                            <field name="date"/>
+                            <field name="payslip_id"/>
+                        </group>
+                        <group>
+                            <field name="late_minutes"/>
+                            <field name="early_minutes"/>
+                            <field name="total_penalty_minutes"/>
+                            <field name="penalty_amount"/>
+                        </group>
+                    </group>
+                    <group string="Check-in/Check-out Times">
+                        <group>
+                            <field name="scheduled_check_in"/>
+                            <field name="actual_check_in"/>
+                        </group>
+                        <group>
+                            <field name="scheduled_check_out"/>
+                            <field name="actual_check_out"/>
+                        </group>
+                    </group>
+                    <field name="note" placeholder="Add a note..."/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Late/Early Tracking Search View -->
+    <record id="view_hr_late_early_tracking_search" model="ir.ui.view">
+        <field name="name">hr.late.early.tracking.search</field>
+        <field name="model">hr.late.early.tracking</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="date"/>
+                <filter string="Late Only" name="late_only"
+                        domain="[('late_minutes', '>', 0)]"/>
+                <filter string="Early Only" name="early_only"
+                        domain="[('early_minutes', '>', 0)]"/>
+                <filter string="Draft" name="draft"
+                        domain="[('state', '=', 'draft')]"/>
+                <filter string="Confirmed" name="confirmed"
+                        domain="[('state', '=', 'confirmed')]"/>
+                <filter string="Approved" name="approved"
+                        domain="[('state', '=', 'approved')]"/>
+                <filter string="Exception" name="exception"
+                        domain="[('state', '=', 'exception')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Employee" name="group_by_employee"
+                            domain="[]" context="{'group_by': 'employee_id'}"/>
+                    <filter string="Date" name="group_by_date"
+                            domain="[]" context="{'group_by': 'date'}"/>
+                    <filter string="Status" name="group_by_state"
+                            domain="[]" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Late/Early Tracking Calendar View -->
+    <record id="view_hr_late_early_tracking_calendar" model="ir.ui.view">
+        <field name="name">hr.late.early.tracking.calendar</field>
+        <field name="model">hr.late.early.tracking</field>
+        <field name="arch" type="xml">
+            <calendar string="Late/Early Tracking" date_start="date" color="employee_id">
+                <field name="name"/>
+                <field name="late_minutes"/>
+                <field name="early_minutes"/>
+                <field name="total_penalty_minutes"/>
+            </calendar>
+        </field>
+    </record>
+
+    <!-- Late/Early Tracking Action Window -->
+    <record id="action_hr_late_early_tracking" model="ir.actions.act_window">
+        <field name="name">Late/Early Tracking</field>
+        <field name="res_model">hr.late.early.tracking</field>
+        <field name="view_mode">tree,form,calendar</field>
+        <field name="search_view_id" ref="view_hr_late_early_tracking_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No late/early records found.
+            </p>
+            <p>
+                This report tracks when employees arrive late or leave early compared to their work schedule.
+            </p>
+        </field>
+    </record>
+
+    <!-- Add menu for Late/Early Tracking -->
+    <menuitem id="menu_hr_late_early_tracking"
+              name="Late/Early Tracking"
+              parent="hr_attendance.menu_hr_attendance_reporting"
+              action="action_hr_late_early_tracking"
+              sequence="30"/>
+</odoo>

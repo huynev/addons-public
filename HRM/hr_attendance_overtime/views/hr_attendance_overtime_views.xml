@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Tree View: Hiển thị trong danh sách attendance -->
+        <record id="view_attendance_tree_overtime" model="ir.ui.view">
+            <field name="name">hr.attendance.tree.overtime</field>
+            <field name="model">hr.attendance</field>
+            <field name="inherit_id" ref="hr_attendance.view_attendance_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='worked_hours']" position="after">
+                    <field name="is_discharge_shift" string="Xả ca"
+                           decoration-muted="is_discharge_shift == True"
+                           optional="show"/>
+                    <!-- Late/Early Fields -->
+                    <field name="late_minutes" string="Late (min)"
+                           decoration-danger="late_minutes > 0"
+                           optional="show"/>
+                    <field name="early_minutes" string="Early (min)"
+                           decoration-warning="early_minutes > 0"
+                           optional="show"/>
+                    <field name="is_late" string="Late"
+                           widget="boolean_toggle"
+                           decoration-danger="is_late == True"
+                           optional="hide"/>
+                    <field name="is_early" string="Early"
+                           widget="boolean_toggle"
+                           decoration-warning="is_early == True"
+                           optional="hide"/>
+                    <!-- Overtime Fields -->
+                    <field name="overtime_early" string="Early OT"
+                           widget="float_time"
+                           decoration-success="overtime_early > 0"
+                           optional="hide"/>
+                    <field name="overtime_regular" string="Regular OT"
+                           widget="float_time"
+                           decoration-warning="overtime_regular > 0"
+                           optional="hide"/>
+                    <field name="overtime_evening" string="Evening OT"
+                           widget="float_time"
+                           decoration-warning="overtime_evening > 0"
+                           optional="hide"/>
+                    <field name="overtime_night" string="Night OT"
+                           widget="float_time"
+                           decoration-danger="overtime_night > 0"
+                           optional="hide"/>
+                    <field name="overtime_holiday" string="Holiday OT"
+                           widget="float_time"
+                           decoration-danger="overtime_holiday > 0"
+                           optional="hide"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Form View: Hiển thị chi tiết trong form attendance -->
+        <record id="view_attendance_form_overtime" model="ir.ui.view">
+            <field name="name">hr.attendance.form.overtime</field>
+            <field name="model">hr.attendance</field>
+            <field name="inherit_id" ref="hr_attendance.hr_attendance_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='overtime_hours']" position="after">
+                     <group>
+                    <field name="is_discharge_shift" string="Xả ca"
+                           help="Đánh dấu ca làm việc này là xả ca (không tính lương)"/>
+                     </group>
+                    <separator string="Tính giờ làm việc"/>
+
+                    <group string="Chi tiết đi trễ/về sớm" col="2">
+                        <field name="scheduled_check_in" string="Giờ vào (qui định)"
+                               widget="datetime" readonly="1"/>
+                        <field name="scheduled_check_out" string="Giờ ra (qui định)"
+                               widget="datetime" readonly="1"/>
+                        <field name="late_minutes" string="Số phút đi trễ" readonly="1"
+                               decoration-danger="late_minutes > 0"/>
+                        <field name="early_minutes" string="Số phút về sớm" readonly="1"
+                               decoration-warning="early_minutes > 0"/>
+                        <field name="is_late" string="Tính trễ" readonly="1" widget="boolean"/>
+                        <field name="is_early" string="Tính về sớm" readonly="1" widget="boolean"/>
+                    </group>
+
+                    <group string="Chi tiết tăng ca" col="2">
+                        <field name="overtime_early" string="Early Overtime (Before Work)"
+                               widget="float_time" readonly="1"
+                               help="Overtime before work hours (must arrive 1+ hour early)"/>
+                        <field name="overtime_regular" string="Regular Overtime (Before 18h)"
+                               widget="float_time" readonly="1"
+                               help="Regular overtime after work, before 18:00"/>
+                        <field name="overtime_evening" string="Evening Overtime (18h-21h)"
+                               widget="float_time" readonly="1"
+                               help="Evening overtime from 18:00 to 21:00"/>
+                        <field name="overtime_night" string="Night Overtime (After 21h)"
+                               widget="float_time" readonly="1"
+                               help="Night overtime after 21:00"/>
+                        <field name="overtime_holiday" string="Holiday Overtime"
+                               widget="float_time" readonly="1"
+                               help="Overtime on rest days or holidays"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Search View: Thêm filter cho overtime - Phiên bản an toàn -->
+        <record id="view_attendance_search_overtime" model="ir.ui.view">
+            <field name="name">hr.attendance.search.overtime</field>
+            <field name="model">hr.attendance</field>
+            <field name="inherit_id" ref="hr_attendance.hr_attendance_view_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//search" position="inside">
+                    <!-- Filters cho Late/Early -->
+                    <separator/>
+                    <filter string="Có đi trễ" name="late_checkin"
+                            domain="[('is_late', '=', True)]"/>
+                    <filter string="Có về sớm" name="early_checkout"
+                            domain="[('is_early', '=', True)]"/>
+                    <filter string="Đúng giờ" name="on_time"
+                            domain="[('is_late', '=', False), ('is_early', '=', False)]"/>
+                    <!-- Filters cho Overtime -->
+                    <separator/>
+                    <filter string="Xả ca" name="discharge_shift"
+                            domain="[('is_discharge_shift', '=', True)]"/>
+                    <filter string="Ca thường" name="normal_shift"
+                            domain="[('is_discharge_shift', '=', False)]"/>
+                    <separator/>
+                    <filter string="Has Overtime" name="has_overtime"
+                            domain="[('overtime_hours', '>', 0)]"/>
+                    <filter string="Early Overtime" name="early_overtime"
+                            domain="[('overtime_early', '>', 0)]"/>
+                    <filter string="Regular Overtime" name="regular_overtime"
+                            domain="[('overtime_regular', '>', 0)]"/>
+                    <filter string="Evening Overtime" name="evening_overtime"
+                            domain="[('overtime_evening', '>', 0)]"/>
+                    <filter string="Night Overtime" name="night_overtime"
+                            domain="[('overtime_night', '>', 0)]"/>
+                    <filter string="Holiday Overtime" name="holiday_overtime"
+                            domain="[('overtime_holiday', '>', 0)]"/>
+
+                    <!-- Group By -->
+                    <separator/>
+                    <filter string="Discharge Shift" name="groupby_discharge_shift"
+                            context="{'group_by': 'is_discharge_shift'}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Pivot View: Báo cáo tổng hợp overtime -->
+        <record id="view_attendance_pivot_overtime" model="ir.ui.view">
+            <field name="name">hr.attendance.pivot.overtime</field>
+            <field name="model">hr.attendance</field>
+            <field name="arch" type="xml">
+                <pivot string="Overtime Analysis">
+                    <field name="employee_id" type="row"/>
+                    <field name="check_in" interval="month" type="col"/>
+                    <field name="is_discharge_shift" type="row"/>
+                    <field name="overtime_hours" type="measure"/>
+                    <field name="overtime_early" type="measure"/>
+                    <field name="overtime_regular" type="measure"/>
+                    <field name="overtime_evening" type="measure"/>
+                    <field name="overtime_night" type="measure"/>
+                    <field name="overtime_holiday" type="measure"/>
+                    <field name="worked_hours" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <!-- Graph View: Biểu đồ overtime -->
+        <record id="view_attendance_graph_overtime" model="ir.ui.view">
+            <field name="name">hr.attendance.graph.overtime</field>
+            <field name="model">hr.attendance</field>
+            <field name="arch" type="xml">
+                <graph string="Overtime Trends" type="line">
+                    <field name="check_in" interval="week"/>
+                    <field name="overtime_hours" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <!-- Calendar View: Hiển thị overtime theo lịch -->
+        <record id="view_attendance_calendar_overtime" model="ir.ui.view">
+            <field name="name">hr.attendance.calendar.overtime</field>
+            <field name="model">hr.attendance</field>
+            <field name="arch" type="xml">
+                <calendar string="Overtime Calendar"
+                         date_start="check_in"
+                         date_stop="check_out"
+                         color="employee_id"
+                         mode="month">
+                    <field name="employee_id"/>
+                    <field name="is_discharge_shift"/>
+                    <field name="overtime_hours"/>
+                    <field name="overtime_early"/>
+                    <field name="overtime_regular"/>
+                    <field name="overtime_evening"/>
+                    <field name="overtime_night"/>
+                    <field name="overtime_holiday"/>
+                </calendar>
+            </field>
+        </record>
+
+        <!-- Action: Menu cho Overtime Analysis -->
+        <record id="action_attendance_overtime_analysis" model="ir.actions.act_window">
+            <field name="name">Overtime Analysis</field>
+            <field name="res_model">hr.attendance</field>
+            <field name="view_mode">tree,form,pivot,graph,calendar</field>
+            <field name="domain">[('overtime_hours', '>', 0)]</field>
+            <field name="context">{
+                'search_default_has_overtime': 1,
+            }</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('view_attendance_tree_overtime')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('view_attendance_form_overtime')}),
+                (0, 0, {'view_mode': 'pivot', 'view_id': ref('view_attendance_pivot_overtime')}),
+                (0, 0, {'view_mode': 'graph', 'view_id': ref('view_attendance_graph_overtime')}),
+                (0, 0, {'view_mode': 'calendar', 'view_id': ref('view_attendance_calendar_overtime')})
+            ]"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No overtime records found!
+                </p>
+                <p>
+                    Overtime hours are automatically calculated based on work schedules and attendance records.
+                </p>
+            </field>
+        </record>
+
+        <!-- Server Action: Để có thể chọn từ Action menu -->
+        <record id="action_server_recompute_overtime" model="ir.actions.server">
+            <field name="name">Tính toán lại giờ tăng ca và đi trễ,về sớm</field>
+            <field name="model_id" ref="hr_attendance.model_hr_attendance"/>
+            <field name="binding_model_id" ref="hr_attendance.model_hr_attendance"/>
+            <field name="binding_view_types">list</field>
+            <field name="state">code</field>
+            <field name="code">action = records.action_recompute_overtime()</field>
+        </record>
+
+        <!-- Menu Item -->
+        <menuitem
+            id="menu_attendance_overtime_analysis"
+            name="Overtime Analysis"
+            parent="hr_attendance.menu_hr_attendance_root"
+            action="action_attendance_overtime_analysis"
+            sequence="20"/>
+
+    </data>
+</odoo>

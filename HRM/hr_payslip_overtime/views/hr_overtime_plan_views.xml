@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hr_overtime_plan_tree" model="ir.ui.view">
+        <field name="name">hr.overtime.plan.tree</field>
+        <field name="model">hr.overtime.plan</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="overtime_hours"/>
+                <field name="payment_percentage"/>
+                <field name="standard_pay"/>
+                <field name="actual_overtime_pay"/>
+                <field name="employee_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_hr_overtime_plan_form" model="ir.ui.view">
+        <field name="name">hr.overtime.plan.form</field>
+        <field name="model">hr.overtime.plan</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="employee_id"/>
+                        <field name="payslip_id"/>
+                    </group>
+                    <group>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                        <field name="overtime_hours"/>
+                        <field name="payment_percentage"/>
+                        <field name="standard_pay"/>
+                        <field name="actual_overtime_pay"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_hr_overtime_plan" model="ir.actions.act_window">
+        <field name="name">Overtime Plans</field>
+        <field name="res_model">hr.overtime.plan</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_hr_overtime_plan"
+        name="Overtime Plans"
+        parent="payroll.payroll_menu_configuration"
+        action="action_hr_overtime_plan"
+        sequence="100"/>
+</odoo>

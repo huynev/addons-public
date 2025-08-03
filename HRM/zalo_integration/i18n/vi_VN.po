@@ -1,0 +1,152 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* zalo_integration
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-08-30 01:59+0000\n"
+"PO-Revision-Date: 2024-08-30 01:59+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: zalo_integration
+#: model:ir.model.fields,field_description:zalo_integration.field_zalo_send_message_wizard__batch_id
+msgid "Batch"
+msgstr "Lô"
+
+#. module: zalo_integration
+#. odoo-python
+#: code:addons/zalo_integration/models/zalo_integration.py:0
+#: model:ir.actions.act_window,name:zalo_integration.action_batch_send_zalo_wizard
+#: model:ir.model,name:zalo_integration.model_zalo_batch_send_wizard
+#: model_terms:ir.ui.view,arch_db:zalo_integration.view_batch_send_zalo_wizard_form
+#: model_terms:ir.ui.view,arch_db:zalo_integration.view_sales_order_filter_inherit_zalo
+#, python-format
+msgid "Batch Send Zalo Messages"
+msgstr "Gửi hàng loạt tin nhắn Zalo"
+
+#. module: zalo_integration
+#: model_terms:ir.ui.view,arch_db:zalo_integration.view_batch_send_zalo_wizard_form
+#: model_terms:ir.ui.view,arch_db:zalo_integration.view_send_zalo_message_wizard_form
+msgid "Cancel"
+msgstr "Hủy"
+
+#. module: zalo_integration
+#: model:ir.model.fields,field_description:zalo_integration.field_zalo_batch_send_wizard__create_uid
+#: model:ir.model.fields,field_description:zalo_integration.field_zalo_send_message_wizard__create_uid
+msgid "Created by"
+msgstr "Tạo bởi"
+
+#. module: zalo_integration
+#: model:ir.model.fields,field_description:zalo_integration.field_zalo_batch_send_wizard__create_date
+#: model:ir.model.fields,field_description:zalo_integration.field_zalo_send_message_wizard__create_date
+msgid "Created on"
+msgstr "Tạo vào"
+
+#. module: zalo_integration
+#: model:ir.model.fields,field_description:zalo_integration.field_zalo_batch_send_wizard__display_name
+#: model:ir.model.fields,field_description:zalo_integration.field_zalo_send_message_wizard__display_name
+msgid "Display Name"
+msgstr "Tên hiển thị"
+
+#. module: zalo_integration
+#: model:ir.model.fields,field_description:zalo_integration.field_zalo_batch_send_wizard__id
+#: model:ir.model.fields,field_description:zalo_integration.field_zalo_send_message_wizard__id
+msgid "ID"
+msgstr "ID"
+
+#. module: zalo_integration
+#: model:ir.model.fields,field_description:zalo_integration.field_zalo_batch_send_wizard__write_uid
+#: model:ir.model.fields,field_description:zalo_integration.field_zalo_send_message_wizard__write_uid
+msgid "Last Updated by"
+msgstr "Cập nhật lần cuối bởi"
+
+#. module: zalo_integration
+#: model:ir.model.fields,field_description:zalo_integration.field_zalo_batch_send_wizard__write_date
+#: model:ir.model.fields,field_description:zalo_integration.field_zalo_send_message_wizard__write_date
+msgid "Last Updated on"
+msgstr "Cập nhật lần cuối vào"
+
+#. module: zalo_integration
+#: model:ir.model.fields,field_description:zalo_integration.field_zalo_batch_send_wizard__model
+msgid "Model"
+msgstr "Model"
+
+#. module: zalo_integration
+#. odoo-python
+#: code:addons/zalo_integration/wizards/send_zalo_message_wizard.py:0
+#, python-format
+msgid "No phone number provided for sending the message."
+msgstr "Không có số điện thoại để gửi tin nhắn."
+
+#. module: zalo_integration
+#. odoo-python
+#: code:addons/zalo_integration/wizards/batch_send_zalo_wizard.py:0
+#, python-format
+msgid "Partner or phone number missing for record: %s"
+msgstr "Thiếu đối tác hoặc số điện thoại cho bản ghi: %s"
+
+#. module: zalo_integration
+#. odoo-python
+#: code:addons/zalo_integration/wizards/send_zalo_message_wizard.py:0
+#, python-format
+msgid "Please provide either a partner"
+msgstr "Vui lòng cung cấp một đối tác"
+
+#. module: zalo_integration
+#: model:ir.model.fields,field_description:zalo_integration.field_zalo_batch_send_wizard__record_ids
+msgid "Record IDs"
+msgstr "ID bản ghi"
+
+#. module: zalo_integration
+#: model:ir.model,name:zalo_integration.model_sale_order
+msgid "Sales Order"
+msgstr "Đơn bán hàng"
+
+#. module: zalo_integration
+#: model_terms:ir.ui.view,arch_db:zalo_integration.view_batch_send_zalo_wizard_form
+#: model_terms:ir.ui.view,arch_db:zalo_integration.view_send_zalo_message_wizard_form
+msgid "Send"
+msgstr "Gửi"
+
+#. module: zalo_integration
+#: model_terms:ir.ui.view,arch_db:zalo_integration.view_order_form_inherit_zalo
+#: model_terms:ir.ui.view,arch_db:zalo_integration.view_send_zalo_message_wizard_form
+msgid "Send Zalo Message"
+msgstr "Gửi tin nhắn Zalo"
+
+#. module: zalo_integration
+#: model:ir.model,name:zalo_integration.model_zalo_send_message_wizard
+msgid "Send Zalo Message Wizard"
+msgstr "Wizard gửi tin nhắn Zalo"
+
+#. module: zalo_integration
+#. odoo-python
+#: code:addons/zalo_integration/models/zalo_integration.py:0
+#, python-format
+msgid "Send Zalo ZNS Message"
+msgstr "Gửi tin nhắn Zalo ZNS"
+
+#. module: zalo_integration
+#: model:ir.model.fields,field_description:zalo_integration.field_zalo_batch_send_wizard__template_id
+#: model:ir.model.fields,field_description:zalo_integration.field_zalo_send_message_wizard__template_id
+msgid "Template"
+msgstr "Mẫu"
+
+#. module: zalo_integration
+#: model:ir.model,name:zalo_integration.model_zalo_integration
+msgid "Zalo Integration"
+msgstr "Tích hợp Zalo"
+
+#. module: zalo_integration
+#. odoo-python
+#: code:addons/zalo_integration/wizards/batch_send_zalo_wizard.py:0
+#, python-format
+msgid "Zalo ZNS Batch"
+msgstr "Lô Zalo ZNS"

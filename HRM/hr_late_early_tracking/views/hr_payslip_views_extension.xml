@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Thêm tab đi trễ/về sớm vào form phiếu lương -->
+    <record id="view_hr_payslip_form_late_early" model="ir.ui.view">
+        <field name="name">hr.payslip.form.late.early</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id" ref="payroll.hr_payslip_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Vào trễ/Về sớm" name="late_early_details">
+                    <group>
+                        <button name="action_get_late_early_data" string="Lấy dữ liệu vào trễ/về sớm" type="object" class="oe_highlight"/>
+                    </group>
+                    <field name="late_early_tracking_ids">
+                        <tree editable="bottom">
+                            <field name="date"/>
+                            <field name="scheduled_check_in" string="Giờ vào qui định"/>
+                            <field name="actual_check_in" string="Giờ vào thực tế"/>
+                            <field name="late_minutes" string="Số phút đi trễ"/>
+                            <field name="scheduled_check_out" string="Giờ ra qui định"/>
+                            <field name="actual_check_out" string="Giờ ra thực tế"/>
+                            <field name="early_minutes" string="Số phút về sớm"/>
+                            <field name="total_penalty_minutes" string="Tổng phút bị trừ"/>
+                            <field name="penalty_amount" string="Số tiền bị trừ"/>
+                            <field name="state"/>
+                        </tree>
+                    </field>
+                    <group>
+                        <field name="total_late_minutes" string="Tổng số phút đi trễ"/>
+                        <field name="total_early_minutes" string="Tổng số phút về sớm"/>
+                        <field name="total_penalty_minutes" string="Tổng số phút bị trừ"/>
+                        <field name="total_penalty_amount" string="Tổng số tiền bị trừ"/>
+                    </group>
+                    <div class="alert alert-info" role="alert">
+                        <h4>Hướng dẫn tính toán phạt đi trễ/về sớm</h4>
+                        <p>Bạn có thể truy cập đến các giá trị bản ghi đi trễ/về sớm này trong mã rule's Python của quy tắc lương như sau:</p>
+                        <ul>
+                            <li><code>payslip.late_early_tracking_ids</code></li>
+                        </ul>
+                        <p>Dưới đây là một vài ví dụ:</p>
+                        <ol>
+                            <li>Để tính tổng số tiền bị trừ do đi trễ/về sớm:<br/>
+                                <code>result = -sum(payslip.late_early_tracking_ids.mapped('penalty_amount'))</code>
+                            </li>
+                            <li>Để tính tiền bị trừ cho riêng đi trễ:<br/>
+                                <code>
+                                    late_minutes = sum(payslip.late_early_tracking_ids.mapped('late_minutes'))<br/>
+                                    hourly_rate = contract.wage / (30 * 8 * 60)<br/>
+                                    result = -late_minutes * hourly_rate
+                                </code>
+                            </li>
+                            <li>Để tính tiền bị trừ cho riêng về sớm:<br/>
+                                <code>
+                                    early_minutes = sum(payslip.late_early_tracking_ids.mapped('early_minutes'))<br/>
+                                    hourly_rate = contract.wage / (30 * a8 * 60)<br/>
+                                    result = -early_minutes * hourly_rate
+                                </code>
+                            </li>
+                        </ol>
+                    </div>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

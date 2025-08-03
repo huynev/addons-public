@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form View -->
+    <record id="view_hr_payroll_bank_report_wizard_form" model="ir.ui.view">
+        <field name="name">hr.payroll.bank.report.wizard.form</field>
+        <field name="model">hr.payroll.bank.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Báo cáo chuyển lương ngân hàng">
+                <field name="state" invisible="1"/>
+
+                <!-- Phần nhập liệu chỉ hiển thị khi state=draft -->
+                <group invisible="state != 'draft'">
+                    <group>
+                        <field name="payslip_run_id"/>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                    </group>
+                    <group>
+                        <field name="company_id" options="{'no_create': True}"/>
+                        <field name="salary_rule_code"/>
+<!--                        <field name="payslip_run_id" domain="[('date_start', '&gt;=', date_from), ('date_end', '&lt;=', date_to)]" options="{'no_create': True}"/>-->
+                        <field name="include_draft"/>
+                    </group>
+                </group>
+
+                <!-- Phần kết quả chỉ hiển thị khi state=generated -->
+                <div invisible="state != 'generated'">
+                    <h2>Báo cáo đã được tạo!</h2>
+                    <p>Bạn có thể tải báo cáo bằng cách nhấn vào nút dưới đây:</p>
+                    <field name="report_file" filename="report_filename" readonly="1" widget="binary"/>
+                    <field name="report_filename" invisible="1"/>
+                </div>
+
+                <footer>
+                    <!-- Nút tạo báo cáo chỉ hiển thị khi state=draft -->
+                    <button name="action_generate_report" string="Tạo báo cáo" type="object"
+                            class="btn-primary" invisible="state != 'draft'"/>
+
+                    <!-- Nút tạo báo cáo mới chỉ hiển thị khi state=generated -->
+                    <button name="action_reset_wizard" string="Tạo báo cáo mới" type="object"
+                            class="btn-primary" invisible="state != 'generated'"/>
+
+                    <button string="Đóng" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_hr_payroll_bank_report_wizard" model="ir.actions.act_window">
+        <field name="name">Báo cáo chuyển lương ngân hàng</field>
+        <field name="res_model">hr.payroll.bank.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem
+        id="payroll_menu_report"
+        name="Báo cáo"
+        parent="payroll.payroll_menu_root"
+        sequence="90"
+        groups="payroll.group_payroll_manager"
+    />
+
+    <menuitem id="menu_hr_payroll_bank_report"
+              name="Báo cáo chuyển lương ngân hàng"
+              parent="payroll_menu_report"
+              action="action_hr_payroll_bank_report_wizard"
+              sequence="15"/>
+</odoo>

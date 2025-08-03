@@ -1,0 +1,1 @@
+from . import hr_payroll_bank_report_wizard

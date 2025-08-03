@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Tạo category cho phụ cấp -->
+        <record id="hr_rule_cat_allowance" model="hr.salary.rule.category">
+            <field name="name">Phụ Cấp</field>
+            <field name="code">ALLOW</field>
+        </record>
+
+        <!-- Quy tắc lương cho phụ cấp chịu thuế -->
+        <record id="hr_salary_rule_allowance_taxable" model="hr.salary.rule">
+            <field name="name">Phụ Cấp Chịu Thuế</field>
+            <field name="code">TALLOW</field>
+            <field name="category_id" ref="hr_rule_cat_allowance"/>
+            <field name="sequence" eval="21"/>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+result = 0
+# Kiểm tra một vài phụ cấp cụ thể
+if 'HARDWORK' in allowances and allowances.HARDWORK.is_taxable:
+    result += allowances.HARDWORK.amount
+if 'HARMFUL' in allowances and allowances.HARMFUL.is_taxable:
+    result += allowances.HARMFUL.amount
+if 'MEAL' in allowances and allowances.MEAL.is_taxable:
+    result += allowances.MEAL.amount
+if 'TRANS' in allowances and allowances.TRANS.is_taxable:
+    result += allowances.TRANS.amount
+if 'PHONE' in allowances and allowances.PHONE.is_taxable:
+    result += allowances.PHONE.amount
+# Thêm các phụ cấp khác nếu cần
+            </field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="condition_select">python</field>
+            <field name="condition_python">
+result = allowances and True or False
+            </field>
+        </record>
+
+        <!-- Quy tắc lương cho phụ cấp không chịu thuế -->
+        <record id="hr_salary_rule_allowance_nontaxable" model="hr.salary.rule">
+            <field name="name">Phụ Cấp Không Chịu Thuế</field>
+            <field name="code">NTALLOW</field>
+            <field name="category_id" ref="hr_rule_cat_allowance"/>
+            <field name="sequence" eval="22"/>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+result = 0
+# Kiểm tra một vài phụ cấp cụ thể
+if 'HARDWORK' in allowances and not allowances.HARDWORK.is_taxable:
+    result += allowances.HARDWORK.amount
+if 'HARMFUL' in allowances and not allowances.HARMFUL.is_taxable:
+    result += allowances.HARMFUL.amount
+if 'MEAL' in allowances and not allowances.MEAL.is_taxable:
+    result += allowances.MEAL.amount
+if 'TRANS' in allowances and not allowances.TRANS.is_taxable:
+    result += allowances.TRANS.amount
+if 'PHONE' in allowances and not allowances.PHONE.is_taxable:
+    result += allowances.PHONE.amount
+# Thêm các phụ cấp khác nếu cần
+            </field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="condition_select">python</field>
+            <field name="condition_python">
+result = allowances and True or False
+            </field>
+        </record>
+    </data>
+</odoo>

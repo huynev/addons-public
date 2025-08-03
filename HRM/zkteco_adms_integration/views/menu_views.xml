@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem id="menu_zkteco_main" name="ZKTeco Attendance" sequence="100"/>
+        <menuitem id="menu_zkteco_dashboard" name="Dashboard" parent="menu_zkteco_main" action="action_zkteco_dashboard" sequence="5"/>
+        <menuitem id="menu_zkteco_devices" name="Devices" parent="menu_zkteco_main" action="action_zkteco_device" sequence="10"/>
+        <menuitem id="menu_zkteco_unknown" name="Unknown Records" parent="menu_zkteco_main" action="action_zkteco_unknown_attendance" sequence="20"/>
+        <menuitem id="menu_zkteco_commands" name="Device Commands" parent="menu_zkteco_main" action="action_zkteco_device_command" sequence="25"/>
+        <menuitem id="menu_zkteco_logs" name="Processing Logs" parent="menu_zkteco_main" action="action_zkteco_attendance_log" sequence="30"/>
+    </data>
+</odoo>

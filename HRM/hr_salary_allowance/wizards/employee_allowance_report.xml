@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Wizard Form View -->
+    <record id="view_employee_allowance_report_form" model="ir.ui.view">
+        <field name="name">employee.allowance.report.form</field>
+        <field name="model">employee.allowance.report</field>
+        <field name="arch" type="xml">
+            <form string="Báo Cáo Phụ Cấp Nhân Viên">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>Báo Cáo Phụ Cấp Nhân Viên</h1>
+                        <p class="oe_grey">
+                            Tạo báo cáo tổng hợp phụ cấp theo nhân viên với từng loại phụ cấp là một cột
+                        </p>
+                    </div>
+
+                    <group>
+                        <group string="Thời gian báo cáo">
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <field name="report_type" widget="radio" options="{'horizontal': true}"/>
+                        </group>
+                        <group string="Bộ lọc dữ liệu">
+                            <field name="filter_type" widget="radio"/>
+                            <field name="department_ids"
+                                   widget="many2many_tags"
+                                   placeholder="Chọn phòng ban..."
+                                   options="{'color_field': 'color'}"
+                                   invisible="filter_type != 'department'"/>
+                            <field name="employee_ids"
+                                   widget="many2many_tags"
+                                   placeholder="Chọn nhân viên..."
+                                   options="{'color_field': 'color'}"
+                                   invisible="filter_type != 'employee'"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group string="Tùy chọn hiển thị">
+                            <field name="group_by_department"/>
+                            <field name="include_inactive"/>
+                            <field name="include_zero_allowance"/>
+                        </group>
+                        <group string="Thống kê">
+                            <field name="employee_count" readonly="1"/>
+                            <label for="employee_count" string="nhân viên sẽ được bao gồm trong báo cáo"/>
+                        </group>
+                    </group>
+
+                    <!-- Hướng dẫn sử dụng -->
+                    <notebook>
+                        <page string="Hướng dẫn sử dụng">
+                            <div class="alert alert-info">
+                                <h4>Thông tin báo cáo</h4>
+                                <p>Báo cáo này sẽ hiển thị thông tin phụ cấp của nhân viên theo dạng bảng</p>
+                            </div>
+
+                            <separator string="Mẹo sử dụng"/>
+                            <div class="alert alert-success">
+                                <ul>
+                                    <li><strong>Chọn khoảng thời gian phù hợp:</strong> Báo cáo sẽ lấy phụ cấp có hiệu lực trong khoảng thời gian này</li>
+                                    <li><strong>Sử dụng bộ lọc:</strong> Có thể lọc theo phòng ban hoặc nhân viên cụ thể</li>
+                                    <li><strong>Bao gồm nhân viên không có phụ cấp:</strong> Để thấy toàn bộ danh sách nhân viên</li>
+                                    <li><strong>File Excel:</strong> Có thể mở bằng Excel/LibreOffice để phân tích thêm</li>
+                                </ul>
+                            </div>
+
+                            <separator string="Ví dụ báo cáo"/>
+                            <div>
+                                <table class="table table-bordered table-sm">
+                                    <thead>
+                                        <tr class="table-active text-center">
+                                            <th>STT</th>
+                                            <th>Mã NV</th>
+                                            <th>Họ và tên</th>
+                                            <th>Phòng ban</th>
+                                            <th>PC Ăn trưa</th>
+                                            <th>PC Xăng xe</th>
+                                            <th>PC Điện thoại</th>
+                                            <th>Tổng cộng</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="text-center">
+                                            <td>1</td>
+                                            <td>NV001</td>
+                                            <td class="text-left">Nguyễn Văn A</td>
+                                            <td class="text-left">Kế toán</td>
+                                            <td>1,000,000</td>
+                                            <td>500,000</td>
+                                            <td>300,000</td>
+                                            <td><strong>1,800,000</strong></td>
+                                        </tr>
+                                        <tr class="text-center">
+                                            <td>2</td>
+                                            <td>NV002</td>
+                                            <td class="text-left">Trần Thị B</td>
+                                            <td class="text-left">Nhân sự</td>
+                                            <td>1,000,000</td>
+                                            <td></td>
+                                            <td>300,000</td>
+                                            <td><strong>1,300,000</strong></td>
+                                        </tr>
+                                        <tr class="text-center table-info">
+                                            <td colspan="4"><strong>TỔNG CỘNG</strong></td>
+                                            <td><strong>2,000,000</strong></td>
+                                            <td><strong>500,000</strong></td>
+                                            <td><strong>600,000</strong></td>
+                                            <td><strong>3,100,000</strong></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <p class="text-muted text-center">
+                                    <small><em>Ví dụ cấu trúc báo cáo phụ cấp nhân viên</em></small>
+                                </p>
+                            </div>
+                        </page>
+
+
+                    </notebook>
+                </sheet>
+
+                <footer>
+                    <button name="action_generate_report"
+                            string="Xuất Báo Cáo Excel"
+                            type="object"
+                            class="btn-primary"
+                            invisible="employee_count == 0"/>
+                    <button string="Hủy" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Wizard Action -->
+    <record id="action_employee_allowance_report_wizard" model="ir.actions.act_window">
+        <field name="name">Báo Cáo Phụ Cấp Nhân Viên</field>
+        <field name="res_model">employee.allowance.report</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{}</field>
+    </record>
+
+    <!-- Menu Item trong module phụ cấp (nếu có) -->
+    <menuitem id="menu_salary_allowance_report"
+              name="Báo Cáo Phụ Cấp"
+              parent="menu_hr_salary_allowance_root"
+              action="action_employee_allowance_report_wizard"
+              sequence="50"/>
+</odoo>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form view cho Wizard Đăng ký đóng góp -->
+    <record id="view_contribution_register_wizard_form" model="ir.ui.view">
+        <field name="name">salary.contribution.register.wizard.form</field>
+        <field name="model">salary.contribution.register.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Đăng Ký Đóng Góp">
+                <sheet>
+                    <!-- Thêm thông báo cảnh báo -->
+                    <div class="alert alert-info" role="alert" invisible="employee_count == 0">
+                        Bạn đang tạo đóng góp cho <field name="employee_count" readonly="1"/> nhân viên đã chọn.
+                    </div>
+                    <div class="alert alert-warning" role="alert" invisible="employee_count > 0 or contribution_type_id == False">
+                        Vui lòng chọn nhân viên để tiếp tục.
+                    </div>
+                    <div class="alert alert-success" role="alert" invisible="contribution_type_id == False or available_employee_count &lt;= 0">
+                        Có <field name="available_employee_count" readonly="1"/> nhân viên có thể đăng ký đóng góp này.
+                    </div>
+                    <div class="alert alert-danger" role="alert" invisible="contribution_type_id == False or available_employee_count &gt; 0">
+                        Tất cả nhân viên đã được đăng ký đóng góp này!
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="contribution_type_id" options="{'no_create': True}"/>
+                            <field name="calculation_base_type" widget="radio"/>
+                            <field name="calculation_base_fixed"
+                                   invisible="calculation_base_type != 'fixed'"
+                                   required="calculation_base_type == 'fixed'" />
+                            <field name="calculation_base_contract_field"
+                                   invisible="calculation_base_type != 'contract_field'"
+                                   required="calculation_base_type == 'contract_field'" />
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="department_id" options="{'no_create': True}"/>
+                            <!-- Các trường ẩn -->
+                            <field name="employee_count" invisible="1"/>
+                            <field name="available_employee_count" invisible="1"/>
+                            <field name="available_employee_domain" invisible="1"/>
+                            <field name="company_currency_id" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="employee_contribution_rate"/>
+                            <field name="company_contribution_rate"/>
+                            <field name="max_unpaid_days"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Nhân Viên" name="employees">
+                            <field name="employee_ids" nolabel="1" widget="many2many" options="{'no_create': True}" domain="available_employee_domain">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="employee_code"/>
+                                    <field name="department_id"/>
+                                    <field name="job_id"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <footer>
+                    <button string="Tạo Đóng Góp" name="action_create_contributions" type="object" class="btn-primary"
+                            invisible="employee_ids == [] or contribution_type_id == False"/>
+                    <button string="Hủy" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action cho Wizard Đăng ký đóng góp -->
+    <record id="action_contribution_register_wizard" model="ir.actions.act_window">
+        <field name="name">Đăng Ký Đóng Góp</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">salary.contribution.register.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="hr.model_hr_employee"/>
+        <field name="binding_view_types">list</field>
+    </record>
+
+    <!-- Action để mở wizard từ menu -->
+    <record id="action_contribution_register_wizard_from_menu" model="ir.actions.act_window">
+        <field name="name">Đăng Ký Đóng Góp</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">salary.contribution.register.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

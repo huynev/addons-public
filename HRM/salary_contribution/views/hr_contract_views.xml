@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_contract_inherit_salary_contribution_view" model="ir.ui.view">
+        <field name="name">hr.contract.inherit.salary.contribution</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='salary_info']" position="inside">
+                <group name="salary">
+                    <label for="wage_social_insurance"/>
+                    <div class="o_row mw-50" name="wage_social_insurance">
+                        <field name="wage_social_insurance" class="oe_inline o_hr_narrow_field" nolabel="1"/>
+                        <div class="mb-3" name="wage_period_label">/ tháng</div>
+                    </div>
+                </group>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Đóng Góp Từ Lương" name="salary_contributions">
+                    <field name="salary_contribution_ids"
+                           readonly="1"
+                           context="{
+                               'default_employee_id': employee_id,
+                               'tree_view_ref': 'salary_contribution.salary_contribution_tree_view'
+                           }">
+                        <tree string="Đăng Ký Đóng Góp" create="false" edit="false">
+                            <field name="name"/>
+                            <field name="contribution_type_id"/>
+                            <field name="calculation_base"/>
+                            <field name="employee_contribution_rate"/>
+                            <field name="company_contribution_rate"/>
+                            <field name="registration_date"/>
+                            <field name="state"/>
+                        </tree>
+                        <form string="Chi Tiết Đóng Góp" create="false" edit="false">
+                            <sheet>
+                                <group>
+                                    <group>
+                                        <field name="name"/>
+                                        <field name="contribution_type_id"/>
+                                        <field name="employee_id"/>
+                                    </group>
+                                    <group>
+                                        <field name="calculation_base"/>
+                                        <field name="registration_date"/>
+                                        <field name="start_date"/>
+                                        <field name="end_date"/>
+                                    </group>
+                                </group>
+                                <notebook>
+                                    <page string="Tỷ Lệ Đóng Góp">
+                                        <group>
+                                            <group>
+                                                <field name="employee_contribution_rate"/>
+                                                <field name="company_contribution_rate"/>
+                                            </group>
+                                            <group>
+                                                <field name="max_unpaid_days"/>
+                                            </group>
+                                        </group>
+                                    </page>
+                                    <page string="Lịch Sử Thay Đổi">
+                                        <field name="history_ids">
+                                            <tree>
+                                                <field name="start_date"/>
+                                                <field name="end_date"/>
+                                                <field name="calculation_base"/>
+                                                <field name="employee_contribution_rate"/>
+                                                <field name="company_contribution_rate"/>
+                                            </tree>
+                                        </field>
+                                    </page>
+                                </notebook>
+                            </sheet>
+                        </form>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

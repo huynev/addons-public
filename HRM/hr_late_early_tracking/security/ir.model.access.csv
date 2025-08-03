@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_late_early_tracking_user,hr.late.early.tracking.user,model_hr_late_early_tracking,hr.group_hr_user,1,1,1,1
+access_hr_late_early_tracking_manager,hr.late.early.tracking.manager,model_hr_late_early_tracking,hr.group_hr_manager,1,1,1,1
+access_hr_late_early_tracking_employee,hr.late.early.tracking.employee,model_hr_late_early_tracking,base.group_user,1,0,0,0
+access_hr_late_early_report_wizard_user,hr.late.early.report.wizard.user,model_hr_late_early_report_wizard,hr.group_hr_user,1,1,1,1
+access_hr_late_early_report_wizard_manager,hr.late.early.report.wizard.manager,model_hr_late_early_report_wizard,hr.group_hr_manager,1,1,1,1
+access_hr_late_early_dashboard_user,hr.late.early.dashboard.user,model_hr_late_early_dashboard,hr.group_hr_user,1,1,1,1
+access_hr_late_early_dashboard_manager,hr.late.early.dashboard.manager,model_hr_late_early_dashboard,hr.group_hr_manager,1,1,1,1
+access_hr_late_early_dashboard_employee,hr.late.early.dashboard.employee,model_hr_late_early_dashboard,base.group_user,1,1,0,0
+access_hr_late_early_dashboard_employee_stats_user,hr.late.early.dashboard.employee.stats.user,model_hr_late_early_dashboard_employee_stats,hr.group_hr_user,1,1,1,1
+access_hr_late_early_dashboard_employee_stats_manager,hr.late.early.dashboard.employee.stats.manager,model_hr_late_early_dashboard_employee_stats,hr.group_hr_manager,1,1,1,1
+access_hr_late_early_dashboard_department_stats_user,hr.late.early.dashboard.department.stats.user,model_hr_late_early_dashboard_department_stats,hr.group_hr_user,1,1,1,1
+access_hr_late_early_dashboard_department_stats_manager,hr.late.early.dashboard.department.stats.manager,model_hr_late_early_dashboard_department_stats,hr.group_hr_manager,1,1,1,1

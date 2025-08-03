@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hr_payroll_excel_export_form" model="ir.ui.view">
+        <field name="name">hr.payroll.excel.export.form</field>
+        <field name="model">hr.payroll.excel.export</field>
+        <field name="arch" type="xml">
+            <form string="Export Payroll to Excel">
+                <field name="state" invisible="1"/>
+                <div invisible="state != 'choose'">
+                    <group>
+                        <group>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <field name="report_type"/>
+                            <field name="group_by_department"/>
+                        </group>
+                        <group>
+                            <field name="department_ids" widget="many2many_tags"/>
+                            <field name="employee_ids" widget="many2many_tags"/>
+                        </group>
+                    </group>
+                    <group string="Trạng thái phiếu lương">
+                        <group>
+                            <field name="include_draft"/>
+                            <field name="include_waiting"/>
+                        </group>
+                        <group>
+                            <field name="include_done"/>
+                            <field name="include_rejected"/>
+                        </group>
+                    </group>
+                    <group string="Tùy chọn hiển thị" invisible="report_type != 'detailed'">
+                        <group>
+                            <field name="show_overtime"/>
+                            <field name="show_workdays"/>
+                        </group>
+                        <group>
+                            <field name="show_late_early"/>
+                        </group>
+                    </group>
+                </div>
+                <div invisible="state != 'done'">
+                    <h2>Báo cáo Excel đã sẵn sàng!</h2>
+                    <group>
+                        <field name="excel_file" filename="file_name" readonly="1"/>
+                        <field name="file_name" readonly="1" invisible="1"/>
+                    </group>
+                </div>
+                <footer>
+                    <button name="action_export_excel" string="Tạo Excel" type="object" class="btn-primary" invisible="state != 'choose'"/>
+                    <button name="action_export_excel" string="Tạo lại Excel" type="object" class="btn-primary" invisible="state != 'done'"/>
+                    <button name="action_back_to_choose" string="Quay lại" type="object" class="btn-secondary" invisible="state != 'done'"/>
+                    <button string="Đóng" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_hr_payroll_excel_export" model="ir.actions.act_window">
+        <field name="name">Export Payroll to Excel</field>
+        <field name="res_model">hr.payroll.excel.export</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Menu item -->
+    <menuitem id="menu_hr_payroll_excel_export"
+              name="Xuất báo cáo bảng lương ra excel"
+              parent="hr_bank_payroll_report.payroll_menu_report"
+              action="action_hr_payroll_excel_export"
+              sequence="15"/>
+</odoo>

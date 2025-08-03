@@ -1,0 +1,2140 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* ohrms_loan
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-24 11:31+0000\n"
+"PO-Revision-Date: 2025-07-24 11:31+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/wizards/hr_loan_auto_add_employees_wizard.py:0
+#, python-format
+msgid ""
+"\n"
+"Skipped employees (have pending loans): %s"
+msgstr ""
+"\n"
+"Nhân viên bị bỏ qua (có khoản tạm ứng đang chờ): %s"
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/models/hr_loan.py:0
+#, python-format
+msgid "%d approved loan(s) cannot be cancelled."
+msgstr "%d khoản tạm ứng đã duyệt không thể hủy."
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/models/hr_loan.py:0
+#, python-format
+msgid "%d approved loan(s) cannot be changed."
+msgstr "%d khoản tạm ứng đã duyệt không thể thay đổi."
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/models/hr_loan.py:0
+#, python-format
+msgid "%d approved loan(s) cannot be refused."
+msgstr "%d khoản tạm ứng đã duyệt không thể từ chối."
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/models/hr_loan.py:0
+#, python-format
+msgid "%d approved loan(s) cannot be reset."
+msgstr "%d khoản tạm ứng đã duyệt không thể đặt lại."
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/models/hr_loan.py:0
+#, python-format
+msgid "%d loan(s) already approved."
+msgstr "%d khoản tạm ứng đã được duyệt."
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/models/hr_loan.py:0
+#, python-format
+msgid "%d loan(s) approved successfully."
+msgstr "%d khoản tạm ứng đã được duyệt thành công."
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/models/hr_loan.py:0
+#, python-format
+msgid "%d loan(s) cancelled successfully."
+msgstr "%d khoản tạm ứng đã được hủy thành công."
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/models/hr_loan.py:0
+#, python-format
+msgid "%d loan(s) refused successfully."
+msgstr "%d khoản tạm ứng đã được từ chối thành công."
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/models/hr_loan.py:0
+#, python-format
+msgid "%d loan(s) reset to draft successfully."
+msgstr "%d khoản tạm ứng đã được đặt lại về nháp thành công."
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/models/hr_loan.py:0
+#: code:addons/ohrms_loan/models/hr_loan.py:0
+#: code:addons/ohrms_loan/models/hr_loan.py:0
+#: code:addons/ohrms_loan/models/hr_loan.py:0
+#: code:addons/ohrms_loan/models/hr_loan.py:0
+#, python-format
+msgid "%d loan(s) skipped (invalid state)."
+msgstr "%d khoản tạm ứng bị bỏ qua (trạng thái không hợp lệ)."
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/models/hr_loan.py:0
+#, python-format
+msgid "%d loan(s) submitted successfully."
+msgstr "%d khoản tạm ứng đã được gửi duyệt thành công."
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/wizards/hr_loan_auto_add_employees_wizard.py:0
+#, python-format
+msgid "%s employees are already in this configuration and will be skipped."
+msgstr "%s nhân viên đã có trong cấu hình này và sẽ bị bỏ qua."
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/wizards/hr_loan_auto_add_employees_wizard.py:0
+#, python-format
+msgid "%s employees have been added to the configuration."
+msgstr "%s nhân viên đã được thêm vào cấu hình."
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/wizards/hr_loan_auto_generation_wizard.py:0
+#, python-format
+msgid "%s loans have been created."
+msgstr "%s khoản tạm ứng đã được tạo."
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/models/hr_employee.py:0
+#, python-format
+msgid ""
+"<p class=\"oe_view_nocontent_create\">\n"
+"                           Click to Create for New Loan\n"
+"                        </p>"
+msgstr ""
+"<p class=\"oe_view_nocontent_create\">\n"
+"                           Nhấp để tạo tạm ứng mới\n"
+"                        </p>"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_auto_config_form
+msgid "<span class=\"o_stat_text\">Execution Logs</span>"
+msgstr "<span class=\"o_stat_text\">Nhật ký thực thi</span>"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_auto_config_form
+msgid "<span class=\"o_stat_text\">Generated Loans</span>"
+msgstr "<span class=\"o_stat_text\">Tạm ứng đã tạo</span>"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_batch_form
+msgid "<span class=\"o_stat_text\">Khoản ứng</span>"
+msgstr "<span class=\"o_stat_text\">Khoản ứng</span>"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.hr_loan_view_form
+msgid "<strong>Khoản ứng tự động:</strong> Khoản ứng này được tạo tự động bởi"
+msgstr "<strong>Khoản ứng tự động:</strong> Khoản ứng này được tạo tự động bởi"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch_process_wizard__action_type
+msgid "Action"
+msgstr "Hành động"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__message_needaction
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_config__message_needaction
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__message_needaction
+msgid "Action Needed"
+msgstr "Hành động cần thiết"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_config__active
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_employee_line__active
+msgid "Active"
+msgstr "Hoạt động"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__activity_ids
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_config__activity_ids
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__activity_ids
+msgid "Activities"
+msgstr "Hoạt động"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__activity_exception_decoration
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_config__activity_exception_decoration
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr "Biểu tượng ngoại lệ hoạt động"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__activity_state
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_config__activity_state
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__activity_state
+msgid "Activity State"
+msgstr "Trạng thái hoạt động"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__activity_type_icon
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_config__activity_type_icon
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__activity_type_icon
+msgid "Activity Type Icon"
+msgstr "Biểu tượng loại hoạt động"
+
+#. module: ohrms_loan
+#: model:ir.actions.act_window,name:ohrms_loan.hr_loan_auto_add_employees_wizard_action
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_auto_add_employees_wizard_form
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_auto_config_form
+msgid "Add Employees"
+msgstr "Thêm nhân viên"
+
+#. module: ohrms_loan
+#: model:ir.model,name:ohrms_loan.model_hr_loan_auto_add_employees_wizard
+msgid "Add Employees to Loan Configuration Wizard"
+msgstr "Trình hướng dẫn thêm nhân viên vào cấu hình tạm ứng"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_auto_config_form
+msgid "Add selected employees to this configuration"
+msgstr "Thêm nhân viên đã chọn vào cấu hình này"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_auto_employee_line__notes
+msgid "Additional notes"
+msgstr "Ghi chú bổ sung"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_line__amount
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_line__amount
+msgid "Amount"
+msgstr "Số tiền"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_auto_employee_line__loan_amount
+msgid "Amount to be generated for this employee"
+msgstr "Số tiền sẽ được tạo cho nhân viên này"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.hr_loan_view_form
+msgid "Approve"
+msgstr "Phê duyệt"
+
+#. module: ohrms_loan
+#: model:ir.model.fields.selection,name:ohrms_loan.selection__hr_loan_batch_process_wizard__action_type__approve_all
+msgid "Approve All Pending Loans"
+msgstr "Duyệt tất cả khoản tạm ứng đang chờ"
+
+#. module: ohrms_loan
+#: model:ir.model.fields.selection,name:ohrms_loan.selection__hr_loan__state__approve
+msgid "Approved"
+msgstr "Đã phê duyệt"
+
+#. module: ohrms_loan
+#: model:ir.model.fields.selection,name:ohrms_loan.selection__hr_loan_batch_create_wizard__month__4
+msgid "April"
+msgstr "Tháng 4"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__message_attachment_count
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_config__message_attachment_count
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__message_attachment_count
+msgid "Attachment Count"
+msgstr "Số lượng tệp đính kèm"
+
+#. module: ohrms_loan
+#: model:ir.model.fields.selection,name:ohrms_loan.selection__hr_loan_batch_create_wizard__month__8
+msgid "August"
+msgstr "Tháng 8"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_bulk_create_wizard__auto_compute_installments
+msgid "Auto Compute Installments"
+msgstr "Tự động tính kỳ trả góp"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__auto_config_id
+msgid "Auto Configuration"
+msgstr "Cấu hình tự động"
+
+#. module: ohrms_loan
+#: model:ir.ui.menu,name:ohrms_loan.menu_hr_loan_auto_config
+msgid "Auto Configurations"
+msgstr "Cấu hình"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__is_auto_generated
+msgid "Auto Generated"
+msgstr "Tự động tạo"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_bulk_create_wizard__auto_submit
+msgid "Auto Submit for Approval"
+msgstr "Tự động gửi duyệt"
+
+#. module: ohrms_loan
+#: model:ir.model,name:ohrms_loan.model_hr_loan_auto_config
+msgid "Automatic Loan Configuration"
+msgstr "Cấu hình tạm ứng tự động"
+
+#. module: ohrms_loan
+#: model:ir.actions.act_window,name:ohrms_loan.action_hr_loan_auto_config
+msgid "Automatic Loan Configurations"
+msgstr "Cấu hình tạm ứng tự động"
+
+#. module: ohrms_loan
+#: model:ir.model,name:ohrms_loan.model_hr_loan_auto_employee_line
+msgid "Automatic Loan Employee Line"
+msgstr "Dòng nhân viên tạm ứng tự động"
+
+#. module: ohrms_loan
+#: model:ir.model,name:ohrms_loan.model_hr_loan_auto_generation
+msgid "Automatic Loan Generation"
+msgstr "Tạo tạm ứng tự động"
+
+#. module: ohrms_loan
+#: model:ir.model,name:ohrms_loan.model_hr_loan_auto_log
+msgid "Automatic Loan Generation Log"
+msgstr "Nhật ký tạo tạm ứng tự động"
+
+#. module: ohrms_loan
+#: model:ir.actions.act_window,name:ohrms_loan.action_hr_loan_auto_log
+msgid "Automatic Loan Logs"
+msgstr "Nhật ký tạm ứng tự động"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__balance_amount
+msgid "Balance Amount"
+msgstr "Số dư"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch_process_wizard__batch_id
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_bulk_create_wizard__batch_id
+msgid "Batch"
+msgstr "Đợt"
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/models/hr_loan.py:0
+#, python-format
+msgid "Batch Approve Result"
+msgstr "Kết quả duyệt hàng loạt"
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/models/hr_loan.py:0
+#, python-format
+msgid "Batch Cancel Result"
+msgstr "Kết quả hủy hàng loạt"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_log__batch_id
+msgid "Batch Created"
+msgstr "Đợt đã tạo"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch_create_wizard__name
+msgid "Batch Name"
+msgstr "Tên đợt"
+
+#. module: ohrms_loan
+#: model:ir.model,name:ohrms_loan.model_hr_loan_batch_process_wizard
+msgid "Batch Process Loans Wizard"
+msgstr "Trình hướng dẫn xử lý tạm ứng hàng loạt"
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/models/hr_loan.py:0
+#, python-format
+msgid "Batch Refuse Result"
+msgstr "Kết quả từ chối hàng loạt"
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/models/hr_loan.py:0
+#, python-format
+msgid "Batch Reset Result"
+msgstr "Kết quả đặt lại hàng loạt"
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/models/hr_loan.py:0
+#, python-format
+msgid "Batch Submit Result"
+msgstr "Kết quả gửi duyệt hàng loạt"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_auto_log__batch_id
+msgid "Batch created during this execution"
+msgstr "Đợt được tạo trong lần thực thi này"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_config__batch_count
+msgid "Batches"
+msgstr "Đợt"
+
+#. module: ohrms_loan
+#: model:ir.actions.act_window,name:ohrms_loan.hr_loan_bulk_create_wizard_action
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_bulk_create_wizard_form
+msgid "Bulk Create Loans"
+msgstr "Tạo tạm ứng hàng loạt"
+
+#. module: ohrms_loan
+#: model:ir.model,name:ohrms_loan.model_hr_loan_bulk_create_wizard
+msgid "Bulk Create Loans Wizard"
+msgstr "Trình hướng dẫn tạo tạm ứng hàng loạt"
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/wizards/hr_loan_auto_add_employees_wizard.py:0
+#, python-format
+msgid "Bulk Create Result"
+msgstr "Kết quả tạo hàng loạt"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_auto_add_employees_wizard_form
+msgid "Bạn đang thêm"
+msgstr "Bạn đang thêm"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.hr_loan_view_form
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_auto_add_employees_wizard_form
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_auto_generation_wizard_form
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_batch_create_wizard_form
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_batch_process_wizard_form
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_bulk_create_wizard_form
+msgid "Cancel"
+msgstr "Hủy bỏ"
+
+#. module: ohrms_loan
+#: model:ir.model.fields.selection,name:ohrms_loan.selection__hr_loan__state__cancel
+msgid "Canceled"
+msgstr "Đã hủy"
+
+#. module: ohrms_loan
+#: model:ir.actions.server,name:ohrms_loan.action_batch_reset_draft_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_batch_form
+msgid "Chuyển về nháp"
+msgstr "Chuyển về nháp"
+
+#. module: ohrms_loan
+#: model_terms:ir.actions.act_window,help:ohrms_loan.action_hr_loan_batch
+msgid "Chưa có đợt ứng lương nào"
+msgstr "Chưa có đợt ứng lương nào"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_auto_add_employees_wizard__department_id
+msgid "Chọn phòng ban để lọc nhân viên"
+msgstr "Chọn phòng ban để lọc nhân viên"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__pending_loan_count
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.hr_loan_view_search
+msgid "Chờ duyệt"
+msgstr "Chờ duyệt"
+
+#. module: ohrms_loan
+#: model_terms:ir.actions.act_window,help:ohrms_loan.hr_loan_action
+msgid "Click to create a new Loan request."
+msgstr "Nhấp để tạo yêu cầu tạm ứng mới."
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__company_id
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_config__company_id
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch_create_wizard__company_id
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan__company_id
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_auto_config__company_id
+msgid "Company"
+msgstr "Công ty"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.hr_loan_view_form
+msgid "Compute Installment"
+msgstr "Tính khoản trả góp"
+
+#. module: ohrms_loan
+#: model:ir.model.fields.selection,name:ohrms_loan.selection__hr_loan_batch_process_wizard__action_type__compute_installments
+msgid "Compute Installments for All"
+msgstr "Tính kỳ trả góp cho tất cả"
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/wizards/hr_loan_auto_add_employees_wizard.py:0
+#, python-format
+msgid "Computed installments for %d loan(s)."
+msgstr "Đã tính kỳ trả góp cho %d khoản tạm ứng."
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_add_employees_wizard__config_id
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_employee_line__config_id
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_generation_wizard__config_id
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_log__config_id
+#: model:ir.ui.menu,name:ohrms_loan.hr_loan_menu_config
+msgid "Configuration"
+msgstr "Cấu hình"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_config__name
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_auto_config_form
+msgid "Configuration Name"
+msgstr "Tên cấu hình"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan__auto_config_id
+msgid "Configuration that generated this loan"
+msgstr "Cấu hình đã tạo khoản tạm ứng này"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_auto_log__config_id
+msgid "Configuration that was executed"
+msgstr "Cấu hình đã được thực thi"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch_process_wizard__confirmation_message
+msgid "Confirmation Message"
+msgstr "Thông báo xác nhận"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_batch_create_wizard_form
+msgid "Create Batch"
+msgstr "Tạo đợt"
+
+#. module: ohrms_loan
+#: model:ir.actions.act_window,name:ohrms_loan.hr_loan_batch_create_wizard_action
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_batch_create_wizard_form
+msgid "Create Loan Batch"
+msgstr "Tạo đợt tạm ứng"
+
+#. module: ohrms_loan
+#: model:ir.model,name:ohrms_loan.model_hr_loan_batch_create_wizard
+msgid "Create Loan Batch Wizard"
+msgstr "Trình hướng dẫn tạo đợt tạm ứng"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_bulk_create_wizard_form
+msgid "Create Loans"
+msgstr "Tạo tạm ứng"
+
+#. module: ohrms_loan
+#: model_terms:ir.actions.act_window,help:ohrms_loan.action_hr_loan_auto_config
+msgid "Create a new automatic loan configuration"
+msgstr "Tạo cấu hình tạm ứng tự động mới"
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/wizards/hr_loan_auto_add_employees_wizard.py:0
+#, python-format
+msgid "Created %d loan(s) successfully."
+msgstr "Đã tạo %d khoản tạm ứng thành công."
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__create_uid
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_add_employees_wizard__create_uid
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_config__create_uid
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_employee_line__create_uid
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_generation__create_uid
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_generation_wizard__create_uid
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_log__create_uid
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__create_uid
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch_create_wizard__create_uid
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch_process_wizard__create_uid
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_bulk_create_wizard__create_uid
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_line__create_uid
+msgid "Created by"
+msgstr "Được tạo bởi"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__create_date
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_add_employees_wizard__create_date
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_config__create_date
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_employee_line__create_date
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_generation__create_date
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_generation_wizard__create_date
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_log__create_date
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__create_date
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch_create_wizard__create_date
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch_process_wizard__create_date
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_bulk_create_wizard__create_date
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_line__create_date
+msgid "Created on"
+msgstr "Được tạo vào"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__currency_id
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan__currency_id
+msgid "Currency"
+msgstr "Tiền tệ"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__loan_ids
+msgid "Các khoản ứng"
+msgstr "Các khoản ứng"
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/models/hr_loan_batch.py:0
+#, python-format
+msgid ""
+"Còn %d khoản ứng chưa được duyệt. Vui lòng duyệt tất cả trước khi hoàn thành"
+" đợt."
+msgstr ""
+"Còn %d khoản ứng chưa được duyệt. Vui lòng duyệt tất cả trước khi hoàn thành"
+" đợt."
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__total_balance_amount
+msgid "Còn lại"
+msgstr "Còn lại"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.hr_loan_view_kanban
+msgid "Còn lại:"
+msgstr "Còn lại:"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_auto_add_employees_wizard_form
+msgid "Có"
+msgstr "Có"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__company_id
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_batch_search
+msgid "Công ty"
+msgstr "Công ty"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__auto_config_id
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_batch_search
+msgid "Cấu hình tự động"
+msgstr "Cấu hình tự động"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_batch__auto_config_id
+msgid "Cấu hình tự động tạo đợt này (nếu có)"
+msgstr "Cấu hình tự động tạo đợt này (nếu có)"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__date
+msgid "Date"
+msgstr "Ngày"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_payslip_input__date_to
+msgid "Date To"
+msgstr "Đến ngày"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_auto_log__execution_date
+msgid "Date and time when the automatic generation ran"
+msgstr "Ngày và giờ khi tạo tự động được thực thi"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_payslip_input__date_from
+msgid "Date from"
+msgstr "Từ ngày"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan__date
+msgid "Date of the loan request"
+msgstr "Ngày"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan__payment_date
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_line__date
+msgid "Date of the payment"
+msgstr "Ngày thanh toán"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_auto_config__execution_day
+msgid "Day of the month when loans will be automatically created"
+msgstr "Ngày trong tháng khi tạm ứng sẽ được tạo tự động"
+
+#. module: ohrms_loan
+#: model:ir.model.fields.selection,name:ohrms_loan.selection__hr_loan_batch_create_wizard__month__12
+msgid "December"
+msgstr "Tháng 12"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_add_employees_wizard__default_loan_amount
+msgid "Default Loan Amount"
+msgstr "Số tiền tạm ứng mặc định"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_config__installment
+msgid "Default No Of Installments"
+msgstr "Số kỳ trả mặc định"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_auto_add_employees_wizard__default_loan_amount
+msgid "Default loan amount for new employees"
+msgstr "Số tiền tạm ứng mặc định cho nhân viên mới"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_auto_config__installment
+msgid "Default number of installments for the generated loans"
+msgstr "Số kỳ trả mặc định cho các khoản tạm ứng được tạo"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__department_id
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.hr_loan_view_search
+msgid "Department"
+msgstr "Phòng ban"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_auto_log__note
+msgid "Details about the execution"
+msgstr "Chi tiết về việc thực thi"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan__loan_lines
+msgid "Details of installment lines associated with the loan."
+msgstr "Chi tiết của các dòng trả góp liên quan đến khoản tạm ứng."
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__display_name
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_add_employees_wizard__display_name
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_config__display_name
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_employee_line__display_name
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_generation__display_name
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_generation_wizard__display_name
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_log__display_name
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__display_name
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch_create_wizard__display_name
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch_process_wizard__display_name
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_bulk_create_wizard__display_name
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_line__display_name
+msgid "Display Name"
+msgstr "Tên hiển thị"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_auto_generation_wizard_form
+msgid "Do you want to continue?"
+msgstr "Bạn có muốn tiếp tục không?"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_add_employees_wizard__available_employee_domain
+msgid "Domain nhân viên có thể thêm"
+msgstr "Domain nhân viên có thể thêm"
+
+#. module: ohrms_loan
+#: model:ir.model.fields.selection,name:ohrms_loan.selection__hr_loan__state__draft
+msgid "Draft"
+msgstr "Nháp"
+
+#. module: ohrms_loan
+#: model:ir.actions.server,name:ohrms_loan.action_batch_approve_loan
+msgid "Duyệt"
+msgstr "Duyệt"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_batch_form
+msgid "Duyệt tất cả khoản ứng"
+msgstr "Duyệt tất cả khoản ứng"
+
+#. module: ohrms_loan
+#: model:ir.model.constraint,message:ohrms_loan.constraint_hr_loan_auto_employee_line_unique_employee_config
+msgid "Each employee can only be added once to a configuration!"
+msgstr "Mỗi nhân viên chỉ có thể được thêm một lần vào cấu hình!"
+
+#. module: ohrms_loan
+#: model:ir.model,name:ohrms_loan.model_hr_employee
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__employee_id
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_employee_line__employee_id
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_line__employee_id
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_line__employee_id
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.hr_loan_view_search
+msgid "Employee"
+msgstr "Nhân viên"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_auto_add_employees_wizard_form
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_bulk_create_wizard_form
+msgid "Employee Code"
+msgstr "Mã nhân viên"
+
+#. module: ohrms_loan
+#: model:ir.ui.menu,name:ohrms_loan.hr_loan_menu_employee
+msgid "Employee Loans"
+msgstr "Tạm ứng nhân viên"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan__employee_id
+msgid "Employee Name"
+msgstr "Nhân viên"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_auto_employee_line__employee_id
+msgid "Employee to generate loans for"
+msgstr "Nhân viên để tạo tạm ứng cho"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_add_employees_wizard__employee_ids
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_config__employee_count
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_config__employee_line_ids
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_bulk_create_wizard__employee_ids
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_auto_config_form
+msgid "Employees"
+msgstr "Nhân viên"
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/wizards/hr_loan_auto_add_employees_wizard.py:0
+#, python-format
+msgid "Employees Added"
+msgstr "Đã thêm nhân viên"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_auto_config__employee_line_ids
+msgid "Employees for automatic loan generation"
+msgstr "Nhân viên để tạo tạm ứng tự động"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_payslip_input__date_to
+msgid "End date for the payslip input."
+msgstr "Ngày kết thúc cho dữ liệu phiếu lương."
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_log__execution_date
+msgid "Execution Date"
+msgstr "Ngày thực thi"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_config__execution_day
+msgid "Execution Day"
+msgstr "Ngày thực thi"
+
+#. module: ohrms_loan
+#: model:ir.actions.act_window,name:ohrms_loan.action_hr_loan_auto_log_filtered
+#: model:ir.ui.menu,name:ohrms_loan.menu_hr_loan_auto_log
+msgid "Execution Logs"
+msgstr "Nhật ký thực thi"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_log__note
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_auto_log_form
+msgid "Execution Notes"
+msgstr "Ghi chú thực thi"
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/models/hr_loan_auto_config.py:0
+#, python-format
+msgid "Execution day must be between 1 and 28"
+msgstr "Ngày thực thi phải từ 1 đến 28"
+
+#. module: ohrms_loan
+#: model:ir.model.fields.selection,name:ohrms_loan.selection__hr_loan_auto_log__state__failed
+msgid "Failed"
+msgstr "Thất bại"
+
+#. module: ohrms_loan
+#: model:ir.model.fields.selection,name:ohrms_loan.selection__hr_loan_batch_create_wizard__month__2
+msgid "February"
+msgstr "Tháng 2"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__message_follower_ids
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_config__message_follower_ids
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__message_follower_ids
+msgid "Followers"
+msgstr "Người theo dõi"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__message_partner_ids
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_config__message_partner_ids
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "Người theo dõi (Đối tác)"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan__activity_type_icon
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_auto_config__activity_type_icon
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_batch__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr "Biểu tượng Font awesome, ví dụ: fa-tasks"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_auto_generation_wizard_form
+msgid "Generate"
+msgstr "Tạo"
+
+#. module: ohrms_loan
+#: model:ir.actions.server,name:ohrms_loan.ir_cron_generate_automatic_loans_ir_actions_server
+msgid "Generate Automatic Loans"
+msgstr "Tạo tạm ứng tự động"
+
+#. module: ohrms_loan
+#: model:ir.model,name:ohrms_loan.model_hr_loan_auto_generation_wizard
+msgid "Generate Automatic Loans Wizard"
+msgstr "Trình hướng dẫn tạo tạm ứng tự động"
+
+#. module: ohrms_loan
+#: model:ir.actions.act_window,name:ohrms_loan.hr_loan_auto_generation_wizard_action
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_auto_config_form
+msgid "Generate Loans Now"
+msgstr "Tạo tạm ứng ngay"
+
+#. module: ohrms_loan
+#: model:ir.actions.act_window,name:ohrms_loan.action_hr_loan_filtered
+msgid "Generated Loans"
+msgstr "Tạm ứng đã tạo"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__auto_log_id
+msgid "Generation Log"
+msgstr "Nhật ký tạo"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.hr_loan_view_search
+msgid "Group By"
+msgstr "Nhóm theo"
+
+#. module: ohrms_loan
+#: model:ir.actions.server,name:ohrms_loan.action_batch_submit_loan
+msgid "Gửi duyệt"
+msgstr "Gửi duyệt"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__has_message
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_config__has_message
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__has_message
+msgid "Has Message"
+msgstr "Có tin nhắn"
+
+#. module: ohrms_loan
+#: model:ir.model.fields.selection,name:ohrms_loan.selection__hr_loan_batch__state__done
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_batch_form
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_batch_search
+msgid "Hoàn thành"
+msgstr "Hoàn thành"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_batch_form
+msgid "Hủy"
+msgstr "Hủy"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__id
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_add_employees_wizard__id
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_config__id
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_employee_line__id
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_generation__id
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_generation_wizard__id
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_log__id
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__id
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch_create_wizard__id
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch_process_wizard__id
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_bulk_create_wizard__id
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_line__id
+msgid "ID"
+msgstr "ID"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__activity_exception_icon
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_config__activity_exception_icon
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__activity_exception_icon
+msgid "Icon"
+msgstr "Biểu tượng"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan__activity_exception_icon
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_auto_config__activity_exception_icon
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_batch__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr "Biểu tượng để chỉ ra một hoạt động ngoại lệ."
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan__message_needaction
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_auto_config__message_needaction
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_batch__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "Nếu được chọn, tin nhắn mới cần sự chú ý của bạn."
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan__message_has_error
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan__message_has_sms_error
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_auto_config__message_has_error
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_auto_config__message_has_sms_error
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_batch__message_has_error
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_batch__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr "Nếu được chọn, một số tin nhắn có lỗi gửi."
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_line__paid
+msgid "Indicates whether the installment has been paid."
+msgstr "Đã thanh toán"
+
+#. module: ohrms_loan
+#: model:ir.model,name:ohrms_loan.model_hr_loan_line
+msgid "Installment Line"
+msgstr "Dòng khoản trả góp"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.hr_loan_view_form
+msgid "Installments"
+msgstr "Trả góp"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__message_is_follower
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_config__message_is_follower
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__message_is_follower
+msgid "Is Follower"
+msgstr "Là người theo dõi"
+
+#. module: ohrms_loan
+#: model:ir.model.fields.selection,name:ohrms_loan.selection__hr_loan_batch_create_wizard__month__1
+msgid "January"
+msgstr "Tháng 1"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__job_position
+msgid "Job Position"
+msgstr "Vị trí công việc"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan__job_position
+msgid "Job position of the employee"
+msgstr "Vị trí công việc"
+
+#. module: ohrms_loan
+#: model:ir.model.fields.selection,name:ohrms_loan.selection__hr_loan_batch_create_wizard__month__7
+msgid "July"
+msgstr "Tháng 7"
+
+#. module: ohrms_loan
+#: model:ir.model.fields.selection,name:ohrms_loan.selection__hr_loan_batch_create_wizard__month__6
+msgid "June"
+msgstr "Tháng 6"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_batch_form
+msgid "Khoản ứng"
+msgstr "Khoản ứng"
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/models/hr_loan_batch.py:0
+#, python-format
+msgid "Khoản ứng - %s"
+msgstr "Khoản ứng - %s"
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/models/hr_loan_batch.py:0
+#, python-format
+msgid "Không có khoản ứng nào cần duyệt."
+msgstr "Không có khoản ứng nào cần duyệt."
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/models/hr_loan_batch.py:0
+#, python-format
+msgid "Không thể hủy đợt có %d khoản ứng đã được duyệt."
+msgstr "Không thể hủy đợt có %d khoản ứng đã được duyệt."
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/models/hr_loan_batch.py:0
+#, python-format
+msgid "Không thể xác nhận đợt rỗng. Vui lòng thêm ít nhất một khoản ứng."
+msgstr "Không thể xác nhận đợt rỗng. Vui lòng thêm ít nhất một khoản ứng."
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__write_uid
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_add_employees_wizard__write_uid
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_config__write_uid
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_employee_line__write_uid
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_generation__write_uid
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_generation_wizard__write_uid
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_log__write_uid
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__write_uid
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch_create_wizard__write_uid
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch_process_wizard__write_uid
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_bulk_create_wizard__write_uid
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_line__write_uid
+msgid "Last Updated by"
+msgstr "Cập nhật lần cuối bởi"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__write_date
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_add_employees_wizard__write_date
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_config__write_date
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_employee_line__write_date
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_generation__write_date
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_generation_wizard__write_date
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_log__write_date
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__write_date
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch_create_wizard__write_date
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch_process_wizard__write_date
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_bulk_create_wizard__write_date
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_line__write_date
+msgid "Last Updated on"
+msgstr "Cập nhật lần cuối vào"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_batch_create_wizard_form
+msgid "Leave empty for auto-generation"
+msgstr "Để trống để tự động tạo"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_batch_create_wizard__name
+msgid "Leave empty to auto-generate"
+msgstr "Để trống để tự động tạo"
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/models/hr_employee.py:0
+#: model:ir.ui.menu,name:ohrms_loan.hr_loan_menu
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.hr_loan_view_search
+#, python-format
+msgid "Loan"
+msgstr "Tạm ứng"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__loan_amount
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_employee_line__loan_amount
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_bulk_create_wizard__loan_amount
+msgid "Loan Amount"
+msgstr "Số tiền vay"
+
+#. module: ohrms_loan
+#: model:ir.model,name:ohrms_loan.model_hr_loan_batch
+msgid "Loan Batch"
+msgstr "Đợt tạm ứng"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_employee__loan_count
+msgid "Loan Count"
+msgstr "Số lượng khoản vay"
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/wizards/hr_loan_auto_generation_wizard.py:0
+#, python-format
+msgid "Loan Generation"
+msgstr "Tạo tạm ứng"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_payslip_input__loan_line_id
+msgid "Loan Installment"
+msgstr "Khoản trả góp khoản vay"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_payslip_input__loan_line_ids
+msgid "Loan Installments"
+msgstr "Các khoản trả góp"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__loan_lines
+msgid "Loan Line"
+msgstr "Dòng khoản vay"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__name
+msgid "Loan Name"
+msgstr "Tên khoản vay"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_line__loan_id
+msgid "Loan Ref."
+msgstr "Tham chiếu khoản vay"
+
+#. module: ohrms_loan
+#: model:ir.model,name:ohrms_loan.model_hr_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.hr_loan_view_form
+msgid "Loan Request"
+msgstr "Yêu cầu vay"
+
+#. module: ohrms_loan
+#: model:ir.ui.menu,name:ohrms_loan.hr_loan_menu_requests
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.hr_loan_view_tree
+msgid "Loan Requests"
+msgstr "Yêu cầu tạm ứng"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan__loan_amount
+msgid "Loan amount"
+msgstr "Số tiền vay"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_payslip_input__loan_line_id
+msgid "Loan installment associated with this payslip input."
+msgstr "Khoản trả góp vay"
+
+#. module: ohrms_loan
+#: model:ir.actions.act_window,name:ohrms_loan.act_hr_employee_loan_request
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_config__loan_count
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_employee_form
+msgid "Loans"
+msgstr "Các khoản vay"
+
+#. module: ohrms_loan
+#: model:ir.ui.menu,name:ohrms_loan.hr_loan_menu_root
+msgid "Loans & Advances"
+msgstr "Tạm ứng"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_log__loan_count
+msgid "Loans Created"
+msgstr "Tạm ứng đã tạo"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan__auto_log_id
+msgid "Log entry of the automatic generation"
+msgstr "Mục nhật ký của việc tạo tự động"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_config__log_count
+msgid "Logs"
+msgstr "Nhật ký"
+
+#. module: ohrms_loan
+#: model:ir.model.fields.selection,name:ohrms_loan.selection__hr_loan_batch_create_wizard__month__3
+msgid "March"
+msgstr "Tháng 3"
+
+#. module: ohrms_loan
+#: model:ir.model.fields.selection,name:ohrms_loan.selection__hr_loan_batch_create_wizard__month__5
+msgid "May"
+msgstr "Tháng 5"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__message_has_error
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_config__message_has_error
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__message_has_error
+msgid "Message Delivery error"
+msgstr "Lỗi gửi tin nhắn"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__message_ids
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_config__message_ids
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__message_ids
+msgid "Messages"
+msgstr "Tin nhắn"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch_create_wizard__month
+msgid "Month"
+msgstr "Tháng"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_payslip_input__loan_line_ids
+msgid "Multiple loan installments for total calculation"
+msgstr "Nhiều khoản trả góp cho tính tổng"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__my_activity_date_deadline
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_config__my_activity_date_deadline
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr "Hạn chót hoạt động của tôi"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.hr_loan_view_search
+msgid "My Requests"
+msgstr "Yêu cầu của tôi"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan__name
+msgid "Name of the loan"
+msgstr "Tên của khoản vay"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_auto_config__name
+msgid "Name of this automatic loan configuration"
+msgstr "Tên của cấu hình tạm ứng tự động này"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__activity_calendar_event_id
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_config__activity_calendar_event_id
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__activity_calendar_event_id
+msgid "Next Activity Calendar Event"
+msgstr "Sự kiện lịch hoạt động tiếp theo"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__activity_date_deadline
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_config__activity_date_deadline
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr "Hạn chót hoạt động tiếp theo"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__activity_summary
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_config__activity_summary
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__activity_summary
+msgid "Next Activity Summary"
+msgstr "Tóm tắt hoạt động tiếp theo"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__activity_type_id
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_config__activity_type_id
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__activity_type_id
+msgid "Next Activity Type"
+msgstr "Loại hoạt động tiếp theo"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__execution_date
+msgid "Ngày thực thi"
+msgstr "Ngày thực thi"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_batch__execution_date
+msgid "Ngày thực thi tạo đợt ứng lương tự động"
+msgstr "Ngày thực thi tạo đợt ứng lương tự động"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__execution_day
+msgid "Ngày trong tháng"
+msgstr "Ngày trong tháng"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_batch__execution_day
+msgid "Ngày trong tháng được thực thi (1-28)"
+msgstr "Ngày trong tháng được thực thi (1-28)"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__date_created
+msgid "Ngày tạo"
+msgstr "Ngày tạo"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__draft_loan_count
+#: model:ir.model.fields.selection,name:ohrms_loan.selection__hr_loan_batch__state__draft
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.hr_loan_view_search
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_batch_search
+msgid "Nháp"
+msgstr "Nháp"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_auto_add_employees_wizard_form
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_bulk_create_wizard_form
+msgid "Nhân Viên"
+msgstr "Nhân Viên"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_batch_search
+msgid "Nhóm theo"
+msgstr "Nhóm theo"
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/wizards/hr_loan_auto_add_employees_wizard.py:0
+#, python-format
+msgid "No Action"
+msgstr "Không có hành động"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__installment
+msgid "No Of Installments"
+msgstr "Số lần trả"
+
+#. module: ohrms_loan
+#: model_terms:ir.actions.act_window,help:ohrms_loan.action_hr_loan_auto_log
+msgid "No automatic loan generation has been executed yet"
+msgstr "Chưa có tạo tạm ứng tự động nào được thực thi"
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/wizards/hr_loan_auto_add_employees_wizard.py:0
+#, python-format
+msgid "No employees selected."
+msgstr "Không có nhân viên nào được chọn."
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/wizards/hr_loan_auto_add_employees_wizard.py:0
+#, python-format
+msgid "No loans to process."
+msgstr "Không có tạm ứng nào để xử lý."
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/models/hr_loan.py:0
+#, python-format
+msgid "No valid loans to approve."
+msgstr "Không có tạm ứng hợp lệ để duyệt."
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/models/hr_loan.py:0
+#, python-format
+msgid "No valid loans to cancel."
+msgstr "Không có tạm ứng hợp lệ để hủy."
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/models/hr_loan.py:0
+#, python-format
+msgid "No valid loans to refuse."
+msgstr "Không có tạm ứng hợp lệ để từ chối."
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/models/hr_loan.py:0
+#, python-format
+msgid "No valid loans to reset to draft."
+msgstr "Không có tạm ứng hợp lệ để đặt lại về nháp."
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/models/hr_loan.py:0
+#, python-format
+msgid "No valid loans to submit."
+msgstr "Không có tạm ứng hợp lệ để gửi duyệt."
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_employee_line__notes
+msgid "Notes"
+msgstr "Ghi chú"
+
+#. module: ohrms_loan
+#: model:ir.model.fields.selection,name:ohrms_loan.selection__hr_loan_batch_create_wizard__month__11
+msgid "November"
+msgstr "Tháng 11"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__message_needaction_counter
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_config__message_needaction_counter
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__message_needaction_counter
+msgid "Number of Actions"
+msgstr "Số lượng hành động"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_bulk_create_wizard__installment
+msgid "Number of Installments"
+msgstr "Số kỳ trả góp"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__message_has_error_counter
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_config__message_has_error_counter
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__message_has_error_counter
+msgid "Number of errors"
+msgstr "Số lượng lỗi"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan__installment
+msgid "Number of installments"
+msgstr "Số lượng khoản trả góp"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_employee__loan_count
+msgid "Number of loans associated with the employee"
+msgstr "Số lượng khoản tạm ứng liên quan đến nhân viên"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_auto_log__loan_count
+msgid "Number of loans created during this run"
+msgstr "Số lượng tạm ứng được tạo trong lần thực thi này"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan__message_needaction_counter
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_auto_config__message_needaction_counter
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_batch__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr "Số lượng tin nhắn cần hành động"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan__message_has_error_counter
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_auto_config__message_has_error_counter
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_batch__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "Số lượng tin nhắn có lỗi gửi"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__year
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_batch_search
+msgid "Năm"
+msgstr "Năm"
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/models/hr_loan_batch.py:0
+#, python-format
+msgid "Năm phải từ 2020 đến 2050"
+msgstr "Năm phải từ 2020 đến 2050"
+
+#. module: ohrms_loan
+#: model:ir.model.fields.selection,name:ohrms_loan.selection__hr_loan_batch_create_wizard__month__10
+msgid "October"
+msgstr "Tháng 10"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_line__paid
+msgid "Paid"
+msgstr "Đã thanh toán"
+
+#. module: ohrms_loan
+#: model:ir.model.fields.selection,name:ohrms_loan.selection__hr_loan_auto_log__state__partial
+msgid "Partial Success"
+msgstr "Thành công một phần"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_line__date
+msgid "Payment Date"
+msgstr "Ngày thanh toán"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__payment_date
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_bulk_create_wizard__payment_date
+msgid "Payment Start Date"
+msgstr "Ngày bắt đầu thanh toán"
+
+#. module: ohrms_loan
+#: model:ir.model,name:ohrms_loan.model_hr_payslip
+msgid "Payslip"
+msgstr "Phiếu lương"
+
+#. module: ohrms_loan
+#: model:ir.model,name:ohrms_loan.model_hr_payslip_input
+msgid "Payslip Input"
+msgstr "Dữ liệu phiếu lương nhập ngoài"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_line__payslip_id
+msgid "Payslip Ref."
+msgstr "Tham chiếu phiếu lương"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_add_employees_wizard__department_id
+msgid "Phòng ban"
+msgstr "Phòng ban"
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/models/hr_loan.py:0
+#, python-format
+msgid "Please Compute installment"
+msgstr "Vui lòng tính khoản trả góp"
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/models/hr_loan.py:0
+#, python-format
+msgid "Please compute installments for the following loans first: %s"
+msgstr "Vui lòng tính kỳ trả góp cho các khoản tạm ứng sau trước: %s"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_batch_process_wizard_form
+msgid "Process"
+msgstr "Xử lý"
+
+#. module: ohrms_loan
+#: model:ir.actions.act_window,name:ohrms_loan.hr_loan_batch_process_wizard_action
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_batch_process_wizard_form
+msgid "Process Batch Loans"
+msgstr "Xử lý tạm ứng hàng loạt"
+
+#. module: ohrms_loan
+#: model:ir.ui.menu,name:ohrms_loan.hr_loan_menu_quick_actions
+msgid "Quick Actions"
+msgstr "Thao tác nhanh"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__rating_ids
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_config__rating_ids
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__rating_ids
+msgid "Ratings"
+msgstr "Đánh giá"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_log__name
+msgid "Reference"
+msgstr "Tham chiếu"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_line__loan_id
+msgid "Reference to the associated loan."
+msgstr "Khoản vay"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_line__payslip_id
+msgid "Reference to the associated payslip, if any."
+msgstr "Phiếu lương"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_auto_employee_line__config_id
+msgid "Reference to the configuration"
+msgstr "Tham chiếu đến cấu hình"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.hr_loan_view_form
+msgid "Refuse"
+msgstr "Từ chối"
+
+#. module: ohrms_loan
+#: model:ir.model.fields.selection,name:ohrms_loan.selection__hr_loan_batch_process_wizard__action_type__refuse_all
+msgid "Refuse All Pending Loans"
+msgstr "Từ chối tất cả khoản tạm ứng đang chờ"
+
+#. module: ohrms_loan
+#: model:ir.model.fields.selection,name:ohrms_loan.selection__hr_loan__state__refuse
+msgid "Refused"
+msgstr "Đã từ chối"
+
+#. module: ohrms_loan
+#: model:ir.ui.menu,name:ohrms_loan.hr_loan_menu_reports
+msgid "Reports"
+msgstr "Báo cáo"
+
+#. module: ohrms_loan
+#: model:ir.actions.act_window,name:ohrms_loan.hr_loan_action
+msgid "Request for Loan"
+msgstr "Yêu cầu tạm ứng"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__activity_user_id
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_config__activity_user_id
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__activity_user_id
+msgid "Responsible User"
+msgstr "Người dùng chịu trách nhiệm"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_auto_log__state
+msgid "Result state of the execution"
+msgstr "Trạng thái kết quả của việc thực thi"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__message_has_sms_error
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_config__message_has_sms_error
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr "Lỗi gửi SMS"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_auto_add_employees_wizard__employee_ids
+msgid "Select employees to add to the configuration"
+msgstr "Chọn nhân viên để thêm vào cấu hình"
+
+#. module: ohrms_loan
+#: model:ir.model.fields.selection,name:ohrms_loan.selection__hr_loan_batch_create_wizard__month__9
+msgid "September"
+msgstr "Tháng 9"
+
+#. module: ohrms_loan
+#: model_terms:ir.actions.act_window,help:ohrms_loan.action_hr_loan_auto_config
+msgid "Set up automatic loan generation for your employees."
+msgstr "Thiết lập tạo tạm ứng tự động cho nhân viên của bạn."
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_payslip_input__date_from
+msgid "Start date for the payslip input."
+msgstr "Ngày bắt đầu cho dữ liệu phiếu lương."
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__state
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_log__state
+msgid "State"
+msgstr "Trạng thái"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.hr_loan_view_search
+msgid "Status"
+msgstr "Trạng thái"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan__activity_state
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_auto_config__activity_state
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_batch__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+"Trạng thái dựa trên hoạt động\n"
+"Quá hạn: Đã qua hạn chót\n"
+"Hôm nay: Ngày hoạt động là hôm nay\n"
+"Đã lên kế hoạch: Hoạt động trong tương lai."
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.hr_loan_view_form
+msgid "Submit"
+msgstr "Gửi duyệt"
+
+#. module: ohrms_loan
+#: model:ir.model.fields.selection,name:ohrms_loan.selection__hr_loan_batch_process_wizard__action_type__submit_all
+msgid "Submit All Draft Loans"
+msgstr "Gửi duyệt tất cả khoản tạm ứng nháp"
+
+#. module: ohrms_loan
+#: model:ir.model.fields.selection,name:ohrms_loan.selection__hr_loan__state__waiting_approval_1
+msgid "Submitted"
+msgstr "Đã gửi"
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/wizards/hr_loan_auto_add_employees_wizard.py:0
+#: model:ir.model.fields.selection,name:ohrms_loan.selection__hr_loan_auto_log__state__success
+#, python-format
+msgid "Success"
+msgstr "Thành công"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__loan_count
+msgid "Số khoản ứng"
+msgstr "Số khoản ứng"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_batch_form
+msgid "Số lượng"
+msgstr "Số lượng"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_add_employees_wizard__available_employee_count
+msgid "Số lượng nhân viên có thể thêm"
+msgstr "Số lượng nhân viên có thể thêm"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_add_employees_wizard__employee_count
+msgid "Số lượng nhân viên đã chọn"
+msgstr "Số lượng nhân viên đã chọn"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__employee_count
+msgid "Số nhân viên"
+msgstr "Số nhân viên"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__sequence
+msgid "Số thứ tự trong tháng"
+msgstr "Số thứ tự trong tháng"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_batch_form
+msgid "Số tiền"
+msgstr "Số tiền"
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/models/hr_loan.py:0
+#, python-format
+msgid "The Employee has already a pending installment"
+msgstr "Nhân viên đã có một khoản trả góp đang chờ xử lý"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan__state
+msgid "The current state of the loan request."
+msgstr "Trạng thái hiện tại của yêu cầu tạm ứng."
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan__department_id
+msgid "The department to which the employee belongs."
+msgstr "Nhân viên"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan__balance_amount
+msgid ""
+"The remaining balance amount of the \n"
+"                                  loan after deducting \n"
+"                                  the total paid amount."
+msgstr "Số dư"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan__total_amount
+msgid "The total amount of the loan"
+msgstr "Tổng số tiền vay"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan__total_paid_amount
+msgid "The total amount that has been paid towards the loan."
+msgstr "Tổng số tiền đã thanh toán"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_form_inherit
+msgid "This loan was automatically generated by"
+msgstr "Khoản tạm ứng này được tạo tự động bởi"
+
+#. module: ohrms_loan
+#: model_terms:ir.actions.act_window,help:ohrms_loan.action_hr_loan_auto_log
+msgid "This view shows the history of automatic loan generation executions."
+msgstr "Giao diện này hiển thị lịch sử thực thi tạo tạm ứng tự động."
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_auto_generation_wizard_form
+msgid ""
+"This will generate loans for all active employees in this configuration."
+msgstr ""
+"Điều này sẽ tạo tạm ứng cho tất cả nhân viên đang hoạt động trong cấu hình "
+"này."
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__month
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.hr_loan_view_search
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_batch_search
+msgid "Tháng"
+msgstr "Tháng"
+
+#. module: ohrms_loan
+#: model:ir.model.fields.selection,name:ohrms_loan.selection__hr_loan_batch__month__1
+msgid "Tháng 1"
+msgstr "Tháng 1"
+
+#. module: ohrms_loan
+#: model:ir.model.fields.selection,name:ohrms_loan.selection__hr_loan_batch__month__10
+msgid "Tháng 10"
+msgstr "Tháng 10"
+
+#. module: ohrms_loan
+#: model:ir.model.fields.selection,name:ohrms_loan.selection__hr_loan_batch__month__11
+msgid "Tháng 11"
+msgstr "Tháng 11"
+
+#. module: ohrms_loan
+#: model:ir.model.fields.selection,name:ohrms_loan.selection__hr_loan_batch__month__12
+msgid "Tháng 12"
+msgstr "Tháng 12"
+
+#. module: ohrms_loan
+#: model:ir.model.fields.selection,name:ohrms_loan.selection__hr_loan_batch__month__2
+msgid "Tháng 2"
+msgstr "Tháng 2"
+
+#. module: ohrms_loan
+#: model:ir.model.fields.selection,name:ohrms_loan.selection__hr_loan_batch__month__3
+msgid "Tháng 3"
+msgstr "Tháng 3"
+
+#. module: ohrms_loan
+#: model:ir.model.fields.selection,name:ohrms_loan.selection__hr_loan_batch__month__4
+msgid "Tháng 4"
+msgstr "Tháng 4"
+
+#. module: ohrms_loan
+#: model:ir.model.fields.selection,name:ohrms_loan.selection__hr_loan_batch__month__5
+msgid "Tháng 5"
+msgstr "Tháng 5"
+
+#. module: ohrms_loan
+#: model:ir.model.fields.selection,name:ohrms_loan.selection__hr_loan_batch__month__6
+msgid "Tháng 6"
+msgstr "Tháng 6"
+
+#. module: ohrms_loan
+#: model:ir.model.fields.selection,name:ohrms_loan.selection__hr_loan_batch__month__7
+msgid "Tháng 7"
+msgstr "Tháng 7"
+
+#. module: ohrms_loan
+#: model:ir.model.fields.selection,name:ohrms_loan.selection__hr_loan_batch__month__8
+msgid "Tháng 8"
+msgstr "Tháng 8"
+
+#. module: ohrms_loan
+#: model:ir.model.fields.selection,name:ohrms_loan.selection__hr_loan_batch__month__9
+msgid "Tháng 9"
+msgstr "Tháng 9"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.hr_loan_view_search
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_batch_search
+msgid "Tháng hiện tại"
+msgstr "Tháng hiện tại"
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/models/hr_loan_batch.py:0
+#, python-format
+msgid "Thông báo"
+msgstr "Thông báo"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.hr_loan_view_form
+msgid "Thông tin tự động"
+msgstr "Thông tin tự động"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_batch_form
+msgid "Thống kê"
+msgstr "Thống kê"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_batch_graph
+msgid "Thống kê đợt ứng lương"
+msgstr "Thống kê đợt ứng lương"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.hr_loan_view_search
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_batch_search
+msgid "Thủ công"
+msgstr "Thủ công"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__total_amount
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_config__total_amount
+msgid "Total Amount"
+msgstr "Tổng số tiền"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__total_paid_amount
+msgid "Total Paid Amount"
+msgstr "Tổng số tiền đã thanh toán"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_auto_config__total_amount
+msgid "Total loan amount for all active employees"
+msgstr "Tổng số tiền tạm ứng cho tất cả nhân viên đang hoạt động"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__state
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_batch_search
+msgid "Trạng thái"
+msgstr "Trạng thái"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan__activity_exception_decoration
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_auto_config__activity_exception_decoration
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_batch__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr "Loại hoạt động ngoại lệ trong hồ sơ."
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__name
+msgid "Tên đợt"
+msgstr "Tên đợt"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_batch_search
+msgid "Tìm kiếm đợt ứng lương"
+msgstr "Tìm kiếm đợt ứng lương"
+
+#. module: ohrms_loan
+#: model:ir.actions.server,name:ohrms_loan.action_batch_cancel_loan
+msgid "Tạm huỷ"
+msgstr "Tạm huỷ"
+
+#. module: ohrms_loan
+#: model:ir.ui.menu,name:ohrms_loan.menu_bulk_create_loans
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_batch_form_wizard_buttons
+msgid "Tạo khoản ứng hàng loạt"
+msgstr "Tạo khoản ứng hàng loạt"
+
+#. module: ohrms_loan
+#: model:ir.actions.act_window,name:ohrms_loan.action_create_batch_shortcut
+#: model:ir.ui.menu,name:ohrms_loan.menu_create_batch_quick
+msgid "Tạo đợt ứng lương"
+msgstr "Tạo đợt ứng lương"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_auto_add_employees_wizard_form
+msgid "Tất cả nhân viên đã được thêm vào cấu hình này!"
+msgstr "Tất cả nhân viên đã được thêm vào cấu hình này!"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_auto_config_form
+msgid "Tổng số tiền tạm ứng"
+msgstr "Tổng số tiền tạm ứng"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__total_amount
+msgid "Tổng tiền ứng"
+msgstr "Tổng tiền ứng"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_batch_kanban
+msgid "Tổng:"
+msgstr "Tổng:"
+
+#. module: ohrms_loan
+#: model:ir.actions.server,name:ohrms_loan.action_batch_refuse_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.hr_loan_view_search
+msgid "Từ chối"
+msgstr "Từ chối"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.hr_loan_view_kanban
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.hr_loan_view_search
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_batch_search
+msgid "Tự động"
+msgstr "Tự động"
+
+#. module: ohrms_loan
+#: model_terms:ir.actions.act_window,help:ohrms_loan.hr_loan_action
+msgid "Use this menu to create loan requests."
+msgstr "Sử dụng menu này để tạo yêu cầu tạm ứng."
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_auto_add_employees_wizard_form
+msgid "Vui lòng chọn nhân viên để tiếp tục."
+msgstr "Vui lòng chọn nhân viên để tiếp tục."
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/wizards/hr_loan_auto_add_employees_wizard.py:0
+#: code:addons/ohrms_loan/wizards/hr_loan_auto_add_employees_wizard.py:0
+#, python-format
+msgid "Warning"
+msgstr "Cảnh báo"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__website_message_ids
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_auto_config__website_message_ids
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__website_message_ids
+msgid "Website Messages"
+msgstr "Tin nhắn website"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan__website_message_ids
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_auto_config__website_message_ids
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_batch__website_message_ids
+msgid "Website communication history"
+msgstr "Lịch sử liên lạc website"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_auto_employee_line__active
+msgid "Whether automatic loan generation is active for this employee"
+msgstr ""
+"Liệu việc tạo tạm ứng tự động có được kích hoạt cho nhân viên này hay không"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan_auto_config__active
+msgid "Whether this configuration is active"
+msgstr "Liệu cấu hình này có được kích hoạt hay không"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan__is_auto_generated
+msgid "Whether this loan was automatically generated"
+msgstr "Liệu khoản tạm ứng này được tạo tự động hay không"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_batch_form
+msgid "Xuất Excel"
+msgstr "Xuất Excel"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_batch_form
+msgid "Xác nhận"
+msgstr "Xác nhận"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_batch_form_wizard_buttons
+msgid "Xử lý hàng loạt"
+msgstr "Xử lý hàng loạt"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch_create_wizard__year
+msgid "Year"
+msgstr "Năm"
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/models/hr_loan.py:0
+#, python-format
+msgid ""
+"You cannot delete a loan which is not in draft or cancelled or refuse or "
+"waiting_approval_1 state"
+msgstr ""
+"Bạn không thể xóa khoản tạm ứng không ở trạng thái nháp, đã hủy, từ chối "
+"hoặc chờ duyệt"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_batch_kanban
+msgid "khoản ứng"
+msgstr "khoản ứng"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_batch_kanban
+msgid "nhân viên"
+msgstr "nhân viên"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_auto_add_employees_wizard_form
+msgid "nhân viên có thể thêm vào cấu hình."
+msgstr "nhân viên có thể thêm vào cấu hình."
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_auto_add_employees_wizard_form
+msgid "nhân viên đã chọn."
+msgstr "nhân viên đã chọn."
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_form_inherit
+msgid "on"
+msgstr "vào"
+
+#. module: ohrms_loan
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.hr_loan_view_form
+msgid "vào ngày"
+msgstr "vào ngày"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__approved_loan_count
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.hr_loan_view_search
+msgid "Đã duyệt"
+msgstr "Đã duyệt"
+
+#. module: ohrms_loan
+#: model:ir.model.fields.selection,name:ohrms_loan.selection__hr_loan_batch__state__cancelled
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.hr_loan_view_search
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_batch_search
+msgid "Đã hủy"
+msgstr "Đã hủy"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan_batch__total_paid_amount
+msgid "Đã trả"
+msgstr "Đã trả"
+
+#. module: ohrms_loan
+#: model:ir.model.fields.selection,name:ohrms_loan.selection__hr_loan_batch__state__confirmed
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_batch_search
+msgid "Đã xác nhận"
+msgstr "Đã xác nhận"
+
+#. module: ohrms_loan
+#: model:ir.actions.act_window,name:ohrms_loan.action_hr_loan_batch
+#: model:ir.actions.act_window,name:ohrms_loan.action_hr_loan_batch_filtered
+#: model:ir.model.fields,field_description:ohrms_loan.field_hr_loan__batch_id
+#: model:ir.ui.menu,name:ohrms_loan.menu_hr_loan_batch
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.hr_loan_view_search
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_batch_calendar
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_batch_form
+#: model_terms:ir.ui.view,arch_db:ohrms_loan.view_hr_loan_batch_tree
+msgid "Đợt tạm ứng"
+msgstr "Đợt tạm ứng"
+
+#. module: ohrms_loan
+#. odoo-python
+#: code:addons/ohrms_loan/models/hr_loan_auto_config.py:0
+#, python-format
+msgid "Đợt tạm ứng - %s"
+msgstr "ĐĐợt tạm ứng - %s"
+
+#. module: ohrms_loan
+#: model:ir.model.fields,help:ohrms_loan.field_hr_loan__batch_id
+msgid "Đợt tạm ứng mà khoản ứng này thuộc về"
+msgstr "Đợt tạm ứng mà khoản ứng này thuộc về"
+
+#. module: ohrms_loan
+#: model_terms:ir.actions.act_window,help:ohrms_loan.action_hr_loan_batch
+msgid ""
+"Đợt ứng lương sẽ được tạo tự động hoặc thủ công để quản lý các khoản ứng "
+"theo từng đợt."
+msgstr ""
+"Đợt ứng lương sẽ được tạo tự động hoặc thủ công để quản lý các khoản ứng "
+"theo từng đợt."

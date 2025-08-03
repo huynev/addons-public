@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Report template cho báo cáo đi trễ/về sớm -->
+    <template id="report_late_early_tracking">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h2 class="text-center">Báo cáo đi trễ/về sớm</h2>
+                    <div class="row mt16 mb16">
+                        <div class="col-6">
+                            <p><strong>Nhân viên:</strong> <span t-field="docs[0].employee_id.name" t-if="len(docs) == 1"/></p>
+                            <p><strong>Phòng ban:</strong> <span t-field="docs[0].employee_id.department_id.name" t-if="len(docs) == 1"/></p>
+                        </div>
+                        <div class="col-6">
+                            <p t-if="len(docs) > 0"><strong>Từ ngày:</strong> <span t-esc="min(docs.mapped('date'))" t-options='{"widget": "date"}'/></p>
+                            <p t-else=""><strong>Từ ngày:</strong> <span t-esc="context.get('date_from')" t-options='{"widget": "date"}'/></p>
+
+                            <p t-if="len(docs) > 0"><strong>Đến ngày:</strong> <span t-esc="max(docs.mapped('date'))" t-options='{"widget": "date"}'/></p>
+                            <p t-else=""><strong>Đến ngày:</strong> <span t-esc="context.get('date_to')" t-options='{"widget": "date"}'/></p>
+                        </div>
+                    </div>
+
+                    <t t-if="len(docs) > 0">
+                        <table class="table table-sm table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Ngày</th>
+                                    <th>Nhân viên</th>
+                                    <th>Giờ vào (Dự kiến)</th>
+                                    <th>Giờ vào (Thực tế)</th>
+                                    <th>Số phút đi trễ</th>
+                                    <th>Giờ ra (Dự kiến)</th>
+                                    <th>Giờ ra (Thực tế)</th>
+                                    <th>Số phút về sớm</th>
+                                    <th>Tổng số phút bị trừ</th>
+                                    <th>Số tiền bị trừ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="docs" t-as="tracking">
+                                    <td><span t-field="tracking.date" t-options='{"widget": "date"}'/></td>
+                                    <td><span t-field="tracking.employee_id.name"/></td>
+                                    <td><span t-field="tracking.scheduled_check_in" t-options='{"widget": "datetime", "time_only": "true"}'/></td>
+                                    <td><span t-field="tracking.actual_check_in" t-options='{"widget": "datetime", "time_only": "true"}'/></td>
+                                    <td><span t-field="tracking.late_minutes"/></td>
+                                    <td><span t-field="tracking.scheduled_check_out" t-options='{"widget": "datetime", "time_only": "true"}'/></td>
+                                    <td><span t-field="tracking.actual_check_out" t-options='{"widget": "datetime", "time_only": "true"}'/></td>
+                                    <td><span t-field="tracking.early_minutes"/></td>
+                                    <td><span t-field="tracking.total_penalty_minutes"/></td>
+                                    <td><span t-field="tracking.penalty_amount" t-options='{"widget": "monetary", "display_currency": res_company.currency_id}'/></td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="4" class="text-right"><strong>Tổng</strong></td>
+                                    <td><t t-esc="sum(docs.mapped('late_minutes'))"/></td>
+                                    <td colspan="2" class="text-right"></td>
+                                    <td><t t-esc="sum(docs.mapped('early_minutes'))"/></td>
+                                    <td><t t-esc="sum(docs.mapped('total_penalty_minutes'))"/></td>
+                                    <td><t t-esc="sum(docs.mapped('penalty_amount'))" t-options='{"widget": "monetary", "display_currency": res_company.currency_id}'/></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </t>
+                    <t t-else="">
+                        <div class="alert alert-info text-center">
+                            <p>Không có bản ghi nào trong khoảng thời gian đã chọn.</p>
+                        </div>
+                    </t>
+
+                    <div class="row mt32 mb32">
+                        <div class="col-4">
+                            <strong>Người lập báo cáo</strong>
+                            <p class="mt16">.........................</p>
+                        </div>
+                        <div class="col-4 text-center">
+                            <strong>Trưởng bộ phận</strong>
+                            <p class="mt16">.........................</p>
+                        </div>
+                        <div class="col-4 text-right">
+                            <strong>Giám đốc</strong>
+                            <p class="mt16">.........................</p>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <!-- Paper format cho báo cáo -->
+    <record id="paperformat_late_early_tracking" model="report.paperformat">
+        <field name="name">Late Early Tracking A4</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">40</field>
+        <field name="margin_bottom">32</field>
+        <field name="margin_left">7</field>
+        <field name="margin_right">7</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">35</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <!-- Report action -->
+    <record id="action_report_late_early_tracking" model="ir.actions.report">
+        <field name="name">Báo cáo đi trễ/về sớm</field>
+        <field name="model">hr.late.early.tracking</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hr_late_early_tracking.report_late_early_tracking</field>
+        <field name="report_file">hr_late_early_tracking.report_late_early_tracking</field>
+        <field name="print_report_name">'Báo cáo đi trễ/về sớm - %s' % (object.employee_id.name)</field>
+        <field name="binding_model_id" ref="model_hr_late_early_tracking"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_late_early_tracking"/>
+    </record>
+</odoo>

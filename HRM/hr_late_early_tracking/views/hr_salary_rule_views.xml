@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Thêm nút tạo quy tắc lương cho đi trễ/về sớm -->
+    <record id="view_hr_salary_rule_form_extend" model="ir.ui.view">
+        <field name="name">hr.salary.rule.form.extend</field>
+        <field name="model">hr.salary.rule</field>
+        <field name="inherit_id" ref="payroll.hr_salary_rule_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form//header" position="inside">
+                <button name="action_create_late_early_penalty_rule"
+                        string="Tạo quy tắc phạt đi trễ/về sớm"
+                        type="object"
+                        groups="hr.group_hr_manager"
+                        class="oe_highlight"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Tạo quy tắc lương mặc định khi cài đặt module -->
+    <record id="hr_salary_rule_late_early_penalty" model="hr.salary.rule">
+        <field name="name">Phạt đi trễ/về sớm</field>
+        <field name="code">LATE_EARLY</field>
+        <field name="category_id" ref="payroll.DED"/>
+        <field name="sequence">190</field>
+        <field name="condition_select">python</field>
+        <field name="condition_python">
+# Chỉ áp dụng nếu có dữ liệu đi trễ/về sớm
+result = bool(payslip.late_early_tracking_ids)
+        </field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+# Mẫu code để tính phạt đi trễ/về sớm
+# Code này có thể được sử dụng trong quy tắc lương
+# Kết quả là giá trị âm (số tiền bị trừ)
+
+# Tính tổng số tiền bị trừ do đi trễ/về sớm
+result = 0
+if payslip.late_early_tracking_ids:
+    result = -sum(payslip.late_early_tracking_ids.mapped('penalty_amount'))
+        </field>
+        <field name="appears_on_payslip" eval="True"/>
+        <field name="note">Khấu trừ cho việc đi trễ và về sớm dựa trên dữ liệu chấm công.</field>
+    </record>
+</odoo>

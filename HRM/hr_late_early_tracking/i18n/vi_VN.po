@@ -1,0 +1,272 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* hr_late_early_tracking
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-05-06 10:00+0000\n"
+"PO-Revision-Date: 2025-05-06 10:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: Vietnamese\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+"Language: vi_VN\n"
+
+#. module: hr_late_early_tracking
+#: model_terms:ir.ui.view,arch_db:hr_late_early_tracking.view_hr_payslip_form_late_early
+msgid "Hướng dẫn tính toán phạt đi trễ/về sớm"
+msgstr "Hướng dẫn tính toán phạt đi trễ/về sớm"
+
+#. module: hr_late_early_tracking
+#: model_terms:ir.ui.view,arch_db:hr_late_early_tracking.view_hr_payslip_form_late_early
+msgid "Bạn có thể truy cập đến các giá trị bản ghi đi trễ/về sớm này trong mã rule's Python của quy tắc lương như sau:"
+msgstr "Bạn có thể truy cập đến các giá trị bản ghi đi trễ/về sớm này trong mã rule's Python của quy tắc lương như sau:"
+
+#. module: hr_late_early_tracking
+#: model_terms:ir.ui.view,arch_db:hr_late_early_tracking.view_hr_payslip_form_late_early
+msgid "Dưới đây là một vài ví dụ:"
+msgstr "Dưới đây là một vài ví dụ:"
+
+#. module: hr_late_early_tracking
+#: model_terms:ir.ui.view,arch_db:hr_late_early_tracking.view_hr_payslip_form_late_early
+msgid "Để tính tổng số tiền bị trừ do đi trễ/về sớm:"
+msgstr "Để tính tổng số tiền bị trừ do đi trễ/về sớm:"
+
+#. module: hr_late_early_tracking
+#: model_terms:ir.ui.view,arch_db:hr_late_early_tracking.view_hr_payslip_form_late_early
+msgid "Để tính tiền bị trừ cho riêng đi trễ:"
+msgstr "Để tính tiền bị trừ cho riêng đi trễ:"
+
+#. module: hr_late_early_tracking
+#: model_terms:ir.ui.view,arch_db:hr_late_early_tracking.view_hr_payslip_form_late_early
+msgid "Để tính tiền bị trừ cho riêng về sớm:"
+msgstr "Để tính tiền bị trừ cho riêng về sớm:"
+
+#. module: hr_late_early_tracking
+#: model:ir.model.fields,field_description:hr_late_early_tracking.field_hr_late_early_tracking__display_name
+msgid "Display Name"
+msgstr "Tên hiển thị"
+
+#. module: hr_late_early_tracking
+#: model:ir.model.fields,field_description:hr_late_early_tracking.field_hr_late_early_tracking__id
+msgid "ID"
+msgstr "ID"
+
+#. module: hr_late_early_tracking
+#: model:ir.model.fields,field_description:hr_late_early_tracking.field_hr_late_early_tracking__write_uid
+msgid "Last Updated by"
+msgstr "Cập nhật lần cuối bởi"
+
+#. module: hr_late_early_tracking
+#: model:ir.model.fields,field_description:hr_late_early_tracking.field_hr_late_early_tracking__write_date
+msgid "Last Updated on"
+msgstr "Cập nhật lần cuối vào"
+
+#. module: hr_late_early_tracking
+#: model_terms:ir.ui.view,arch_db:hr_late_early_tracking.report_late_early_tracking
+msgid "Nhân viên:"
+msgstr "Nhân viên:"
+
+#. module: hr_late_early_tracking
+#: model_terms:ir.ui.view,arch_db:hr_late_early_tracking.report_late_early_tracking
+msgid "Phòng ban:"
+msgstr "Phòng ban:"
+
+#. module: hr_late_early_tracking
+#: model_terms:ir.ui.view,arch_db:hr_late_early_tracking.report_late_early_tracking
+msgid "Từ ngày:"
+msgstr "Từ ngày:"
+
+#. module: hr_late_early_tracking
+#: model_terms:ir.ui.view,arch_db:hr_late_early_tracking.report_late_early_tracking
+msgid "Đến ngày:"
+msgstr "Đến ngày:"
+
+#. module: hr_late_early_tracking
+#: model_terms:ir.ui.view,arch_db:hr_late_early_tracking.report_late_early_tracking
+msgid "Ngày"
+msgstr "Ngày"
+
+#. module: hr_late_early_tracking
+#: model_terms:ir.ui.view,arch_db:hr_late_early_tracking.report_late_early_tracking
+msgid "Nhân viên"
+msgstr "Nhân viên"
+
+#. module: hr_late_early_tracking
+#: model_terms:ir.ui.view,arch_db:hr_late_early_tracking.report_late_early_tracking
+msgid "Giờ vào (Dự kiến)"
+msgstr "Giờ vào (Dự kiến)"
+
+#. module: hr_late_early_tracking
+#: model_terms:ir.ui.view,arch_db:hr_late_early_tracking.report_late_early_tracking
+msgid "Giờ vào (Thực tế)"
+msgstr "Giờ vào (Thực tế)"
+
+#. module: hr_late_early_tracking
+#: model_terms:ir.ui.view,arch_db:hr_late_early_tracking.report_late_early_tracking
+msgid "Số phút đi trễ"
+msgstr "Số phút đi trễ"
+
+#. module: hr_late_early_tracking
+#: model_terms:ir.ui.view,arch_db:hr_late_early_tracking.report_late_early_tracking
+msgid "Giờ ra (Dự kiến)"
+msgstr "Giờ ra (Dự kiến)"
+
+#. module: hr_late_early_tracking
+#: model_terms:ir.ui.view,arch_db:hr_late_early_tracking.report_late_early_tracking
+msgid "Giờ ra (Thực tế)"
+msgstr "Giờ ra (Thực tế)"
+
+#. module: hr_late_early_tracking
+#: model_terms:ir.ui.view,arch_db:hr_late_early_tracking.report_late_early_tracking
+msgid "Số phút về sớm"
+msgstr "Số phút về sớm"
+
+#. module: hr_late_early_tracking
+#: model_terms:ir.ui.view,arch_db:hr_late_early_tracking.report_late_early_tracking
+msgid "Tổng số phút bị trừ"
+msgstr "Tổng số phút bị trừ"
+
+#. module: hr_late_early_tracking
+#: model_terms:ir.ui.view,arch_db:hr_late_early_tracking.report_late_early_tracking
+msgid "Số tiền bị trừ"
+msgstr "Số tiền bị trừ"
+
+#. module: hr_late_early_tracking
+#: model_terms:ir.ui.view,arch_db:hr_late_early_tracking.report_late_early_tracking
+msgid "Tổng"
+msgstr "Tổng"
+
+#. module: hr_late_early_tracking
+#: model_terms:ir.ui.view,arch_db:hr_late_early_tracking.report_late_early_tracking
+msgid "Người lập báo cáo"
+msgstr "Người lập báo cáo"
+
+#. module: hr_late_early_tracking
+#: model_terms:ir.ui.view,arch_db:hr_late_early_tracking.report_late_early_tracking
+msgid "Trưởng bộ phận"
+msgstr "Trưởng bộ phận"
+
+#. module: hr_late_early_tracking
+#: model_terms:ir.ui.view,arch_db:hr_late_early_tracking.report_late_early_tracking
+msgid "Giám đốc"
+msgstr "Giám đốc"
+
+#. module: hr_late_early_tracking
+#: model_terms:ir.ui.view,arch_db:hr_late_early_tracking.view_hr_late_early_tracking_form
+msgid "Approve"
+msgstr "Phê duyệt"
+
+#. module: hr_late_early_tracking
+#: model:ir.actions.act_window,name:hr_late_early_tracking.action_hr_late_early_dashboard
+msgid "Dashboard Đi trễ/Về sớm"
+msgstr "Dashboard Đi trễ/Về sớm"
+
+#. module: hr_late_early_tracking
+#: model:ir.model.fields,field_description:hr_late_early_tracking.field_hr_late_early_tracking__note
+msgid "Note"
+msgstr "Ghi chú"
+
+#. module: hr_late_early_tracking
+#: model:ir.model,name:hr_late_early_tracking.model_hr_salary_rule
+msgid "Salary Rule"
+msgstr "Quy tắc lương"
+
+#. module: hr_late_early_tracking
+#: model_terms:ir.ui.view,arch_db:hr_late_early_tracking.view_hr_salary_rule_form_extend
+msgid "Tạo quy tắc phạt đi trễ/về sớm"
+msgstr "Tạo quy tắc phạt đi trễ/về sớm"
+
+#. module: hr_late_early_tracking
+#: model:hr.salary.rule,name:hr_late_early_tracking.hr_salary_rule_late_early_penalty
+msgid "Phạt đi trễ/về sớm"
+msgstr "Phạt đi trễ/về sớm"
+
+#. module: hr_late_early_tracking
+#: model:hr.salary.rule,note:hr_late_early_tracking.hr_salary_rule_late_early_penalty
+msgid "Khấu trừ cho việc đi trễ và về sớm dựa trên dữ liệu chấm công."
+msgstr "Khấu trừ cho việc đi trễ và về sớm dựa trên dữ liệu chấm công."
+
+#. module: hr_late_early_tracking
+#: model_terms:ir.ui.view,arch_db:hr_late_early_tracking.view_hr_late_early_tracking_calendar
+msgid "Late/Early Tracking"
+msgstr "Theo dõi đi trễ/về sớm"
+
+#. module: hr_late_early_tracking
+#: model_terms:ir.ui.view,arch_db:hr_late_early_tracking.view_hr_late_early_tracking_tree
+msgid "name"
+msgstr "tên"
+
+#. module: hr_late_early_tracking
+#: model_terms:ir.ui.view,arch_db:hr_late_early_tracking.view_hr_late_early_tracking_tree
+msgid "employee_id"
+msgstr "nhân viên"
+
+#. module: hr_late_early_tracking
+#: model_terms:ir.ui.view,arch_db:hr_late_early_tracking.view_hr_late_early_tracking_tree
+msgid "date"
+msgstr "ngày"
+
+#. module: hr_late_early_tracking
+#: model_terms:ir.ui.view,arch_db:hr_late_early_tracking.view_hr_late_early_tracking_tree
+msgid "scheduled_check_in"
+msgstr "giờ vào dự kiến"
+
+#. module: hr_late_early_tracking
+#: model_terms:ir.ui.view,arch_db:hr_late_early_tracking.view_hr_late_early_tracking_tree
+msgid "actual_check_in"
+msgstr "giờ vào thực tế"
+
+#. module: hr_late_early_tracking
+#: model_terms:ir.ui.view,arch_db:hr_late_early_tracking.view_hr_late_early_tracking_tree
+msgid "late_minutes"
+msgstr "số phút đi trễ"
+
+#. module: hr_late_early_tracking
+#: model_terms:ir.ui.view,arch_db:hr_late_early_tracking.view_hr_late_early_tracking_tree
+msgid "scheduled_check_out"
+msgstr "giờ ra dự kiến"
+
+#. module: hr_late_early_tracking
+#: model_terms:ir.ui.view,arch_db:hr_late_early_tracking.view_hr_late_early_tracking_tree
+msgid "actual_check_out"
+msgstr "giờ ra thực tế"
+
+#. module: hr_late_early_tracking
+#: model_terms:ir.ui.view,arch_db:hr_late_early_tracking.view_hr_late_early_tracking_tree
+msgid "early_minutes"
+msgstr "số phút về sớm"
+
+#. module: hr_late_early_tracking
+#: model_terms:ir.ui.view,arch_db:hr_late_early_tracking.view_hr_late_early_tracking_tree
+msgid "total_penalty_minutes"
+msgstr "tổng số phút bị trừ"
+
+#. module: hr_late_early_tracking
+#: model_terms:ir.ui.view,arch_db:hr_late_early_tracking.view_hr_late_early_tracking_tree
+msgid "penalty_amount"
+msgstr "số tiền bị trừ"
+
+#. module: hr_late_early_tracking
+#: model_terms:ir.ui.view,arch_db:hr_late_early_tracking.view_hr_late_early_tracking_tree
+msgid "state"
+msgstr "trạng thái"
+
+#. module: hr_late_early_tracking
+#: model_terms:ir.ui.view,arch_db:hr_late_early_tracking.view_hr_late_early_tracking_tree
+msgid "Total Penalty"
+msgstr "Tổng tiền phạt"
+
+#. module: hr_late_early_tracking
+#: model_terms:ir.ui.view,arch_db:hr_late_early_tracking.view_hr_late_early_tracking_help
+msgid "No late/early records found."
+msgstr "Không tìm thấy bản ghi đi trễ/về sớm nào."
+
+#. module: hr_late_early_tracking
+#: model_terms:ir.ui.view,arch_db:hr_late_early_tracking.view_hr_late_early_tracking_help
+msgid "This report tracks when employees arrive late or leave early compared to their work schedule."
+msgstr "Báo cáo này theo dõi khi nhân viên đi trễ hoặc về sớm so với lịch làm việc của họ."

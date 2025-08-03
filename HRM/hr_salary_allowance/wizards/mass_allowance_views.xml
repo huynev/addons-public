@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form View for Mass Allowance Wizard -->
+    <record id="view_mass_allowance_wizard_form" model="ir.ui.view">
+        <field name="name">mass.allowance.wizard.form</field>
+        <field name="model">mass.allowance.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Đăng Ký Phụ Cấp Hàng Loạt">
+                <sheet>
+                    <div class="alert alert-info" role="alert" invisible="employee_count == 0">
+                        Bạn đang tạo phụ cấp cho <field name="employee_count" readonly="1"/> nhân viên đã chọn.
+                    </div>
+                    <div class="alert alert-warning" role="alert" invisible="employee_count > 0 or allowance_type_id == False">
+                        Vui lòng chọn nhân viên để tiếp tục.
+                    </div>
+                    <div class="alert alert-success" role="alert" invisible="allowance_type_id == False or available_employee_count &lt;= 0">
+                        Có <field name="available_employee_count" readonly="1"/> nhân viên có thể đăng ký phụ cấp này.
+                    </div>
+                    <div class="alert alert-danger" role="alert" invisible="allowance_type_id == False or available_employee_count &gt; 0">
+                        Tất cả nhân viên đã được đăng ký phụ cấp này!
+                    </div>
+                    <group>
+                        <group>
+                            <field name="allowance_type_id"/>
+                            <field name="amount"/>
+                            <field name="company_currency_id" invisible="1"/>
+                            <field name="employee_count" invisible="1"/>
+                            <field name="available_employee_count" invisible="1"/>
+                            <!-- Thêm trường ẩn chứa domain động -->
+                            <field name="available_employee_domain" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="department_id" options="{'no_create': True}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Nhân Viên" name="employees">
+                            <field name="employee_ids" nolabel="1" widget="many2many" options="{'no_create': True}" domain="available_employee_domain">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="employee_code"/>
+                                    <field name="department_id"/>
+                                    <field name="job_id"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Ghi Chú" name="notes">
+                            <field name="notes" placeholder="Nhập ghi chú cho tất cả các đăng ký phụ cấp..."/>
+                        </page>
+                    </notebook>
+                    <footer>
+                        <button name="action_create_allowances" string="Tạo Phụ Cấp" type="object" class="btn-primary"
+                                invisible="employee_ids == [] or allowance_type_id == False"/>
+                        <button string="Hủy" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action to open the wizard from menu -->
+    <record id="action_mass_allowance_wizard" model="ir.actions.act_window">
+        <field name="name">Đăng Ký Phụ Cấp Hàng Loạt</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">mass.allowance.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Action to open the wizard from employee list -->
+    <record id="action_mass_allowance_wizard_from_employees" model="ir.actions.act_window">
+        <field name="name">Đăng Ký Phụ Cấp Hàng Loạt</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">mass.allowance.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'hide_employee_selection': True}</field>
+    </record>
+</odoo>
