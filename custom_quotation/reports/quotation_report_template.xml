@@ -34,7 +34,7 @@
                                                 t-att-src="image_data_uri(line.product_id.image_256)"
                                                 style="max-height: 300px; max-width: 300px;"/>
                                         </td>
-                                        <td><span t-field="line.name"/></td>
+                                        <td><span t-field="line.product_id.display_name"/></td>
                                         <td><span t-field="line.product_id.uom_id.name"/></td>
                                         <td class="text-end">
                                             <span t-field="line.price_unit"/>

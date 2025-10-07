@@ -215,15 +215,15 @@ class CustomQuotation(models.Model):
 
         # Header
         current_row = 0
-        worksheet.merge_range(f'A{current_row + 1}:G{current_row + 1}', 'Báo giá: ' + self.name, header_format)
+        worksheet.merge_range(f'A{current_row + 1}:H{current_row + 1}', 'Báo giá: ' + self.name, header_format)
         current_row += 1
 
         if self.partner_id:
-            worksheet.merge_range(f'A{current_row + 1}:G{current_row + 1}', 'Khách hàng: ' + self.partner_id.name,
+            worksheet.merge_range(f'A{current_row + 1}:H{current_row + 1}', 'Khách hàng: ' + self.partner_id.name,
                                   header_format)
             current_row += 1
 
-        worksheet.merge_range(f'A{current_row + 1}:G{current_row + 1}', 'Ngày: ' + str(self.date), header_format)
+        worksheet.merge_range(f'A{current_row + 1}:H{current_row + 1}', 'Ngày: ' + str(self.date), header_format)
         current_row += 1
 
         # Tiêu đề cột
@@ -288,7 +288,8 @@ class CustomQuotation(models.Model):
                     print(f"Error processing image: {e}")
 
             # Các thông tin khác
-            worksheet.write(row, 2, line.name, cell_format)
+            product_name = str(line.product_id.display_name) or line.name
+            worksheet.write(row, 2, product_name, cell_format)
             worksheet.write(row, 3, line.product_id.uom_id.name, cell_format)
             worksheet.write(row, 4, line.packaging_info or '', cell_format)
             worksheet.write(row, 5, line.price_unit, number_format)
@@ -300,9 +301,9 @@ class CustomQuotation(models.Model):
 
         # Ghi chú
         row += 1
-        worksheet.merge_range(f'A{row + 1}:G{row + 1}', 'Ghi chú:', header_format)
+        worksheet.merge_range(f'A{row + 1}:H{row + 1}', 'Ghi chú:', header_format)
         row += 1
-        worksheet.merge_range(f'A{row + 1}:G{row + 1}', '- Giá trên chưa bao gồm thuế VAT', cell_format)
+        worksheet.merge_range(f'A{row + 1}:H{row + 1}', '- Giá trên chưa bao gồm thuế VAT', cell_format)
         if self.validity_date:
             row += 1
             worksheet.merge_range(f'A{row + 1}:G{row + 1}',

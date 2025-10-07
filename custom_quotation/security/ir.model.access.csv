@@ -1,3 +1,8 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_custom_quotation_user,custom.quotation.user,model_custom_quotation,base.group_user,1,1,1,1
 access_custom_quotation_line_user,custom.quotation.line.user,model_custom_quotation_line,base.group_user,1,1,1,1
+access_custom_quotation_manager,custom.quotation.manager,model_custom_quotation,base.group_user,1,1,1,1
+access_custom_quotation_line_manager,custom.quotation.line.manager,model_custom_quotation_line,base.group_user,1,1,1,1
+access_product_packaging_user,product.packaging user,product.model_product_packaging,base.group_user,1,1,1,0
+access_ir_actions_act_window_user,ir.actions.act_window user,base.model_ir_actions_act_window,base.group_user,1,0,0,0
+access_ir_actions_act_window_view_user,ir.actions.act_window_view user,base.model_ir_actions_act_window_view,base.group_user,1,0,0,0

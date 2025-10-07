@@ -92,6 +92,16 @@ class SalaryAllowance(models.Model):
     def _create_history_entry(self):
         """Tạo mục lịch sử thay đổi"""
         for record in self:
+            existing_history = self.env['salary.allowance.history'].search([
+                ('allowance_id', '=', record.id),
+                ('start_date', '=', record.start_date),
+                ('amount', '=', record.amount),
+            ], limit=1)
+
+            # Nếu đã tồn tại history entry tương tự, không tạo mới
+            if existing_history:
+                continue
+
             self.env['salary.allowance.history'].create({
                 'allowance_id': record.id,
                 'start_date': record.start_date,

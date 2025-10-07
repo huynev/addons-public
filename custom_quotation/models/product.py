@@ -1,5 +1,6 @@
 from odoo import models, api
 from datetime import datetime
+from odoo.exceptions import ValidationError
 
 class ProductProduct(models.Model):
     _inherit = 'product.product'
@@ -12,6 +13,15 @@ class ProductProduct(models.Model):
             quotation = self.env['custom.quotation'].browse(quotation_id)
             QuotationLine = self.env['custom.quotation.line']
             quotation_lines = []
+
+            # Kiểm tra giới hạn số lượng sản phẩm
+            current_product_count = len(quotation.quotation_line_ids)
+            new_product_count = len(active_ids)
+
+            if current_product_count + new_product_count > 370:
+                raise ValidationError('Không thể thêm quá 370 sản phẩm vào báo giá. '
+                                      f'Hiện có {current_product_count} sản phẩm, '
+                                      f'bạn đang thêm {new_product_count} sản phẩm.')
 
             # Lấy danh sách sản phẩm đã tồn tại
             existing_products = quotation.quotation_line_ids.mapped('product_id').ids

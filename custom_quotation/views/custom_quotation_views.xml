@@ -10,8 +10,6 @@
                 <field name="description"/>
                 <field name="partner_id"/>
                 <field name="date"/>
-                <field name="excel_file" filename="excel_filename" widget="binary" readonly="1" string="Download Excel"/>
-                <field name="pdf_file" filename="pdf_filename" widget="binary" readonly="1" string="Download PDF"/>
             </tree>
         </field>
     </record>
@@ -160,6 +158,7 @@
                         string="Áp dụng"
                         class="btn-primary"/>
                 </header>
+                <field name="image_128" widget="image" width="75px"/>
                 <field name="default_code"/>
                 <field name="name"/>
                 <field name="lst_price"/>
