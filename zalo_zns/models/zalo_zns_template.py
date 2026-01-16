@@ -30,6 +30,8 @@ class ZaloZnsTemplateKeyValue(models.Model):
     value = fields.Char(string='Value')
     model_id = fields.Many2one('ir.model', string='Model')
     field_id = fields.Many2one('ir.model.fields', string='Field')
+    line_code = fields.Char(string='Line Code',
+                                    help='Code của dòng (VD dòng trong phiếu lương: BASIC, GROSS, NET, ...)')
 
     @api.onchange('model_id')
     def _onchange_model_id(self):

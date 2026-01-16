@@ -11,6 +11,8 @@
                     <button name="action_cancel" string="Cancel" type="object" invisible="state not in ('draft', 'in_progress')"/>
                     <button name="action_draft" string="Set to Draft" type="object" invisible="state != 'cancelled'"/>
                     <button name="action_done" string="Mark as Done" type="object" invisible="state != 'in_progress'" class="oe_highlight"/>
+                    <button name="action_reset_and_resend"  string="Reset and Resend" type="object"  invisible="state not in ('done', 'cancelled')"
+                        confirm="Are you sure you want to reset all messages and send them again?"/>
                     <field name="state" widget="statusbar" options="{'clickable': '1'}"/>
                 </header>
                 <sheet>

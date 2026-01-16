@@ -29,7 +29,7 @@ class BatchSendZaloWizard(models.TransientModel):
     def _onchange_model(self):
         self.field_id = False
         if self.model:
-            model_id = self.env['ir.model'].search([('model', '=', self.model)], limit=1)
+            model_id = self.env['ir.model'].sudo().search([('model', '=', self.model)], limit=1)
             return {'domain': {'field_id': [
                 ('model_id', '=', model_id.id),
                 '|',
@@ -61,8 +61,6 @@ class BatchSendZaloWizard(models.TransientModel):
 
         invalid_records = []
         for record in records:
-            partner = record.partner_id if hasattr(record, 'partner_id') else False
-
             if self.field_id:
                 phone = record[self.field_id.name]
                 if isinstance(phone, models.BaseModel):
@@ -70,8 +68,10 @@ class BatchSendZaloWizard(models.TransientModel):
                         phone = phone.phone
                     else:
                         phone = str(phone)
-            elif partner and partner.phone:
-                phone = partner.phone
+            elif hasattr(record, 'partner_id'):
+                phone = record.partner_id.phone
+            elif hasattr(record, 'employee_id'):
+                phone = record.employee_id.private_phone or record.employee_id.mobile_phone
             elif hasattr(record, 'phone_zalo'):
                 phone = record.phone_zalo
             elif hasattr(record, 'phone'):
@@ -80,7 +80,10 @@ class BatchSendZaloWizard(models.TransientModel):
                 phone = None
 
             if not phone or not is_valid_phone_number(phone):
-                invalid_records.append(record.display_name)
+                if hasattr(record, 'display_name'):
+                    invalid_records.append(record.display_name)
+                else:
+                    invalid_records.append(record.name)
                 continue
             elif phone:
                 message_vals = {
@@ -89,12 +92,13 @@ class BatchSendZaloWizard(models.TransientModel):
                     'name': record.name,
                     'phone': phone,
                     'record_id': record.id,
-                    'model_id': self.env['ir.model'].search([('model', '=', self.model)], limit=1).id,
+                    'model_id': self.env['ir.model'].sudo.search([('model', '=', self.model)], limit=1).id,
                 }
                 message = self.env['zalo.zns.message'].create(message_vals)
 
         if invalid_records:
-            raise UserError(_("The following records do not have valid phone numbers: %s") % ", ".join(invalid_records))
+            invalid_records = [str(r) for r in invalid_records if r]
+            # raise UserError(_("The following records do not have valid phone numbers: %s") % ", ".join(invalid_records))
 
         batch.action_confirm()
         return {

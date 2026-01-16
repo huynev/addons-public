@@ -25,14 +25,21 @@ class ZaloZnsBatch(models.Model):
     def _compute_message_count(self):
         for batch in self:
             batch.message_count = len(batch.message_ids)
+            check_all_message = all(
+                message.state != 'draft' and message.state != 'sent' for message in batch.message_ids)
+            if check_all_message:
+                batch.state = 'done'
 
-    @api.model
-    def create(self, vals):
-        if vals.get('name', '/') == '/':
-            today = date.today()
-            origin_model = vals.get('origin_model') or self._name
-            vals['name'] = self._generate_unique_name(today, origin_model)
-        return super(ZaloZnsBatch, self).create(vals)
+    @api.model_create_multi
+    def create(self, vals_list):
+        today = date.today()
+
+        for vals in vals_list:
+            if vals.get('name', '/') == '/':
+                origin_model = vals.get('origin_model') or self._name
+                vals['name'] = self._generate_unique_name(today, origin_model)
+
+        return super(ZaloZnsBatch, self).create(vals_list)
 
     def _generate_unique_name(self, date, model_name):
         sequence = self.env['ir.sequence'].with_context(ir_sequence_date=date)
@@ -48,7 +55,27 @@ class ZaloZnsBatch(models.Model):
         self.write({'state': 'in_progress'})
 
     def action_cancel(self):
-        self.write({'state': 'cancelled'})
+        """Cancel batch and all related messages"""
+        self.ensure_one()
+        if self.state in ['draft', 'in_progress']:
+            # Cancel all messages that are not in final states
+            messages_to_cancel = self.message_ids.filtered(
+                lambda m: m.state in ['draft', 'failed']
+            )
+            if messages_to_cancel:
+                messages_to_cancel.write({
+                    'state': 'cancelled',
+                    'error_message': 'Cancelled due to batch cancellation'
+                })
+                # Update related records state
+                for message in messages_to_cancel:
+                    message.update_record_state(
+                        message.record_id,
+                        message.model_id.id,
+                        'cancelled'
+                    )
+            # Update batch state
+            self.write({'state': 'cancelled'})
 
     def action_draft(self):
         self.write({'state': 'draft'})
@@ -68,3 +95,16 @@ class ZaloZnsBatch(models.Model):
             'type': 'ir.actions.act_window',
             'context': {'default_batch_id': self.id}
         }
+
+    def action_reset_and_resend(self):
+        """Reset messages to draft state and set batch to in progress"""
+        self.ensure_one()
+        if self.state in ['done', 'cancelled']:
+            # Reset all messages to draft
+            self.message_ids.write({
+                'state': 'draft',
+                'error_message': False,
+                'zalo_msg_id': False
+            })
+            # Set batch to in progress
+            self.write({'state': 'in_progress'})

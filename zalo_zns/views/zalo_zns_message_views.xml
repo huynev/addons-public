@@ -28,8 +28,9 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button name="action_send_message_zalo_zns" string="Send Message" type="object" class="oe_highlight"/>
-                    <button name="action_update_status_send_zns_from_zalo" string="Update status form Zalo" invisible="state != 'sent'" type="object" class="oe_highlight"/>
+                    <button name="action_send_message_zalo_zns" string="Send Zalo Message" type="object" class="oe_highlight"/>
+                    <button name="action_update_status_send_zns_from_zalo" string="Update status form Zalo" invisible="state == 'draft'" type="object" class="oe_highlight"/>
+                    <button name="action_cancel" string="Cancel" type="object" invisible="state not in ('draft', 'failed')" confirm="Are you sure you want to cancel this message?"/>
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
@@ -37,6 +38,7 @@
                         <field name="batch_id"/>
                         <field name="name"/>
                         <field name="model_id"/>
+                        <field name="record_id"/>
                         <field name="template_id"/>
                         <field name="zalo_msg_id"/>
                         <field name="phone"/>
@@ -55,5 +57,17 @@
         <field name="name">Zalo ZNS Messages</field>
         <field name="res_model">zalo.zns.message</field>
         <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Tree view specific actions -->
+    <record id="action_send_selected_messages" model="ir.actions.server">
+        <field name="name">Send Zalo ZNS Selected Messages</field>
+        <field name="model_id" ref="model_zalo_zns_message"/>
+        <field name="binding_model_id" ref="model_zalo_zns_message"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+            records.action_send_message_zalo_zns()
+        </field>
     </record>
 </odoo>

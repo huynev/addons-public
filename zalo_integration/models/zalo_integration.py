@@ -28,3 +28,13 @@ class ZaloIntegration(models.AbstractModel):
             'target': 'new',
             'context': {'active_model': self._name, 'active_ids': self.ids},
         }
+
+    def action_batch_send_zalo_message_model(self, model_name, ids):
+        return {
+            'name': _('Batch Send Zalo Messages'),
+            'type': 'ir.actions.act_window',
+            'view_mode': 'form',
+            'res_model': 'zalo.batch.send.wizard',
+            'target': 'new',
+            'context': {'active_model': model_name, 'active_ids': ids},
+        }

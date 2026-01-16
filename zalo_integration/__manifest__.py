@@ -11,16 +11,14 @@
     """,
     'author': 'Wokwy support by claude.ai',
     'website': '',
-    'depends': ['base', 'sale', 'stock', 'zalo_zns'],
+    'depends': ['base', 'zalo_zns'],
     'data': [
         'security/ir.model.access.csv',
-        'views/sale_order_view.xml',
-        'views/stock_picking_view.xml',
         'wizards/send_zalo_message_wizard_views.xml',
         'wizards/batch_send_zalo_wizard_views.xml',
     ],
     'installable': True,
     'auto_install': False,
     'application': False,
-    'translations': ['i18n/vi_VN.po'],
+    'license': 'LGPL-3',
 }

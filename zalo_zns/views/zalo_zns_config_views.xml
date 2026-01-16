@@ -1,26 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright 2024 Wokwy - quochuy.software@gmail.com -->
 <odoo>
     <record id="view_zalo_zns_config_form" model="ir.ui.view">
         <field name="name">zalo.zns.config.form</field>
         <field name="model">zalo.zns.config</field>
         <field name="arch" type="xml">
             <form string="Zalo ZNS Configuration">
+                <header>
+                    <button name="action_authorize_zalo"
+                            string="Kết nối Zalo (Lấy Code)"
+                            type="object"
+                            class="oe_highlight"/>
+                    <button name="action_refresh_access_token"
+                                string="Lấy Access Token Mới"
+                                type="object"
+                                class="oe_highlight"
+                                confirm="Bạn có chắc chắn muốn làm mới Access Token từ Refresh Token hiện tại không?"/>
+                </header>
                 <sheet>
-                    <group>
+                    <group name="app_credentials" string="Thông tin Ứng dụng Zalo (App Credentials)">
                         <field name="name"/>
-                        <field name="api_url"/>
-                        <field name="access_token" password="True"/>
+                        <field name="app_id"/>
+                        <field name="secret_key" password="true"/>
+                    </group>
+
+                    <group name="endpoints" string="API Endpoints">
+                        <field name="api_url" widget="url"/>
+                        <field name="auth_endpoint" widget="url"/>
+                        <field name="token_endpoint" widget="url"/>
+                    </group>
+
+                    <group name="tokens" string="Access Tokens">
+                        <field name="access_token"/>
+                        <field name="refresh_token"/>
+                        <field name="token_expiry_date"/>
                     </group>
                 </sheet>
             </form>
         </field>
     </record>
 
+    <record id="view_zalo_zns_config_tree" model="ir.ui.view">
+        <field name="name">zalo.zns.config.tree</field>
+        <field name="model">zalo.zns.config</field>
+        <field name="arch" type="xml">
+            <tree string="Zalo ZNS Configuration">
+                <field name="name"/>
+                <field name="app_id"/> <field name="api_url"/>
+            </tree>
+        </field>
+    </record>
+
     <record id="action_zalo_zns_config" model="ir.actions.act_window">
         <field name="name">Zalo ZNS Configuration</field>
         <field name="res_model">zalo.zns.config</field>
-        <field name="view_mode">form</field>
-        <field name="target">inline</field>
+        <field name="view_mode">tree,form</field>
     </record>
 </odoo>

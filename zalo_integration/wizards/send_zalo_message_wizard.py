@@ -36,10 +36,11 @@ class SendZaloMessageWizard(models.TransientModel):
         active_model = self._context.get('active_model')
         active_id = self._context.get('active_id')
         if active_model and active_id:
-            record = self.env[active_model].browse(active_id)
+            record = self.env[active_model].sudo().browse(active_id)
 
             if self.field_id:
-                phone = record[self.field_id.name]
+                field_name = self.sudo().field_id.name
+                phone = record.sudo()[field_name]
                 if isinstance(phone, models.BaseModel):
                     if hasattr(phone, 'phone'):
                         phone = phone.phone
@@ -47,6 +48,8 @@ class SendZaloMessageWizard(models.TransientModel):
                         phone = str(phone)
             elif hasattr(record, 'partner_id'):
                 phone = record.partner_id.phone
+            elif hasattr(record, 'employee_id'):
+                phone = record.employee_id.private_phone or record.employee_id.mobile_phone
             elif hasattr(record, 'phone_zalo'):
                 phone = record.phone_zalo
             elif hasattr(record, 'phone'):
@@ -65,7 +68,7 @@ class SendZaloMessageWizard(models.TransientModel):
                 'phone': phone,
                 'record_id': self._context.get('active_id'),
                 'batch_id': self.batch_id.id if self.batch_id else False,
-                'model_id': self.env['ir.model'].search([('model', '=', active_model)], limit=1).id,
+                'model_id': self.env['ir.model'].sudo().search([('model', '=', active_model)], limit=1).id,
             }
 
             try:

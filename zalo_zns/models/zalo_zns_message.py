@@ -3,6 +3,18 @@ from odoo import models, fields, api
 import requests
 import json
 import re
+from datetime import date, datetime
+
+from odoo.exceptions import UserError
+
+def json_default_serializer(obj):
+    """Fallback function for json.dumps to serialize non-serializable objects (like date/datetime)."""
+    if isinstance(obj, (date, datetime)):
+        # Chuyển đổi thành chuỗi ISO 8601
+        return obj.isoformat()
+    # Nếu không phải là date/datetime, raise TypeError để json.dumps xử lý
+    raise TypeError(f'Object of type {obj.__class__.__name__} is not JSON serializable')
+
 
 class ZaloZnsMessage(models.Model):
     _name = 'zalo.zns.message'
@@ -10,7 +22,7 @@ class ZaloZnsMessage(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
     batch_id = fields.Many2one('zalo.zns.batch', string='Batch', ondelete='set null', required=False, readonly=True)
-    template_id = fields.Many2one('zalo.zns.template', string='Template', related='batch_id.template_id', readonly=True)
+    template_id = fields.Many2one('zalo.zns.template', string='Template', readonly=True)
     name = fields.Char(string='Name')
     model_id = fields.Many2one('ir.model', string='Model')
     record_id = fields.Integer(string='Record ID')
@@ -22,7 +34,8 @@ class ZaloZnsMessage(models.Model):
         ('draft', 'Draft'),
         ('sent', 'Sent'),
         ('done', 'Done'),
-        ('failed', 'Failed')
+        ('failed', 'Failed'),
+        ('cancelled', 'Cancelled')
     ], string='State', default='draft', tracking=True)
     error_message = fields.Text(string='Error Message')
     message_type = fields.Selection([('dummy', 'Dummy')], default='dummy', string='Message Type')
@@ -51,13 +64,36 @@ class ZaloZnsMessage(models.Model):
 
             template_data = {}
             for kv in key_value_pairs:
-                if kv.model_id and kv.field_id:
-                    related_record = self.env[message.model_id.model].browse(message.record_id)
-                    value = related_record[kv.field_id.name]
+                if kv.line_code:
+                    model_name = message.sudo().model_id.model
+                    related_record = self.env[model_name].sudo().browse(message.record_id)
+
+                    if hasattr(related_record, 'line_ids'):
+                        payslip_line = related_record.line_ids.filtered(
+                            lambda line: line.code == kv.line_code
+                        )
+
+                        if payslip_line:
+                            # Lấy giá trị total từ dòng phiếu lương
+                            value = payslip_line[0].total if payslip_line else 0
+                            # Format số tiền
+                            if isinstance(value, (int, float)):
+                                value = int(value)
+                        else:
+                            value = 0
+                    else:
+                        value = 0
+                elif kv.model_id and kv.field_id:
+                    model_name = message.sudo().model_id.model
+                    related_record = self.env[model_name].sudo().browse(message.record_id)
+                    field_name = kv.sudo().field_id.name
+                    value = related_record.sudo()[field_name]
 
                     # Xử lý trường hợp value là một recordset
                     if isinstance(value, models.BaseModel):
-                        if hasattr(value, 'name'):
+                        if hasattr(value, str(kv.key)):
+                            value = getattr(value, str(kv.key))
+                        elif hasattr(value, 'name'):
                             value = value.name
                         elif hasattr(value, 'display_name'):
                             value = value.display_name
@@ -77,22 +113,25 @@ class ZaloZnsMessage(models.Model):
                 'template_id': message.template_id.template_id,
                 'template_data': template_data
             }
-
+            data = json.dumps(payload, default=json_default_serializer)
             try:
-                response = requests.post(config.api_url, headers=headers, data=json.dumps(payload))
+                response = requests.post(f"{config.api_url}/message/template", headers=headers, data=json.dumps(payload, default=json_default_serializer))
                 response.raise_for_status()
                 response_data = response.json()
 
                 if response_data.get('error') == 0:
                     message.zalo_msg_id = response_data['data']['msg_id']
                     message.state = 'sent'
+                    self.update_record_state(message.record_id, message.model_id.id, 'sent')
                 else:
                     message.state = 'failed'
                     message.error_message = response_data.get('message', 'Unknown error')
+                    self.update_record_state(message.record_id, message.model_id.id, 'failed')
 
             except requests.exceptions.RequestException as e:
                 message.state = 'failed'
                 message.error_message = str(e)
+                self.update_record_state(message.record_id, message.model_id.id, 'failed')
 
     def action_update_status_send_zns_from_zalo(self):
         config = self.env['zalo.zns.config'].get_config()
@@ -105,7 +144,7 @@ class ZaloZnsMessage(models.Model):
         }
 
         for message in self:
-            zalo_api_url = f"https://business.openapi.zalo.me/message/status?message_id={message.zalo_msg_id}&phone={message.phone}"
+            zalo_api_url = f"{config.api_url}/message/status?message_id={message.zalo_msg_id}&phone={message.phone}"
             try:
                 response = requests.get(zalo_api_url, headers=headers)
                 response.raise_for_status()
@@ -113,20 +152,56 @@ class ZaloZnsMessage(models.Model):
 
                 if response_data.get('error') == 0:
                     message.state = 'done'
+                    self.update_record_state(message.record_id, message.model_id.id, 'sent')
                 else:
                     message.state = 'failed'
                     message.error_message = response_data.get('message', 'Unknown error')
+                    self.update_record_state(message.record_id, message.model_id.id, 'failed')
 
             except requests.exceptions.RequestException as e:
                 message.state = 'failed'
                 message.error_message = str(e)
 
+    def action_cancel(self):
+        """Cancel the message"""
+        self.ensure_one()
+        if self.state in ['draft']:
+            self.write({
+                'state': 'cancelled',
+                'error_message': 'Cancelled by user'
+            })
+            # Update record state if needed
+            self.update_record_state(self.record_id, self.model_id.id, 'cancelled')
+
     @api.model
     def _cron_send_messages_zalo_zns(self):
-        messages = self.search([('state', '=', 'draft')])
+        messages = self.search([('state', '=', 'draft')], limit=50)
         messages.action_send_message_zalo_zns()
 
     @api.model
     def _cron_update_status_send_zns_from_zalo(self):
-        messages = self.search([('zalo_msg_id', '!=', '')])
+        messages = self.search([('zalo_msg_id', '!=', ''), ('state', '=', 'sent')], limit=50)
         messages.action_update_status_send_zns_from_zalo()
+
+    @api.model
+    def update_record_state(self, record_id, model_id, new_state):
+        """
+        Update the state of a record based on record_id and model_id.
+
+        :param record_id: ID of the record to update
+        :param model_id: ID of the model (ir.model) containing the record
+        :param new_state: New state to update to
+        :return: True if update successful, False otherwise
+        """
+        try:
+            model_name = self.env['ir.model'].sudo().browse(model_id).model
+            Model = self.env[model_name].sudo()
+            if 'send_status' in Model._fields:
+                record = Model.browse(record_id)
+                # Check if the new state is valid for this model
+                if new_state in dict(Model._fields['send_status'].selection):
+                    # Update the state
+                    record.sudo().write({'send_status': new_state})
+            return True
+        except Exception as e:
+            return False
