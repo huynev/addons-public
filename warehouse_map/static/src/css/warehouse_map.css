@@ -1,0 +1,456 @@
+.o_warehouse_map_container {
+    padding: 0;
+    background: #f5f5f5;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.o_warehouse_map_header {
+    background: white;
+    padding: 15px 20px;
+    border-bottom: 2px solid #e0e0e0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+    z-index: 100;
+    position: sticky;
+    top: 0;
+}
+
+.o_warehouse_map_content {
+    flex: 1;
+    overflow: auto;
+    padding: 20px;
+}
+
+.o_warehouse_map_title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
+
+.o_warehouse_map_info {
+    color: #666;
+    font-size: 14px;
+}
+
+.o_warehouse_map_content {
+    flex: 1;
+    overflow: auto;
+    padding: 20px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.o_warehouse_map_grid {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: inline-block;
+}
+
+.o_warehouse_map_legend {
+    padding: 15px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    min-width: 280px;
+    max-width: 320px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 20px;
+    align-self: flex-start;
+}
+
+.o_warehouse_map_table {
+    border-collapse: separate;
+    border-spacing: 5px;
+    margin: 0 auto;
+}
+
+/* Row spacing */
+.o_warehouse_map_table tr.o_warehouse_row_spacing {
+    height: 20px;
+}
+
+.o_warehouse_map_table tr.o_warehouse_row_spacing td {
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: default;
+}
+
+/* Column spacing */
+.o_warehouse_map_table td.o_warehouse_col_spacing {
+    width: 20px;
+    min-width: 20px;
+    max-width: 20px;
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: default;
+}
+
+/* Spacing visual indicator */
+.o_warehouse_spacing_line {
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(to right, transparent, #2196f3, transparent);
+    opacity: 0.3;
+}
+
+.o_warehouse_spacing_line_vertical {
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent, #2196f3, transparent);
+    opacity: 0.3;
+    margin: 0 auto;
+}
+
+.o_warehouse_map_cell {
+    width: 140px;
+    height: 140px;
+    min-width: 140px;
+    min-height: 140px;
+    max-width: 140px;
+    max-height: 140px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: #fafafa;
+    position: relative;
+    vertical-align: top;
+    overflow: hidden;
+}
+
+.o_warehouse_map_cell:hover {
+    border-color: #007bff;
+    box-shadow: 0 4px 8px rgba(0,123,255,0.2);
+    transform: translateY(-2px);
+}
+
+.o_warehouse_map_cell.has_stock {
+    background: #e8f5e9;
+    border-color: #4caf50;
+}
+
+.o_warehouse_map_cell.has_reserved {
+    background: #fff3e0;
+    border-color: #ff9800;
+}
+
+.o_warehouse_map_cell.blocked_cell {
+    background: repeating-linear-gradient(
+        45deg,
+        #f5f5f5,
+        #f5f5f5 10px,
+        #e0e0e0 10px,
+        #e0e0e0 20px
+    );
+    border: 2px dashed #9e9e9e;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.o_warehouse_map_cell.blocked_cell:hover {
+    border-color: #9e9e9e;
+    box-shadow: none;
+    transform: none;
+}
+
+.o_warehouse_map_cell_header {
+    font-size: 11px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.o_warehouse_map_cell_content {
+    font-size: 10px;
+    color: #666;
+    overflow-y: auto;
+    max-height: 100px;
+    padding: 3px;
+}
+
+.o_warehouse_days_badge {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 9px;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    z-index: 10;
+}
+
+.o_warehouse_days_badge.warning {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.o_warehouse_days_badge.danger {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { 
+        transform: scale(1);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    50% { 
+        transform: scale(1.05);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+}
+
+.o_warehouse_in_date {
+    color: #9e9e9e;
+    font-size: 8px;
+    margin-top: 2px;
+}
+
+.o_warehouse_lot_product {
+    color: #333;
+    font-size: 10px;
+    font-weight: 600;
+    margin-bottom: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.o_warehouse_lot_code {
+    color: #666;
+    font-size: 9px;
+    margin-bottom: 3px;
+}
+
+.o_warehouse_lot_qty {
+    color: #4caf50;
+    font-weight: bold;
+    font-size: 10px;
+    margin-bottom: 2px;
+}
+
+.o_warehouse_lot_available {
+    color: #2196f3;
+    font-size: 9px;
+    margin-bottom: 2px;
+}
+
+.o_warehouse_lot_reserved {
+    color: #ff9800;
+    font-size: 9px;
+    margin-bottom: 2px;
+    font-weight: bold;
+}
+
+.o_warehouse_lot_location {
+    color: #9e9e9e;
+    font-size: 9px;
+    margin-top: 3px;
+    padding-top: 3px;
+    border-top: 1px solid #f0f0f0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.o_warehouse_map_cell_badge {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: #4caf50;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.o_warehouse_map_empty {
+    color: #999;
+    font-style: italic;
+    text-align: center;
+    padding-top: 35px;
+    font-size: 11px;
+}
+
+.o_warehouse_map_empty_clickable {
+    padding-top: 20px !important;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.o_warehouse_map_empty_clickable:hover {
+    color: #007bff;
+}
+
+.o_warehouse_map_empty_clickable:hover i {
+    color: #007bff !important;
+    transform: scale(1.2);
+}
+
+.o_warehouse_empty_header {
+    color: #999;
+    font-size: 10px;
+}
+
+/* Context Menu */
+.o_warehouse_context_menu {
+    position: fixed;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 1000;
+    min-width: 180px;
+    padding: 5px 0;
+}
+
+.o_warehouse_context_menu_item {
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+}
+
+.o_warehouse_context_menu_item:hover {
+    background: #f5f5f5;
+}
+
+.o_warehouse_context_menu_item i {
+    margin-right: 10px;
+    width: 16px;
+}
+
+.o_warehouse_context_menu_item.o_warehouse_context_menu_danger {
+    color: #dc3545;
+}
+
+.o_warehouse_context_menu_item.o_warehouse_context_menu_danger:hover {
+    background: #ffe5e5;
+}
+
+.o_warehouse_context_menu_header {
+    padding: 10px 15px;
+    font-weight: bold;
+    font-size: 13px;
+    color: #333;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.o_warehouse_context_menu_info {
+    padding: 8px 15px;
+    font-size: 12px;
+    color: #666;
+    line-height: 1.4;
+}
+
+.o_warehouse_context_menu_info strong {
+    color: #333;
+}
+
+.o_warehouse_map_legend_title {
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+    font-size: 14px;
+}
+
+.o_warehouse_map_legend_items {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.o_warehouse_map_legend_item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+}
+
+.o_warehouse_map_legend_color {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    border: 2px solid #ddd;
+}
+
+.o_warehouse_map_loading {
+    text-align: center;
+    padding: 50px;
+    font-size: 18px;
+    color: #666;
+}
+
+.o_warehouse_map_loading i {
+    font-size: 48px;
+    color: #007bff;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsive - Mobile */
+@media (max-width: 1200px) {
+    .o_warehouse_map_content {
+        flex-direction: column;
+    }
+    
+    .o_warehouse_map_legend {
+        position: static;
+        width: 100%;
+        max-width: 100%;
+        margin-top: 20px;
+    }
+    
+    .o_warehouse_map_legend_items {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+}
+
+/* Scrollbar styling */
+.o_warehouse_map_content::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+.o_warehouse_map_content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 5px;
+}
+
+.o_warehouse_map_content::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+}
+
+.o_warehouse_map_content::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}

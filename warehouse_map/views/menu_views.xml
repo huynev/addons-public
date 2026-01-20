@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_warehouse_map_root"
+              name="Sơ đồ kho"
+              parent="stock.menu_stock_root"
+              sequence="10"/>
+
+    <menuitem id="menu_warehouse_map"
+              name="Sơ đồ kho"
+              parent="menu_warehouse_map_root"
+              action="action_warehouse_map"
+              sequence="1"/>
+</odoo>

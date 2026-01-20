@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_assign_lot_position_wizard_form" model="ir.ui.view">
+        <field name="name">assign.lot.position.wizard.form</field>
+        <field name="model">assign.lot.position.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Gán vị trí cho Lot">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            Gán Lot vào vị trí [<field name="posx" readonly="1" class="oe_inline"/>, 
+                            <field name="posy" readonly="1" class="oe_inline"/>]
+                        </h1>
+                    </div>
+                    
+                    <group>
+                        <field name="warehouse_map_id" invisible="1"/>
+                        <field name="location_id"/>
+                        <field name="posz"/>
+                    </group>
+                    
+                    <group>
+                        <field name="create_new" string="Tạo quant mới thay vì chọn từ danh sách"/>
+                    </group>
+                    
+                    <notebook>
+                        <!-- Tab 1: Chọn từ danh sách quants hiện có -->
+                        <page string="Chọn Lot hiện có" invisible="create_new">
+                            <group>
+                                <field name="quant_id" 
+                                       options="{'no_create': True}"
+                                       context="{'tree_view_ref': 'warehouse_map.view_stock_quant_available_tree'}"/>
+                            </group>
+                            
+                            <group string="Thông tin Lot đã chọn" invisible="not quant_id">
+                                <group>
+                                    <field name="product_id"/>
+                                    <field name="lot_id"/>
+                                </group>
+                                <group>
+                                    <field name="quantity"/>
+                                </group>
+                            </group>
+                            
+                            <div class="alert alert-info" role="alert" invisible="quant_id">
+                                <p>
+                                    <strong>Chọn lot/quant từ danh sách bên dưới:</strong>
+                                </p>
+                                <ul>
+                                    <li>Chỉ hiển thị các lot chưa có vị trí hoặc chưa hiển thị trên sơ đồ</li>
+                                    <li>Lot phải có số lượng tồn kho &gt; 0</li>
+                                    <li>Lot phải nằm trong kho được chọn</li>
+                                </ul>
+                            </div>
+                        </page>
+                        
+                        <!-- Tab 2: Tạo quant mới -->
+                        <page string="Tạo Quant mới" invisible="not create_new">
+                            <group>
+                                <group>
+                                    <field name="new_product_id" 
+                                           string="Sản phẩm"
+                                           required="create_new"
+                                           options="{'no_create': True}"/>
+                                    <field name="new_lot_id" 
+                                           string="Lot/Serial Number"
+                                           options="{'no_create': True}"
+                                           invisible="not new_product_id"/>
+                                </group>
+                                <group>
+                                    <field name="new_quantity" 
+                                           string="Số lượng"
+                                           required="create_new"/>
+                                </group>
+                            </group>
+                            
+                            <div class="alert alert-warning" role="alert">
+                                <p>
+                                    <strong>Lưu ý khi tạo quant mới:</strong>
+                                </p>
+                                <ul>
+                                    <li>Quant mới sẽ được tạo tại location: <field name="location_id" readonly="1" class="oe_inline"/></li>
+                                    <li>Đây chỉ là cách nhanh để gán vị trí. Để thêm hàng thực tế vào kho, hãy sử dụng Receipt/Purchase Order</li>
+                                    <li>Nếu sản phẩm yêu cầu lot/serial, vui lòng chọn hoặc tạo lot trước</li>
+                                </ul>
+                            </div>
+                        </page>
+                    </notebook>
+                </sheet>
+                <footer>
+                    <button string="Xác nhận" type="object" name="action_assign_position" class="btn-primary"/>
+                    <button string="Hủy" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Custom tree view cho quants có thể chọn -->
+    <record id="view_stock_quant_available_tree" model="ir.ui.view">
+        <field name="name">stock.quant.available.tree</field>
+        <field name="model">stock.quant</field>
+        <field name="arch" type="xml">
+            <tree string="Lots khả dụng">
+                <field name="product_id"/>
+                <field name="lot_id"/>
+                <field name="location_id"/>
+                <field name="quantity"/>
+                <field name="available_quantity"/>
+                <field name="reserved_quantity"/>
+            </tree>
+        </field>
+    </record>
+</odoo>

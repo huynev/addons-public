@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree view -->
+    <record id="view_warehouse_map_blocked_cell_tree" model="ir.ui.view">
+        <field name="name">warehouse.map.blocked.cell.tree</field>
+        <field name="model">warehouse.map.blocked.cell</field>
+        <field name="arch" type="xml">
+            <tree string="Các ô bị chặn" editable="bottom">
+                <field name="warehouse_map_id"/>
+                <field name="posx"/>
+                <field name="posy"/>
+                <field name="posz"/>
+                <field name="block_type"/>
+                <field name="block_color" widget="color"/>
+                <field name="note"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form view -->
+    <record id="view_warehouse_map_blocked_cell_form" model="ir.ui.view">
+        <field name="name">warehouse.map.blocked.cell.form</field>
+        <field name="model">warehouse.map.blocked.cell</field>
+        <field name="arch" type="xml">
+            <form string="Ô bị chặn">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="warehouse_map_id"/>
+                            <field name="posx"/>
+                            <field name="posy"/>
+                            <field name="posz"/>
+                        </group>
+                        <group>
+                            <field name="block_type"/>
+                            <field name="block_color" widget="color"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note" placeholder="Ghi chú về ô này..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_warehouse_map_blocked_cell" model="ir.actions.act_window">
+        <field name="name">Các ô bị chặn</field>
+        <field name="res_model">warehouse.map.blocked.cell</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'default_warehouse_map_id': active_id}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Chặn các ô không thể đặt hàng
+            </p>
+            <p>
+                Đánh dấu các ô như: tường, cột, lối đi, thiết bị cố định, khu vực nguy hiểm...
+            </p>
+        </field>
+    </record>
+</odoo>

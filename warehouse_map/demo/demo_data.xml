@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Tạo một sơ đồ kho demo -->
+        <record id="demo_warehouse_map_1" model="warehouse.map">
+            <field name="name">Sơ đồ Kho Chính</field>
+            <field name="warehouse_id" ref="stock.warehouse0"/>
+            <field name="location_id" ref="stock.stock_location_stock"/>
+            <field name="rows">5</field>
+            <field name="columns">5</field>
+            <field name="sequence">10</field>
+        </record>
+
+        <!-- Tạo một số sản phẩm demo nếu chưa có -->
+        <record id="demo_product_1" model="product.product">
+            <field name="name">Sản phẩm A</field>
+            <field name="type">product</field>
+            <field name="default_code">PROD-A</field>
+            <field name="tracking">lot</field>
+        </record>
+
+        <record id="demo_product_2" model="product.product">
+            <field name="name">Sản phẩm B</field>
+            <field name="type">product</field>
+            <field name="default_code">PROD-B</field>
+            <field name="tracking">lot</field>
+        </record>
+
+        <record id="demo_product_3" model="product.product">
+            <field name="name">Sản phẩm C</field>
+            <field name="type">product</field>
+            <field name="default_code">PROD-C</field>
+            <field name="tracking">lot</field>
+        </record>
+
+        <!-- Tạo lots -->
+        <record id="demo_lot_1" model="stock.lot">
+            <field name="name">LOT-001</field>
+            <field name="product_id" ref="demo_product_1"/>
+            <field name="company_id" ref="base.main_company"/>
+        </record>
+
+        <record id="demo_lot_2" model="stock.lot">
+            <field name="name">LOT-002</field>
+            <field name="product_id" ref="demo_product_2"/>
+            <field name="company_id" ref="base.main_company"/>
+        </record>
+
+        <record id="demo_lot_3" model="stock.lot">
+            <field name="name">LOT-003</field>
+            <field name="product_id" ref="demo_product_3"/>
+            <field name="company_id" ref="base.main_company"/>
+        </record>
+
+        <record id="demo_lot_4" model="stock.lot">
+            <field name="name">LOT-004</field>
+            <field name="product_id" ref="demo_product_1"/>
+            <field name="company_id" ref="base.main_company"/>
+        </record>
+
+        <record id="demo_lot_5" model="stock.lot">
+            <field name="name">LOT-005</field>
+            <field name="product_id" ref="demo_product_2"/>
+            <field name="company_id" ref="base.main_company"/>
+        </record>
+
+        <!-- Tạo quants với vị trí trên sơ đồ -->
+        <!-- Row 0 -->
+        <record id="demo_quant_1" model="stock.quant">
+            <field name="product_id" ref="demo_product_1"/>
+            <field name="location_id" ref="stock.stock_location_stock"/>
+            <field name="lot_id" ref="demo_lot_1"/>
+            <field name="quantity">100</field>
+            <field name="posx">0</field>
+            <field name="posy">0</field>
+            <field name="posz">0</field>
+            <field name="display_on_map">True</field>
+        </record>
+
+        <record id="demo_quant_2" model="stock.quant">
+            <field name="product_id" ref="demo_product_2"/>
+            <field name="location_id" ref="stock.stock_location_stock"/>
+            <field name="lot_id" ref="demo_lot_2"/>
+            <field name="quantity">50</field>
+            <field name="posx">1</field>
+            <field name="posy">0</field>
+            <field name="posz">0</field>
+            <field name="display_on_map">True</field>
+        </record>
+
+        <record id="demo_quant_3" model="stock.quant">
+            <field name="product_id" ref="demo_product_3"/>
+            <field name="location_id" ref="stock.stock_location_stock"/>
+            <field name="lot_id" ref="demo_lot_3"/>
+            <field name="quantity">75</field>
+            <field name="posx">2</field>
+            <field name="posy">0</field>
+            <field name="posz">0</field>
+            <field name="display_on_map">True</field>
+        </record>
+
+        <!-- Row 1 -->
+        <record id="demo_quant_4" model="stock.quant">
+            <field name="product_id" ref="demo_product_1"/>
+            <field name="location_id" ref="stock.stock_location_stock"/>
+            <field name="lot_id" ref="demo_lot_4"/>
+            <field name="quantity">200</field>
+            <field name="posx">0</field>
+            <field name="posy">1</field>
+            <field name="posz">0</field>
+            <field name="display_on_map">True</field>
+        </record>
+
+        <record id="demo_quant_5" model="stock.quant">
+            <field name="product_id" ref="demo_product_2"/>
+            <field name="location_id" ref="stock.stock_location_stock"/>
+            <field name="lot_id" ref="demo_lot_5"/>
+            <field name="quantity">150</field>
+            <field name="posx">1</field>
+            <field name="posy">1</field>
+            <field name="posz">0</field>
+            <field name="display_on_map">True</field>
+        </record>
+
+        <!-- Row 2 -->
+        <record id="demo_quant_6" model="stock.quant">
+            <field name="product_id" ref="demo_product_3"/>
+            <field name="location_id" ref="stock.stock_location_stock"/>
+            <field name="quantity">80</field>
+            <field name="posx">0</field>
+            <field name="posy">2</field>
+            <field name="posz">0</field>
+            <field name="display_on_map">True</field>
+        </record>
+
+    </data>
+</odoo>

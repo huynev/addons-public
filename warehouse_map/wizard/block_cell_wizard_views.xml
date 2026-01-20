@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form view for Block Cell Wizard -->
+    <record id="view_block_cell_wizard_form" model="ir.ui.view">
+        <field name="name">block.cell.wizard.form</field>
+        <field name="model">block.cell.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Chặn/Bỏ chặn ô">
+                <group>
+                    <group>
+                        <field name="warehouse_map_id" invisible="1"/>
+                        <field name="posx" invisible="1"/>
+                        <field name="posy" invisible="1"/>
+                        <field name="posz" invisible="1"/>
+                        <field name="action_type" widget="radio"/>
+                    </group>
+                </group>
+                
+                <!-- Block options -->
+                <group invisible="action_type == 'unblock'">
+                    <group>
+                        <field name="block_type"/>
+                        <field name="block_color" widget="color"/>
+                    </group>
+                    <group>
+                        <field name="note" placeholder="Ghi chú về ô này..."/>
+                    </group>
+                </group>
+                
+                <!-- Unblock confirmation -->
+                <div invisible="action_type == 'block'" class="alert alert-warning" role="alert" style="margin: 16px;">
+                    <field name="blocked_cell_id" invisible="1"/>
+                    <p style="margin: 0;">
+                        <i class="fa fa-exclamation-triangle" title="Cảnh báo"/>
+                        <strong>Xác nhận:</strong> Bạn có chắc muốn bỏ chặn ô này?
+                    </p>
+                </div>
+                
+                <footer>
+                    <button name="action_execute" string="Thực hiện" type="object" class="btn-primary"/>
+                    <button string="Hủy" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_block_cell_wizard" model="ir.actions.act_window">
+        <field name="name">Chặn/Bỏ chặn ô</field>
+        <field name="res_model">block.cell.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

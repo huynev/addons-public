@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="warehouse_map.WarehouseMapView" owl="1">
+        <div class="o_warehouse_map_container">
+            <!-- Loading -->
+            <t t-if="state.loading">
+                <div class="o_warehouse_map_loading">
+                    <i class="fa fa-spinner fa-spin"/>
+                    <div>Đang tải dữ liệu sơ đồ kho...</div>
+                </div>
+            </t>
+
+            <!-- Map Content -->
+            <t t-else="">
+                <!-- Header -->
+                <div class="o_warehouse_map_header">
+                    <div>
+                        <div class="o_warehouse_map_title">
+                            <i class="fa fa-map-marker"/> <t t-esc="state.mapData.name"/>
+                        </div>
+                        <div class="o_warehouse_map_info">
+                            <i class="fa fa-warehouse"/> <t t-esc="state.mapData.warehouse_name"/>
+                        </div>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary" t-on-click="() => this.loadMapData()">
+                            <i class="fa fa-refresh"/> Làm mới
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Scrollable Content -->
+                <div class="o_warehouse_map_content">
+                    <!-- Grid -->
+                    <div class="o_warehouse_map_grid">
+                    <table class="o_warehouse_map_table">
+                        <tbody>
+                            <t t-foreach="state.mapData.rowsArray" t-as="row" t-key="row">
+                                <tr>
+                                    <t t-foreach="state.mapData.columnsArray" t-as="col" t-key="col">
+                                        <t t-set="lot" t-value="getLotAtPosition(row, col)"/>
+                                        <t t-set="blockedCell" t-value="getBlockedCellAtPosition(row, col)"/>
+                                        <td t-att-class="getCellClass(lot, row, col)"
+                                            t-on-click="(ev) => this.onCellClick(ev, row, col)">
+                                            
+                                            <!-- Blocked Cell -->
+                                            <t t-if="blockedCell">
+                                                <div class="o_warehouse_map_cell_header" 
+                                                     t-att-style="'background-color: ' + blockedCell.block_color + '; color: white; text-align: center;'">
+                                                    <i class="fa fa-ban"/> <t t-esc="blockedCell.block_type_name"/>
+                                                </div>
+                                                <div class="o_warehouse_map_cell_content" style="text-align: center; padding-top: 30px;">
+                                                    <div style="font-size: 11px; color: #666;">
+                                                        [<t t-esc="col"/>,<t t-esc="row"/>]
+                                                    </div>
+                                                    <t t-if="blockedCell.note">
+                                                        <div style="font-size: 10px; color: #999; margin-top: 10px;">
+                                                            <t t-esc="blockedCell.note"/>
+                                                        </div>
+                                                    </t>
+                                                </div>
+                                            </t>
+                                            
+                                            <!-- Lot Cell -->
+                                            <t t-elif="lot">
+                                                <!-- Days in Stock Badge -->
+                                                <t t-if="lot.days_in_stock">
+                                                    <t t-set="badge_class" t-value="''"/>
+                                                    <t t-if="lot.days_in_stock > 90">
+                                                        <t t-set="badge_class" t-value="'danger'"/>
+                                                    </t>
+                                                    <t t-elif="lot.days_in_stock > 60">
+                                                        <t t-set="badge_class" t-value="'warning'"/>
+                                                    </t>
+                                                    <div t-att-class="'o_warehouse_days_badge ' + badge_class">
+                                                        <t t-esc="lot.days_in_stock"/> ngày
+                                                    </div>
+                                                </t>
+                                                
+                                                <!-- Cell Header - Lot Name -->
+                                                <div class="o_warehouse_map_cell_header" t-att-title="lot.lot_name">
+                                                    📦 <t t-esc="lot.lot_name"/>
+                                                </div>
+
+                                                <!-- Cell Content -->
+                                                <div class="o_warehouse_map_cell_content">
+                                                    <!-- Vendor Name -->
+                                                    <t t-if="lot.partner_id">
+                                                        <div class="o_warehouse_lot_code">
+                                                            NCC: <strong><t t-esc="lot.partner_id"/></strong>
+                                                        </div>
+                                                    </t>
+
+                                                    <!-- Product Name -->
+                                                    <div class="o_warehouse_lot_product" t-att-title="lot.product_name">
+                                                        <strong><t t-esc="lot.product_name"/></strong>
+                                                    </div>
+
+                                                    <!-- Product Code
+                                                    <t t-if="lot.product_code">
+                                                        <div class="o_warehouse_lot_code">
+                                                            [<t t-esc="lot.product_code"/>]
+                                                        </div>
+                                                    </t>-->
+                                                    
+                                                    <!-- Quantity -->
+                                                    <div class="o_warehouse_lot_qty">
+                                                        SL: <t t-esc="formatQuantity(lot.quantity)"/> <t t-esc="lot.uom"/>
+                                                    </div>
+                                                    
+                                                    <!-- Available Quantity
+                                                    <div class="o_warehouse_lot_available">
+                                                        Khả dụng: <t t-esc="formatQuantity(lot.available_quantity)"/> <t t-esc="lot.uom"/>
+                                                    </div>-->
+                                                    
+                                                    <!-- Reserved if any
+                                                    <t t-if="lot.reserved_quantity > 0">
+                                                        <div class="o_warehouse_lot_reserved">
+                                                            Đã đặt: <t t-esc="formatQuantity(lot.reserved_quantity)"/>
+                                                        </div>
+                                                    </t> -->
+                                                    
+                                                    <!-- In Date -->
+                                                    <t t-if="lot.in_date">
+                                                        <div class="o_warehouse_in_date">
+                                                            📅 Nhập: <t t-esc="lot.in_date"/>
+                                                        </div>
+                                                    </t>
+                                                    
+                                                    <!-- Location
+                                                    <div class="o_warehouse_lot_location" t-att-title="lot.location_complete_name">
+                                                        📍 <t t-esc="lot.location_name"/>
+                                                    </div> -->
+                                                </div>
+                                            </t>
+                                            <t t-else="">
+                                                <div class="o_warehouse_map_cell_header o_warehouse_empty_header">
+                                                    [<t t-esc="col"/>,<t t-esc="row"/>]
+                                                </div>
+                                                <div class="o_warehouse_map_empty o_warehouse_map_empty_clickable">
+                                                    <i class="fa fa-plus-circle fa-2x" style="color: #ccc;"/>
+                                                    <div style="margin-top: 5px;">Click để gán lot</div>
+                                                </div>
+                                            </t>
+                                        </td>
+                                        
+                                        <!-- Column Spacing -->
+                                        <t t-if="shouldAddColumnSpacing(col)">
+                                            <td class="o_warehouse_col_spacing">
+                                                <div class="o_warehouse_spacing_line_vertical"></div>
+                                            </td>
+                                        </t>
+                                    </t>
+                                </tr>
+                                
+                                <!-- Row Spacing -->
+                                <t t-if="shouldAddRowSpacing(row)">
+                                    <tr class="o_warehouse_row_spacing">
+                                        <td t-att-colspan="state.mapData.columns + (state.mapData.column_spacing_interval > 0 ? Math.floor(state.mapData.columns / state.mapData.column_spacing_interval) : 0)">
+                                            <div class="o_warehouse_spacing_line"></div>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Legend -->
+                <div class="o_warehouse_map_legend">
+                    <div class="o_warehouse_map_legend_title">
+                        <i class="fa fa-info-circle"/> Chú thích
+                    </div>
+                    <div class="o_warehouse_map_legend_items">
+                        <div class="o_warehouse_map_legend_item">
+                            <div class="o_warehouse_map_legend_color" style="background: #e8f5e9; border-color: #4caf50;"/>
+                            <span>Có hàng tồn</span>
+                        </div>
+                        <div class="o_warehouse_map_legend_item">
+                            <div class="o_warehouse_map_legend_color" style="background: #fff3e0; border-color: #ff9800;"/>
+                            <span>Có hàng đã đặt trước</span>
+                        </div>
+                        <div class="o_warehouse_map_legend_item">
+                            <div class="o_warehouse_map_legend_color" style="background: #fafafa;"/>
+                            <span>Trống</span>
+                        </div>
+                    </div>
+                    
+                    <div class="o_warehouse_map_legend_title" style="margin-top: 15px;">
+                        <i class="fa fa-clock-o"/> Badge số ngày trong kho
+                    </div>
+                    <div class="o_warehouse_map_legend_items">
+                        <div class="o_warehouse_map_legend_item">
+                            <div class="o_warehouse_days_badge" style="position: relative; top: 0; right: 0;">30 ngày</div>
+                            <span>&lt; 60 ngày: Bình thường</span>
+                        </div>
+                        <div class="o_warehouse_map_legend_item">
+                            <div class="o_warehouse_days_badge warning" style="position: relative; top: 0; right: 0;">75 ngày</div>
+                            <span>60-90 ngày: Cảnh báo</span>
+                        </div>
+                        <div class="o_warehouse_map_legend_item">
+                            <div class="o_warehouse_days_badge danger" style="position: relative; top: 0; right: 0;">120 ngày</div>
+                            <span>&gt; 90 ngày: Tồn lâu</span>
+                        </div>
+                    </div>
+                </div>
+                
+                </div><!-- End o_warehouse_map_content -->
+            </t>
+
+            <!-- Context Menu -->
+            <t t-if="state.contextMenu.visible">
+                <div class="o_warehouse_context_menu"
+                     t-att-style="'left: ' + state.contextMenu.x + 'px; top: ' + state.contextMenu.y + 'px;'">
+                    
+                    <!-- Menu for Lot -->
+                    <t t-if="state.contextMenu.lotData">
+                        <div class="o_warehouse_context_menu_item" t-on-click="() => this.executeAction('pick')">
+                            <i class="fa fa-arrow-right"/>
+                            <span>Lấy hàng</span>
+                        </div>
+                        
+                        <div class="o_warehouse_context_menu_item" t-on-click="() => this.executeAction('move')">
+                            <i class="fa fa-arrows"/>
+                            <span>Chuyển vị trí</span>
+                        </div>
+                        
+                        <div class="o_warehouse_context_menu_item" t-on-click="() => this.executeAction('transfer')">
+                            <i class="fa fa-truck"/>
+                            <span>Chuyển kho</span>
+                        </div>
+                        
+                        <hr style="margin: 5px 0;"/>
+                        
+                        <div class="o_warehouse_context_menu_item" t-on-click="() => this.viewStock()">
+                            <i class="fa fa-list"/>
+                            <span>Xem chi tiết</span>
+                        </div>
+                        
+                        <div class="o_warehouse_context_menu_item" t-on-click="() => this.viewLocation()">
+                            <i class="fa fa-map-marker"/>
+                            <span>Chi tiết vị trí</span>
+                        </div>
+                        
+                        <hr style="margin: 5px 0;"/>
+                        
+                        <div class="o_warehouse_context_menu_item o_warehouse_context_menu_danger" t-on-click="() => this.removeFromMap()">
+                            <i class="fa fa-times"/>
+                            <span>Xóa khỏi sơ đồ</span>
+                        </div>
+                    </t>
+                    
+                    <!-- Menu for Empty Cell -->
+                    <t t-if="state.contextMenu.emptyCell">
+                        <div class="o_warehouse_context_menu_item" t-on-click="() => this.openAssignPositionWizard(state.contextMenu.row, state.contextMenu.col)">
+                            <i class="fa fa-plus-circle"/>
+                            <span>Gán lot vào vị trí này</span>
+                        </div>
+                        
+                        <hr style="margin: 5px 0;"/>
+                        
+                        <div class="o_warehouse_context_menu_item" t-on-click="() => this.openBlockCellWizard(state.contextMenu.row, state.contextMenu.col)">
+                            <i class="fa fa-ban"/>
+                            <span>Chặn ô này</span>
+                        </div>
+                    </t>
+                    
+                    <!-- Menu for Blocked Cell -->
+                    <t t-if="state.contextMenu.blockedCell">
+                        <div class="o_warehouse_context_menu_header">
+                            <i class="fa fa-ban"/> Ô bị chặn
+                        </div>
+                        
+                        <div class="o_warehouse_context_menu_info">
+                            <strong>Loại:</strong> <t t-esc="state.contextMenu.blockedCell.block_type_name"/>
+                        </div>
+                        
+                        <t t-if="state.contextMenu.blockedCell.note">
+                            <div class="o_warehouse_context_menu_info">
+                                <strong>Ghi chú:</strong> <t t-esc="state.contextMenu.blockedCell.note"/>
+                            </div>
+                        </t>
+                        
+                        <hr style="margin: 5px 0;"/>
+                        
+                        <div class="o_warehouse_context_menu_item" t-on-click="() => this.openBlockCellWizard(state.contextMenu.row, state.contextMenu.col)">
+                            <i class="fa fa-edit"/>
+                            <span>Chỉnh sửa / Bỏ chặn</span>
+                        </div>
+                    </t>
+                </div>
+            </t>
+        </div>
+    </t>
+
+</templates>

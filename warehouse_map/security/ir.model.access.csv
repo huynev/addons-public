@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_warehouse_map_user,warehouse.map.user,model_warehouse_map,stock.group_stock_user,1,1,1,1
+access_warehouse_map_manager,warehouse.map.manager,model_warehouse_map,stock.group_stock_manager,1,1,1,1
+access_warehouse_map_blocked_cell_user,warehouse.map.blocked.cell.user,model_warehouse_map_blocked_cell,stock.group_stock_user,1,1,1,1
+access_warehouse_map_blocked_cell_manager,warehouse.map.blocked.cell.manager,model_warehouse_map_blocked_cell,stock.group_stock_manager,1,1,1,1
+access_location_action_wizard,location.action.wizard,model_location_action_wizard,stock.group_stock_user,1,1,1,1
+access_assign_lot_position_wizard,assign.lot.position.wizard,model_assign_lot_position_wizard,stock.group_stock_user,1,1,1,1
+access_block_cell_wizard,block.cell.wizard,model_block_cell_wizard,stock.group_stock_user,1,1,1,1
