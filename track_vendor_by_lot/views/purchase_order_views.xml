@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+        <record id="purchase_order_track_by_lot_form" model="ir.ui.view">
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase_lot.purchase_order_lot_form" />
+            <field name="arch" type="xml">
+                <!-- Thêm field track_vendor_by_lot vào tree (ẩn) -->
+                <xpath expr="//field[@name='order_line']/tree/field[@name='tracking']" position="after">
+                    <field name="track_vendor_by_lot" column_invisible="1" />
+                </xpath>
+
+                <!-- Replace field lot_id -->
+                <xpath expr="//field[@name='order_line']/tree/field[@name='lot_id']" position="replace">
+                    <field
+                        name="lot_id"
+                        domain="[('product_id','=', product_id)]"
+                        context="{'default_product_id': product_id, 'default_date_planned': date_planned}"
+                        groups="stock.group_production_lot"
+                        invisible="tracking == 'none'"
+                        required="tracking != 'none' and track_vendor_by_lot"
+                    />
+                </xpath>
+            </field>
+        </record>
+
+        <record id="purchase_order_line_track_by_lot_form" model="ir.ui.view">
+            <field name="model">purchase.order.line</field>
+            <field name="inherit_id" ref="purchase_lot.purchase_order_line_lot_form" />
+            <field name="arch" type="xml">
+                <!-- Thêm field track_vendor_by_lot (ẩn) -->
+                <xpath expr="//field[@name='tracking']" position="after">
+                    <field name="track_vendor_by_lot" invisible="1" />
+                </xpath>
+
+                <!-- Replace field lot_id -->
+                <xpath expr="//field[@name='lot_id']" position="replace">
+                    <field
+                        name="lot_id"
+                        domain="[('product_id','=', product_id)]"
+                        context="{'default_product_id': product_id, 'default_date_planned': date_planned}"
+                        groups="stock.group_production_lot"
+                        invisible="tracking == 'none'"
+                        required="tracking != 'none' and track_vendor_by_lot"
+                    />
+                </xpath>
+            </field>
+        </record>
+
+</odoo>

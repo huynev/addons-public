@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form View -->
+    <record id="view_production_lot_form_inherit_vendor" model="ir.ui.view">
+        <field name="name">stock.lot.form.inherit.vendor</field>
+        <field name="model">stock.lot</field>
+        <field name="inherit_id" ref="stock.view_production_lot_form"/>
+        <field name="arch" type="xml">
+            <field name="product_id" position="after" >
+                <field name="partner_id" options="{'no_create': True}"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- Tree View -->
+    <record id="view_production_lot_tree_inherit_vendor" model="ir.ui.view">
+        <field name="name">stock.lot.tree.inherit.vendor</field>
+        <field name="model">stock.lot</field>
+        <field name="inherit_id" ref="stock.view_production_lot_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='product_id']" position="after">
+                <field name="partner_id" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_production_lot_search_inherit_vendor" model="ir.ui.view">
+        <field name="name">stock.lot.search.inherit.vendor</field>
+        <field name="model">stock.lot</field>
+        <field name="inherit_id" ref="stock.search_product_lot_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="partner_id"/>
+            </xpath>
+            <xpath expr="//group" position="inside">
+                <filter string="Vendor" name="vendor"
+                        context="{'group_by': 'partner_id'}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
