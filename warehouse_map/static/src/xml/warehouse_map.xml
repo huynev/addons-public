@@ -85,13 +85,6 @@
 
                                                 <!-- Cell Content -->
                                                 <div class="o_warehouse_map_cell_content">
-                                                    <!-- Vendor Name -->
-                                                    <t t-if="lot.partner_id">
-                                                        <div class="o_warehouse_lot_code">
-                                                            NCC: <strong><t t-esc="lot.partner_id"/></strong>
-                                                        </div>
-                                                    </t>
-
                                                     <!-- Product Name -->
                                                     <div class="o_warehouse_lot_product" t-att-title="lot.product_name">
                                                         <strong><t t-esc="lot.product_name"/></strong>

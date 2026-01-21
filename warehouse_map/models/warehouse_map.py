@@ -83,7 +83,6 @@ class WarehouseMap(models.Model):
                 'product_code': quant.product_id.default_code or '',
                 'lot_id': quant.lot_id.id if quant.lot_id else False,
                 'lot_name': quant.lot_id.name if quant.lot_id else 'No Lot',
-                'partner_id': quant.lot_id.partner_id.name if quant.lot_id.partner_id else 'No Vendor',
                 'quantity': quant.quantity,
                 'uom': quant.product_uom_id.name,
                 'reserved_quantity': quant.reserved_quantity,
