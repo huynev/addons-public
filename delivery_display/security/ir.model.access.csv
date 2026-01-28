@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_stock_picking_delivery_user,stock.picking.delivery.user,stock.model_stock_picking,stock.group_stock_user,1,1,1,0
+access_stock_picking_delivery_manager,stock.picking.delivery.manager,stock.model_stock_picking,stock.group_stock_manager,1,1,1,1
+access_add_driver_wizard_user,delivery.display.add.driver.wizard.user,model_delivery_display_add_driver_wizard,stock.group_stock_user,1,1,1,1

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="delivery_display.DeliveryDisplayDriversPanel">
+        <div class="o_search_panel o_delivery_drivers_panel position-absolute position-md-sticky top-0 z-index-1 bottom-0 flex-grow-0 flex-shrink-0 h-100 bg-view border-end"
+             t-att-class="env.searchModel.searchPanelInfo.className" t-ref="root">
+            
+            <!-- Header -->
+            <div class="p-3 border-bottom">
+                <h5 class="mb-1">
+                    <i class="fa fa-users me-2"/>
+                    Drivers
+                </h5>
+                <small class="text-muted">Click to select, then assign to deliveries</small>
+            </div>
+
+            <!-- Drivers List -->
+            <ul class="list-group list-group-flush h-100 overflow-auto pb-5" style="padding-bottom: 80px !important;">
+                <li t-foreach="props.drivers.connected" t-as="driver" t-key="driver.id"
+                    class="list-group-item py-3 cursor-pointer border-start-0 border-end-0"
+                    t-on-click="() => props.setSessionDriver(driver.id)"
+                    t-att-class="{
+                        'bg-primary bg-opacity-10': driver.id == props.drivers.selected,
+                        'border-start border-primary border-3': driver.id == props.drivers.selected
+                    }">
+                    <div class="d-flex align-items-start">
+                        <!-- Avatar -->
+                        <img t-attf-src="/web/image/res.partner/{{driver.id}}/avatar_128"
+                            class="rounded flex-shrink-0"
+                            style="width: 48px; height: 48px; object-fit: cover;"/>
+                        
+                        <!-- Info -->
+                        <div class="d-flex flex-column ps-3 flex-grow-1 overflow-hidden">
+                            <div class="fw-bold text-truncate" t-esc="driver.name"/>
+                            
+                            <div t-if="driver.phone" class="text-muted small text-truncate">
+                                <i class="fa fa-phone me-1"/>
+                                <span t-esc="driver.phone"/>
+                            </div>
+                            
+                            <!-- Statistics -->
+                            <div class="mt-2">
+                                <span t-if="driver.inProgressCount > 0" 
+                                      class="badge bg-warning text-dark me-1">
+                                    <i class="fa fa-truck me-1"/>
+                                    <span t-esc="driver.inProgressCount"/> in progress
+                                </span>
+                                <span t-if="driver.deliveredCount > 0" 
+                                      class="badge bg-success">
+                                    <i class="fa fa-check me-1"/>
+                                    <span t-esc="driver.deliveredCount"/> delivered
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <!-- Remove button -->
+                        <i t-if="driver.inProgressCount == 0" 
+                           class="oi oi-close fa-lg cursor-pointer text-muted flex-shrink-0"
+                           t-on-click.stop="() => props.logout(driver.id)"
+                           title="Remove driver"/>
+                    </div>
+                </li>
+                
+                <li t-if="!props.drivers.connected.length" class="list-group-item text-center text-muted py-5">
+                    <i class="fa fa-user-plus fa-3x mb-3 opacity-25"/>
+                    <div>No drivers yet</div>
+                    <small>Click "Add Driver" below</small>
+                </li>
+            </ul>
+
+            <!-- Add Driver Button -->
+            <div class="position-absolute bottom-0 start-0 end-0 bg-white border-top">
+                <button class="btn btn-primary w-100 rounded-0 py-3"
+                    t-on-click="props.popupAddDriver">
+                    <i class="fa fa-plus me-2"/>
+                    Add Driver
+                </button>
+            </div>
+        </div>
+    </t>
+</templates>

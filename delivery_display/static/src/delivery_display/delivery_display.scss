@@ -1,0 +1,75 @@
+.o_delivery_display {
+    background-color: #f8f9fa;
+
+    .o_delivery_search_bar {
+        background-color: white;
+    }
+
+    .o_delivery_control_panel {
+        background-color: white;
+    }
+
+    .delivery-card {
+        transition: all 0.3s ease;
+        border: 1px solid #dee2e6;
+
+        &:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+        }
+
+        .card-header {
+            border-bottom: none;
+            padding: 1rem;
+        }
+
+        .card-body {
+            padding: 1rem;
+            font-size: 0.9rem;
+
+            i {
+                width: 20px;
+            }
+        }
+
+        .card-footer {
+            background-color: transparent;
+            border-top: 1px solid #dee2e6;
+            padding: 0.75rem 1rem;
+        }
+    }
+
+    .bg-draft {
+        background-color: #6c757d !important;
+    }
+
+    .bg-waiting {
+        background-color: #ffc107 !important;
+    }
+
+    .bg-confirmed {
+        background-color: #17a2b8 !important;
+    }
+
+    .bg-assigned {
+        background-color: #007bff !important;
+    }
+
+    .bg-done {
+        background-color: #28a745 !important;
+    }
+
+    .bg-cancel {
+        background-color: #dc3545 !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .o_delivery_display {
+        .delivery-card {
+            &:hover {
+                transform: none;
+            }
+        }
+    }
+}

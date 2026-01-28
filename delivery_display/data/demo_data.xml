@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Demo Delivery Routes -->
+        <record id="delivery_route_north" model="stock.route">
+            <field name="name">North District Route</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="delivery_route_south" model="stock.route">
+            <field name="name">South District Route</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="delivery_route_east" model="stock.route">
+            <field name="name">East District Route</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="delivery_route_west" model="stock.route">
+            <field name="name">West District Route</field>
+            <field name="active">True</field>
+        </record>
+
+        <!-- Demo Vehicles (if fleet module is installed) -->
+        <!-- Uncomment if you have fleet module
+        <record id="vehicle_truck_01" model="fleet.vehicle">
+            <field name="name">Truck 01</field>
+            <field name="license_plate">29A-12345</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="vehicle_truck_02" model="fleet.vehicle">
+            <field name="name">Truck 02</field>
+            <field name="license_plate">29B-54321</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="vehicle_van_01" model="fleet.vehicle">
+            <field name="name">Van 01</field>
+            <field name="license_plate">29C-98765</field>
+            <field name="active">True</field>
+        </record>
+        -->
+    </data>
+</odoo>

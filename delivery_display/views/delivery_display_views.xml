@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Action for Delivery Display -->
+    <record id="action_delivery_display" model="ir.actions.client">
+        <field name="name">Delivery Display</field>
+        <field name="tag">delivery_display</field>
+        <field name="target">fullscreen</field>
+        <field name="context">{
+            'show_confirmed_only': False,
+            'show_assigned_only': False,
+        }</field>
+    </record>
+
+    <!-- Menu item -->
+    <menuitem
+        id="menu_delivery_display"
+        name="Delivery Display"
+        parent="stock.menu_stock_root"
+        action="action_delivery_display"
+        sequence="10"/>
+
+    <!-- Extended form view for stock.picking -->
+    <record id="view_picking_form_delivery_display" model="ir.ui.view">
+        <field name="name">stock.picking.form.delivery.display</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='origin']" position="after">
+                <field name="driver_id" invisible="picking_type_code != 'outgoing'"/>
+                <field name="delivery_route_id" invisible="picking_type_code != 'outgoing'"/>
+                <field name="shipping_weight" invisible="picking_type_code != 'outgoing'"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Search view with custom filters -->
+    <record id="view_picking_search_delivery_display" model="ir.ui.view">
+        <field name="name">stock.picking.search.delivery.display</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_internal_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <filter string="This Warehouse" name="delivery_this_warehouse" 
+                        domain="[('picking_type_id.warehouse_id', '=', False)]"/>
+                <separator/>
+                <filter string="Draft" name="state_draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Waiting" name="state_waiting" domain="[('state', '=', 'waiting')]"/>
+                <filter string="Confirmed" name="state_confirmed" domain="[('state', '=', 'confirmed')]"/>
+                <filter string="Ready" name="state_assigned" domain="[('state', '=', 'assigned')]"/>
+                <filter string="Done" name="state_done" domain="[('state', '=', 'done')]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Driver" name="group_driver" context="{'group_by': 'driver_id'}"/>
+                    <filter string="Route" name="group_route" context="{'group_by': 'delivery_route_id'}"/>
+                    <filter string="Warehouse" name="group_warehouse" context="{'group_by': 'picking_type_id'}"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

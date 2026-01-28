@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="delivery_display.DeliveryDisplay">
+        <div class="o_delivery_display d-flex flex-column h-100" t-ref="root">
+            <!-- Search Bar -->
+            <div class="o_delivery_search_bar border-bottom p-2">
+                <DeliveryDisplaySearchBar/>
+            </div>
+
+            <div class="d-flex flex-grow-1 overflow-hidden">
+                <!-- Drivers Panel -->
+                <DeliveryDisplayDriversPanel
+                    drivers="state.drivers"
+                    setSessionDriver.bind="setSessionDriver"
+                    popupAddDriver.bind="popupAddDriver"
+                    logout.bind="logout"/>
+
+                <!-- Main Content -->
+                <div class="flex-grow-1 d-flex flex-column overflow-hidden">
+                    <!-- Control Panel -->
+                    <div class="o_delivery_control_panel border-bottom p-2">
+                        <DeliveryControlPanelButtons
+                            activeFilter="state.activeFilter"
+                            deliveryCount="state.deliveries.length"
+                            selectFilter.bind="selectFilter"
+                            toggleFilter.bind="toggleFilter"
+                            warehouses="state.warehouses"
+                            routes="state.routes"
+                            deliveries="state.deliveries"
+                            relevantCount="state.filteredDeliveries?.length || 0"
+                            myDeliveries="myDeliveries"
+                            hideNewFilterButton="false"/>
+                    </div>
+
+                    <!-- Deliveries List -->
+                    <div class="o_delivery_list flex-grow-1 overflow-auto p-3">
+                        <div class="row g-3">
+                            <t t-foreach="state.filteredDeliveries || state.deliveries" t-as="delivery" t-key="delivery.resId">
+                                <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                                    <div class="card h-100 shadow-sm delivery-card"
+                                         t-on-click="() => this.onDeliveryCardClick(delivery)"
+                                         style="cursor: pointer;">
+                                        <div class="card-header d-flex justify-content-between align-items-center"
+                                             t-attf-class="bg-{{getDeliveryStateColor(delivery.data.state)}} text-white">
+                                            <span class="fw-bold" t-esc="delivery.data.name"/>
+                                            <i class="fa" t-att-class="getPriorityIcon(delivery.data.priority)"/>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="mb-2">
+                                                <i class="fa fa-user me-2 text-muted"/>
+                                                <span t-esc="delivery.data.partner_id ? delivery.data.partner_id[1] : 'N/A'"/>
+                                            </div>
+                                            <div class="mb-2" t-if="delivery.data.scheduled_date">
+                                                <i class="fa fa-calendar me-2 text-muted"/>
+                                                <span t-esc="delivery.data.scheduled_date"/>
+                                            </div>
+                                            <div class="mb-2" t-if="delivery.data.driver_id">
+                                                <i class="fa fa-id-card me-2 text-success"/>
+                                                <strong class="text-success" t-esc="'✓ ' + delivery.data.driver_id[1]"/>
+                                            </div>
+                                            <div class="mb-2" t-if="!delivery.data.driver_id">
+                                                <i class="fa fa-id-card me-2 text-muted"/>
+                                                <span class="text-muted">No driver assigned</span>
+                                            </div>
+                                            <div class="mb-2" t-if="delivery.data.origin">
+                                                <i class="fa fa-file me-2 text-muted"/>
+                                                <span class="text-muted small" t-esc="delivery.data.origin"/>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer">
+                                            <span class="badge"
+                                                  t-attf-class="bg-{{getDeliveryStateColor(delivery.data.state)}}"
+                                                  t-esc="delivery.data.state.toUpperCase()"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </t>
+                            <t t-if="!state.filteredDeliveries?.length and !state.deliveries.length">
+                                <div class="col-12">
+                                    <div class="alert alert-info text-center">
+                                        <i class="fa fa-info-circle fa-3x mb-3"/>
+                                        <h5>No deliveries found</h5>
+                                        <p>There are no deliveries matching your current filters.</p>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Assign Driver Dialog -->
+            <t t-if="state.showAssignDialog">
+                <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">
+                                    <i class="fa fa-truck me-2"/>
+                                    Assign Driver &amp; Validate Delivery
+                                </h5>
+                                <button type="button" class="btn-close" t-on-click="closeAssignDialog"/>
+                            </div>
+                            <div class="modal-body">
+                                <!-- Delivery Info -->
+                                <div class="alert alert-info mb-3">
+                                    <div class="mb-1">
+                                        <strong>Delivery:</strong>
+                                        <span class="ms-2" t-esc="state.assignDialogData.delivery?.data.name"/>
+                                    </div>
+                                    <div class="mb-1">
+                                        <strong>Customer:</strong>
+                                        <span class="ms-2" t-esc="state.assignDialogData.delivery?.data.partner_id ? state.assignDialogData.delivery.data.partner_id[1] : 'N/A'"/>
+                                    </div>
+                                    <div t-if="state.assignDialogData.delivery?.data.scheduled_date">
+                                        <strong>Scheduled:</strong>
+                                        <span class="ms-2" t-esc="state.assignDialogData.delivery.data.scheduled_date"/>
+                                    </div>
+                                </div>
+
+                                <p class="text-muted small mb-3">
+                                    <i class="fa fa-info-circle me-1"/>
+                                    Select a driver and confirm. The delivery will be assigned and validated (stock will be moved out).
+                                </p>
+
+                                <!-- Driver List -->
+                                <div style="max-height: 400px; overflow-y: auto;">
+                                    <t t-foreach="state.drivers.connected" t-as="driver" t-key="driver.id">
+                                        <div class="form-check p-3 mb-2 border rounded cursor-pointer"
+                                             t-att-class="{'bg-primary bg-opacity-10 border-primary border-2': state.assignDialogData.selectedDriverId == driver.id}"
+                                             t-on-click="() => this.selectDriverInDialog(driver.id)">
+                                            <div class="d-flex align-items-center">
+                                                <input class="form-check-input mt-0"
+                                                       type="radio"
+                                                       name="driver_selection"
+                                                       t-att-checked="state.assignDialogData.selectedDriverId == driver.id"
+                                                       t-on-click.stop="() => this.selectDriverInDialog(driver.id)"/>
+                                                <img t-attf-src="/web/image/res.partner/{{driver.id}}/avatar_128"
+                                                     class="rounded ms-3 me-3"
+                                                     style="width: 48px; height: 48px; object-fit: cover;"/>
+                                                <div class="flex-grow-1">
+                                                    <div class="fw-bold" t-esc="driver.name"/>
+                                                    <div class="small text-muted" t-if="driver.phone">
+                                                        <i class="fa fa-phone me-1"/>
+                                                        <span t-esc="driver.phone"/>
+                                                    </div>
+                                                    <div class="small">
+                                                        <span class="badge bg-info me-1" t-if="driver.inProgressCount > 0">
+                                                            <span t-esc="driver.inProgressCount"/> in progress
+                                                        </span>
+                                                        <span class="badge bg-success" t-if="driver.deliveredCount > 0">
+                                                            <span t-esc="driver.deliveredCount"/> delivered
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </t>
+                                </div>
+
+                                <div t-if="!state.drivers.connected.length" class="alert alert-warning">
+                                    <i class="fa fa-exclamation-triangle me-2"/>
+                                    No drivers available. Please add drivers first.
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" t-on-click="closeAssignDialog">
+                                    Cancel
+                                </button>
+                                <button type="button" class="btn btn-primary"
+                                        t-on-click="confirmAssignDriver"
+                                        t-att-disabled="!state.assignDialogData.selectedDriverId">
+                                    <i class="fa fa-check me-2"/>
+                                    Assign &amp; Validate
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </div>
+    </t>
+</templates>

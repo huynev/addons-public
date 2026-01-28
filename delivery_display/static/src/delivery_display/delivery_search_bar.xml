@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates xml:space="preserve">
+
+    <t t-name="delivery_display.DeliveryDisplaySearchBarFacets" t-inherit="web.SearchBar.Facets">
+        <xpath expr="//div[hasclass('o_searchview_facet_label')]" position="attributes">
+            <attribute name="t-attf-class">btn-{{facet.color || (facet.type == 'favorite' ? 'favorite' : 'primary')}}</attribute>
+        </xpath>
+        <xpath expr="//div[hasclass('o_searchview_facet_label')]/small" position="after">
+            <small t-if="facet.color === 'success'">DO</small>
+        </xpath>
+    </t>
+
+    <t t-name="delivery_display.DeliveryDisplaySearchBar" t-inherit="web.SearchBar">
+        <xpath expr="//div[hasclass('o_searchview_input_container')]/*" position="attributes">
+            <attribute name="t-call">delivery_display.DeliveryDisplaySearchBarFacets</attribute>
+        </xpath>
+    </t>
+
+</templates>

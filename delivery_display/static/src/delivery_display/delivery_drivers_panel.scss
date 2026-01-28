@@ -1,0 +1,37 @@
+.o_delivery_drivers_panel {
+    width: 300px;
+    min-width: 300px;
+
+    .o_avatar_connected {
+        width: 48px;
+        height: 48px;
+        border: 2px solid #28a745;
+    }
+
+    .o_admin_user {
+        background-color: #f8f9fa !important;
+        border-left: 4px solid #007bff !important;
+    }
+
+    .list-group-item {
+        transition: background-color 0.2s;
+
+        &:hover {
+            background-color: #f8f9fa !important;
+        }
+    }
+
+    button {
+        &:hover {
+            background-color: #e9ecef !important;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .o_delivery_drivers_panel {
+        width: 100%;
+        position: fixed !important;
+        z-index: 1000;
+    }
+}
