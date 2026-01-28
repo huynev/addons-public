@@ -2,11 +2,6 @@
 <templates xml:space="preserve">
     <t t-name="delivery_display.DeliveryDisplay">
         <div class="o_delivery_display d-flex flex-column h-100" t-ref="root">
-            <!-- Search Bar -->
-            <div class="o_delivery_search_bar border-bottom p-2">
-                <DeliveryDisplaySearchBar/>
-            </div>
-
             <div class="d-flex flex-grow-1 overflow-hidden">
                 <!-- Drivers Panel -->
                 <DeliveryDisplayDriversPanel
@@ -17,27 +12,21 @@
 
                 <!-- Main Content -->
                 <div class="flex-grow-1 d-flex flex-column overflow-hidden">
-                    <!-- Control Panel -->
-                    <div class="o_delivery_control_panel border-bottom p-2">
-                        <DeliveryControlPanelButtons
-                            activeFilter="state.activeFilter"
-                            deliveryCount="state.deliveries.length"
-                            selectFilter.bind="selectFilter"
-                            toggleFilter.bind="toggleFilter"
-                            warehouses="state.warehouses"
-                            routes="state.routes"
-                            deliveries="state.deliveries"
-                            relevantCount="state.filteredDeliveries?.length || 0"
-                            myDeliveries="myDeliveries"
-                            hideNewFilterButton="false"/>
+                    <!-- Simple Header -->
+                    <div class="border-bottom p-3 bg-light">
+                        <h5 class="mb-0">
+                            <i class="fa fa-truck me-2"/>
+                            Deliveries
+                            <span class="badge bg-primary ms-2" t-esc="state.deliveries.length"/>
+                        </h5>
                     </div>
 
                     <!-- Deliveries List -->
                     <div class="o_delivery_list flex-grow-1 overflow-auto p-3">
                         <div class="row g-3">
-                            <t t-foreach="state.filteredDeliveries || state.deliveries" t-as="delivery" t-key="delivery.resId">
+                            <t t-foreach="state.deliveries" t-as="delivery" t-key="delivery.resId">
                                 <div class="col-12 col-md-6 col-lg-4 col-xl-3">
-                                    <div class="card h-100 shadow-sm delivery-card"
+                                    <div class="card h-100 shadow-sm delivery-card" 
                                          t-on-click="() => this.onDeliveryCardClick(delivery)"
                                          style="cursor: pointer;">
                                         <div class="card-header d-flex justify-content-between align-items-center"
@@ -94,19 +83,19 @@
                 <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
-                            <div class="modal-header">
+                            <div class="modal-header bg-primary text-white">
                                 <h5 class="modal-title">
-                                    <i class="fa fa-truck me-2"/>
-                                    Assign Driver &amp; Validate Delivery
+                                    <i class="fa fa-id-badge me-2"/>
+                                    Driver Authentication
                                 </h5>
-                                <button type="button" class="btn-close" t-on-click="closeAssignDialog"/>
+                                <button type="button" class="btn-close btn-close-white" t-on-click="closeAssignDialog"/>
                             </div>
                             <div class="modal-body">
                                 <!-- Delivery Info -->
-                                <div class="alert alert-info mb-3">
+                                <div class="alert alert-info mb-4">
                                     <div class="mb-1">
                                         <strong>Delivery:</strong>
-                                        <span class="ms-2" t-esc="state.assignDialogData.delivery?.data.name"/>
+                                        <span class="ms-2 badge bg-info" t-esc="state.assignDialogData.delivery?.data.name"/>
                                     </div>
                                     <div class="mb-1">
                                         <strong>Customer:</strong>
@@ -118,60 +107,122 @@
                                     </div>
                                 </div>
 
-                                <p class="text-muted small mb-3">
-                                    <i class="fa fa-info-circle me-1"/>
-                                    Select a driver and confirm. The delivery will be assigned and validated (stock will be moved out).
-                                </p>
-
-                                <!-- Driver List -->
-                                <div style="max-height: 400px; overflow-y: auto;">
-                                    <t t-foreach="state.drivers.connected" t-as="driver" t-key="driver.id">
-                                        <div class="form-check p-3 mb-2 border rounded cursor-pointer"
-                                             t-att-class="{'bg-primary bg-opacity-10 border-primary border-2': state.assignDialogData.selectedDriverId == driver.id}"
-                                             t-on-click="() => this.selectDriverInDialog(driver.id)">
-                                            <div class="d-flex align-items-center">
-                                                <input class="form-check-input mt-0"
-                                                       type="radio"
-                                                       name="driver_selection"
-                                                       t-att-checked="state.assignDialogData.selectedDriverId == driver.id"
-                                                       t-on-click.stop="() => this.selectDriverInDialog(driver.id)"/>
-                                                <img t-attf-src="/web/image/res.partner/{{driver.id}}/avatar_128"
-                                                     class="rounded ms-3 me-3"
-                                                     style="width: 48px; height: 48px; object-fit: cover;"/>
-                                                <div class="flex-grow-1">
-                                                    <div class="fw-bold" t-esc="driver.name"/>
-                                                    <div class="small text-muted" t-if="driver.phone">
-                                                        <i class="fa fa-phone me-1"/>
-                                                        <span t-esc="driver.phone"/>
-                                                    </div>
-                                                    <div class="small">
-                                                        <span class="badge bg-info me-1" t-if="driver.inProgressCount > 0">
-                                                            <span t-esc="driver.inProgressCount"/> in progress
-                                                        </span>
-                                                        <span class="badge bg-success" t-if="driver.deliveredCount > 0">
-                                                            <span t-esc="driver.deliveredCount"/> delivered
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </t>
+                                <!-- Instructions -->
+                                <div class="mb-3 text-center">
+                                    <i class="fa fa-barcode fa-3x text-primary mb-2"/>
+                                    <p class="mb-1">
+                                        <strong>Enter your PIN or scan your barcode</strong>
+                                    </p>
+                                    <small class="text-muted">
+                                        The delivery will be assigned to you and validated immediately
+                                    </small>
                                 </div>
 
-                                <div t-if="!state.drivers.connected.length" class="alert alert-warning">
+                                <!-- PIN/Barcode Input -->
+                                <div class="mb-3">
+                                    <label for="pin_barcode_input" class="form-label">
+                                        <i class="fa fa-key me-1"/>
+                                        PIN or Barcode
+                                    </label>
+                                    <div class="input-group input-group-lg">
+                                        <input 
+                                            type="text" 
+                                            class="form-control text-center"
+                                            id="pin_barcode_input"
+                                            placeholder="Enter PIN or scan barcode..."
+                                            t-att-value="state.assignDialogData.pinOrBarcode"
+                                            t-on-input="updatePinOrBarcode"
+                                            t-on-keyup="onPinInputKeyup"
+                                            autofocus="autofocus"/>
+                                        <button class="btn btn-outline-primary" 
+                                                type="button" 
+                                                t-on-click="openCameraScanner"
+                                                title="Scan with camera">
+                                            <i class="fa fa-camera fa-lg"/>
+                                        </button>
+                                    </div>
+                                    <small class="text-muted">
+                                        <i class="fa fa-info-circle me-1"/>
+                                        Click camera button to scan barcode with your device camera
+                                    </small>
+                                </div>
+
+                                <div class="alert alert-warning mb-0">
                                     <i class="fa fa-exclamation-triangle me-2"/>
-                                    No drivers available. Please add drivers first.
+                                    <small>Make sure your PIN or barcode is correct. The delivery will be validated after assignment.</small>
                                 </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" t-on-click="closeAssignDialog">
+                                    <i class="fa fa-times me-1"/>
                                     Cancel
                                 </button>
-                                <button type="button" class="btn btn-primary"
+                                <button type="button" class="btn btn-primary btn-lg" 
                                         t-on-click="confirmAssignDriver"
-                                        t-att-disabled="!state.assignDialogData.selectedDriverId">
+                                        t-att-disabled="!state.assignDialogData.pinOrBarcode">
                                     <i class="fa fa-check me-2"/>
-                                    Assign &amp; Validate
+                                    Confirm &amp; Validate
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+
+            <!-- Camera Scanner Modal -->
+            <t t-if="state.showCameraScanner">
+                <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.8);">
+                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header bg-dark text-white">
+                                <h5 class="modal-title">
+                                    <i class="fa fa-camera me-2"/>
+                                    Scan Barcode with Camera
+                                </h5>
+                                <button type="button" class="btn-close btn-close-white" t-on-click="closeCameraScanner"/>
+                            </div>
+                            <div class="modal-body bg-dark p-0">
+                                <!-- Camera Video -->
+                                <div class="position-relative" style="background: black;">
+                                    <video 
+                                        t-ref="video_scanner"
+                                        class="w-100"
+                                        style="max-height: 500px; object-fit: contain;"
+                                        autoplay="autoplay"
+                                        playsinline="playsinline">
+                                    </video>
+                                    
+                                    <!-- Scanning Overlay -->
+                                    <div class="position-absolute top-50 start-50 translate-middle" 
+                                         style="width: 80%; height: 200px; border: 3px solid #00ff00; border-radius: 10px; pointer-events: none;">
+                                        <div class="position-absolute top-50 start-50 translate-middle text-white bg-dark bg-opacity-75 px-3 py-2 rounded">
+                                            <i class="fa fa-crosshairs fa-2x"/>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Scanning Status -->
+                                    <div class="position-absolute bottom-0 start-0 end-0 p-3 text-center">
+                                        <div class="bg-dark bg-opacity-75 text-white p-3 rounded d-inline-block">
+                                            <t t-if="state.isScanning">
+                                                <i class="fa fa-spinner fa-spin me-2"/>
+                                                <span>Scanning... Point camera at barcode</span>
+                                            </t>
+                                            <t t-else="">
+                                                <i class="fa fa-info-circle me-2"/>
+                                                <span>Starting camera...</span>
+                                            </t>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer bg-dark text-white">
+                                <small class="text-muted me-auto">
+                                    <i class="fa fa-lightbulb me-1"/>
+                                    Tip: Ensure good lighting and hold steady
+                                </small>
+                                <button type="button" class="btn btn-secondary" t-on-click="closeCameraScanner">
+                                    <i class="fa fa-times me-1"/>
+                                    Close Camera
                                 </button>
                             </div>
                         </div>

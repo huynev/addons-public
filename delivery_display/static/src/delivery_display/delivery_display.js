@@ -1,18 +1,14 @@
 /** @odoo-module **/
 
 import { _t } from "@web/core/l10n/translation";
-import { Component, onWillStart, onMounted, useState, useRef } from "@odoo/owl";
+import { Component, onWillStart, onMounted, onWillUnmount, useState, useRef } from "@odoo/owl";
 import { useService } from "@web/core/utils/hooks";
-import { DeliveryDisplaySearchBar } from "@delivery_display/delivery_display/delivery_display_search_bar";
 import { DeliveryDisplayDriversPanel } from "@delivery_display/delivery_display/delivery_drivers_panel";
-import { DeliveryControlPanelButtons } from "@delivery_display/delivery_display/delivery_control_panel";
 
 export class DeliveryDisplay extends Component {
     static template = "delivery_display.DeliveryDisplay";
     static components = {
-        DeliveryDisplaySearchBar,
         DeliveryDisplayDriversPanel,
-        DeliveryControlPanelButtons,
     };
     static props = {
         models: Array,
@@ -35,54 +31,59 @@ export class DeliveryDisplay extends Component {
         this.state = useState({
             deliveries: [],
             drivers: {
-                connected: [],  // Danh sách tất cả tài xế
+                connected: [],  // Danh sách tài xế (hr.employee có is_driver=True)
                 selected: null, // Tài xế đang được chọn
             },
-            warehouses: [],
-            routes: [],
-            activeFilter: "0",
             showAssignDialog: false,
             assignDialogData: {
                 delivery: null,
-                selectedDriverId: null,
+                pinOrBarcode: "",  // PIN hoặc Barcode nhập vào
             },
+            showCameraScanner: false,  // Camera scanner popup
+            isScanning: false,          // Đang quét
+            pollingInterval: null,      // Auto-refresh interval
+            lastDeliveryCount: 0,       // Để detect delivery mới
         });
 
         this.rootRef = useRef("root");
+        this.videoRef = useRef("video_scanner");
 
         onWillStart(async () => {
             await this.loadDrivers();
             await this.loadDeliveries();
-            await this.loadWarehouses();
-            await this.loadRoutes();
         });
 
         onMounted(() => {
-            this.updateDeliveryList();
+            this.startAutoRefresh();  // Bắt đầu auto-refresh
+        });
+        
+        onWillUnmount(() => {
+            this.stopAutoRefresh();   // Dừng auto-refresh
+            this.stopCameraScanner(); // Dừng camera
         });
     }
 
     async loadDrivers() {
-        // Load partners marked as drivers (is_driver = True)
-        const drivers = await this.orm.searchRead(
-            "res.partner",
+        // Load hr.employee có is_driver = True
+        const employees = await this.orm.searchRead(
+            "hr.employee",
             [
                 ["active", "=", true],
-                ["is_driver", "=", true],  // ← CHỈ load partners có is_driver=True
+                ["is_driver", "=", true],  // ← CHỈ drivers
             ],
-            ["id", "name", "phone", "email"],
+            ["id", "name", "mobile_phone", "work_phone", "barcode", "driver_pin"],
             { 
                 order: "name ASC",
             }
         );
         
         // Build driver list với thông tin số đơn
-        const driversWithStats = await Promise.all(drivers.map(async (driver) => {
+        const driversWithStats = await Promise.all(employees.map(async (employee) => {
             // Đếm số đơn đã giao
             const deliveredCount = await this.orm.searchCount(
                 "stock.picking",
                 [
-                    ["driver_id", "=", driver.id],
+                    ["driver_id", "=", employee.id],
                     ["state", "=", "done"],
                     ["picking_type_code", "=", "outgoing"],
                 ]
@@ -92,45 +93,25 @@ export class DeliveryDisplay extends Component {
             const inProgressCount = await this.orm.searchCount(
                 "stock.picking",
                 [
-                    ["driver_id", "=", driver.id],
+                    ["driver_id", "=", employee.id],
                     ["state", "in", ["confirmed", "assigned"]],
                     ["picking_type_code", "=", "outgoing"],
                 ]
             );
             
             return {
-                id: driver.id,
-                name: driver.name,
-                phone: driver.phone || "",
-                email: driver.email || "",
+                id: employee.id,
+                name: employee.name,
+                mobile_phone: employee.mobile_phone || "",
+                work_phone: employee.work_phone || "",
+                barcode: employee.barcode || "",
+                driver_pin: employee.driver_pin || "",
                 deliveredCount: deliveredCount,
                 inProgressCount: inProgressCount,
             };
         }));
         
         this.state.drivers.connected = driversWithStats;
-    }
-
-    /**
-     * Getter: Trả về danh sách đơn hàng thuộc về tài xế đang được chọn.
-     * Đây là phần quan trọng để sửa lỗi "myDeliveries is undefined"
-     */
-    get myDeliveries() {
-        if (!this.state.drivers.selected) {
-            return [];
-        }
-        return this.state.deliveries.filter(d =>
-            d.data.driver_id && d.data.driver_id[0] === this.state.drivers.selected
-        );
-    }
-
-    async loadInitialData() {
-        await Promise.all([
-            this.loadDeliveries(),
-            this.loadDrivers(),
-            this.loadWarehouses(),
-            this.loadRoutes(),
-        ]);
     }
 
     async loadDeliveries() {
@@ -162,78 +143,10 @@ export class DeliveryDisplay extends Component {
             resId: d.id,
             data: d,
         }));
-        
-        this.updateDeliveryList();
-    }
-
-    async loadWarehouses() {
-        const warehouses = await this.orm.searchRead(
-            "stock.warehouse",
-            [],
-            ["id", "name", "code"],
-            { order: "name ASC" }
-        );
-        this.state.warehouses = warehouses.map(w => ({
-            id: w.id,
-            display_name: w.name,
-            code: w.code,
-        }));
-    }
-
-    async loadRoutes() {
-        try {
-            const routes = await this.orm.searchRead(
-                "stock.route",
-                [["active", "=", true]],
-                ["id", "name"],
-                { order: "name ASC" }
-            );
-            this.state.routes = routes.map(r => ({
-                id: r.id,
-                display_name: r.name,
-            }));
-        } catch (error) {
-            this.state.routes = [];
-        }
     }
 
     getActiveStates() {
-        const activeFilters = this.env.searchModel.state.deliveryFilters
-            .filter(f => f.isActive)
-            .map(f => f.name);
-        
-        // Default: confirmed, assigned (đơn cần giao)
-        return activeFilters.length > 0 ? activeFilters : ["confirmed", "assigned"];
-    }
-
-    selectFilter(filterId) {
-        this.state.activeFilter = filterId;
-        this.updateDeliveryList();
-    }
-
-    toggleFilter() {
-        this.notification.add(_t("Filter management coming soon!"), {
-            type: "info",
-        });
-    }
-
-    updateDeliveryList() {
-        let filteredDeliveries = [...this.state.deliveries];
-
-        // Filter logic
-        if (this.state.activeFilter.startsWith("wh_")) {
-            const warehouseId = parseInt(this.state.activeFilter.substring(3));
-            filteredDeliveries = filteredDeliveries.filter(d =>
-                d.data.picking_type_id && d.data.picking_type_id[0] === warehouseId
-            );
-        } else if (this.state.activeFilter.startsWith("rt_")) {
-            const routeId = parseInt(this.state.activeFilter.substring(3));
-            filteredDeliveries = filteredDeliveries.filter(d =>
-                d.data.delivery_route_id && d.data.delivery_route_id[0] === routeId
-            );
-        }
-
-        this.state.filteredDeliveries = filteredDeliveries;
+        return ["assigned"];
     }
 
     // Click chọn tài xế trong panel
@@ -246,13 +159,21 @@ export class DeliveryDisplay extends Component {
         );
     }
 
-    // Click vào delivery card -> Mở popup assign driver
+    // Click vào delivery card -> Mở popup nhập PIN/Barcode
     async onDeliveryCardClick(delivery) {
         this.state.assignDialogData = {
             delivery: delivery,
-            selectedDriverId: this.state.drivers.selected || null,
+            pinOrBarcode: "",
         };
         this.state.showAssignDialog = true;
+        
+        // Focus vào input sau khi dialog render
+        setTimeout(() => {
+            const input = document.querySelector('#pin_barcode_input');
+            if (input) {
+                input.focus();
+            }
+        }, 100);
     }
 
     // Đóng popup
@@ -260,30 +181,61 @@ export class DeliveryDisplay extends Component {
         this.state.showAssignDialog = false;
         this.state.assignDialogData = {
             delivery: null,
-            selectedDriverId: null,
+            pinOrBarcode: "",
         };
     }
 
-    // Select driver trong popup
-    selectDriverInDialog(driverId) {
-        this.state.assignDialogData.selectedDriverId = driverId;
+    // Update PIN/Barcode input
+    updatePinOrBarcode(event) {
+        this.state.assignDialogData.pinOrBarcode = event.target.value.trim();
     }
 
-    // Xác nhận assign + validate
+    // Handle Enter key in PIN input
+    onPinInputKeyup(event) {
+        if (event.key === 'Enter' || event.keyCode === 13) {
+            this.confirmAssignDriver();
+        }
+    }
+
+    // Xác nhận assign driver bằng PIN/Barcode
     async confirmAssignDriver() {
-        const { delivery, selectedDriverId } = this.state.assignDialogData;
+        const { delivery, pinOrBarcode } = this.state.assignDialogData;
         
-        if (!selectedDriverId) {
-            this.notification.add(_t("Please select a driver!"), {
+        if (!pinOrBarcode) {
+            this.notification.add(_t("Please enter PIN or scan barcode!"), {
                 type: "warning",
             });
             return;
         }
 
         try {
+            // Tìm employee theo PIN hoặc Barcode
+            const employees = await this.orm.searchRead(
+                "hr.employee",
+                [
+                    ["active", "=", true],
+                    ["is_driver", "=", true],
+                    "|",
+                    ["driver_pin", "=", pinOrBarcode],
+                    ["barcode", "=", pinOrBarcode],
+                ],
+                ["id", "name"],
+                { limit: 1 }
+            );
+
+            if (!employees || employees.length === 0) {
+                this.notification.add(
+                    _t("Driver not found! Please check PIN or Barcode."),
+                    { type: "warning" }
+                );
+                return;
+            }
+
+            const employee = employees[0];
+
             // 1. Assign driver
             await this.orm.write("stock.picking", [delivery.resId], {
-                driver_id: selectedDriverId,
+                driver_id: employee.id,
             });
 
             // 2. Validate delivery (xuất kho)
@@ -293,9 +245,8 @@ export class DeliveryDisplay extends Component {
                 [[delivery.resId]]
             );
 
-            const driver = this.state.drivers.connected.find(d => d.id === selectedDriverId);
             this.notification.add(
-                _t("Delivery %s assigned to %s and validated!", delivery.data.name, driver ? driver.name : ''),
+                _t("Delivery %s assigned to %s and validated!", delivery.data.name, employee.name),
                 { type: "success" }
             );
 
@@ -315,9 +266,8 @@ export class DeliveryDisplay extends Component {
         }
     }
 
-    // Thêm tài xế mới
+    // Thêm tài xế mới (mở wizard chọn employees)
     async popupAddDriver() {
-        // Mở wizard add drivers
         await this.action.doAction({
             type: "ir.actions.act_window",
             name: _t("Add Drivers"),
@@ -326,7 +276,7 @@ export class DeliveryDisplay extends Component {
             target: "new",
         });
         
-        // Reload drivers sau khi đóng wizard
+        // Reload drivers
         await this.loadDrivers();
     }
 
@@ -348,12 +298,12 @@ export class DeliveryDisplay extends Component {
             return;
         }
 
-        // Set is_driver = False thay vì xóa khỏi list
-        await this.orm.write("res.partner", [driverId], {
+        // Set is_driver = False
+        await this.orm.write("hr.employee", [driverId], {
             is_driver: false,
         });
         
-        // Reload drivers để update UI
+        // Reload drivers
         await this.loadDrivers();
         
         if (this.state.drivers.selected === driverId) {
@@ -379,5 +329,279 @@ export class DeliveryDisplay extends Component {
         if (priority === "2") return "fa-angle-double-up text-danger";
         if (priority === "1") return "fa-angle-up text-warning";
         return "fa-minus text-muted";
+    }
+
+    // ============= AUTO-REFRESH FUNCTIONS =============
+    
+    startAutoRefresh() {
+        // Poll mỗi 10 giây để check deliveries mới
+        this.state.pollingInterval = setInterval(() => {
+            this.checkNewDeliveries();
+        }, 10000); // 10 seconds
+        
+        this.state.lastDeliveryCount = this.state.deliveries.length;
+    }
+
+    stopAutoRefresh() {
+        if (this.state.pollingInterval) {
+            clearInterval(this.state.pollingInterval);
+            this.state.pollingInterval = null;
+        }
+    }
+
+    async checkNewDeliveries() {
+        try {
+            const domain = this.props.domain.concat([
+                ["state", "in", this.getActiveStates()],
+                ["picking_type_code", "=", "outgoing"],
+            ]);
+
+            const newDeliveries = await this.orm.searchRead(
+                this.props.resModel,
+                domain,
+                [
+                    "name",
+                    "partner_id",
+                    "scheduled_date",
+                    "date_done",
+                    "state",
+                    "picking_type_id",
+                    "driver_id",
+                    "priority",
+                    "origin",
+                ],
+                {
+                    order: this.props.orderBy.map(o => `${o.name} ${o.asc ? 'ASC' : 'DESC'}`).join(','),
+                }
+            );
+
+            // Build map of new deliveries for easy lookup
+            const newDeliveriesMap = new Map(newDeliveries.map(d => [d.id, d]));
+            const existingIds = new Set(this.state.deliveries.map(d => d.resId));
+            
+            let stateChangedCount = 0;
+            let addedCount = 0;
+            let removedCount = 0;
+
+            // Check for state changes in existing deliveries
+            for (const delivery of this.state.deliveries) {
+                const newData = newDeliveriesMap.get(delivery.resId);
+                
+                if (!newData) {
+                    // Delivery không còn trong list (đã done/cancelled)
+                    removedCount++;
+                } else if (newData.state !== delivery.data.state || 
+                           newData.driver_id?.[0] !== delivery.data.driver_id?.[0]) {
+                    // State hoặc driver đã thay đổi → Update
+                    delivery.data = newData;
+                    stateChangedCount++;
+                }
+            }
+
+            // Check for new deliveries
+            const addedDeliveries = newDeliveries
+                .filter(d => !existingIds.has(d.id))
+                .map(d => ({
+                    resId: d.id,
+                    data: d,
+                }));
+
+            if (addedDeliveries.length > 0) {
+                // Thêm deliveries mới vào cuối
+                this.state.deliveries.push(...addedDeliveries);
+                addedCount = addedDeliveries.length;
+            }
+
+            // Remove deliveries that no longer match criteria
+            if (removedCount > 0) {
+                this.state.deliveries = this.state.deliveries.filter(d => 
+                    newDeliveriesMap.has(d.resId)
+                );
+            }
+
+            // Update count
+            this.state.lastDeliveryCount = this.state.deliveries.length;
+
+            // Show notifications
+            if (addedCount > 0) {
+                this.notification.add(
+                    _t("%s new delivery(ies) added!", addedCount),
+                    { type: "info" }
+                );
+            }
+            
+            if (stateChangedCount > 0) {
+                this.notification.add(
+                    _t("%s delivery(ies) updated!", stateChangedCount),
+                    { type: "success" }
+                );
+            }
+
+            if (removedCount > 0) {
+                this.notification.add(
+                    _t("%s delivery(ies) completed!", removedCount),
+                    { type: "success" }
+                );
+            }
+
+        } catch (error) {
+            console.error("Error checking new deliveries:", error);
+        }
+    }
+
+    // ============= CAMERA SCANNER FUNCTIONS =============
+    
+    openCameraScanner() {
+        this.state.showCameraScanner = true;
+        this.state.isScanning = false;
+        
+        // Start camera sau khi render
+        setTimeout(() => {
+            this.startCameraScanner();
+        }, 100);
+    }
+
+    closeCameraScanner() {
+        this.stopCameraScanner();
+        this.state.showCameraScanner = false;
+    }
+
+    async startCameraScanner() {
+        try {
+            const video = this.videoRef.el;
+            if (!video) {
+                console.error("Video element not found");
+                return;
+            }
+
+            // Request camera permission
+            const stream = await navigator.mediaDevices.getUserMedia({
+                video: { facingMode: "environment" } // Rear camera
+            });
+
+            video.srcObject = stream;
+            video.play();
+            this.state.isScanning = true;
+
+            // Start scanning
+            this.scanBarcodeFromVideo(video);
+        } catch (error) {
+            console.error("Camera error:", error);
+            this.notification.add(
+                _t("Cannot access camera: %s", error.message),
+                { type: "danger" }
+            );
+        }
+    }
+
+    stopCameraScanner() {
+        const video = this.videoRef.el;
+        if (video && video.srcObject) {
+            const stream = video.srcObject;
+            const tracks = stream.getTracks();
+            tracks.forEach(track => track.stop());
+            video.srcObject = null;
+        }
+        this.state.isScanning = false;
+    }
+
+    async scanBarcodeFromVideo(video) {
+        // Try native BarcodeDetector API first
+        if ('BarcodeDetector' in window) {
+            try {
+                const barcodeDetector = new BarcodeDetector({
+                    formats: ['code_128', 'code_39', 'code_93', 'ean_13', 'ean_8', 'qr_code']
+                });
+
+                const scanLoop = async () => {
+                    if (!this.state.isScanning) return;
+
+                    try {
+                        const barcodes = await barcodeDetector.detect(video);
+                        if (barcodes.length > 0) {
+                            const barcode = barcodes[0].rawValue;
+                            this.onBarcodeDetected(barcode);
+                            return; // Stop scanning
+                        }
+                    } catch (error) {
+                        // Continue silently
+                    }
+
+                    // Continue scanning
+                    requestAnimationFrame(scanLoop);
+                };
+
+                scanLoop();
+                return;
+            } catch (error) {
+                console.warn("BarcodeDetector failed, trying fallback:", error);
+            }
+        }
+
+        // Fallback: Use ZXing library
+        this.scanWithZXing(video);
+    }
+
+    async scanWithZXing(video) {
+        // Load ZXing library dynamically
+        if (!window.ZXing) {
+            try {
+                // Load from CDN
+                await this.loadScript('https://unpkg.com/@zxing/library@latest/umd/index.min.js');
+            } catch (error) {
+                this.notification.add(
+                    _t("Cannot load barcode scanner library. Please use manual input."),
+                    { type: "warning" }
+                );
+                this.closeCameraScanner();
+                return;
+            }
+        }
+
+        try {
+            const codeReader = new ZXing.BrowserMultiFormatReader();
+            const result = await codeReader.decodeOnceFromVideoDevice(undefined, video);
+            if (result) {
+                this.onBarcodeDetected(result.text);
+            }
+        } catch (error) {
+            if (this.state.isScanning) {
+                // Try again
+                setTimeout(() => {
+                    if (this.state.isScanning) {
+                        this.scanWithZXing(video);
+                    }
+                }, 100);
+            }
+        }
+    }
+
+    loadScript(src) {
+        return new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src = src;
+            script.onload = resolve;
+            script.onerror = reject;
+            document.head.appendChild(script);
+        });
+    }
+
+    onBarcodeDetected(barcode) {
+        console.log("Barcode detected:", barcode);
+        
+        // Fill vào input
+        this.state.assignDialogData.pinOrBarcode = barcode;
+        
+        // Close camera
+        this.closeCameraScanner();
+        
+        // Notification
+        this.notification.add(
+            _t("Barcode scanned: %s", barcode),
+            { type: "success" }
+        );
+        
+        // Auto-submit nếu muốn
+        // this.confirmAssignDriver();
     }
 }

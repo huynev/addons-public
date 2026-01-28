@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Delivery Display',
-    'version': '17.0.1.1.0',
+    'version': '17.0.3.2.0',
     'category': 'Inventory/Delivery',
-    'summary': 'Interactive delivery management display similar to shop floor',
+    'summary': 'Interactive delivery management with real-time status updates',
     'description': """
 Delivery Display Module
 =======================
@@ -21,14 +21,16 @@ Features:
 
     """,
     'author': 'Wokwy (quochuy.software@gmail.com) support by Claude.ai',
-    'website': 'https://www.yourcompany.com',
+    'website': 'https://www.c2bgroup.net',
     'depends': [
         'stock',
         'web',
+        'hr',  # Thêm HR module
     ],
     'data': [
         'security/ir.model.access.csv',
         'wizard/add_driver_wizard_views.xml',
+        'views/hr_employee_views.xml',
         'views/delivery_display_views.xml',
     ],
     'demo': [
@@ -36,20 +38,14 @@ Features:
     ],
     'assets': {
         'web.assets_backend': [
-            'delivery_display/static/src/delivery_display/delivery_display_search_model.js',
-            'delivery_display/static/src/delivery_display/delivery_display_search_bar.js',
             'delivery_display/static/src/delivery_display/delivery_display_action.js',
             'delivery_display/static/src/delivery_display/delivery_display.js',
             'delivery_display/static/src/delivery_display/delivery_drivers_panel.js',
-            'delivery_display/static/src/delivery_display/delivery_control_panel.js',
-            'delivery_display/static/src/delivery_display/delivery_search_bar.xml',
             'delivery_display/static/src/delivery_display/delivery_display_action.xml',
             'delivery_display/static/src/delivery_display/delivery_display.xml',
             'delivery_display/static/src/delivery_display/delivery_drivers_panel.xml',
-            'delivery_display/static/src/delivery_display/delivery_control_panel.xml',
             'delivery_display/static/src/delivery_display/delivery_display.scss',
             'delivery_display/static/src/delivery_display/delivery_drivers_panel.scss',
-            'delivery_display/static/src/delivery_display/delivery_control_panel.scss',
         ],
     },
     'installable': True,

@@ -8,11 +8,12 @@
             <form string="Add Drivers">
                 <sheet>
                     <group>
-                        <field name="partner_ids" widget="many2many_tags" options="{'no_create': True}">
+                        <field name="employee_ids" widget="many2many_tags" options="{'no_create': True}">
                             <tree>
                                 <field name="name"/>
-                                <field name="phone"/>
-                                <field name="email"/>
+                                <field name="job_id"/>
+                                <field name="mobile_phone"/>
+                                <field name="barcode"/>
                             </tree>
                         </field>
                     </group>

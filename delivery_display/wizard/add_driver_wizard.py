@@ -6,14 +6,14 @@ class AddDriverWizard(models.TransientModel):
     _name = 'delivery.display.add.driver.wizard'
     _description = 'Add Drivers Wizard'
 
-    partner_ids = fields.Many2many(
-        'res.partner',
-        string='Select Partners to Add as Drivers',
-        domain=[('active', '=', True), ('is_company', '=', False), ('is_driver', '=', False)]
+    employee_ids = fields.Many2many(
+        'hr.employee',
+        string='Select Employees to Add as Drivers',
+        domain=[('active', '=', True), ('is_driver', '=', False)]
     )
 
     def action_add_drivers(self):
-        """Set selected partners as drivers"""
-        if self.partner_ids:
-            self.partner_ids.write({'is_driver': True})
+        """Set selected employees as drivers"""
+        if self.employee_ids:
+            self.employee_ids.write({'is_driver': True})
         return {'type': 'ir.actions.act_window_close'}

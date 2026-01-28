@@ -5,7 +5,6 @@ import { useService } from "@web/core/utils/hooks";
 import { WithSearch } from "@web/search/with_search/with_search";
 import { DeliveryDisplay } from "@delivery_display/delivery_display/delivery_display";
 import { Component, onWillStart, useSubEnv } from "@odoo/owl";
-import { DeliveryDisplaySearchModel } from "@delivery_display/delivery_display/delivery_display_search_model";
 
 // from record.js
 const defaultActiveField = { attrs: {}, options: {}, domain: "[]", string: "" };
@@ -35,8 +34,6 @@ export class DeliveryDisplayAction extends Component {
                 "origin",
                 "backorder_id",
                 "driver_id",
-                "shipping_weight",
-                "delivery_route_id",
                 "priority",
                 "note",
             ],
@@ -163,15 +160,6 @@ export class DeliveryDisplayAction extends Component {
                     { name: "scheduled_date", asc: true },
                     { name: "name", asc: true },
                 ],
-                SearchModel: DeliveryDisplaySearchModel,
-                searchModelArgs: {
-                    ...context,
-                    loadedWarehouses:
-                        JSON.parse(localStorage.getItem(this.env.localStorageName + '_warehouses')) || [],
-                    enableWarehouseFilter:
-                        !context.warehouse_id &&
-                        (await this.userService.hasGroup("stock.group_stock_multi_locations")),
-                },
                 loadIrFilters: true,
             };
         });
