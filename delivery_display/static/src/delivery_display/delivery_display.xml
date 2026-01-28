@@ -27,6 +27,7 @@
                             <t t-foreach="state.deliveries" t-as="delivery" t-key="delivery.resId">
                                 <div class="col-12 col-md-6 col-lg-4 col-xl-3">
                                     <div class="card h-100 shadow-sm delivery-card" 
+                                         t-att-data-delivery-id="delivery.resId"
                                          t-on-click="() => this.onDeliveryCardClick(delivery)"
                                          style="cursor: pointer;">
                                         <div class="card-header d-flex justify-content-between align-items-center"
@@ -41,7 +42,7 @@
                                             </div>
                                             <div class="mb-2" t-if="delivery.data.scheduled_date">
                                                 <i class="fa fa-calendar me-2 text-muted"/>
-                                                <span t-esc="delivery.data.scheduled_date"/>
+                                                <span t-esc="formatDate(delivery.data.scheduled_date)"/>
                                             </div>
                                             <div class="mb-2" t-if="delivery.data.driver_id">
                                                 <i class="fa fa-id-card me-2 text-success"/>
@@ -80,7 +81,10 @@
 
             <!-- Assign Driver Dialog -->
             <t t-if="state.showAssignDialog">
-                <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+                <div class="modal fade show d-block" 
+                     t-att-class="{'modal-closing': state.assignDialogData.isClosing}"
+                     tabindex="-1" 
+                     style="background-color: rgba(0,0,0,0.5);">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header bg-primary text-white">

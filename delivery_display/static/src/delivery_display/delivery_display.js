@@ -38,6 +38,7 @@ export class DeliveryDisplay extends Component {
             assignDialogData: {
                 delivery: null,
                 pinOrBarcode: "",  // PIN hoặc Barcode nhập vào
+                isClosing: false,  // Animation state
             },
             showCameraScanner: false,  // Camera scanner popup
             isScanning: false,          // Đang quét
@@ -146,7 +147,7 @@ export class DeliveryDisplay extends Component {
     }
 
     getActiveStates() {
-        return ["assigned"];
+        return ["confirmed", "assigned"];
     }
 
     // Click chọn tài xế trong panel
@@ -178,11 +179,18 @@ export class DeliveryDisplay extends Component {
 
     // Đóng popup
     closeAssignDialog() {
-        this.state.showAssignDialog = false;
-        this.state.assignDialogData = {
-            delivery: null,
-            pinOrBarcode: "",
-        };
+        // Add closing animation class
+        this.state.assignDialogData.isClosing = true;
+        
+        // Wait for animation to complete before closing
+        setTimeout(() => {
+            this.state.showAssignDialog = false;
+            this.state.assignDialogData = {
+                delivery: null,
+                pinOrBarcode: "",
+                isClosing: false,
+            };
+        }, 200); // Match animation duration
     }
 
     // Update PIN/Barcode input
@@ -245,17 +253,28 @@ export class DeliveryDisplay extends Component {
                 [[delivery.resId]]
             );
 
+            // Mark card as validated for animation
+            const cardElement = document.querySelector(
+                `[data-delivery-id="${delivery.resId}"]`
+            );
+            if (cardElement) {
+                cardElement.classList.add('card-validated');
+            }
+
+            // Show success notification with checkmark
             this.notification.add(
-                _t("Delivery %s assigned to %s and validated!", delivery.data.name, employee.name),
+                _t("✓ Delivery %s assigned to %s and validated!", delivery.data.name, employee.name),
                 { type: "success" }
             );
 
-            // 3. Reload data
-            await this.loadDeliveries();
-            await this.loadDrivers();
-            
-            // 4. Close dialog
+            // Close dialog with animation
             this.closeAssignDialog();
+
+            // Wait for card animation to complete before reload
+            setTimeout(async () => {
+                await this.loadDeliveries();
+                await this.loadDrivers();
+            }, 500); // Match card animation duration
 
         } catch (error) {
             console.error("Error:", error);
@@ -329,6 +348,32 @@ export class DeliveryDisplay extends Component {
         if (priority === "2") return "fa-angle-double-up text-danger";
         if (priority === "1") return "fa-angle-up text-warning";
         return "fa-minus text-muted";
+    }
+
+    formatDate(dateString) {
+        // Format: YYYY-MM-DD HH:MM:SS hoặc YYYY-MM-DD
+        // Output: DD/MM/YYYY
+        if (!dateString) return "";
+
+        try {
+            // Parse date string
+            const date = new Date(dateString);
+
+            // Check if valid date
+            if (isNaN(date.getTime())) return dateString;
+
+            // Format as DD/MM/YYYY
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            const hours = String(date.getHours()).padStart(2, '0');      // ← NEW
+            const minutes = String(date.getMinutes()).padStart(2, '0');  // ← NEW
+
+            return `${day}/${month}/${year} ${hours}:${minutes}`;
+        } catch (e) {
+            // Nếu có lỗi, trả về string gốc
+            return dateString;
+        }
     }
 
     // ============= AUTO-REFRESH FUNCTIONS =============

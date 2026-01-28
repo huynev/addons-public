@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Delivery Display',
-    'version': '17.0.3.2.0',
+    'version': '17.0.3.3.0',
     'category': 'Inventory/Delivery',
-    'summary': 'Interactive delivery management with real-time status updates',
+    'summary': 'Interactive delivery management with beautiful animations',
     'description': """
 Delivery Display Module
 =======================
@@ -25,7 +25,7 @@ Features:
     'depends': [
         'stock',
         'web',
-        'hr',  # Thêm HR module
+        'hr',
     ],
     'data': [
         'security/ir.model.access.csv',

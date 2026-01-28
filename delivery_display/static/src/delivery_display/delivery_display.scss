@@ -18,9 +18,15 @@
             box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
         }
 
+        // Fade out animation khi card được validate
+        &.card-validated {
+            animation: fadeOutScale 0.5s ease-out forwards;
+        }
+
         .card-header {
             border-bottom: none;
             padding: 1rem;
+            transition: background-color 0.3s ease;
         }
 
         .card-body {
@@ -36,7 +42,36 @@
             background-color: transparent;
             border-top: 1px solid #dee2e6;
             padding: 0.75rem 1rem;
+            transition: all 0.3s ease;
         }
+    }
+
+    // Modal animations
+    .modal {
+        &.fade {
+            transition: opacity 0.15s linear;
+        }
+
+        &.show {
+            animation: modalFadeIn 0.3s ease-out;
+        }
+
+        .modal-dialog {
+            transition: transform 0.3s ease-out;
+        }
+
+        &.modal-closing {
+            animation: modalFadeOut 0.2s ease-in forwards;
+            
+            .modal-dialog {
+                animation: modalSlideOut 0.2s ease-in forwards;
+            }
+        }
+    }
+
+    // Success checkmark animation
+    .success-checkmark {
+        animation: scaleIn 0.5s ease-out;
     }
 
     .bg-draft {
@@ -61,6 +96,77 @@
 
     .bg-cancel {
         background-color: #dc3545 !important;
+    }
+}
+
+// Keyframe animations
+@keyframes fadeOutScale {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.9);
+        height: 0;
+        margin: 0;
+        padding: 0;
+    }
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes modalFadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes modalSlideOut {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+}
+
+@keyframes scaleIn {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
     }
 }
 
