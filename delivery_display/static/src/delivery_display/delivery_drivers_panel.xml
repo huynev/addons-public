@@ -15,56 +15,87 @@
 
             <!-- Drivers List -->
             <ul class="list-group list-group-flush h-100 overflow-auto pb-5" style="padding-bottom: 80px !important;">
+                <!-- All Deliveries Option -->
+                <li class="list-group-item py-3 cursor-pointer border-start-0 border-end-0"
+                    t-on-click="() => props.setSessionDriver(null)"
+                    t-att-class="{
+                        'bg-info bg-opacity-10': !props.drivers.selected &amp;&amp; !props.drivers.sessionOwner,
+                        'border-start border-info border-3': !props.drivers.selected &amp;&amp; !props.drivers.sessionOwner
+                    }">
+                    <div class="d-flex align-items-center">
+                        <div class="rounded flex-shrink-0 bg-info bg-opacity-25 d-flex align-items-center justify-content-center"
+                             style="width: 48px; height: 48px;">
+                            <i class="fa fa-list fa-lg text-info"/>
+                        </div>
+                        <div class="ps-3 flex-grow-1">
+                            <div class="fw-bold">All Deliveries</div>
+                            <small class="text-muted">
+                                <t t-if="props.drivers.sessionOwner">Click to logout and show all</t>
+                                <t t-else="">Show all unassigned and assigned deliveries</t>
+                            </small>
+                        </div>
+                    </div>
+                </li>
+
+                <!-- Drivers -->
                 <li t-foreach="props.drivers.connected" t-as="driver" t-key="driver.id"
                     class="list-group-item py-3 cursor-pointer border-start-0 border-end-0"
                     t-on-click="() => props.setSessionDriver(driver.id)"
                     t-att-class="{
                         'bg-primary bg-opacity-10': driver.id == props.drivers.selected,
-                        'border-start border-primary border-3': driver.id == props.drivers.selected
+                        'border-start border-primary border-3': driver.id == props.drivers.selected,
+                        'bg-success bg-opacity-10': driver.id == props.drivers.sessionOwner,
+                        'border-start border-success border-3': driver.id == props.drivers.sessionOwner
                     }">
                     <div class="d-flex align-items-start">
                         <!-- Avatar -->
                         <img t-attf-src="/web/image/hr.employee/{{driver.id}}/avatar_128"
                             class="rounded flex-shrink-0"
                             style="width: 48px; height: 48px; object-fit: cover;"/>
-                        
+
                         <!-- Info -->
                         <div class="d-flex flex-column ps-3 flex-grow-1 overflow-hidden">
-                            <div class="fw-bold text-truncate" t-esc="driver.name"/>
-                            
+                            <div class="d-flex align-items-center mb-1">
+                                <div class="fw-bold text-truncate flex-grow-1" t-esc="driver.name"/>
+                                <span t-if="driver.id == props.drivers.sessionOwner"
+                                      class="badge bg-success ms-2 flex-shrink-0">
+                                    <i class="fa fa-check-circle me-1"/>Logged In
+                                </span>
+                            </div>
+
                             <div t-if="driver.mobile_phone" class="text-muted small text-truncate">
                                 <i class="fa fa-mobile me-1"/>
                                 <span t-esc="driver.mobile_phone"/>
                             </div>
-                            
+
                             <div t-if="driver.barcode" class="text-muted small text-truncate">
                                 <i class="fa fa-barcode me-1"/>
                                 <span t-esc="driver.barcode"/>
                             </div>
-                            
+
                             <!-- Statistics -->
                             <div class="mt-2">
-                                <span t-if="driver.inProgressCount > 0" 
+                                <span t-if="driver.inProgressCount > 0"
                                       class="badge bg-warning text-dark me-1">
                                     <i class="fa fa-truck me-1"/>
                                     <span t-esc="driver.inProgressCount"/> in progress
                                 </span>
-                                <span t-if="driver.deliveredCount > 0" 
+                                <span t-if="driver.deliveredCount > 0"
                                       class="badge bg-success">
                                     <i class="fa fa-check me-1"/>
                                     <span t-esc="driver.deliveredCount"/> delivered
                                 </span>
                             </div>
                         </div>
-                        
+
                         <!-- Remove button -->
-                        <i t-if="driver.inProgressCount == 0" 
+                        <i t-if="driver.inProgressCount == 0"
                            class="oi oi-close fa-lg cursor-pointer text-muted flex-shrink-0"
                            t-on-click.stop="() => props.logout(driver.id)"
                            title="Remove driver"/>
                     </div>
                 </li>
-                
+
                 <li t-if="!props.drivers.connected.length" class="list-group-item text-center text-muted py-5">
                     <i class="fa fa-user-plus fa-3x mb-3 opacity-25"/>
                     <div>No drivers yet</div>

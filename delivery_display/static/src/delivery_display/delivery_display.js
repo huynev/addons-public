@@ -31,14 +31,17 @@ export class DeliveryDisplay extends Component {
         this.state = useState({
             deliveries: [],
             drivers: {
-                connected: [],  // Danh sách tài xế (hr.employee có is_driver=True)
-                selected: null, // Tài xế đang được chọn
+                connected: [],     // Danh sách tài xế (hr.employee có is_driver=True)
+                selected: null,    // Tài xế đang được chọn (filter)
+                sessionOwner: null, // Tài xế đã login (session owner)
             },
             showAssignDialog: false,
             assignDialogData: {
                 delivery: null,
                 pinOrBarcode: "",  // PIN hoặc Barcode nhập vào
                 isClosing: false,  // Animation state
+                mode: null,        // Mode: 'assign_new', 'validate_existing', 'driver_login'
+                driverToLogin: null, // Driver object khi mode='driver_login'
             },
             showCameraScanner: false,  // Camera scanner popup
             isScanning: false,          // Đang quét
@@ -57,7 +60,7 @@ export class DeliveryDisplay extends Component {
         onMounted(() => {
             this.startAutoRefresh();  // Bắt đầu auto-refresh
         });
-        
+
         onWillUnmount(() => {
             this.stopAutoRefresh();   // Dừng auto-refresh
             this.stopCameraScanner(); // Dừng camera
@@ -73,11 +76,11 @@ export class DeliveryDisplay extends Component {
                 ["is_driver", "=", true],  // ← CHỈ drivers
             ],
             ["id", "name", "mobile_phone", "work_phone", "barcode", "driver_pin"],
-            { 
+            {
                 order: "name ASC",
             }
         );
-        
+
         // Build driver list với thông tin số đơn
         const driversWithStats = await Promise.all(employees.map(async (employee) => {
             // Đếm số đơn đã giao
@@ -89,7 +92,7 @@ export class DeliveryDisplay extends Component {
                     ["picking_type_code", "=", "outgoing"],
                 ]
             );
-            
+
             // Đếm số đơn đang giao
             const inProgressCount = await this.orm.searchCount(
                 "stock.picking",
@@ -99,7 +102,7 @@ export class DeliveryDisplay extends Component {
                     ["picking_type_code", "=", "outgoing"],
                 ]
             );
-            
+
             return {
                 id: employee.id,
                 name: employee.name,
@@ -111,7 +114,7 @@ export class DeliveryDisplay extends Component {
                 inProgressCount: inProgressCount,
             };
         }));
-        
+
         this.state.drivers.connected = driversWithStats;
     }
 
@@ -120,6 +123,11 @@ export class DeliveryDisplay extends Component {
             ["state", "in", this.getActiveStates()],
             ["picking_type_code", "=", "outgoing"],
         ]);
+
+        // Filter theo driver nếu có driver được chọn
+        if (this.state.drivers.selected) {
+            domain.push(["driver_id", "=", this.state.drivers.selected]);
+        }
 
         const deliveries = await this.orm.searchRead(
             this.props.resModel,
@@ -147,27 +155,87 @@ export class DeliveryDisplay extends Component {
     }
 
     getActiveStates() {
+        // Return fixed states for delivery display
+        // confirmed: Orders confirmed but not yet assigned
+        // assigned: Orders assigned and ready for delivery
         return ["confirmed", "assigned"];
     }
 
     // Click chọn tài xế trong panel
-    setSessionDriver(driverId) {
-        this.state.drivers.selected = driverId;
-        const driver = this.state.drivers.connected.find(d => d.id === driverId);
-        this.notification.add(
-            _t("Selected driver: ") + (driver ? driver.name : ''),
-            { type: "info" }
-        );
-    }
+    async setSessionDriver(driverId) {
+        // Click on "All Deliveries" hoặc null
+        if (driverId === null) {
+            // Logout driver nếu có driver đang login
+            if (this.state.drivers.sessionOwner) {
+                const driver = this.state.drivers.connected.find(d => d.id === this.state.drivers.sessionOwner);
 
-    // Click vào delivery card -> Mở popup nhập PIN/Barcode
-    async onDeliveryCardClick(delivery) {
+                try {
+                    await this.orm.call(
+                        "hr.employee",
+                        "logout",
+                        [[this.state.drivers.sessionOwner]],
+                        { unchecked: true }  // No PIN needed for logout
+                    );
+                } catch (error) {
+                    console.error("Logout error:", error);
+                }
+
+                this.state.drivers.sessionOwner = null;
+                this.notification.add(
+                    _t("Logged out: ") + (driver ? driver.name : '') + "\n" + _t("Showing all deliveries"),
+                    { type: "info" }
+                );
+            } else {
+                this.notification.add(
+                    _t("Showing all deliveries"),
+                    { type: "info" }
+                );
+            }
+
+            this.state.drivers.selected = null;
+            await this.loadDeliveries();
+            return;
+        }
+
+        // Click vào driver đang được chọn → Logout
+        if (this.state.drivers.selected === driverId) {
+            const driver = this.state.drivers.connected.find(d => d.id === driverId);
+
+            // Logout driver from session
+            try {
+                await this.orm.call(
+                    "hr.employee",
+                    "logout",
+                    [[driverId]],
+                    { unchecked: true }  // No PIN needed for logout
+                );
+            } catch (error) {
+                console.error("Logout error:", error);
+            }
+
+            this.state.drivers.selected = null;
+            this.state.drivers.sessionOwner = null;
+            this.notification.add(
+                _t("Logged out: ") + (driver ? driver.name : ''),
+                { type: "info" }
+            );
+            await this.loadDeliveries();
+            return;
+        }
+
+        // Click vào driver mới → Mở dialog để login
+        const driver = this.state.drivers.connected.find(d => d.id === driverId);
+        if (!driver) return;
+
+        // Mở dialog nhập PIN/Barcode để login
         this.state.assignDialogData = {
-            delivery: delivery,
+            delivery: null,  // No delivery, just login
             pinOrBarcode: "",
+            mode: 'driver_login',
+            driverToLogin: driver,
         };
         this.state.showAssignDialog = true;
-        
+
         // Focus vào input sau khi dialog render
         setTimeout(() => {
             const input = document.querySelector('#pin_barcode_input');
@@ -177,11 +245,140 @@ export class DeliveryDisplay extends Component {
         }, 100);
     }
 
+    // Click vào delivery card
+    async onDeliveryCardClick(delivery) {
+        // Nếu delivery đã có driver_id → Validate luôn
+        if (delivery.data.driver_id) {
+            await this.validateDeliveryWithExistingDriver(delivery);
+        } else {
+            // Chưa có driver → Mở popup nhập PIN/Barcode
+            this.state.assignDialogData = {
+                delivery: delivery,
+                pinOrBarcode: "",
+            };
+            this.state.showAssignDialog = true;
+
+            // Focus vào input sau khi dialog render
+            setTimeout(() => {
+                const input = document.querySelector('#pin_barcode_input');
+                if (input) {
+                    input.focus();
+                }
+            }, 100);
+        }
+    }
+
+    // Validate delivery đã có driver (không cần nhập PIN)
+    async validateDeliveryWithExistingDriver(delivery) {
+        try {
+            // Nếu đã login và là delivery của mình → Validate luôn
+            if (this.state.drivers.sessionOwner &&
+                delivery.data.driver_id[0] === this.state.drivers.sessionOwner) {
+                // Direct validate - đã login và đúng driver
+                await this.performValidation(delivery);
+                return;
+            }
+
+            // Nếu chưa login hoặc đang ở "All Deliveries" mode
+            // → Yêu cầu xác thực bằng PIN/Barcode
+            this.state.assignDialogData = {
+                delivery: delivery,
+                pinOrBarcode: "",
+                mode: 'validate_existing', // Mode đặc biệt cho validate delivery có driver
+            };
+            this.state.showAssignDialog = true;
+
+            // Focus vào input sau khi dialog render
+            setTimeout(() => {
+                const input = document.querySelector('#pin_barcode_input');
+                if (input) {
+                    input.focus();
+                }
+            }, 100);
+
+        } catch (error) {
+            console.error("Error:", error);
+            this.notification.add(
+                _t("Error: ") + (error.data?.message || error.message || "Unknown error"),
+                { type: "danger" }
+            );
+        }
+    }
+
+    // Perform actual validation
+    async performValidation(delivery) {
+        try {
+            // Confirm before validation
+            const driverName = delivery.data.driver_id ? delivery.data.driver_id[1] : 'Unknown';
+            const confirmMessage = _t(
+                "Are you sure you want to validate this delivery?\n\n" +
+                "Delivery: %s\n" +
+                "Customer: %s\n" +
+                "Driver: %s\n\n" +
+                "This action cannot be undone."
+            );
+
+            const confirmed = confirm(
+                confirmMessage
+                    .replace('%s', delivery.data.name)
+                    .replace('%s', delivery.data.partner_id ? delivery.data.partner_id[1] : 'N/A')
+                    .replace('%s', driverName)
+            );
+
+            if (!confirmed) {
+                // User cancelled
+                return;
+            }
+
+            // Validate delivery using safe method
+            const result = await this.orm.call(
+                "stock.picking",
+                "action_validate_delivery_picking",
+                [[delivery.resId]]
+            );
+
+            if (result && result.success === false) {
+                this.notification.add(
+                    _t("Validation failed: ") + result.message,
+                    { type: "warning" }
+                );
+                return;
+            }
+
+            // Mark card as validated for animation
+            const cardElement = document.querySelector(
+                `[data-delivery-id="${delivery.resId}"]`
+            );
+            if (cardElement) {
+                cardElement.classList.add('card-validated');
+            }
+
+            // Show success notification
+            this.notification.add(
+                _t("✓ Delivery %s validated!", delivery.data.name),
+                { type: "success" }
+            );
+
+            // Wait for card animation to complete before reload
+            setTimeout(async () => {
+                await this.loadDeliveries();
+                await this.loadDrivers();
+            }, 500);
+
+        } catch (error) {
+            console.error("Error:", error);
+            this.notification.add(
+                _t("Error: ") + (error.data?.message || error.message || "Unknown error"),
+                { type: "danger" }
+            );
+        }
+    }
+
     // Đóng popup
     closeAssignDialog() {
         // Add closing animation class
         this.state.assignDialogData.isClosing = true;
-        
+
         // Wait for animation to complete before closing
         setTimeout(() => {
             this.state.showAssignDialog = false;
@@ -189,6 +386,8 @@ export class DeliveryDisplay extends Component {
                 delivery: null,
                 pinOrBarcode: "",
                 isClosing: false,
+                mode: null,
+                driverToLogin: null,
             };
         }, 200); // Match animation duration
     }
@@ -207,8 +406,8 @@ export class DeliveryDisplay extends Component {
 
     // Xác nhận assign driver bằng PIN/Barcode
     async confirmAssignDriver() {
-        const { delivery, pinOrBarcode } = this.state.assignDialogData;
-        
+        const { delivery, pinOrBarcode, mode, driverToLogin } = this.state.assignDialogData;
+
         if (!pinOrBarcode) {
             this.notification.add(_t("Please enter PIN or scan barcode!"), {
                 type: "warning",
@@ -241,17 +440,132 @@ export class DeliveryDisplay extends Component {
 
             const employee = employees[0];
 
+            // MODE 1: Driver Login (click vào tên driver)
+            if (mode === 'driver_login') {
+                // Verify it's the correct driver
+                if (driverToLogin && employee.id !== driverToLogin.id) {
+                    this.notification.add(
+                        _t("Wrong driver! This PIN/Barcode belongs to another driver."),
+                        { type: "warning" }
+                    );
+                    return;
+                }
+
+                // Login driver to session
+                const result = await this.orm.call(
+                    "hr.employee",
+                    "login",
+                    [[employee.id]],
+                    { pin: pinOrBarcode, set_in_session: true }
+                );
+
+                if (result) {
+                    this.state.drivers.selected = employee.id;
+                    this.state.drivers.sessionOwner = employee.id;
+                    this.notification.add(
+                        _t("✓ Logged in as: ") + employee.name,
+                        { type: "success" }
+                    );
+                    this.closeAssignDialog();
+                    await this.loadDeliveries();
+                } else {
+                    this.notification.add(
+                        _t("Login failed! Invalid PIN or Barcode."),
+                        { type: "danger" }
+                    );
+                }
+                return;
+            }
+
+            // MODE 2: Validate delivery đã có driver (ở All Deliveries)
+            if (mode === 'validate_existing') {
+                // Verify driver matches delivery
+                if (delivery.data.driver_id && employee.id !== delivery.data.driver_id[0]) {
+                    this.notification.add(
+                        _t("Wrong driver! This delivery is assigned to %s", delivery.data.driver_id[1]),
+                        { type: "warning" }
+                    );
+                    return;
+                }
+
+                // Login driver first
+                await this.orm.call(
+                    "hr.employee",
+                    "login",
+                    [[employee.id]],
+                    { pin: pinOrBarcode, set_in_session: true }
+                );
+
+                this.state.drivers.sessionOwner = employee.id;
+
+                // Then validate
+                const result = await this.orm.call(
+                    "stock.picking",
+                    "action_validate_delivery_picking",
+                    [[delivery.resId]]
+                );
+
+                if (result && result.success === false) {
+                    this.notification.add(
+                        _t("Validation failed: ") + result.message,
+                        { type: "warning" }
+                    );
+                    return;
+                }
+
+                // Mark card as validated for animation
+                const cardElement = document.querySelector(
+                    `[data-delivery-id="${delivery.resId}"]`
+                );
+                if (cardElement) {
+                    cardElement.classList.add('card-validated');
+                }
+
+                this.notification.add(
+                    _t("✓ Delivery %s validated by %s!", delivery.data.name, employee.name),
+                    { type: "success" }
+                );
+
+                this.closeAssignDialog();
+
+                setTimeout(async () => {
+                    await this.loadDeliveries();
+                    await this.loadDrivers();
+                }, 500);
+
+                return;
+            }
+
+            // MODE 3: Assign driver mới và validate (default - delivery chưa có driver)
             // 1. Assign driver
             await this.orm.write("stock.picking", [delivery.resId], {
                 driver_id: employee.id,
             });
 
-            // 2. Validate delivery (xuất kho)
+            // 2. Login driver to session
             await this.orm.call(
+                "hr.employee",
+                "login",
+                [[employee.id]],
+                { pin: pinOrBarcode, set_in_session: true }
+            );
+
+            this.state.drivers.sessionOwner = employee.id;
+
+            // 3. Validate delivery using safe method
+            const result = await this.orm.call(
                 "stock.picking",
-                "button_validate",
+                "action_validate_delivery_picking",
                 [[delivery.resId]]
             );
+
+            if (result && result.success === false) {
+                this.notification.add(
+                    _t("Validation failed: ") + result.message,
+                    { type: "warning" }
+                );
+                return;
+            }
 
             // Mark card as validated for animation
             const cardElement = document.querySelector(
@@ -294,7 +608,7 @@ export class DeliveryDisplay extends Component {
             views: [[false, "form"]],
             target: "new",
         });
-        
+
         // Reload drivers
         await this.loadDrivers();
     }
@@ -321,10 +635,10 @@ export class DeliveryDisplay extends Component {
         await this.orm.write("hr.employee", [driverId], {
             is_driver: false,
         });
-        
+
         // Reload drivers
         await this.loadDrivers();
-        
+
         if (this.state.drivers.selected === driverId) {
             this.state.drivers.selected = null;
         }
@@ -352,7 +666,7 @@ export class DeliveryDisplay extends Component {
 
     formatDate(dateString) {
         // Format: YYYY-MM-DD HH:MM:SS hoặc YYYY-MM-DD
-        // Output: DD/MM/YYYY
+        // Output: DD/MM/YYYY HH:MM
         if (!dateString) return "";
 
         try {
@@ -362,12 +676,12 @@ export class DeliveryDisplay extends Component {
             // Check if valid date
             if (isNaN(date.getTime())) return dateString;
 
-            // Format as DD/MM/YYYY
+            // Format as DD/MM/YYYY HH:MM
             const day = String(date.getDate()).padStart(2, '0');
             const month = String(date.getMonth() + 1).padStart(2, '0');
             const year = date.getFullYear();
-            const hours = String(date.getHours()).padStart(2, '0');      // ← NEW
-            const minutes = String(date.getMinutes()).padStart(2, '0');  // ← NEW
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
 
             return `${day}/${month}/${year} ${hours}:${minutes}`;
         } catch (e) {
@@ -377,13 +691,13 @@ export class DeliveryDisplay extends Component {
     }
 
     // ============= AUTO-REFRESH FUNCTIONS =============
-    
+
     startAutoRefresh() {
         // Poll mỗi 10 giây để check deliveries mới
         this.state.pollingInterval = setInterval(() => {
             this.checkNewDeliveries();
         }, 10000); // 10 seconds
-        
+
         this.state.lastDeliveryCount = this.state.deliveries.length;
     }
 
@@ -400,6 +714,11 @@ export class DeliveryDisplay extends Component {
                 ["state", "in", this.getActiveStates()],
                 ["picking_type_code", "=", "outgoing"],
             ]);
+
+            // CRITICAL: Filter theo driver nếu có driver được chọn
+            if (this.state.drivers.selected) {
+                domain.push(["driver_id", "=", this.state.drivers.selected]);
+            }
 
             const newDeliveries = await this.orm.searchRead(
                 this.props.resModel,
@@ -423,7 +742,7 @@ export class DeliveryDisplay extends Component {
             // Build map of new deliveries for easy lookup
             const newDeliveriesMap = new Map(newDeliveries.map(d => [d.id, d]));
             const existingIds = new Set(this.state.deliveries.map(d => d.resId));
-            
+
             let stateChangedCount = 0;
             let addedCount = 0;
             let removedCount = 0;
@@ -431,11 +750,11 @@ export class DeliveryDisplay extends Component {
             // Check for state changes in existing deliveries
             for (const delivery of this.state.deliveries) {
                 const newData = newDeliveriesMap.get(delivery.resId);
-                
+
                 if (!newData) {
                     // Delivery không còn trong list (đã done/cancelled)
                     removedCount++;
-                } else if (newData.state !== delivery.data.state || 
+                } else if (newData.state !== delivery.data.state ||
                            newData.driver_id?.[0] !== delivery.data.driver_id?.[0]) {
                     // State hoặc driver đã thay đổi → Update
                     delivery.data = newData;
@@ -459,7 +778,7 @@ export class DeliveryDisplay extends Component {
 
             // Remove deliveries that no longer match criteria
             if (removedCount > 0) {
-                this.state.deliveries = this.state.deliveries.filter(d => 
+                this.state.deliveries = this.state.deliveries.filter(d =>
                     newDeliveriesMap.has(d.resId)
                 );
             }
@@ -474,7 +793,7 @@ export class DeliveryDisplay extends Component {
                     { type: "info" }
                 );
             }
-            
+
             if (stateChangedCount > 0) {
                 this.notification.add(
                     _t("%s delivery(ies) updated!", stateChangedCount),
@@ -495,11 +814,11 @@ export class DeliveryDisplay extends Component {
     }
 
     // ============= CAMERA SCANNER FUNCTIONS =============
-    
+
     openCameraScanner() {
         this.state.showCameraScanner = true;
         this.state.isScanning = false;
-        
+
         // Start camera sau khi render
         setTimeout(() => {
             this.startCameraScanner();
@@ -633,19 +952,19 @@ export class DeliveryDisplay extends Component {
 
     onBarcodeDetected(barcode) {
         console.log("Barcode detected:", barcode);
-        
+
         // Fill vào input
         this.state.assignDialogData.pinOrBarcode = barcode;
-        
+
         // Close camera
         this.closeCameraScanner();
-        
+
         // Notification
         this.notification.add(
             _t("Barcode scanned: %s", barcode),
             { type: "success" }
         );
-        
+
         // Auto-submit nếu muốn
         // this.confirmAssignDriver();
     }

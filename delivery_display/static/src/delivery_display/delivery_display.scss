@@ -18,6 +18,23 @@
             box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
         }
 
+        // Card có driver - ready to validate
+        &.has-driver {
+            border-left: 3px solid #28a745;
+
+            &:hover {
+                border-color: #28a745;
+                box-shadow: 0 0.5rem 1rem rgba(40, 167, 69, 0.3) !important;
+            }
+        }
+
+        // Card chưa có driver - need assignment
+        &.no-driver {
+            &:hover {
+                border-color: #6c757d;
+            }
+        }
+
         // Fade out animation khi card được validate
         &.card-validated {
             animation: fadeOutScale 0.5s ease-out forwards;
@@ -62,7 +79,7 @@
 
         &.modal-closing {
             animation: modalFadeOut 0.2s ease-in forwards;
-            
+
             .modal-dialog {
                 animation: modalSlideOut 0.2s ease-in forwards;
             }
