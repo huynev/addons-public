@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+<t t-name="mobile_portal.LoginPage">
+<div style="min-height:100dvh;min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,#0a5c47 0%,#0F6E56 45%,#1a8f70 100%);padding:20px 16px;">
+<div style="width:100%;max-width:420px;background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.2);">
+
+    <!-- Hero -->
+    <div style="background:linear-gradient(135deg,#0F6E56,#0a5240);padding:32px 28px 28px;text-align:center;">
+        <div style="width:56px;height:56px;background:rgba(255,255,255,0.18);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;">
+            <svg width="32" height="32" viewBox="0 0 30 30" fill="none">
+                <rect x="3" y="3" width="10" height="10" rx="3" fill="rgba(255,255,255,0.9)"/>
+                <rect x="17" y="3" width="10" height="10" rx="3" fill="rgba(255,255,255,0.5)"/>
+                <rect x="3" y="17" width="10" height="10" rx="3" fill="rgba(255,255,255,0.5)"/>
+                <rect x="17" y="17" width="10" height="10" rx="3" fill="rgba(255,255,255,0.9)"/>
+            </svg>
+        </div>
+        <div style="font-size:20px;font-weight:600;color:#fff;font-family:Georgia,serif;">Cổng Khách Hàng</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.7);margin-top:4px;">Đăng nhập để tiếp tục</div>
+    </div>
+
+    <!-- Form -->
+    <div style="padding:28px 24px 32px;">
+
+        <!-- Error — dùng state.error (không phải props.error) -->
+        <t t-if="state.error">
+            <div style="background:#FEF2F2;border:1px solid #FECACA;border-radius:10px;padding:10px 14px;font-size:12px;color:#B91C1C;display:flex;align-items:center;gap:8px;margin-bottom:18px;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="flex-shrink:0">
+                    <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                <t t-esc="state.error"/>
+            </div>
+        </t>
+
+        <!-- Email -->
+        <div style="margin-bottom:16px;">
+            <label style="display:block;font-size:11px;font-weight:500;color:#888780;letter-spacing:0.6px;text-transform:uppercase;margin-bottom:6px;">EMAIL</label>
+            <input type="email" placeholder="example@company.com"
+                   autocomplete="username"
+                   t-att-value="state.email"
+                   t-on-input="onEmailInput"
+                   t-on-keydown="onKeydown"
+                   style="width:100%;border:1px solid rgba(0,0,0,0.15);border-radius:10px;padding:11px 14px;font-size:14px;color:#2C2C2A;background:#fafaf8;outline:none;font-family:inherit;display:block;"/>
+        </div>
+
+        <!-- Password -->
+        <div style="margin-bottom:20px;">
+            <label style="display:block;font-size:11px;font-weight:500;color:#888780;letter-spacing:0.6px;text-transform:uppercase;margin-bottom:6px;">MẬT KHẨU</label>
+            <div style="position:relative;">
+                <input t-att-type="state.showPass ? 'text' : 'password'"
+                       placeholder="••••••••"
+                       autocomplete="current-password"
+                       t-att-value="state.password"
+                       t-on-input="onPassInput"
+                       t-on-keydown="onKeydown"
+                       style="width:100%;border:1px solid rgba(0,0,0,0.15);border-radius:10px;padding:11px 42px 11px 14px;font-size:14px;color:#2C2C2A;background:#fafaf8;outline:none;font-family:inherit;display:block;"/>
+                <button type="button" t-on-click="toggleShowPass"
+                        style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#888780;padding:4px;display:flex;align-items:center;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Submit — dùng state.loading (không phải props.loading) -->
+        <button type="button"
+                t-att-disabled="state.loading"
+                t-on-click="onSubmit"
+                style="width:100%;background:#0F6E56;color:#fff;border:none;border-radius:12px;padding:13px;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;">
+            <t t-if="state.loading">
+                <span style="width:16px;height:16px;border:2px solid rgba(255,255,255,0.35);border-top-color:#fff;border-radius:50%;animation:mp-spin 0.7s linear infinite;display:inline-block;flex-shrink:0;"/>
+                Đang đăng nhập...
+            </t>
+            <t t-else="">Đăng nhập</t>
+        </button>
+
+        <!-- Divider -->
+        <div style="text-align:center;margin:18px 0;position:relative;">
+            <div style="position:absolute;top:50%;left:0;right:0;height:1px;background:rgba(0,0,0,0.08);"/>
+            <span style="position:relative;background:#fff;padding:0 12px;font-size:11px;color:#aaa9a2;">hoặc</span>
+        </div>
+
+        <!-- Go to register — dùng arrow function để tránh mất this -->
+        <button type="button"
+                t-on-click="() => this.props.onGoRegister()"
+                style="width:100%;background:transparent;color:#0F6E56;border:1.5px solid rgba(15,110,86,0.35);border-radius:12px;padding:12px;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;">
+            Tạo tài khoản mới
+        </button>
+
+    </div>
+</div>
+</div>
+</t>
+</templates>

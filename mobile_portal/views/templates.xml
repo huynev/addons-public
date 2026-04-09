@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="portal_app_shell" name="Mobile Portal App">
+        <html lang="vi" style="height:100%;margin:0;padding:0;overflow:hidden">
+            <head>
+                <meta charset="UTF-8"/>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+                <meta name="theme-color" content="#0F6E56"/>
+                <title>Cổng Khách Hàng</title>
+                <t t-call-assets="web.assets_frontend" t-js="false"/>
+                <t t-call-assets="web.assets_frontend" t-css="false"/>
+                <style>
+                    html,body{height:100%!important;margin:0!important;padding:0!important;overflow:hidden!important;background:#f4f3ee!important}
+                    #mobile-portal-root{height:100dvh;height:100vh;display:block;overflow:hidden}
+                    /* Hide Odoo portal header/footer if website module injects them */
+                    header.o_main_navbar,.o_website_navbar,nav.navbar,
+                    .o_portal_navbar,footer.o_footer{display:none!important}
+                    @keyframes mp-spin{to{transform:rotate(360deg)}}
+                </style>
+            </head>
+            <body style="height:100%;margin:0;padding:0;overflow:hidden;background:#f4f3ee">
+                <div id="mobile-portal-root"
+                     t-att-data-partner-name="partner_name"
+                     t-att-data-partner-id="partner_id"
+                     t-att-data-is-logged-in="is_logged_in"
+                     style="height:100dvh;height:100vh;overflow:hidden"/>
+            </body>
+        </html>
+    </template>
+</odoo>

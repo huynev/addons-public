@@ -1,0 +1,870 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- ── LoginPage/LoginPage.xml ── -->
+<t t-name="mobile_portal.LoginPage">
+<div style="min-height:100dvh;min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,#0a5c47 0%,#0F6E56 45%,#1a8f70 100%);padding:20px 16px;">
+<div style="width:100%;max-width:420px;background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.2);">
+
+    <!-- Hero -->
+    <div style="background:linear-gradient(135deg,#0F6E56,#0a5240);padding:32px 28px 28px;text-align:center;">
+        <div style="width:56px;height:56px;background:rgba(255,255,255,0.18);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;">
+            <svg width="32" height="32" viewBox="0 0 30 30" fill="none">
+                <rect x="3" y="3" width="10" height="10" rx="3" fill="rgba(255,255,255,0.9)"/>
+                <rect x="17" y="3" width="10" height="10" rx="3" fill="rgba(255,255,255,0.5)"/>
+                <rect x="3" y="17" width="10" height="10" rx="3" fill="rgba(255,255,255,0.5)"/>
+                <rect x="17" y="17" width="10" height="10" rx="3" fill="rgba(255,255,255,0.9)"/>
+            </svg>
+        </div>
+        <div style="font-size:20px;font-weight:600;color:#fff;font-family:Georgia,serif;">Cổng Khách Hàng</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.7);margin-top:4px;">Đăng nhập để tiếp tục</div>
+    </div>
+
+    <!-- Form -->
+    <div style="padding:28px 24px 32px;">
+
+        <!-- Error — dùng state.error (không phải props.error) -->
+        <t t-if="state.error">
+            <div style="background:#FEF2F2;border:1px solid #FECACA;border-radius:10px;padding:10px 14px;font-size:12px;color:#B91C1C;display:flex;align-items:center;gap:8px;margin-bottom:18px;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="flex-shrink:0">
+                    <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                <t t-esc="state.error"/>
+            </div>
+        </t>
+
+        <!-- Email -->
+        <div style="margin-bottom:16px;">
+            <label style="display:block;font-size:11px;font-weight:500;color:#888780;letter-spacing:0.6px;text-transform:uppercase;margin-bottom:6px;">EMAIL</label>
+            <input type="email" placeholder="example@company.com"
+                   autocomplete="username"
+                   t-att-value="state.email"
+                   t-on-input="onEmailInput"
+                   t-on-keydown="onKeydown"
+                   style="width:100%;border:1px solid rgba(0,0,0,0.15);border-radius:10px;padding:11px 14px;font-size:14px;color:#2C2C2A;background:#fafaf8;outline:none;font-family:inherit;display:block;"/>
+        </div>
+
+        <!-- Password -->
+        <div style="margin-bottom:20px;">
+            <label style="display:block;font-size:11px;font-weight:500;color:#888780;letter-spacing:0.6px;text-transform:uppercase;margin-bottom:6px;">MẬT KHẨU</label>
+            <div style="position:relative;">
+                <input t-att-type="state.showPass ? 'text' : 'password'"
+                       placeholder="••••••••"
+                       autocomplete="current-password"
+                       t-att-value="state.password"
+                       t-on-input="onPassInput"
+                       t-on-keydown="onKeydown"
+                       style="width:100%;border:1px solid rgba(0,0,0,0.15);border-radius:10px;padding:11px 42px 11px 14px;font-size:14px;color:#2C2C2A;background:#fafaf8;outline:none;font-family:inherit;display:block;"/>
+                <button type="button" t-on-click="toggleShowPass"
+                        style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#888780;padding:4px;display:flex;align-items:center;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Submit — dùng state.loading (không phải props.loading) -->
+        <button type="button"
+                t-att-disabled="state.loading"
+                t-on-click="onSubmit"
+                style="width:100%;background:#0F6E56;color:#fff;border:none;border-radius:12px;padding:13px;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;">
+            <t t-if="state.loading">
+                <span style="width:16px;height:16px;border:2px solid rgba(255,255,255,0.35);border-top-color:#fff;border-radius:50%;animation:mp-spin 0.7s linear infinite;display:inline-block;flex-shrink:0;"/>
+                Đang đăng nhập...
+            </t>
+            <t t-else="">Đăng nhập</t>
+        </button>
+
+        <!-- Divider -->
+        <div style="text-align:center;margin:18px 0;position:relative;">
+            <div style="position:absolute;top:50%;left:0;right:0;height:1px;background:rgba(0,0,0,0.08);"/>
+            <span style="position:relative;background:#fff;padding:0 12px;font-size:11px;color:#aaa9a2;">hoặc</span>
+        </div>
+
+        <!-- Go to register — dùng arrow function để tránh mất this -->
+        <button type="button"
+                t-on-click="() => this.props.onGoRegister()"
+                style="width:100%;background:transparent;color:#0F6E56;border:1.5px solid rgba(15,110,86,0.35);border-radius:12px;padding:12px;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;">
+            Tạo tài khoản mới
+        </button>
+
+    </div>
+</div>
+</div>
+</t>
+
+    <!-- ── RegisterPage/RegisterPage.xml ── -->
+<t t-name="mobile_portal.RegisterPage">
+<div class="auth-page" style="min-height:100dvh;min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,#0a5c47 0%,#0F6E56 45%,#1a8f70 100%);padding:20px 16px;">
+<div class="auth-card" style="width:100%;max-width:420px;background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.2);">
+
+    <div class="auth-hero" style="background:linear-gradient(135deg,#0F6E56,#0a5240);padding:28px 28px 22px;text-align:center;">
+        <div style="width:48px;height:48px;background:rgba(255,255,255,0.18);border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;">
+            <svg width="26" height="26" viewBox="0 0 30 30" fill="none">
+                <rect x="3" y="3" width="10" height="10" rx="3" fill="rgba(255,255,255,0.9)"/>
+                <rect x="17" y="3" width="10" height="10" rx="3" fill="rgba(255,255,255,0.5)"/>
+                <rect x="3" y="17" width="10" height="10" rx="3" fill="rgba(255,255,255,0.5)"/>
+                <rect x="17" y="17" width="10" height="10" rx="3" fill="rgba(255,255,255,0.9)"/>
+            </svg>
+        </div>
+        <div style="font-size:18px;font-weight:600;color:#fff;font-family:Georgia,serif;">Tạo tài khoản</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.7);margin-top:4px;">Đăng ký để bắt đầu đặt hàng</div>
+    </div>
+
+    <div style="padding:24px 24px 28px;max-height:70vh;overflow-y:auto;">
+
+        <!-- Error -->
+        <t t-if="state.error">
+            <div style="background:#FEF2F2;border:1px solid #FECACA;border-radius:10px;padding:10px 14px;font-size:12px;color:#B91C1C;display:flex;align-items:center;gap:8px;margin-bottom:16px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="flex-shrink:0">
+                    <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                <t t-esc="state.error"/>
+            </div>
+        </t>
+
+        <!-- Name -->
+        <div style="margin-bottom:14px;">
+            <label style="display:block;font-size:11px;font-weight:500;color:#888780;letter-spacing:0.6px;text-transform:uppercase;margin-bottom:5px;">HỌ VÀ TÊN <span style="color:#D85A30">*</span></label>
+            <input type="text" placeholder="Nguyễn Văn A"
+                   t-att-value="state.name" t-on-input="onInput('name')"
+                   style="width:100%;border:1px solid rgba(0,0,0,0.15);border-radius:10px;padding:10px 14px;font-size:14px;color:#2C2C2A;background:#fafaf8;outline:none;font-family:inherit;display:block;"/>
+        </div>
+
+        <!-- Email -->
+        <div style="margin-bottom:14px;">
+            <label style="display:block;font-size:11px;font-weight:500;color:#888780;letter-spacing:0.6px;text-transform:uppercase;margin-bottom:5px;">EMAIL <span style="color:#D85A30">*</span></label>
+            <input type="email" placeholder="example@company.com" autocomplete="username"
+                   t-att-value="state.email" t-on-input="onInput('email')"
+                   style="width:100%;border:1px solid rgba(0,0,0,0.15);border-radius:10px;padding:10px 14px;font-size:14px;color:#2C2C2A;background:#fafaf8;outline:none;font-family:inherit;display:block;"/>
+        </div>
+
+        <!-- Phone -->
+        <div style="margin-bottom:14px;">
+            <label style="display:block;font-size:11px;font-weight:500;color:#888780;letter-spacing:0.6px;text-transform:uppercase;margin-bottom:5px;">SỐ ĐIỆN THOẠI</label>
+            <input type="tel" placeholder="0901 234 567"
+                   t-att-value="state.phone" t-on-input="onInput('phone')"
+                   style="width:100%;border:1px solid rgba(0,0,0,0.15);border-radius:10px;padding:10px 14px;font-size:14px;color:#2C2C2A;background:#fafaf8;outline:none;font-family:inherit;display:block;"/>
+        </div>
+
+        <!-- Password -->
+        <div style="margin-bottom:14px;">
+            <label style="display:block;font-size:11px;font-weight:500;color:#888780;letter-spacing:0.6px;text-transform:uppercase;margin-bottom:5px;">MẬT KHẨU <span style="color:#D85A30">*</span></label>
+            <div style="position:relative;">
+                <input t-att-type="state.showPass ? 'text' : 'password'" placeholder="Tối thiểu 6 ký tự"
+                       autocomplete="new-password"
+                       t-att-value="state.password" t-on-input="onInput('password')"
+                       style="width:100%;border:1px solid rgba(0,0,0,0.15);border-radius:10px;padding:10px 42px 10px 14px;font-size:14px;color:#2C2C2A;background:#fafaf8;outline:none;font-family:inherit;display:block;"/>
+                <button type="button" t-on-click="() => this.state.showPass = !this.state.showPass"
+                        style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#888780;padding:4px;display:flex;align-items:center;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Confirm -->
+        <div style="margin-bottom:20px;">
+            <label style="display:block;font-size:11px;font-weight:500;color:#888780;letter-spacing:0.6px;text-transform:uppercase;margin-bottom:5px;">XÁC NHẬN MẬT KHẨU <span style="color:#D85A30">*</span></label>
+            <input t-att-type="state.showConfirm ? 'text' : 'password'" placeholder="Nhập lại mật khẩu"
+                   autocomplete="new-password"
+                   t-att-value="state.confirm" t-on-input="onInput('confirm')"
+                   t-att-style="passwordMismatch ? 'width:100%;border:1px solid #E24B4A;border-radius:10px;padding:10px 14px;font-size:14px;color:#2C2C2A;background:#fafaf8;outline:none;font-family:inherit;display:block;' : 'width:100%;border:1px solid rgba(0,0,0,0.15);border-radius:10px;padding:10px 14px;font-size:14px;color:#2C2C2A;background:#fafaf8;outline:none;font-family:inherit;display:block;'"/>
+            <t t-if="passwordMismatch">
+                <span style="font-size:11px;color:#E24B4A;margin-top:4px;display:block;">Mật khẩu không khớp</span>
+            </t>
+        </div>
+
+        <!-- Submit -->
+        <button t-on-click="onSubmit"
+                t-att-disabled="!canSubmit or state.loading"
+                t-att-style="(!canSubmit or state.loading) ? 'width:100%;background:#0F6E56;color:#fff;border:none;border-radius:12px;padding:13px;font-size:14px;font-weight:500;cursor:not-allowed;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;opacity:0.55;' : 'width:100%;background:#0F6E56;color:#fff;border:none;border-radius:12px;padding:13px;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;'">
+            <t t-if="state.loading">
+                <span style="width:16px;height:16px;border:2px solid rgba(255,255,255,0.35);border-top-color:#fff;border-radius:50%;animation:mp-spin 0.7s linear infinite;display:inline-block;flex-shrink:0;"/>
+                Đang tạo tài khoản...
+            </t>
+            <t t-else="">Tạo tài khoản</t>
+        </button>
+
+        <!-- Divider -->
+        <div style="text-align:center;margin:16px 0;position:relative;">
+            <div style="position:absolute;top:50%;left:0;right:0;height:1px;background:rgba(0,0,0,0.08);"/>
+            <span style="position:relative;background:#fff;padding:0 12px;font-size:11px;color:#aaa9a2;">đã có tài khoản?</span>
+        </div>
+
+        <button t-on-click="() => this.props.onGoLogin()"
+                style="width:100%;background:transparent;color:#0F6E56;border:1.5px solid rgba(15,110,86,0.35);border-radius:12px;padding:12px;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;">
+            Đăng nhập
+        </button>
+
+    </div>
+</div>
+</div>
+</t>
+
+    <!-- ── BottomNav/BottomNav.xml ── -->
+<t t-name="mobile_portal.BottomNav">
+    <div class="bnav">
+        <!-- Products tab -->
+        <div class="ntab" t-att-class="{'on': isActive('products')}"
+             t-on-click="() => this.onTabClick('products')">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none"
+                 t-att-stroke="isActive('products') ? '#0F6E56' : '#aaa9a2'"
+                 stroke-width="1.8" stroke-linecap="round">
+                <rect x="3" y="3" width="7" height="7" rx="1.5"/>
+                <rect x="14" y="3" width="7" height="7" rx="1.5"/>
+                <rect x="3" y="14" width="7" height="7" rx="1.5"/>
+                <rect x="14" y="14" width="7" height="7" rx="1.5"/>
+            </svg>
+            <span class="nlbl" t-att-style="isActive('products') ? 'color:#0F6E56' : ''">Sản phẩm</span>
+        </div>
+
+        <!-- Cart tab (with badge when cart has items) -->
+        <div class="ntab" t-att-class="{'on': isActive('cart')}"
+             t-on-click="() => this.onTabClick('cart')">
+            <div style="position:relative;display:inline-flex">
+                <svg width="21" height="21" viewBox="0 0 24 24" fill="none"
+                     t-att-stroke="isActive('cart') ? '#0F6E56' : '#aaa9a2'"
+                     stroke-width="1.8" stroke-linecap="round">
+                    <circle cx="9" cy="21" r="1"/>
+                    <circle cx="20" cy="21" r="1"/>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 001.99 1.61H19a2 2 0 001.99-1.61L23 6H6"/>
+                </svg>
+                <!-- Badge on cart icon in nav -->
+                <t t-if="props.cartCount > 0">
+                    <span style="position:absolute;top:-5px;right:-7px;background:#D85A30;color:#fff;border-radius:10px;font-size:9px;font-weight:500;padding:1px 4px;line-height:14px;min-width:14px;text-align:center;">
+                        <t t-esc="props.cartCount"/>
+                    </span>
+                </t>
+            </div>
+            <span class="nlbl" t-att-style="isActive('cart') ? 'color:#0F6E56' : ''">Giỏ hàng</span>
+        </div>
+
+        <!-- Orders tab -->
+        <div class="ntab" t-att-class="{'on': isActive('orders')}"
+             t-on-click="() => this.onTabClick('orders')">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none"
+                 t-att-stroke="isActive('orders') ? '#0F6E56' : '#aaa9a2'"
+                 stroke-width="1.8" stroke-linecap="round">
+                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/>
+            </svg>
+            <span class="nlbl" t-att-style="isActive('orders') ? 'color:#0F6E56' : ''">Đơn hàng</span>
+        </div>
+
+        <!-- Debt tab -->
+        <div class="ntab" t-att-class="{'on': isActive('debt')}"
+             t-on-click="() => this.onTabClick('debt')">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none"
+                 t-att-stroke="isActive('debt') ? '#0F6E56' : '#aaa9a2'"
+                 stroke-width="1.8" stroke-linecap="round">
+                <line x1="12" y1="1" x2="12" y2="23"/>
+                <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+            </svg>
+            <span class="nlbl" t-att-style="isActive('debt') ? 'color:#0F6E56' : ''">Công nợ</span>
+        </div>
+    </div>
+</t>
+
+    <!-- ── ProductModal/ProductModal.xml ── -->
+<t t-name="mobile_portal.ProductModal">
+    <!-- Semi-transparent backdrop — tap to close -->
+    <div class="moverlay on" t-on-click="onOverlayClick">
+        <!-- Bottom sheet (stops click propagation) -->
+        <div class="msheet" t-on-click.stop="">
+
+            <div class="mhandle"/>
+
+            <!-- Product header -->
+            <div class="mphdr">
+                <div class="mthumb" t-att-style="'background:' + props.product.bg + ';color:' + props.product.tc">
+                    <t t-esc="props.product.letter"/>
+                </div>
+                <div>
+                    <div class="mname"><t t-esc="props.product.name"/></div>
+                    <div class="mprice"><t t-esc="props.product.priceFormatted"/></div>
+                    <div class="munit">/<t t-esc="props.product.unit"/></div>
+                </div>
+            </div>
+
+            <!-- Quantity selector -->
+            <div class="mqrow">
+                <span class="mqlbl">Số lượng</span>
+                <div class="mqctrl">
+                    <div class="mqbtn" t-on-click="decrement">−</div>
+                    <span class="mqnum"><t t-esc="state.qty"/></span>
+                    <div class="mqbtn" t-on-click="increment">+</div>
+                </div>
+            </div>
+
+            <!-- Add to cart CTA -->
+            <button class="mabtn" t-on-click="onAddClick">
+                Thêm vào giỏ hàng
+            </button>
+
+        </div>
+    </div>
+</t>
+
+    <!-- ── ProductList/ProductList.xml ── -->
+<t t-name="mobile_portal.ProductList">
+    <!-- Search bar -->
+    <div class="sbar2">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#aaa9a2" stroke-width="2" stroke-linecap="round">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="M21 21l-4.35-4.35"/>
+        </svg>
+        <input class="sinput"
+               type="search"
+               placeholder="Tìm sản phẩm..."
+               t-att-value="props.filterQ"
+               t-on-input="onSearchInput"/>
+    </div>
+
+    <!-- Category pills -->
+    <div class="pills">
+        <t t-foreach="props.categories" t-as="cat" t-key="cat">
+            <div class="pill"
+                 t-att-class="{'on': props.filterCat === (cat === 'Tất cả' ? '' : cat)}"
+                 t-on-click="() => this.onPillClick(cat === 'Tất cả' ? '' : cat)">
+                <t t-esc="cat"/>
+            </div>
+        </t>
+    </div>
+
+    <!-- Product grid -->
+    <div class="pgrid">
+        <t t-if="props.products.length === 0">
+            <div style="grid-column: 1 / -1; text-align:center; padding:40px; color:#aaa9a2; font-size:13px;">
+                Không tìm thấy sản phẩm
+            </div>
+        </t>
+
+        <t t-foreach="props.products" t-as="product" t-key="product.id">
+            <div class="pcard" t-on-click="() => this.onCardClick(product)">
+                <!-- Thumbnail with colored bg and first letter -->
+                <div class="pthumb" t-att-style="'background:' + product.bg">
+                    <span class="pletter" t-att-style="'color:' + product.tc">
+                        <t t-esc="product.letter"/>
+                    </span>
+                    <!-- "in cart" chip -->
+                    <t t-if="cartQty(product.id) > 0">
+                        <div class="cinchip">
+                            ×<t t-esc="cartQty(product.id)"/>
+                        </div>
+                    </t>
+                </div>
+                <!-- Product info -->
+                <div class="pinfo">
+                    <div class="pname"><t t-esc="product.name"/></div>
+                    <div class="pprice"><t t-esc="product.priceFormatted"/></div>
+                    <div class="punit">/<t t-esc="product.unit"/></div>
+                </div>
+            </div>
+        </t>
+    </div>
+</t>
+
+    <!-- ── Cart/Cart.xml ── -->
+<t t-name="mobile_portal.Cart">
+    <!-- Empty state -->
+    <t t-if="props.items.length === 0">
+        <div class="cempty">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ddd"
+                 stroke-width="1.2" stroke-linecap="round" style="display:block;margin:0 auto 14px">
+                <circle cx="9" cy="21" r="1"/>
+                <circle cx="20" cy="21" r="1"/>
+                <path d="M1 1h4l2.68 13.39a2 2 0 001.99 1.61H19a2 2 0 001.99-1.61L23 6H6"/>
+            </svg>
+            Giỏ hàng trống<br/>
+            <span style="font-size:11px">Chọn sản phẩm để bắt đầu</span>
+        </div>
+    </t>
+
+    <!-- Cart items -->
+    <t t-if="props.items.length > 0">
+        <div class="shd" style="padding-top:14px">
+            Giỏ hàng (<t t-esc="totalQty"/> sản phẩm)
+        </div>
+
+        <div class="clist">
+            <t t-foreach="props.items" t-as="item" t-key="item.id">
+                <div class="citem">
+                    <!-- Thumbnail -->
+                    <div class="cithumb" t-att-style="'background:' + item.bg + ';color:' + item.tc">
+                        <t t-esc="item.letter"/>
+                    </div>
+                    <!-- Info -->
+                    <div class="ciinfo">
+                        <div class="ciname"><t t-esc="item.name"/></div>
+                        <div class="cisub">
+                            <t t-esc="item.priceFormatted"/>/<t t-esc="item.unit"/>
+                        </div>
+                        <div class="ciprice"><t t-esc="lineTotal(item)"/></div>
+                    </div>
+                    <!-- Quantity controls -->
+                    <div class="qctrl">
+                        <div class="qbtn" t-on-click="() => this.props.onUpdateQty(item.id, -1)">−</div>
+                        <span class="qnum"><t t-esc="item.qty"/></span>
+                        <div class="qbtn" t-on-click="() => this.props.onUpdateQty(item.id, +1)">+</div>
+                    </div>
+                </div>
+            </t>
+        </div>
+
+        <!-- Footer: total + order button -->
+        <div class="cfooter">
+            <div class="trow">
+                <span style="font-size:13px;color:#888780">Tổng thanh toán</span>
+                <span class="tamt"><t t-esc="totalFormatted"/></span>
+            </div>
+            <button class="gbtn"
+                    t-att-disabled="!canOrder"
+                    t-att-style="!canOrder ? 'opacity:0.6;cursor:not-allowed' : ''"
+                    t-on-click="this.props.onPlace">
+                <t t-if="props.isPlacing">Đang xử lý...</t>
+                <t t-else="">Xác nhận đặt hàng</t>
+            </button>
+        </div>
+    </t>
+</t>
+
+    <!-- ── OrderDetail/OrderDetail.xml ── -->
+<t t-name="mobile_portal.OrderDetail">
+    <div class="pg-detail" t-att-class="{'show': isVisible}">
+
+        <!-- Header -->
+        <div class="dhdr">
+            <div class="dback" t-on-click="this.props.onClose">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none"
+                     stroke="#2C2C2A" stroke-width="2" stroke-linecap="round">
+                    <polyline points="15 18 9 12 15 6"/>
+                </svg>
+            </div>
+            <div class="dtitle"><t t-esc="order.ref or 'Chi tiết đơn hàng'"/></div>
+            <span class="stt" t-att-class="'s-' + order.status">
+                <t t-esc="order.label"/>
+            </span>
+        </div>
+
+        <!-- Scrollable body -->
+        <div class="dbody">
+
+            <!-- ── CANCELLED notice ── -->
+            <t t-if="isCancelled">
+                <div class="card" style="text-align:center">
+                    <span class="stt s-cancel" style="font-size:12px;padding:6px 14px">
+                        Đơn hàng đã bị hủy
+                    </span>
+                    <t t-if="order.note">
+                        <div style="font-size:12px;color:#888780;margin-top:10px">
+                            <t t-esc="order.note"/>
+                        </div>
+                    </t>
+                </div>
+            </t>
+
+            <!-- ── TIMELINE ── -->
+            <t t-if="!isCancelled">
+                <div class="card">
+                    <div class="cardtitle">Tiến trình</div>
+                    <div class="tlrow">
+                        <t t-foreach="timeline" t-as="step" t-key="step_index">
+                            <div t-att-class="timelineStepClass(step_index)">
+                                <div class="tldot">
+                                    <!-- checkmark for done steps -->
+                                    <t t-if="step_index &lt; timelineIndex">
+                                        <svg width="10" height="10" viewBox="0 0 12 12" fill="none"
+                                             stroke="#fff" stroke-width="2.2" stroke-linecap="round">
+                                            <polyline points="2 6 5 9 10 3"/>
+                                        </svg>
+                                    </t>
+                                    <!-- current step dot -->
+                                    <t t-elif="step_index === timelineIndex">
+                                        <div style="width:8px;height:8px;border-radius:50%;background:#0F6E56"/>
+                                    </t>
+                                    <!-- future step dot -->
+                                    <t t-else="">
+                                        <div style="width:8px;height:8px;border-radius:50%;background:#C4DDD4"/>
+                                    </t>
+                                </div>
+                                <div class="tllbl"><t t-esc="step"/></div>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+            </t>
+
+            <!-- ── PRODUCTS ── -->
+            <div class="card">
+                <div class="cardtitle">Sản phẩm</div>
+                <t t-foreach="linesWithTotals" t-as="line" t-key="line_index">
+                    <div class="oline">
+                        <div class="othumb" t-att-style="'background:' + line.bg + ';color:' + line.tc">
+                            <t t-esc="line.letter"/>
+                        </div>
+                        <div style="flex:1">
+                            <div style="font-size:12px;font-weight:500;color:#2C2C2A">
+                                <t t-esc="line.name"/>
+                            </div>
+                            <div style="font-size:11px;color:#888780;margin-top:1px">
+                                <t t-esc="line.qtyLabel"/>
+                            </div>
+                        </div>
+                        <div class="oprice"><t t-esc="line.lineTotal"/></div>
+                    </div>
+                </t>
+                <!-- Totals -->
+                <div style="border-top:0.5px solid rgba(0,0,0,0.07);margin-top:10px;padding-top:10px">
+                    <div class="srow">
+                        <span class="ml">Tạm tính</span>
+                        <span><t t-esc="orderTotal"/></span>
+                    </div>
+                    <div class="srow">
+                        <span class="ml">Vận chuyển</span>
+                        <span style="color:#27500A">Miễn phí</span>
+                    </div>
+                    <div class="srow tot">
+                        <span>Tổng cộng</span>
+                        <span class="vr"><t t-esc="orderTotal"/></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── PAYMENT STATUS ── -->
+            <t t-if="!isCancelled">
+                <div class="card">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+                        <div class="cardtitle" style="margin-bottom:0">Thanh toán</div>
+                        <span class="psbadge" t-att-class="payClass">
+                            <t t-esc="payLabel"/>
+                        </span>
+                    </div>
+                    <!-- Progress bar (shown only for partial payment) -->
+                    <t t-if="showPayProgress">
+                        <div class="barwrap">
+                            <div class="barfill" t-att-style="'width:' + payPct + '%;background:#BA7517'"/>
+                        </div>
+                        <div class="barlbls">
+                            <span><t t-esc="payPct"/>% đã TT</span>
+                            <span>còn lại <t t-esc="100 - payPct"/>%</span>
+                        </div>
+                    </t>
+                    <div class="srow" style="margin-top:8px">
+                        <span class="ml">Tổng đơn</span>
+                        <span><t t-esc="orderTotal"/></span>
+                    </div>
+                    <div class="srow">
+                        <span class="ml">Đã thanh toán</span>
+                        <span style="color:#27500A;font-weight:500"><t t-esc="paidAmount"/></span>
+                    </div>
+                    <div class="srow" style="border-top:0.5px solid rgba(0,0,0,0.08);margin-top:6px;padding-top:10px;font-weight:500">
+                        <span>Còn lại</span>
+                        <span t-att-style="'color:' + remainColor">
+                            <t t-esc="remainAmount"/>
+                        </span>
+                    </div>
+                </div>
+            </t>
+
+            <div style="height:12px"/>
+        </div>
+    </div>
+</t>
+
+    <!-- ── OrderList/OrderList.xml ── -->
+<t t-name="mobile_portal.OrderList">
+
+    <div class="shd" style="padding-top:14px">Đơn hàng của bạn</div>
+
+    <!-- Loading state -->
+    <t t-if="props.isLoading">
+        <div class="loading-wrap">Đang tải đơn hàng...</div>
+    </t>
+
+    <!-- Empty state -->
+    <t t-elif="props.orders.length === 0">
+        <div class="cempty">
+            <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#ddd"
+                 stroke-width="1.2" stroke-linecap="round" style="display:block;margin:0 auto 14px">
+                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+            </svg>
+            Chưa có đơn hàng nào
+        </div>
+    </t>
+
+    <!-- Order cards -->
+    <t t-else="">
+        <div class="olist">
+            <t t-foreach="props.orders" t-as="order" t-key="order.id">
+                <div class="ocard" t-on-click="() => this.props.onOpenDetail(order)">
+                    <div class="ocardtop">
+                        <div>
+                            <div class="oref"><t t-esc="order.ref"/></div>
+                            <div class="odate"><t t-esc="order.date"/></div>
+                        </div>
+                        <span class="stt" t-att-class="'s-' + order.status">
+                            <t t-esc="order.label"/>
+                        </span>
+                    </div>
+                    <div class="osub"><t t-esc="orderSummary(order)"/></div>
+                    <div class="ocfooter">
+                        <span style="font-size:11px">
+                            <t t-esc="totalLines(order)"/> sp •
+                            <span t-att-style="'color:' + payLabel(order).color">
+                                <t t-esc="payLabel(order).text"/>
+                            </span>
+                        </span>
+                        <span class="ototal"><t t-esc="totalFormatted(order)"/></span>
+                    </div>
+                </div>
+            </t>
+        </div>
+    </t>
+
+</t>
+
+    <!-- ── DebtView/DebtView.xml ── -->
+<t t-name="mobile_portal.DebtView">
+
+    <t t-if="props.isLoading">
+        <div class="loading-wrap">Đang tải công nợ...</div>
+    </t>
+
+    <t t-else="">
+        <!-- Summary cards: 3 columns -->
+        <div class="shd" style="padding-top:14px">Tổng quan công nợ</div>
+        <div class="dsummary">
+            <div class="dcrd">
+                <div class="dclbl">Tổng đơn hàng</div>
+                <div class="dcval" style="color:#0F6E56">
+                    <t t-esc="totalDebtK"/>k
+                </div>
+            </div>
+            <div class="dcrd">
+                <div class="dclbl">Đã thanh toán</div>
+                <div class="dcval" style="color:#27500A">
+                    <t t-esc="totalPaidK"/>k
+                </div>
+            </div>
+            <div class="dcrd">
+                <div class="dclbl">Còn phải trả</div>
+                <div class="dcval" style="color:#A32D2D">
+                    <t t-esc="totalRemainK"/>k
+                </div>
+            </div>
+        </div>
+
+        <!-- Overall progress bar -->
+        <div class="progwrap">
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:#888780;margin-bottom:6px">
+                <span>Tiến độ thanh toán</span>
+                <span><t t-esc="payPct"/>%</span>
+            </div>
+            <div class="progbar">
+                <div class="progfill" t-att-style="'width:' + payPct + '%'"/>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:11px">
+                <span style="color:#27500A;font-weight:500">
+                    <t t-esc="totalPaidFmt"/> đã TT
+                </span>
+                <span style="color:#A32D2D">
+                    <t t-esc="totalRemainFmt"/> còn lại
+                </span>
+            </div>
+        </div>
+
+        <!-- Payment history -->
+        <t t-if="props.payments.length > 0">
+            <div class="shd">Lịch sử thanh toán</div>
+            <div class="paylist">
+                <t t-foreach="props.payments" t-as="pay" t-key="pay_index">
+                    <div class="prow">
+                        <div class="picon">
+                            <svg width="17" height="17" viewBox="0 0 24 24" fill="none"
+                                 stroke="#0F6E56" stroke-width="1.8" stroke-linecap="round">
+                                <rect x="2" y="5" width="20" height="14" rx="2"/>
+                                <line x1="2" y1="10" x2="22" y2="10"/>
+                            </svg>
+                        </div>
+                        <div class="pinfo2">
+                            <div class="pref"><t t-esc="pay.ref"/></div>
+                            <div class="pfor">
+                                <t t-esc="pay.method"/> • <t t-esc="pay.orderRef"/>
+                            </div>
+                            <div style="font-size:11px;color:#aaa9a2;margin-top:1px">
+                                <t t-esc="pay.date"/>
+                            </div>
+                        </div>
+                        <div class="pamt"><t t-esc="payAmtFmt(pay)"/></div>
+                    </div>
+                </t>
+            </div>
+        </t>
+
+        <!-- Per-order debt breakdown -->
+        <div class="shd">Chi tiết theo đơn hàng</div>
+        <div class="dolist">
+            <t t-foreach="props.orders" t-as="order" t-key="order.id">
+                <div class="dorow" t-on-click="() => this.props.onOpenDetail(order)">
+                    <div class="dortop">
+                        <div>
+                            <div class="doref2"><t t-esc="order.ref"/></div>
+                            <div style="font-size:11px;color:#aaa9a2">
+                                <t t-esc="order.date"/>
+                            </div>
+                        </div>
+                        <span class="psbadge" t-att-class="orderPayInfo(order).cls">
+                            <t t-esc="orderPayInfo(order).label"/>
+                        </span>
+                    </div>
+
+                    <!-- Progress + amounts for non-cancelled orders -->
+                    <t t-if="order.status !== 'cancel'">
+                        <div class="barwrap">
+                            <div class="barfill"
+                                 t-att-style="'width:' + orderBarPct(order) + '%;background:' + orderPayInfo(order).color"/>
+                        </div>
+                        <div class="barlbls">
+                            <span style="color:#27500A;font-weight:500">
+                                <t t-esc="orderPaidFmt(order)"/> đã TT
+                            </span>
+                            <span style="color:#0F6E56;font-weight:500">
+                                <t t-esc="orderTotalFmt(order)"/>
+                            </span>
+                        </div>
+                        <t t-if="order.total > order.paid">
+                            <div style="font-size:11px;color:#A32D2D;text-align:right;margin-top:4px">
+                                Còn: <t t-esc="orderRemainFmt(order)"/>
+                            </div>
+                        </t>
+                    </t>
+                    <t t-else="">
+                        <div style="font-size:11px;color:#aaa9a2;margin-top:2px">Đơn hàng đã hủy</div>
+                    </t>
+                </div>
+            </t>
+        </div>
+
+        <div style="height:12px"/>
+    </t>
+
+</t>
+
+    <!-- ── PortalApp/PortalApp.xml ── -->
+<t t-name="mobile_portal.PortalApp">
+<div class="mp-root">
+
+    <!-- ══ AUTH SCREENS ══ -->
+    <t t-if="state.view === 'login'">
+        <LoginPage onLoginSuccess.bind="onLoginSuccess" onGoRegister.bind="goToRegister"/>
+    </t>
+    <t t-elif="state.view === 'register'">
+        <RegisterPage onRegisterSuccess.bind="onRegisterSuccess" onGoLogin.bind="goToLogin"/>
+    </t>
+
+    <!-- ══ MAIN APP ══ -->
+    <t t-elif="state.view === 'app'">
+        <div class="mp-app">
+
+            <!-- Header -->
+            <header class="mp-header">
+                <div class="mp-header-inner">
+                    <div class="mp-brand">
+                        <div class="mp-brand-icon">
+                            <svg width="16" height="16" viewBox="0 0 30 30" fill="none">
+                                <rect x="3" y="3" width="10" height="10" rx="3" fill="#fff" fill-opacity=".95"/>
+                                <rect x="17" y="3" width="10" height="10" rx="3" fill="#fff" fill-opacity=".5"/>
+                                <rect x="3" y="17" width="10" height="10" rx="3" fill="#fff" fill-opacity=".5"/>
+                                <rect x="17" y="17" width="10" height="10" rx="3" fill="#fff" fill-opacity=".95"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="mp-brand-name">Đặt hàng</div>
+                            <div class="mp-brand-sub"><t t-esc="state.userName"/></div>
+                        </div>
+                    </div>
+                    <div class="mp-header-actions">
+                        <button class="mp-icon-btn" t-on-click="() => this.switchTab('cart')">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+                                <path d="M1 1h4l2.68 13.39a2 2 0 001.99 1.61H19a2 2 0 001.99-1.61L23 6H6"/>
+                            </svg>
+                            <t t-if="cartCount > 0">
+                                <span class="mp-badge"><t t-esc="cartCount"/></span>
+                            </t>
+                        </button>
+                        <button class="mp-icon-btn mp-icon-btn-ghost" t-on-click="onLogout">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
+                                <polyline points="16 17 21 12 16 7"/>
+                                <line x1="21" y1="12" x2="9" y2="12"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Tab content -->
+            <main class="mp-content">
+                <!-- Sản phẩm -->
+                <div class="mp-pane" t-att-class="{'mp-pane--active': state.currentTab === 'products'}">
+                    <t t-if="state.loadingProducts">
+                        <div class="mp-loading"><span class="mp-spinner"/><span>Đang tải sản phẩm...</span></div>
+                    </t>
+                    <t t-else="">
+                        <ProductList products="filteredProducts" categories="state.categories"
+                                     filterCat="state.filterCat" filterQ="state.filterQ"
+                                     cart="state.cart"
+                                     onOpenModal.bind="onOpenModal"
+                                     onFilterCat.bind="onFilterCat"
+                                     onFilterQ.bind="onFilterQ"/>
+                    </t>
+                </div>
+
+                <!-- Giỏ hàng -->
+                <div class="mp-pane" t-att-class="{'mp-pane--active': state.currentTab === 'cart'}">
+                    <Cart items="cartItems" onUpdateQty.bind="onUpdateCartQty"
+                          onPlace.bind="onPlaceOrder" isPlacing="state.isPlacing"/>
+                </div>
+
+                <!-- Đơn hàng -->
+                <div class="mp-pane" t-att-class="{'mp-pane--active': state.currentTab === 'orders'}">
+                    <OrderList orders="state.orders" isLoading="state.loadingOrders"
+                               onOpenDetail.bind="onOpenDetail"/>
+                </div>
+
+                <!-- Công nợ -->
+                <div class="mp-pane" t-att-class="{'mp-pane--active': state.currentTab === 'debt'}">
+                    <DebtView orders="state.orders" payments="state.payments"
+                              isLoading="state.loadingOrders" onOpenDetail.bind="onOpenDetail"/>
+                </div>
+
+                <!-- Order detail slide -->
+                <OrderDetail order="state.detailOrder" onClose.bind="onCloseDetail"/>
+            </main>
+
+            <!-- Bottom nav -->
+            <BottomNav currentTab="state.currentTab" cartCount="cartCount" onSwitch.bind="switchTab"/>
+
+            <!-- Product modal -->
+            <t t-if="state.showModal and state.modalProduct">
+                <ProductModal product="state.modalProduct" initialQty="state.modalQty"
+                              onAdd.bind="onAddToCart" onClose.bind="onCloseModal"/>
+            </t>
+
+            <!-- Toast -->
+            <div class="mp-toast" t-att-class="{'mp-toast--show': state.toastVisible}">
+                <t t-esc="state.toastMsg"/>
+            </div>
+        </div>
+    </t>
+</div>
+</t>
+
+</templates>

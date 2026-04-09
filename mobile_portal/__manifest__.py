@@ -1,0 +1,29 @@
+# -*- coding: utf-8 -*-
+{
+    'name': 'Mobile Customer Portal',
+    'version': '17.0.2.0.0',
+    'category': 'Portal',
+    'summary': 'Responsive OWL SPA portal: Login, Register, Products, Cart, Orders, Debt',
+    'depends': ['portal', 'sale', 'product'],
+    'data': ['views/templates.xml'],
+    'assets': {
+        'web.assets_frontend': [
+            'mobile_portal/static/src/portal_app.scss',
+            'mobile_portal/static/src/utils.js',
+            'mobile_portal/static/src/components/LoginPage/LoginPage.js',
+            'mobile_portal/static/src/components/RegisterPage/RegisterPage.js',
+            'mobile_portal/static/src/components/BottomNav/BottomNav.js',
+            'mobile_portal/static/src/components/ProductModal/ProductModal.js',
+            'mobile_portal/static/src/components/ProductList/ProductList.js',
+            'mobile_portal/static/src/components/Cart/Cart.js',
+            'mobile_portal/static/src/components/OrderDetail/OrderDetail.js',
+            'mobile_portal/static/src/components/OrderList/OrderList.js',
+            'mobile_portal/static/src/components/DebtView/DebtView.js',
+            'mobile_portal/static/src/components/PortalApp/PortalApp.js',
+            'mobile_portal/static/src/app.js',
+        ],
+    },
+    'installable': True,
+    'application': False,
+    'license': 'LGPL-3',
+}

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<t t-name="mobile_portal.OrderDetail">
+    <div class="pg-detail" t-att-class="{'show': isVisible}">
+
+        <!-- Header -->
+        <div class="dhdr">
+            <div class="dback" t-on-click="this.props.onClose">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none"
+                     stroke="#2C2C2A" stroke-width="2" stroke-linecap="round">
+                    <polyline points="15 18 9 12 15 6"/>
+                </svg>
+            </div>
+            <div class="dtitle"><t t-esc="order.ref or 'Chi tiết đơn hàng'"/></div>
+            <span class="stt" t-att-class="'s-' + order.status">
+                <t t-esc="order.label"/>
+            </span>
+        </div>
+
+        <!-- Scrollable body -->
+        <div class="dbody">
+
+            <!-- ── CANCELLED notice ── -->
+            <t t-if="isCancelled">
+                <div class="card" style="text-align:center">
+                    <span class="stt s-cancel" style="font-size:12px;padding:6px 14px">
+                        Đơn hàng đã bị hủy
+                    </span>
+                    <t t-if="order.note">
+                        <div style="font-size:12px;color:#888780;margin-top:10px">
+                            <t t-esc="order.note"/>
+                        </div>
+                    </t>
+                </div>
+            </t>
+
+            <!-- ── TIMELINE ── -->
+            <t t-if="!isCancelled">
+                <div class="card">
+                    <div class="cardtitle">Tiến trình</div>
+                    <div class="tlrow">
+                        <t t-foreach="timeline" t-as="step" t-key="step_index">
+                            <div t-att-class="timelineStepClass(step_index)">
+                                <div class="tldot">
+                                    <!-- checkmark for done steps -->
+                                    <t t-if="step_index &lt; timelineIndex">
+                                        <svg width="10" height="10" viewBox="0 0 12 12" fill="none"
+                                             stroke="#fff" stroke-width="2.2" stroke-linecap="round">
+                                            <polyline points="2 6 5 9 10 3"/>
+                                        </svg>
+                                    </t>
+                                    <!-- current step dot -->
+                                    <t t-elif="step_index === timelineIndex">
+                                        <div style="width:8px;height:8px;border-radius:50%;background:#0F6E56"/>
+                                    </t>
+                                    <!-- future step dot -->
+                                    <t t-else="">
+                                        <div style="width:8px;height:8px;border-radius:50%;background:#C4DDD4"/>
+                                    </t>
+                                </div>
+                                <div class="tllbl"><t t-esc="step"/></div>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+            </t>
+
+            <!-- ── PRODUCTS ── -->
+            <div class="card">
+                <div class="cardtitle">Sản phẩm</div>
+                <t t-foreach="linesWithTotals" t-as="line" t-key="line_index">
+                    <div class="oline">
+                        <div class="othumb" t-att-style="'background:' + line.bg + ';color:' + line.tc">
+                            <t t-esc="line.letter"/>
+                        </div>
+                        <div style="flex:1">
+                            <div style="font-size:12px;font-weight:500;color:#2C2C2A">
+                                <t t-esc="line.name"/>
+                            </div>
+                            <div style="font-size:11px;color:#888780;margin-top:1px">
+                                <t t-esc="line.qtyLabel"/>
+                            </div>
+                        </div>
+                        <div class="oprice"><t t-esc="line.lineTotal"/></div>
+                    </div>
+                </t>
+                <!-- Totals -->
+                <div style="border-top:0.5px solid rgba(0,0,0,0.07);margin-top:10px;padding-top:10px">
+                    <div class="srow">
+                        <span class="ml">Tạm tính</span>
+                        <span><t t-esc="orderTotal"/></span>
+                    </div>
+                    <div class="srow">
+                        <span class="ml">Vận chuyển</span>
+                        <span style="color:#27500A">Miễn phí</span>
+                    </div>
+                    <div class="srow tot">
+                        <span>Tổng cộng</span>
+                        <span class="vr"><t t-esc="orderTotal"/></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── PAYMENT STATUS ── -->
+            <t t-if="!isCancelled">
+                <div class="card">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+                        <div class="cardtitle" style="margin-bottom:0">Thanh toán</div>
+                        <span class="psbadge" t-att-class="payClass">
+                            <t t-esc="payLabel"/>
+                        </span>
+                    </div>
+                    <!-- Progress bar (shown only for partial payment) -->
+                    <t t-if="showPayProgress">
+                        <div class="barwrap">
+                            <div class="barfill" t-att-style="'width:' + payPct + '%;background:#BA7517'"/>
+                        </div>
+                        <div class="barlbls">
+                            <span><t t-esc="payPct"/>% đã TT</span>
+                            <span>còn lại <t t-esc="100 - payPct"/>%</span>
+                        </div>
+                    </t>
+                    <div class="srow" style="margin-top:8px">
+                        <span class="ml">Tổng đơn</span>
+                        <span><t t-esc="orderTotal"/></span>
+                    </div>
+                    <div class="srow">
+                        <span class="ml">Đã thanh toán</span>
+                        <span style="color:#27500A;font-weight:500"><t t-esc="paidAmount"/></span>
+                    </div>
+                    <div class="srow" style="border-top:0.5px solid rgba(0,0,0,0.08);margin-top:6px;padding-top:10px;font-weight:500">
+                        <span>Còn lại</span>
+                        <span t-att-style="'color:' + remainColor">
+                            <t t-esc="remainAmount"/>
+                        </span>
+                    </div>
+                </div>
+            </t>
+
+            <div style="height:12px"/>
+        </div>
+    </div>
+</t>
+
+</templates>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<t t-name="mobile_portal.ProductModal">
+    <!-- Semi-transparent backdrop — tap to close -->
+    <div class="moverlay on" t-on-click="onOverlayClick">
+        <!-- Bottom sheet (stops click propagation) -->
+        <div class="msheet" t-on-click.stop="">
+
+            <div class="mhandle"/>
+
+            <!-- Product header -->
+            <div class="mphdr">
+                <div class="mthumb" t-att-style="'background:' + props.product.bg + ';color:' + props.product.tc">
+                    <t t-esc="props.product.letter"/>
+                </div>
+                <div>
+                    <div class="mname"><t t-esc="props.product.name"/></div>
+                    <div class="mprice"><t t-esc="props.product.priceFormatted"/></div>
+                    <div class="munit">/<t t-esc="props.product.unit"/></div>
+                </div>
+            </div>
+
+            <!-- Quantity selector -->
+            <div class="mqrow">
+                <span class="mqlbl">Số lượng</span>
+                <div class="mqctrl">
+                    <div class="mqbtn" t-on-click="decrement">−</div>
+                    <span class="mqnum"><t t-esc="state.qty"/></span>
+                    <div class="mqbtn" t-on-click="increment">+</div>
+                </div>
+            </div>
+
+            <!-- Add to cart CTA -->
+            <button class="mabtn" t-on-click="onAddClick">
+                Thêm vào giỏ hàng
+            </button>
+
+        </div>
+    </div>
+</t>
+
+</templates>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+<t t-name="mobile_portal.RegisterPage">
+<div class="auth-page" style="min-height:100dvh;min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,#0a5c47 0%,#0F6E56 45%,#1a8f70 100%);padding:20px 16px;">
+<div class="auth-card" style="width:100%;max-width:420px;background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.2);">
+
+    <div class="auth-hero" style="background:linear-gradient(135deg,#0F6E56,#0a5240);padding:28px 28px 22px;text-align:center;">
+        <div style="width:48px;height:48px;background:rgba(255,255,255,0.18);border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;">
+            <svg width="26" height="26" viewBox="0 0 30 30" fill="none">
+                <rect x="3" y="3" width="10" height="10" rx="3" fill="rgba(255,255,255,0.9)"/>
+                <rect x="17" y="3" width="10" height="10" rx="3" fill="rgba(255,255,255,0.5)"/>
+                <rect x="3" y="17" width="10" height="10" rx="3" fill="rgba(255,255,255,0.5)"/>
+                <rect x="17" y="17" width="10" height="10" rx="3" fill="rgba(255,255,255,0.9)"/>
+            </svg>
+        </div>
+        <div style="font-size:18px;font-weight:600;color:#fff;font-family:Georgia,serif;">Tạo tài khoản</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.7);margin-top:4px;">Đăng ký để bắt đầu đặt hàng</div>
+    </div>
+
+    <div style="padding:24px 24px 28px;max-height:70vh;overflow-y:auto;">
+
+        <!-- Error -->
+        <t t-if="state.error">
+            <div style="background:#FEF2F2;border:1px solid #FECACA;border-radius:10px;padding:10px 14px;font-size:12px;color:#B91C1C;display:flex;align-items:center;gap:8px;margin-bottom:16px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="flex-shrink:0">
+                    <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                <t t-esc="state.error"/>
+            </div>
+        </t>
+
+        <!-- Name -->
+        <div style="margin-bottom:14px;">
+            <label style="display:block;font-size:11px;font-weight:500;color:#888780;letter-spacing:0.6px;text-transform:uppercase;margin-bottom:5px;">HỌ VÀ TÊN <span style="color:#D85A30">*</span></label>
+            <input type="text" placeholder="Nguyễn Văn A"
+                   t-att-value="state.name" t-on-input="onInput('name')"
+                   style="width:100%;border:1px solid rgba(0,0,0,0.15);border-radius:10px;padding:10px 14px;font-size:14px;color:#2C2C2A;background:#fafaf8;outline:none;font-family:inherit;display:block;"/>
+        </div>
+
+        <!-- Email -->
+        <div style="margin-bottom:14px;">
+            <label style="display:block;font-size:11px;font-weight:500;color:#888780;letter-spacing:0.6px;text-transform:uppercase;margin-bottom:5px;">EMAIL <span style="color:#D85A30">*</span></label>
+            <input type="email" placeholder="example@company.com" autocomplete="username"
+                   t-att-value="state.email" t-on-input="onInput('email')"
+                   style="width:100%;border:1px solid rgba(0,0,0,0.15);border-radius:10px;padding:10px 14px;font-size:14px;color:#2C2C2A;background:#fafaf8;outline:none;font-family:inherit;display:block;"/>
+        </div>
+
+        <!-- Phone -->
+        <div style="margin-bottom:14px;">
+            <label style="display:block;font-size:11px;font-weight:500;color:#888780;letter-spacing:0.6px;text-transform:uppercase;margin-bottom:5px;">SỐ ĐIỆN THOẠI</label>
+            <input type="tel" placeholder="0901 234 567"
+                   t-att-value="state.phone" t-on-input="onInput('phone')"
+                   style="width:100%;border:1px solid rgba(0,0,0,0.15);border-radius:10px;padding:10px 14px;font-size:14px;color:#2C2C2A;background:#fafaf8;outline:none;font-family:inherit;display:block;"/>
+        </div>
+
+        <!-- Password -->
+        <div style="margin-bottom:14px;">
+            <label style="display:block;font-size:11px;font-weight:500;color:#888780;letter-spacing:0.6px;text-transform:uppercase;margin-bottom:5px;">MẬT KHẨU <span style="color:#D85A30">*</span></label>
+            <div style="position:relative;">
+                <input t-att-type="state.showPass ? 'text' : 'password'" placeholder="Tối thiểu 6 ký tự"
+                       autocomplete="new-password"
+                       t-att-value="state.password" t-on-input="onInput('password')"
+                       style="width:100%;border:1px solid rgba(0,0,0,0.15);border-radius:10px;padding:10px 42px 10px 14px;font-size:14px;color:#2C2C2A;background:#fafaf8;outline:none;font-family:inherit;display:block;"/>
+                <button type="button" t-on-click="() => this.state.showPass = !this.state.showPass"
+                        style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#888780;padding:4px;display:flex;align-items:center;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Confirm -->
+        <div style="margin-bottom:20px;">
+            <label style="display:block;font-size:11px;font-weight:500;color:#888780;letter-spacing:0.6px;text-transform:uppercase;margin-bottom:5px;">XÁC NHẬN MẬT KHẨU <span style="color:#D85A30">*</span></label>
+            <input t-att-type="state.showConfirm ? 'text' : 'password'" placeholder="Nhập lại mật khẩu"
+                   autocomplete="new-password"
+                   t-att-value="state.confirm" t-on-input="onInput('confirm')"
+                   t-att-style="passwordMismatch ? 'width:100%;border:1px solid #E24B4A;border-radius:10px;padding:10px 14px;font-size:14px;color:#2C2C2A;background:#fafaf8;outline:none;font-family:inherit;display:block;' : 'width:100%;border:1px solid rgba(0,0,0,0.15);border-radius:10px;padding:10px 14px;font-size:14px;color:#2C2C2A;background:#fafaf8;outline:none;font-family:inherit;display:block;'"/>
+            <t t-if="passwordMismatch">
+                <span style="font-size:11px;color:#E24B4A;margin-top:4px;display:block;">Mật khẩu không khớp</span>
+            </t>
+        </div>
+
+        <!-- Submit -->
+        <button t-on-click="onSubmit"
+                t-att-disabled="!canSubmit or state.loading"
+                t-att-style="(!canSubmit or state.loading) ? 'width:100%;background:#0F6E56;color:#fff;border:none;border-radius:12px;padding:13px;font-size:14px;font-weight:500;cursor:not-allowed;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;opacity:0.55;' : 'width:100%;background:#0F6E56;color:#fff;border:none;border-radius:12px;padding:13px;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;'">
+            <t t-if="state.loading">
+                <span style="width:16px;height:16px;border:2px solid rgba(255,255,255,0.35);border-top-color:#fff;border-radius:50%;animation:mp-spin 0.7s linear infinite;display:inline-block;flex-shrink:0;"/>
+                Đang tạo tài khoản...
+            </t>
+            <t t-else="">Tạo tài khoản</t>
+        </button>
+
+        <!-- Divider -->
+        <div style="text-align:center;margin:16px 0;position:relative;">
+            <div style="position:absolute;top:50%;left:0;right:0;height:1px;background:rgba(0,0,0,0.08);"/>
+            <span style="position:relative;background:#fff;padding:0 12px;font-size:11px;color:#aaa9a2;">đã có tài khoản?</span>
+        </div>
+
+        <button t-on-click="() => this.props.onGoLogin()"
+                style="width:100%;background:transparent;color:#0F6E56;border:1.5px solid rgba(15,110,86,0.35);border-radius:12px;padding:12px;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;">
+            Đăng nhập
+        </button>
+
+    </div>
+</div>
+</div>
+</t>
+</templates>

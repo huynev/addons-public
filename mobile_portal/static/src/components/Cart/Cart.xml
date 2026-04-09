@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<t t-name="mobile_portal.Cart">
+    <!-- Empty state -->
+    <t t-if="props.items.length === 0">
+        <div class="cempty">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ddd"
+                 stroke-width="1.2" stroke-linecap="round" style="display:block;margin:0 auto 14px">
+                <circle cx="9" cy="21" r="1"/>
+                <circle cx="20" cy="21" r="1"/>
+                <path d="M1 1h4l2.68 13.39a2 2 0 001.99 1.61H19a2 2 0 001.99-1.61L23 6H6"/>
+            </svg>
+            Giỏ hàng trống<br/>
+            <span style="font-size:11px">Chọn sản phẩm để bắt đầu</span>
+        </div>
+    </t>
+
+    <!-- Cart items -->
+    <t t-if="props.items.length > 0">
+        <div class="shd" style="padding-top:14px">
+            Giỏ hàng (<t t-esc="totalQty"/> sản phẩm)
+        </div>
+
+        <div class="clist">
+            <t t-foreach="props.items" t-as="item" t-key="item.id">
+                <div class="citem">
+                    <!-- Thumbnail -->
+                    <div class="cithumb" t-att-style="'background:' + item.bg + ';color:' + item.tc">
+                        <t t-esc="item.letter"/>
+                    </div>
+                    <!-- Info -->
+                    <div class="ciinfo">
+                        <div class="ciname"><t t-esc="item.name"/></div>
+                        <div class="cisub">
+                            <t t-esc="item.priceFormatted"/>/<t t-esc="item.unit"/>
+                        </div>
+                        <div class="ciprice"><t t-esc="lineTotal(item)"/></div>
+                    </div>
+                    <!-- Quantity controls -->
+                    <div class="qctrl">
+                        <div class="qbtn" t-on-click="() => this.props.onUpdateQty(item.id, -1)">−</div>
+                        <span class="qnum"><t t-esc="item.qty"/></span>
+                        <div class="qbtn" t-on-click="() => this.props.onUpdateQty(item.id, +1)">+</div>
+                    </div>
+                </div>
+            </t>
+        </div>
+
+        <!-- Footer: total + order button -->
+        <div class="cfooter">
+            <div class="trow">
+                <span style="font-size:13px;color:#888780">Tổng thanh toán</span>
+                <span class="tamt"><t t-esc="totalFormatted"/></span>
+            </div>
+            <button class="gbtn"
+                    t-att-disabled="!canOrder"
+                    t-att-style="!canOrder ? 'opacity:0.6;cursor:not-allowed' : ''"
+                    t-on-click="this.props.onPlace">
+                <t t-if="props.isPlacing">Đang xử lý...</t>
+                <t t-else="">Xác nhận đặt hàng</t>
+            </button>
+        </div>
+    </t>
+</t>
+
+</templates>

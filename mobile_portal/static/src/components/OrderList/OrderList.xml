@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<t t-name="mobile_portal.OrderList">
+
+    <div class="shd" style="padding-top:14px">Đơn hàng của bạn</div>
+
+    <!-- Loading state -->
+    <t t-if="props.isLoading">
+        <div class="loading-wrap">Đang tải đơn hàng...</div>
+    </t>
+
+    <!-- Empty state -->
+    <t t-elif="props.orders.length === 0">
+        <div class="cempty">
+            <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#ddd"
+                 stroke-width="1.2" stroke-linecap="round" style="display:block;margin:0 auto 14px">
+                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+            </svg>
+            Chưa có đơn hàng nào
+        </div>
+    </t>
+
+    <!-- Order cards -->
+    <t t-else="">
+        <div class="olist">
+            <t t-foreach="props.orders" t-as="order" t-key="order.id">
+                <div class="ocard" t-on-click="() => this.props.onOpenDetail(order)">
+                    <div class="ocardtop">
+                        <div>
+                            <div class="oref"><t t-esc="order.ref"/></div>
+                            <div class="odate"><t t-esc="order.date"/></div>
+                        </div>
+                        <span class="stt" t-att-class="'s-' + order.status">
+                            <t t-esc="order.label"/>
+                        </span>
+                    </div>
+                    <div class="osub"><t t-esc="orderSummary(order)"/></div>
+                    <div class="ocfooter">
+                        <span style="font-size:11px">
+                            <t t-esc="totalLines(order)"/> sp •
+                            <span t-att-style="'color:' + payLabel(order).color">
+                                <t t-esc="payLabel(order).text"/>
+                            </span>
+                        </span>
+                        <span class="ototal"><t t-esc="totalFormatted(order)"/></span>
+                    </div>
+                </div>
+            </t>
+        </div>
+    </t>
+
+</t>
+
+</templates>

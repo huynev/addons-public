@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<t t-name="mobile_portal.DebtView">
+
+    <t t-if="props.isLoading">
+        <div class="loading-wrap">Đang tải công nợ...</div>
+    </t>
+
+    <t t-else="">
+        <!-- Summary cards: 3 columns -->
+        <div class="shd" style="padding-top:14px">Tổng quan công nợ</div>
+        <div class="dsummary">
+            <div class="dcrd">
+                <div class="dclbl">Tổng đơn hàng</div>
+                <div class="dcval" style="color:#0F6E56">
+                    <t t-esc="totalDebtK"/>k
+                </div>
+            </div>
+            <div class="dcrd">
+                <div class="dclbl">Đã thanh toán</div>
+                <div class="dcval" style="color:#27500A">
+                    <t t-esc="totalPaidK"/>k
+                </div>
+            </div>
+            <div class="dcrd">
+                <div class="dclbl">Còn phải trả</div>
+                <div class="dcval" style="color:#A32D2D">
+                    <t t-esc="totalRemainK"/>k
+                </div>
+            </div>
+        </div>
+
+        <!-- Overall progress bar -->
+        <div class="progwrap">
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:#888780;margin-bottom:6px">
+                <span>Tiến độ thanh toán</span>
+                <span><t t-esc="payPct"/>%</span>
+            </div>
+            <div class="progbar">
+                <div class="progfill" t-att-style="'width:' + payPct + '%'"/>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:11px">
+                <span style="color:#27500A;font-weight:500">
+                    <t t-esc="totalPaidFmt"/> đã TT
+                </span>
+                <span style="color:#A32D2D">
+                    <t t-esc="totalRemainFmt"/> còn lại
+                </span>
+            </div>
+        </div>
+
+        <!-- Payment history -->
+        <t t-if="props.payments.length > 0">
+            <div class="shd">Lịch sử thanh toán</div>
+            <div class="paylist">
+                <t t-foreach="props.payments" t-as="pay" t-key="pay_index">
+                    <div class="prow">
+                        <div class="picon">
+                            <svg width="17" height="17" viewBox="0 0 24 24" fill="none"
+                                 stroke="#0F6E56" stroke-width="1.8" stroke-linecap="round">
+                                <rect x="2" y="5" width="20" height="14" rx="2"/>
+                                <line x1="2" y1="10" x2="22" y2="10"/>
+                            </svg>
+                        </div>
+                        <div class="pinfo2">
+                            <div class="pref"><t t-esc="pay.ref"/></div>
+                            <div class="pfor">
+                                <t t-esc="pay.method"/> • <t t-esc="pay.orderRef"/>
+                            </div>
+                            <div style="font-size:11px;color:#aaa9a2;margin-top:1px">
+                                <t t-esc="pay.date"/>
+                            </div>
+                        </div>
+                        <div class="pamt"><t t-esc="payAmtFmt(pay)"/></div>
+                    </div>
+                </t>
+            </div>
+        </t>
+
+        <!-- Per-order debt breakdown -->
+        <div class="shd">Chi tiết theo đơn hàng</div>
+        <div class="dolist">
+            <t t-foreach="props.orders" t-as="order" t-key="order.id">
+                <div class="dorow" t-on-click="() => this.props.onOpenDetail(order)">
+                    <div class="dortop">
+                        <div>
+                            <div class="doref2"><t t-esc="order.ref"/></div>
+                            <div style="font-size:11px;color:#aaa9a2">
+                                <t t-esc="order.date"/>
+                            </div>
+                        </div>
+                        <span class="psbadge" t-att-class="orderPayInfo(order).cls">
+                            <t t-esc="orderPayInfo(order).label"/>
+                        </span>
+                    </div>
+
+                    <!-- Progress + amounts for non-cancelled orders -->
+                    <t t-if="order.status !== 'cancel'">
+                        <div class="barwrap">
+                            <div class="barfill"
+                                 t-att-style="'width:' + orderBarPct(order) + '%;background:' + orderPayInfo(order).color"/>
+                        </div>
+                        <div class="barlbls">
+                            <span style="color:#27500A;font-weight:500">
+                                <t t-esc="orderPaidFmt(order)"/> đã TT
+                            </span>
+                            <span style="color:#0F6E56;font-weight:500">
+                                <t t-esc="orderTotalFmt(order)"/>
+                            </span>
+                        </div>
+                        <t t-if="order.total > order.paid">
+                            <div style="font-size:11px;color:#A32D2D;text-align:right;margin-top:4px">
+                                Còn: <t t-esc="orderRemainFmt(order)"/>
+                            </div>
+                        </t>
+                    </t>
+                    <t t-else="">
+                        <div style="font-size:11px;color:#aaa9a2;margin-top:2px">Đơn hàng đã hủy</div>
+                    </t>
+                </div>
+            </t>
+        </div>
+
+        <div style="height:12px"/>
+    </t>
+
+</t>
+
+</templates>

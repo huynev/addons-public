@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<t t-name="mobile_portal.ProductList">
+    <!-- Search bar -->
+    <div class="sbar2">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#aaa9a2" stroke-width="2" stroke-linecap="round">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="M21 21l-4.35-4.35"/>
+        </svg>
+        <input class="sinput"
+               type="search"
+               placeholder="Tìm sản phẩm..."
+               t-att-value="props.filterQ"
+               t-on-input="onSearchInput"/>
+    </div>
+
+    <!-- Category pills -->
+    <div class="pills">
+        <t t-foreach="props.categories" t-as="cat" t-key="cat">
+            <div class="pill"
+                 t-att-class="{'on': props.filterCat === (cat === 'Tất cả' ? '' : cat)}"
+                 t-on-click="() => this.onPillClick(cat === 'Tất cả' ? '' : cat)">
+                <t t-esc="cat"/>
+            </div>
+        </t>
+    </div>
+
+    <!-- Product grid -->
+    <div class="pgrid">
+        <t t-if="props.products.length === 0">
+            <div style="grid-column: 1 / -1; text-align:center; padding:40px; color:#aaa9a2; font-size:13px;">
+                Không tìm thấy sản phẩm
+            </div>
+        </t>
+
+        <t t-foreach="props.products" t-as="product" t-key="product.id">
+            <div class="pcard" t-on-click="() => this.onCardClick(product)">
+                <!-- Thumbnail with colored bg and first letter -->
+                <div class="pthumb" t-att-style="'background:' + product.bg">
+                    <span class="pletter" t-att-style="'color:' + product.tc">
+                        <t t-esc="product.letter"/>
+                    </span>
+                    <!-- "in cart" chip -->
+                    <t t-if="cartQty(product.id) > 0">
+                        <div class="cinchip">
+                            ×<t t-esc="cartQty(product.id)"/>
+                        </div>
+                    </t>
+                </div>
+                <!-- Product info -->
+                <div class="pinfo">
+                    <div class="pname"><t t-esc="product.name"/></div>
+                    <div class="pprice"><t t-esc="product.priceFormatted"/></div>
+                    <div class="punit">/<t t-esc="product.unit"/></div>
+                </div>
+            </div>
+        </t>
+    </div>
+</t>
+
+</templates>
