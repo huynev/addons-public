@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Mobile Customer Portal',
-    'version': '17.0.2.0.0',
+    'version': '17.0.3.10.7',
+    'author': "Wokwy (quochuy.software@gmail.com) - support by Claude.com",
     'category': 'Portal',
     'summary': 'Responsive OWL SPA portal: Login, Register, Products, Cart, Orders, Debt',
-    'depends': ['portal', 'sale', 'product'],
+    'depends': ['portal', 'sale', 'product', 'payment_allocation'],
     'data': ['views/templates.xml'],
     'assets': {
         'web.assets_frontend': [

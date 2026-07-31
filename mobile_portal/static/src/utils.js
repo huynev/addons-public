@@ -25,7 +25,7 @@ export function pct(numerator, denominator) {
  * Returns [bg, tc] (background color, text color).
  */
 const PALETTES = [
-    ['#E1F5EE', '#085041'],
+    ['#FEF3E8', '#6F3C09'],
     ['#FAECE7', '#712B13'],
     ['#FAEEDA', '#633806'],
     ['#FBEAF0', '#72243E'],

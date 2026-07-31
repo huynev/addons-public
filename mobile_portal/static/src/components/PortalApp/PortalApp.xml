@@ -61,12 +61,15 @@
                         <div class="mp-loading"><span class="mp-spinner"/><span>Đang tải sản phẩm...</span></div>
                     </t>
                     <t t-else="">
-                        <ProductList products="filteredProducts" categories="state.categories"
+                        <ProductList products="state.products" categories="state.categories"
                                      filterCat="state.filterCat" filterQ="state.filterQ"
                                      cart="state.cart"
+                                     hasMore="state.productHasMore"
+                                     loadingMore="state.loadingMore"
                                      onOpenModal.bind="onOpenModal"
                                      onFilterCat.bind="onFilterCat"
-                                     onFilterQ.bind="onFilterQ"/>
+                                     onFilterQ.bind="onFilterQ"
+                                     onLoadMore.bind="onLoadMore"/>
                     </t>
                 </div>
 
@@ -84,8 +87,9 @@
 
                 <!-- Công nợ -->
                 <div class="mp-pane" t-att-class="{'mp-pane--active': state.currentTab === 'debt'}">
-                    <DebtView orders="state.orders" payments="state.payments"
-                              isLoading="state.loadingOrders" onOpenDetail.bind="onOpenDetail"/>
+                    <DebtView orders="state.orders" debt="state.debt"
+                              isLoading="state.loadingDebt" onOpenDetail.bind="onOpenDetail"
+                              onFilter.bind="onDebtFilter"/>
                 </div>
 
                 <!-- Order detail slide -->
@@ -98,6 +102,10 @@
             <!-- Product modal -->
             <t t-if="state.showModal and state.modalProduct">
                 <ProductModal product="state.modalProduct" initialQty="state.modalQty"
+                              initialVariant="state.modalVariant"
+                              initialPkg="state.modalPkg"
+                              hasPriorSelection="state.modalHasPrior"
+                              cartVariants="state.modalCartVariants"
                               onAdd.bind="onAddToCart" onClose.bind="onCloseModal"/>
             </t>
 

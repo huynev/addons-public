@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_account_payment_form_inherit_allocation" model="ir.ui.view">
+        <field name="name">account.payment.form.inherit.allocation</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                <button name="%(payment_allocation.action_payment_allocation_wizard)d"
+                        type="action"
+                        class="oe_stat_button"
+                        icon="fa-random"
+                        invisible="state != 'posted' or not partner_id">
+                    <field name="unallocated_amount" widget="statinfo"
+                           string="Chưa phân bổ"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

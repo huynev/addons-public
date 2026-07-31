@@ -4,8 +4,14 @@
         <html lang="vi" style="height:100%;margin:0;padding:0;overflow:hidden">
             <head>
                 <meta charset="UTF-8"/>
-                <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-                <meta name="theme-color" content="#0F6E56"/>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
+                <meta name="theme-color" content="#F78614"/>
+                <!-- PWA -->
+                <link rel="manifest" href="/my/shop/manifest.json"/>
+                <link rel="apple-touch-icon" href="/my/shop/icon/192"/>
+                <meta name="apple-mobile-web-app-capable" content="yes"/>
+                <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+                <meta name="apple-mobile-web-app-title" content="Shop"/>
                 <title>Cổng Khách Hàng</title>
                 <t t-call-assets="web.assets_frontend" t-js="false"/>
                 <t t-call-assets="web.assets_frontend" t-css="false"/>
@@ -18,7 +24,7 @@
                     @keyframes mp-spin{to{transform:rotate(360deg)}}
                 </style>
             </head>
-            <body style="height:100%;margin:0;padding:0;overflow:hidden;background:#f4f3ee">
+            <body style="height:100%;margin:0;padding:0;overflow:hidden;background:#F78614">
                 <div id="mobile-portal-root"
                      t-att-data-partner-name="partner_name"
                      t-att-data-partner-id="partner_id"

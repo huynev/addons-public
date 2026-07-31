@@ -11,13 +11,27 @@
 
             <!-- Product header -->
             <div class="mphdr">
-                <div class="mthumb" t-att-style="'background:' + props.product.bg + ';color:' + props.product.tc">
-                    <t t-esc="props.product.letter"/>
+                <div class="mthumb" t-att-style="'background:' + props.product.bg">
+                    <img class="mthumb-img"
+                         t-att-src="'/web/image/product.template/' + props.product.id + '/image_256'"
+                         t-att-alt="props.product.name"
+                         t-on-error="onImgError"/>
+                    <span class="mthumb-fallback" t-att-style="'color:' + props.product.tc">
+                        <t t-esc="props.product.letter"/>
+                    </span>
                 </div>
                 <div>
                     <div class="mname"><t t-esc="props.product.name"/></div>
-                    <div class="mprice"><t t-esc="props.product.priceFormatted"/></div>
-                    <div class="munit">/<t t-esc="props.product.unit"/></div>
+                    <t t-if="props.product.code">
+                        <div class="mcode">MSP: <t t-esc="props.product.code"/></div>
+                    </t>
+                    <div class="mprow">
+                        <span class="mprice"><t t-esc="currentPriceFormatted"/></span>
+                        <t t-if="currentTaxRate">
+                            <span class="mtax">(VAT <t t-esc="Math.round(currentTaxRate)"/>%)</span>
+                        </t>
+                    </div>
+                    <span class="munit"><t t-esc="props.product.unit"/></span>
                 </div>
             </div>
 
@@ -26,7 +40,10 @@
                 <span class="mqlbl">Số lượng</span>
                 <div class="mqctrl">
                     <div class="mqbtn" t-on-click="decrement">−</div>
-                    <span class="mqnum"><t t-esc="state.qty"/></span>
+                    <input type="number" inputmode="numeric" min="1" class="mqnum mqnum-input"
+                           t-att-value="state.qty"
+                           t-on-input="onQtyInput" t-on-blur="onQtyBlur"
+                           t-on-click.stop=""/>
                     <div class="mqbtn" t-on-click="increment">+</div>
                 </div>
             </div>

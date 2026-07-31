@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_customer_payment_detail_report_wizard_form" model="ir.ui.view">
+        <field name="name">customer.payment.detail.report.wizard.form</field>
+        <field name="model">customer.payment.detail.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Báo cáo chi tiết thanh toán">
+                <group>
+                    <group>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                    </group>
+                    <group>
+                        <field name="partner_ids" widget="many2many_tags"/>
+                        <field name="currency_id" invisible="1"/>
+                    </group>
+                </group>
+                <field name="line_ids" invisible="not line_ids">
+                    <tree decoration-muted="is_unallocated">
+                        <field name="payment_date"/>
+                        <field name="partner_id"/>
+                        <field name="payment_id"/>
+                        <field name="payment_memo"/>
+                        <field name="invoice_id"/>
+                        <field name="invoice_date"/>
+                        <field name="allocated_amount" sum="Tổng đã phân bổ"/>
+                        <field name="is_unallocated" widget="boolean_toggle" readonly="1"/>
+                        <field name="currency_id" column_invisible="1"/>
+                    </tree>
+                </field>
+                <footer>
+                    <button name="action_generate_report" type="object"
+                            string="Xem báo cáo" class="btn-primary"/>
+                    <button string="Đóng" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_customer_payment_detail_report_wizard" model="ir.actions.act_window">
+        <field name="name">Báo cáo chi tiết thanh toán</field>
+        <field name="res_model">customer.payment.detail.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

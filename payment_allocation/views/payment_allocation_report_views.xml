@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_payment_allocation_report_tree" model="ir.ui.view">
+        <field name="name">payment.allocation.report.tree</field>
+        <field name="model">payment.allocation.report</field>
+        <field name="arch" type="xml">
+            <tree string="Báo cáo phân bổ thanh toán" decoration-warning="is_unallocated"
+                  create="0" edit="0" delete="0">
+                <field name="payment_date"/>
+                <field name="partner_id"/>
+                <field name="payment_id"/>
+                <field name="payment_memo"/>
+                <field name="invoice_id"/>
+                <field name="invoice_date"/>
+                <field name="allocated_amount" sum="Tổng phân bổ"/>
+                <field name="is_unallocated" optional="hide"/>
+                <field name="currency_id" column_invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_payment_allocation_report_search" model="ir.ui.view">
+        <field name="name">payment.allocation.report.search</field>
+        <field name="model">payment.allocation.report</field>
+        <field name="arch" type="xml">
+            <search string="Tìm kiếm phân bổ thanh toán">
+                <field name="partner_id"/>
+                <field name="payment_id"/>
+                <field name="invoice_id"/>
+                <field name="payment_date"/>
+                <separator/>
+                <filter string="Đã phân bổ" name="filter_allocated"
+                        domain="[('is_unallocated', '=', False)]"/>
+                <filter string="Chưa phân bổ" name="filter_unallocated"
+                        domain="[('is_unallocated', '=', True)]"/>
+                <separator/>
+                <filter string="Ngày nhận tiền" name="filter_payment_date" date="payment_date"/>
+                <group expand="0" string="Nhóm theo">
+                    <filter string="Khách hàng" name="group_partner"
+                            context="{'group_by': 'partner_id'}"/>
+                    <filter string="Thanh toán" name="group_payment"
+                            context="{'group_by': 'payment_id'}"/>
+                    <filter string="Hoá đơn" name="group_invoice"
+                            context="{'group_by': 'invoice_id'}"/>
+                    <filter string="Ngày nhận tiền" name="group_date"
+                            context="{'group_by': 'payment_date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_payment_allocation_report" model="ir.actions.act_window">
+        <field name="name">Báo cáo phân bổ thanh toán</field>
+        <field name="res_model">payment.allocation.report</field>
+        <field name="view_mode">tree,pivot</field>
+        <field name="search_view_id" ref="view_payment_allocation_report_search"/>
+        <field name="context">{'search_default_group_partner': 1}</field>
+    </record>
+
+</odoo>

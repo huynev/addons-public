@@ -52,7 +52,7 @@
                                     </t>
                                     <!-- current step dot -->
                                     <t t-elif="step_index === timelineIndex">
-                                        <div style="width:8px;height:8px;border-radius:50%;background:#0F6E56"/>
+                                        <div style="width:8px;height:8px;border-radius:50%;background:#F78614"/>
                                     </t>
                                     <!-- future step dot -->
                                     <t t-else="">
@@ -81,6 +81,9 @@
                             <div style="font-size:11px;color:#888780;margin-top:1px">
                                 <t t-esc="line.qtyLabel"/>
                             </div>
+                            <t t-if="line.pkgLabel">
+                                <div class="cipkg" style="margin-top:3px"><t t-esc="line.pkgLabel"/></div>
+                            </t>
                         </div>
                         <div class="oprice"><t t-esc="line.lineTotal"/></div>
                     </div>
@@ -122,8 +125,31 @@
                         </div>
                     </t>
                     <div class="srow" style="margin-top:8px">
-                        <span class="ml">Tổng đơn</span>
-                        <span><t t-esc="orderTotal"/></span>
+                        <span class="ml">Tổng tiền (chưa VAT, chưa CK)</span>
+                        <span><t t-esc="amountBeforeDiscount"/></span>
+                    </div>
+                    <div class="srow">
+                        <span class="ml">Tổng tiền sau CK</span>
+                        <span><t t-esc="amountUntaxed"/></span>
+                    </div>
+                    <!-- Tách riêng theo từng nhóm thuế (vd. Thuế GTGT) nếu đơn dùng nhiều nhóm -->
+                    <t t-if="taxGroupRows.length > 0">
+                        <t t-foreach="taxGroupRows" t-as="tg" t-key="tg_index">
+                            <div class="srow">
+                                <span class="ml"><t t-esc="tg.name"/></span>
+                                <span><t t-esc="tg.amountFmt"/></span>
+                            </div>
+                        </t>
+                    </t>
+                    <t t-elif="hasTax">
+                        <div class="srow">
+                            <span class="ml">Thuế GTGT</span>
+                            <span><t t-esc="amountTax"/></span>
+                        </div>
+                    </t>
+                    <div class="srow" style="border-top:0.5px solid rgba(0,0,0,0.08);margin-top:6px;padding-top:10px;font-weight:500">
+                        <span>Tổng</span>
+                        <span style="color:#064e3c"><t t-esc="orderTotal"/></span>
                     </div>
                     <div class="srow">
                         <span class="ml">Đã thanh toán</span>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_payment_allocation_wizard_form" model="ir.ui.view">
+        <field name="name">payment.allocation.wizard.form</field>
+        <field name="model">payment.allocation.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Phân bổ thanh toán cho hoá đơn">
+                <group>
+                    <group>
+                        <field name="payment_id" readonly="1"/>
+                        <field name="partner_id" readonly="1"/>
+                        <field name="currency_id" invisible="1"/>
+                    </group>
+                    <group>
+                        <field name="amount_total" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                        <field name="amount_unallocated" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                        <field name="amount_allocated" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                        <field name="amount_available" widget="monetary" options="{'currency_field': 'currency_id'}" decoration-danger="amount_available &lt; 0"/>
+                    </group>
+                </group>
+                <field name="line_ids">
+                    <tree editable="bottom" create="0" delete="0">
+                        <!-- force_save="1" cho các field readonly được set 1 lần
+                             qua default_get, không có widget để user chỉnh sửa —
+                             nếu không Odoo 17 sẽ không gửi lại giá trị khi Save. -->
+                        <field name="move_line_id" column_invisible="1" force_save="1"/>
+                        <field name="currency_id" column_invisible="1"/>
+
+                        <field name="move_id" readonly="1"/>
+                        <field name="invoice_date_due" readonly="1"/>
+                        <field name="amount_residual" widget="monetary"
+                               options="{'currency_field': 'currency_id'}"
+                               readonly="1" force_save="1"/>
+                        <field name="amount_to_allocate" widget="monetary"
+                               options="{'currency_field': 'currency_id'}"/>
+                    </tree>
+                </field>
+                <footer>
+                    <button name="action_allocate" type="object"
+                            string="Xác nhận phân bổ" class="btn-primary"/>
+                    <button string="Huỷ" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_payment_allocation_wizard" model="ir.actions.act_window">
+        <field name="name">Phân bổ thanh toán</field>
+        <field name="res_model">payment.allocation.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

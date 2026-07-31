@@ -34,6 +34,9 @@
                         <div class="ciname"><t t-esc="item.name"/></div>
                         <div class="cisub">
                             <t t-esc="item.priceFormatted"/>/<t t-esc="item.unit"/>
+                            <t t-if="item.taxRate">
+                                <span class="citax"><t t-esc="lineTaxTag(item)"/></span>
+                            </t>
                         </div>
                         <div class="ciprice"><t t-esc="lineTotal(item)"/></div>
                     </div>
@@ -47,8 +50,18 @@
             </t>
         </div>
 
-        <!-- Footer: total + order button -->
+        <!-- Footer: subtotal, tax groups, total + order button -->
         <div class="cfooter">
+            <div class="tsrow">
+                <span>Tạm tính (chưa VAT)</span>
+                <span><t t-esc="subtotalUntaxedFormatted"/></span>
+            </div>
+            <t t-foreach="taxGroups" t-as="tg" t-key="tg_index">
+                <div class="tsrow">
+                    <span><t t-esc="tg.label"/></span>
+                    <span><t t-esc="tg.amountFmt"/></span>
+                </div>
+            </t>
             <div class="trow">
                 <span style="font-size:13px;color:#888780">Tổng thanh toán</span>
                 <span class="tamt"><t t-esc="totalFormatted"/></span>

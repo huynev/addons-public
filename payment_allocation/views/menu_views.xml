@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<!--    &lt;!&ndash; Gom cả 3 báo cáo vào menu "Reporting" của app Invoicing/Accounting. &ndash;&gt;-->
+<!--    <menuitem id="menu_customer_payment_report"-->
+<!--              name="Báo cáo thanh toán KH"-->
+<!--              parent="account.menu_finance_reports"-->
+<!--              action="action_customer_payment_report_wizard"-->
+<!--              sequence="80"/>-->
+
+<!--    <menuitem id="menu_customer_payment_detail_report"-->
+<!--              name="Báo cáo chi tiết thanh toán"-->
+<!--              parent="account.menu_finance_reports"-->
+<!--              action="action_customer_payment_detail_report_wizard"-->
+<!--              sequence="81"/>-->
+
+    <menuitem id="menu_payment_allocation_report"
+              name="Báo cáo phân bổ thanh toán"
+              parent="account.menu_finance_reports"
+              action="action_payment_allocation_report"
+              sequence="82"/>
+
+</odoo>

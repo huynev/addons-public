@@ -10,21 +10,36 @@
         </svg>
         <input class="sinput"
                type="search"
-               placeholder="Tìm sản phẩm..."
+               placeholder="Tìm sản phẩm (bằng mã, tên, hoặc tên danh mục)..."
                t-att-value="props.filterQ"
                t-on-input="onSearchInput"/>
     </div>
 
-    <!-- Category pills -->
-    <div class="pills">
-        <t t-foreach="props.categories" t-as="cat" t-key="cat">
-            <div class="pill"
-                 t-att-class="{'on': props.filterCat === (cat === 'Tất cả' ? '' : cat)}"
-                 t-on-click="() => this.onPillClick(cat === 'Tất cả' ? '' : cat)">
-                <t t-esc="cat"/>
-            </div>
-        </t>
+    <!-- Category tree (multi-select, up to 3 levels) -->
+    <div class="catnode" t-att-class="{'on': props.filterCat.length === 0}"
+         t-on-click="() => this.onCatClick(0)">
+        <span>Tất cả</span>
     </div>
+
+    <t t-foreach="props.categories" t-as="cat" t-key="cat.id">
+        <div class="catnode-wrap">
+            <div class="catnode" t-att-class="{'on': props.filterCat.includes(cat.id)}"
+                 t-on-click="() => this.onCatClick(cat.id)">
+                <span><t t-esc="cat.name"/></span>
+            </div>
+
+            <t t-if="cat.children &amp;&amp; cat.children.length">
+                <div class="catnode-children">
+                    <t t-foreach="cat.children" t-as="child" t-key="child.id">
+                        <div class="catnode catnode--l2" t-att-class="{'on': props.filterCat.includes(child.id)}"
+                             t-on-click="() => this.onCatClick(child.id)">
+                            <span><t t-esc="child.name"/></span>
+                        </div>
+                    </t>
+                </div>
+            </t>
+        </div>
+    </t>
 
     <!-- Product grid -->
     <div class="pgrid">
@@ -36,9 +51,13 @@
 
         <t t-foreach="props.products" t-as="product" t-key="product.id">
             <div class="pcard" t-on-click="() => this.onCardClick(product)">
-                <!-- Thumbnail with colored bg and first letter -->
+                <!-- Thumbnail: product image with letter fallback -->
                 <div class="pthumb" t-att-style="'background:' + product.bg">
-                    <span class="pletter" t-att-style="'color:' + product.tc">
+                    <img class="pimg"
+                         t-att-src="'/web/image/product.template/' + product.id + '/image_256'"
+                         t-att-alt="product.name"
+                         t-on-error="(ev) => this.onImgError(ev, product)"/>
+                    <span class="pletter pletter-fallback" t-att-style="'color:' + product.tc">
                         <t t-esc="product.letter"/>
                     </span>
                     <!-- "in cart" chip -->
@@ -51,12 +70,43 @@
                 <!-- Product info -->
                 <div class="pinfo">
                     <div class="pname"><t t-esc="product.name"/></div>
-                    <div class="pprice"><t t-esc="product.priceFormatted"/></div>
-                    <div class="punit">/<t t-esc="product.unit"/></div>
+                    <div class="pprow">
+                        <span class="pprice"><t t-esc="product.priceFormatted"/>/</span>
+                        <span class="punit"><t t-esc="product.unit"/></span>
+                        <t t-if="product.tax_rate">
+                            <span class="ptax">(VAT <t t-esc="Math.round(product.tax_rate)"/>%)</span>
+                        </t>
+                    </div>
+                    <t t-if="product.code">
+                        <div class="pcode">MSP: <t t-esc="product.code"/></div>
+                    </t>
                 </div>
             </div>
         </t>
     </div>
+
+    <!-- Infinite scroll sentinel + loading indicator -->
+    <div t-ref="sentinel" class="load-more-sentinel">
+        <t t-if="props.loadingMore">
+            <div class="mp-loading" style="padding:16px 20px;">
+                <span class="mp-spinner"/>
+                <span>Đang tải thêm...</span>
+            </div>
+        </t>
+        <t t-elif="!props.hasMore and props.products.length > 0">
+            <div class="load-more-end">Đã hiển thị tất cả sản phẩm</div>
+        </t>
+    </div>
+
+    <!-- Scroll-to-top -->
+    <t t-if="ui.showScrollTop">
+        <button class="scroll-top-btn" t-on-click="scrollToTop" aria-label="Lên đầu trang">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="19" x2="12" y2="5"/>
+                <polyline points="5 12 12 5 19 12"/>
+            </svg>
+        </button>
+    </t>
 </t>
 
 </templates>

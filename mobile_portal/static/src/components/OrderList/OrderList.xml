@@ -32,18 +32,18 @@
                             <div class="oref"><t t-esc="order.ref"/></div>
                             <div class="odate"><t t-esc="order.date"/></div>
                         </div>
-                        <span class="stt" t-att-class="'s-' + order.status">
-                            <t t-esc="order.label"/>
-                        </span>
+                        <span class="ocview">Xem chi tiết ›</span>
                     </div>
                     <div class="osub"><t t-esc="orderSummary(order)"/></div>
                     <div class="ocfooter">
-                        <span style="font-size:11px">
-                            <t t-esc="totalLines(order)"/> sp •
-                            <span t-att-style="'color:' + payLabel(order).color">
+                        <div style="display:flex;gap:6px;flex-wrap:wrap">
+                            <span class="stt" t-att-class="'s-' + order.status">
+                                <t t-esc="order.label"/>
+                            </span>
+                            <span class="psbadge" t-att-class="payLabel(order).cls">
                                 <t t-esc="payLabel(order).text"/>
                             </span>
-                        </span>
+                        </div>
                         <span class="ototal"><t t-esc="totalFormatted(order)"/></span>
                     </div>
                 </div>

@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_payment_allocation_wizard,payment.allocation.wizard,model_payment_allocation_wizard,account.group_account_invoice,1,1,1,1
+access_payment_allocation_wizard_line,payment.allocation.wizard.line,model_payment_allocation_wizard_line,account.group_account_invoice,1,1,1,1
+access_customer_payment_report_wizard,customer.payment.report.wizard,model_customer_payment_report_wizard,account.group_account_invoice,1,1,1,1
+access_customer_payment_report_line,customer.payment.report.line,model_customer_payment_report_line,account.group_account_invoice,1,1,1,1
+access_customer_payment_detail_report_wizard,customer.payment.detail.report.wizard,model_customer_payment_detail_report_wizard,account.group_account_invoice,1,1,1,1
+access_customer_payment_detail_report_line,customer.payment.detail.report.line,model_customer_payment_detail_report_line,account.group_account_invoice,1,1,1,1
+access_payment_allocation_report,payment.allocation.report,model_payment_allocation_report,account.group_account_invoice,1,0,0,0
